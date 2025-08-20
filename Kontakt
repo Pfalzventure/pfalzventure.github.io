@@ -1,1 +1,55 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Kontakt – Pfalzventure</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-content">
+      <h1>Kontakt</h1>
+      <p>Du hast Fragen zu unseren Kursen oder möchtest direkt buchen?</p>
+    </div>
+  </header>
+
+  <nav class="main-nav">
+    <ul>
+      <li><a href="index.html">🏠 Start</a></li>
+      <li><a href="termine.html">📅 Termine</a></li>
+      <li><a href="kurse.html">🧭 Kurse</a></li>
+      <li><a href="shop.html">🛒 Shop</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section class="intro">
+      <h2>Schreib uns!</h2>
+      <p>Wir freuen uns über deine Nachricht – ob Feedback, Fragen oder Kursanfragen.</p>
+      <p>📧 <strong>E-Mail:</strong> <a href="mailto:info@pfalzventure.de">info@pfalzventure.de</a></p>
+    </section>
+
+    <section class="highlights">
+      <div class="highlight-box">
+        <h3>📍 Standort</h3>
+        <p>Neustadt an der Weinstraße, Rheinland-Pfalz</p>
+      </div>
+      <div class="highlight-box">
+        <h3>📞 Telefon</h3>
+        <p>Wird demnächst ergänzt</p>
+      </div>
+      <div class="highlight-box">
+        <h3>📱 Social Media</h3>
+        <p>Instagram & Facebook folgen bald</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Pfalzventure – Abenteuer beginnt hier.</p>
+  </footer>
+</body>
+</html>
 
