@@ -171,4 +171,60 @@ footer a {
   .burger {
     display: flex;
   }
+  
+  /* Kontakt-Seite */
+.kontakt-section {
+  max-width: 800px;
+  margin: 4rem auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.kontakt-section h1 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--darkgreen);
+}
+
+.kontakt-info {
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.kontakt-info a {
+  color: var(--forestgreen);
+  text-decoration: none;
+}
+
+.kontakt-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.kontakt-form input,
+.kontakt-form textarea {
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.kontakt-form button {
+  background: var(--forestgreen);
+  color: white;
+  border: none;
+  padding: 0.8rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.kontakt-form button:hover {
+  background: var(--darkgreen);
+}
+
 }
