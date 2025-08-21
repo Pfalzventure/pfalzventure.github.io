@@ -34,10 +34,10 @@
     <div class="kontakt-info">
       <p><strong>Email:</strong> <a href="mailto:info@pfalzventure.de">info@pfalzventure.de</a></p>
       <p><strong>Telefon:</strong> <a href="tel:+491708307443">0170 8307443</a></p>
-
     </div>
 
-    <form action="mailto:info@pfalzventure.de" method="post" enctype="text/plain" class="kontakt-form">
+    <!-- Formspree Formular -->
+    <form action="https://formspree.io/f/DEINFORMID" method="POST" class="kontakt-form">
       <label for="name">Name:</label>
       <input type="text" id="name" name="name" required>
 
@@ -46,6 +46,9 @@
 
       <label for="nachricht">Nachricht:</label>
       <textarea id="nachricht" name="nachricht" rows="6" required></textarea>
+
+      <!-- Spam-Schutz -->
+      <input type="text" name="_gotcha" style="display:none">
 
       <button type="submit" class="btn">Nachricht senden</button>
     </form>
