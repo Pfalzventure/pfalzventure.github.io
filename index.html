@@ -1,54 +1,95 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pfalzventure – Bushcraft & Survival</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pfalzventure – Bushcraft & Survival Kurse in der Pfalz</title>
+<meta name="description" content="Bushcraft- und Survival-Kurse in der Pfalz. Kursübersicht, Preise, Shop und Kontakt – alles auf einen Blick." />
+<meta property="og:title" content="Pfalzventure – Bushcraft & Survival" />
+<meta property="og:description" content="Kurse, Preise, Shop & Kontakt. Lerne echte Wildnis-Skills in der Pfalz." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://pfalzventure.de/" />
+<meta name="theme-color" content="#0f172a" />
+<style>/* (CSS bleibt unverändert) */</style>
+<script>/* (JS bleibt unverändert) */</script>
 </head>
 <body>
-  <header class="hero">
-    <div class="hero-content">
-      <h1>Pfalzventure</h1>
-      <p>Erlebe die Wildnis – Bushcraft & Survival in der Pfalz</p>
-      <a href="kursübersicht.html" class="cta-button">Jetzt Kurs entdecken</a>
-    </div>
-  </header>
+<!-- NAV -->
+<nav class="nav">
+<div class="container inner">
+<a class="brand" href="#top"><span class="logo"><svg viewBox="0 0 24 24"><path d="M12 2l9 7-9 11L3 9l9-7z"/></svg></span><span>Pfalzventure</span></a>
+<button id="menuToggle" class="menuToggle">Menü</button>
+<div id="menu" class="menu">
+<a href="#kurse">Kursübersicht</a>
+<a href="#preise">Preise</a>
+<a href="#shop">Shop</a>
+<a href="#kontakt">Kontakt</a>
+</div>
+</div>
+</nav>
 
-  <nav class="main-nav">
-    <ul>
-      <li><a href="termine.html">📅 Termine</a></li>
-      <li><a href="kursübersicht.html">🧭 Kursübersicht</a></li>
-      <li><a href="shop.html">🛒 Shop</a></li>
-      <li><a href="kontakt.html">📬 Kontakt</a></li>
-    </ul>
-  </nav>
 
-  <main>
-    <section class="intro">
-      <h2>Willkommen bei Pfalzventure</h2>
-      <p>Unsere Kurse verbinden Abenteuer, Naturverbundenheit und echtes Survival-Wissen. Ob Einsteiger oder Outdoor-Profi – bei uns findest du dein nächstes Wildnis-Erlebnis.</p>
-    </section>
+<!-- HERO -->
+<header id="top" class="hero">
+<div class="bg"></div>
+<div class="container content">
+<span class="kicker">🌲 Bushcraft & Survival in der Pfalz</span>
+<h1>Raus in die Wildnis – <br/>lerne echte Outdoor-Skills</h1>
+<p class="lead">Praxisnahe Kurse, kleine Gruppen und klare Inhalte: Vom Feuerbohren über Orientierung bis zur Übernachtung im Wald. Perfekt für Einsteiger, Fortgeschrittene und Teams.</p>
+<div class="ctaRow">
+<a class="btn" href="#kurse">Kurse ansehen</a>
+<a class="btn ghost" href="#kontakt">Fragen? Schreib mir</a>
+</div>
+</div>
+</header>
 
-    <section class="highlights">
-      <div class="highlight-box">
-        <h3>🔥 Feuertechniken</h3>
-        <p>Lerne, wie du mit natürlichen Materialien Feuer entfachst – ganz ohne moderne Hilfsmittel.</p>
-      </div>
-      <div class="highlight-box">
-        <h3🌲 Shelterbau</h3>
-        <p>Baue dir mit einfachen Mitteln einen sicheren Unterschlupf – Schutz vor Wind und Wetter garantiert.</p>
-      </div>
-      <div class="highlight-box">
-        <h3>🧭 Orientierung</h3>
-        <p>Finde deinen Weg mit Karte, Kompass und natürlichen Zeichen – ganz ohne GPS.</p>
-      </div>
-    </section>
-  </main>
 
-  <footer>
-    <p>&copy; 2025 Pfalzventure – Abenteuer beginnt hier.</p>
-  </footer>
-</body>
-</html>
+<main>
+<!-- KURSE -->
+<section id="kurse" class="container">
+<h2>Kursübersicht</h2>
+<div class="grid cards">
+<article class="card">
+<h3>1-Tages Kurs</h3>
+<p>Grundlagen: Sicherheit, Feuer machen, Shelter Basics.</p>
+<div class="meta"><span>⏱️ 1 Tag</span></div>
+<div class="ctaRow"><a class="btn" href="#kontakt">Anfragen/Buchen</a><a class="btn ghost" href="#preise">Preis</a></div>
+</article>
+<article class="card">
+<h3>2-Tages Kurs</h3>
+<p>Feuer, Wasser, Orientierung, Übernachtung im Wald.</p>
+<div class="meta"><span>⏱️ 2 Tage</span></div>
+<div class="ctaRow"><a class="btn" href="#kontakt">Anfragen/Buchen</a><a class="btn ghost" href="#preise">Preis</a></div>
+</article>
+<article class="card">
+<h3>Bushcraft Kurs</h3>
+<p>Vertiefung: Feuer, Wasser, Orientierung, Ausrüstung.</p>
+<div class="meta"><span>⏱️ 2 Tage</span></div>
+<div class="ctaRow"><a class="btn" href="#kontakt">Anfragen/Buchen</a><a class="btn ghost" href="#preise">Preis</a></div>
+</article>
+</div>
+</section>
+
+
+<!-- PREISE -->
+<section id="preise" class="container">
+<h2>Preise</h2>
+<div class="card">
+<table class="priceTable">
+<thead><tr><th>Kurs</th><th>Dauer</th><th>Preis</th></tr></thead>
+<tbody>
+<tr><td>1-Tages Kurs</td><td>1 Tag</td><td><strong>60 €</strong></td></tr>
+<tr><td>2-Tages Kurs</td><td>2 Tage</td><td><strong>120 €</strong></td></tr>
+<tr><td>Bushcraft Kurs</td><td>2 Tage</td><td><strong>120 €</strong></td></tr>
+</tbody>
+</table>
+<p class="tiny">Alle Preise inkl. USt., Kleinunternehmerregelung nach §19 UStG.</p>
+</div>
+</section>
+
+
+<!-- SHOP -->
+<section id="shop" class="container">
+<h2>Shop</h2>
+<div class="shop card">
+<div>
