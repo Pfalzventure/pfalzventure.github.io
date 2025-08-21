@@ -114,6 +114,13 @@ nav ul li a:hover {
 .hero p {
   font-size: 1.2rem;
   margin-bottom: 2rem;
+
+.hero-logo {
+  max-width: 220px;   /* Größe, kannst du anpassen */
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 0 10px rgba(0,0,0,0.7)); /* hebt es vom Hintergrund ab */
+}
+
 }
 
 
