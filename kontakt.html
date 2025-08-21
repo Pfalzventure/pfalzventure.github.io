@@ -36,8 +36,11 @@
       <p><strong>Telefon:</strong> <a href="tel:+491708307443">0170 8307443</a></p>
     </div>
 
-    <!-- Formular über Formspree -->
+    <!-- Kontaktformular mit Formspree und Redirect -->
     <form action="https://formspree.io/f/mldlyqdz" method="POST" class="kontakt-form">
+      <!-- Redirect Ziel -->
+      <input type="hidden" name="_redirect" value="https://pfalzventure.de/danke.html">
+
       <label for="name">Name:</label>
       <input type="text" id="name" name="name" required>
 
