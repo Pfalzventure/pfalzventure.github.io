@@ -281,24 +281,35 @@ footer a {
     </form>
   </main>
   
-  <!-- Kursübersicht-Bereich -->
-  <main class="Kurse-section">
-    <h1>Kursübersicht</h1>
-    <p>Hier findest du eine kurze Übersicht über unsere Angebote<br>
-    Egal ob du auf der Suche nach einem Abenteuer bist, mal an deine Grenzen gehen willst, einfach nur Techniken erlernen möchtest mit denen du in der Natur überleben kannst oder auf der Suche nach einem Event bist, was dein Team enger zusammenschweißen lässt- </p>
-    <p>Hier ist für jeden was dabei!<br>  
+/* Zusatzinfos auf Kurse-Seite */
+.preis-info {
+  margin-top: 3rem;
+  background: #eaf2e0;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: left;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
+.preis-info h2 {
+  margin-bottom: 1rem;
+  color: var(--forest-green);
+}
 
-    </div>
+.preis-info ul {
+  list-style: none;
+  padding: 0;
+}
 
-  <p>1 Tages Crashkurs<br>
-    Erlerne an nur einem Tag die grundlegensten Techniken um in der Natur überleben zu können </p>
-   <p>2 Tages Kurs<br>
-    Du begibst dich in ein realistisches Survival Szenario und lernst dabei mit minimaler Ausrüstung überleben. Hier werden die Inhalte vom 1 Tages Kurs vermittelt und dann in die Praxis umgesetzt</p>
-   <p>2 Tages Bushcraft Kurs<br>
-    Für alle die es etwas unbequemer mögen - Du erlernst Techniken mit der du komplett ohne Ausrüstung in der Natur überleben kannst</p>
-    </form>
-  </main>
+.preis-info ul li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ccc;
+}
+.preis-info ul li:last-child {
+  border-bottom: none;
+}
   
   <!-- Footer -->
   <footer>
