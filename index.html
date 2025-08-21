@@ -1,95 +1,58 @@
-<!doctype html>
+!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Pfalzventure – Bushcraft & Survival Kurse in der Pfalz</title>
-<meta name="description" content="Bushcraft- und Survival-Kurse in der Pfalz. Kursübersicht, Preise, Shop und Kontakt – alles auf einen Blick." />
-<meta property="og:title" content="Pfalzventure – Bushcraft & Survival" />
-<meta property="og:description" content="Kurse, Preise, Shop & Kontakt. Lerne echte Wildnis-Skills in der Pfalz." />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://pfalzventure.de/" />
-<meta name="theme-color" content="#0f172a" />
-<style>/* (CSS bleibt unverändert) */</style>
-<script>/* (JS bleibt unverändert) */</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pfalzventure – Bushcraft & Survival</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<!-- NAV -->
-<nav class="nav">
-<div class="container inner">
-<a class="brand" href="#top"><span class="logo"><svg viewBox="0 0 24 24"><path d="M12 2l9 7-9 11L3 9l9-7z"/></svg></span><span>Pfalzventure</span></a>
-<button id="menuToggle" class="menuToggle">Menü</button>
-<div id="menu" class="menu">
-<a href="#kurse">Kursübersicht</a>
-<a href="#preise">Preise</a>
-<a href="#shop">Shop</a>
-<a href="#kontakt">Kontakt</a>
-</div>
-</div>
-</nav>
+  <!-- Header mit Logo + Navigation -->
+  <header>
+    <div class="container">
+      <a href="index.html" class="logo">
+        <img src="assets/logo.png" alt="Pfalzventure Logo">
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Start</a></li>
+          <li><a href="kurse.html">Kurse</a></li>
+          <li><a href="preise.html">Preise</a></li>
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="kontakt.html">Kontakt</a></li>
+        </ul>
+        <div class="burger">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </nav>
+    </div>
+  </header>
 
+  <!-- Hero-Bereich -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Willkommen bei Pfalzventure</h1>
+      <p>Dein Abenteuer in der Natur – Bushcraft & Survival im Pfälzerwald</p>
+      <a href="kurse.html" class="btn">Zu den Kursen</a>
+    </div>
+  </section>
 
-<!-- HERO -->
-<header id="top" class="hero">
-<div class="bg"></div>
-<div class="container content">
-<span class="kicker">🌲 Bushcraft & Survival in der Pfalz</span>
-<h1>Raus in die Wildnis – <br/>lerne echte Outdoor-Skills</h1>
-<p class="lead">Praxisnahe Kurse, kleine Gruppen und klare Inhalte: Vom Feuerbohren über Orientierung bis zur Übernachtung im Wald. Perfekt für Einsteiger, Fortgeschrittene und Teams.</p>
-<div class="ctaRow">
-<a class="btn" href="#kurse">Kurse ansehen</a>
-<a class="btn ghost" href="#kontakt">Fragen? Schreib mir</a>
-</div>
-</div>
-</header>
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Pfalzventure – Robert Prokasky</p>
+    <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
+  </footer>
 
-
-<main>
-<!-- KURSE -->
-<section id="kurse" class="container">
-<h2>Kursübersicht</h2>
-<div class="grid cards">
-<article class="card">
-<h3>1-Tages Kurs</h3>
-<p>Grundlagen: Sicherheit, Feuer machen, Shelter Basics.</p>
-<div class="meta"><span>⏱️ 1 Tag</span></div>
-<div class="ctaRow"><a class="btn" href="#kontakt">Anfragen/Buchen</a><a class="btn ghost" href="#preise">Preis</a></div>
-</article>
-<article class="card">
-<h3>2-Tages Kurs</h3>
-<p>Feuer, Wasser, Orientierung, Übernachtung im Wald.</p>
-<div class="meta"><span>⏱️ 2 Tage</span></div>
-<div class="ctaRow"><a class="btn" href="#kontakt">Anfragen/Buchen</a><a class="btn ghost" href="#preise">Preis</a></div>
-</article>
-<article class="card">
-<h3>Bushcraft Kurs</h3>
-<p>Vertiefung: Feuer, Wasser, Orientierung, Ausrüstung.</p>
-<div class="meta"><span>⏱️ 2 Tage</span></div>
-<div class="ctaRow"><a class="btn" href="#kontakt">Anfragen/Buchen</a><a class="btn ghost" href="#preise">Preis</a></div>
-</article>
-</div>
-</section>
-
-
-<!-- PREISE -->
-<section id="preise" class="container">
-<h2>Preise</h2>
-<div class="card">
-<table class="priceTable">
-<thead><tr><th>Kurs</th><th>Dauer</th><th>Preis</th></tr></thead>
-<tbody>
-<tr><td>1-Tages Kurs</td><td>1 Tag</td><td><strong>60 €</strong></td></tr>
-<tr><td>2-Tages Kurs</td><td>2 Tage</td><td><strong>120 €</strong></td></tr>
-<tr><td>Bushcraft Kurs</td><td>2 Tage</td><td><strong>120 €</strong></td></tr>
-</tbody>
-</table>
-<p class="tiny">Alle Preise inkl. USt., Kleinunternehmerregelung nach §19 UStG.</p>
-</div>
-</section>
-
-
-<!-- SHOP -->
-<section id="shop" class="container">
-<h2>Shop</h2>
-<div class="shop card">
-<div>
+  <script>
+    // Burger Menü für Mobile
+    const burger = document.querySelector('.burger');
+    const nav = document.querySelector('.nav-links');
+    burger.addEventListener('click', () => {
+      nav.classList.toggle('nav-active');
+      burger.classList.toggle('toggle');
+    });
+  </script>
+</body>
+</html>
