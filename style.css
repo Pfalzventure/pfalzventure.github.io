@@ -1,92 +1,165 @@
-body {
-  margin: 0;
-  font-family: 'Montserrat', sans-serif;
-  background-color: #fdfcf7;
-  color: #2c3e50;
+/* Farben vom Logo: */
+:root {
+  --dark-green: #2f4f4f;
+  --forest-green: #3b6e4d;
+  --brown: #8b5a2b;
+  --beige: #f5f5dc;
+  --white: #fff;
 }
 
-.hero {
-  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('wald.jpg') center/cover no-repeat;
-  color: white;
-  text-align: center;
-  padding: 100px 20px;
-}
-
-.hero-content h1 {
-  font-size: 3em;
-  margin-bottom: 10px;
-}
-
-.hero-content p {
-  font-size: 1.2em;
-  margin-bottom: 20px;
-}
-
-.cta-button {
-  background-color: #27ae60;
-  color: white;
-  padding: 12px 24px;
-  text-decoration: none;
-  font-weight: bold;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.cta-button:hover {
-  background-color: #219150;
-}
-
-.main-nav {
-  background-color: #2c3e50;
-  padding: 10px 0;
-}
-
-.main-nav ul {
-  display: flex;
-  justify-content: center;
-  list-style: none;
+/* Reset */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
-.main-nav li {
-  margin: 0 15px;
+body {
+  font-family: Arial, sans-serif;
+  background: var(--beige);
+  color: var(--dark-green);
+  line-height: 1.6;
 }
 
-.main-nav a {
-  color: white;
+/* Header */
+header {
+  background: var(--dark-green);
+  color: var(--white);
+  padding: 0.5rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+header .container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo img {
+  height: 60px;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+}
+
+nav ul li {
+  margin-left: 20px;
+}
+
+nav ul li a {
   text-decoration: none;
-  font-weight: 600;
+  color: var(--white);
+  font-weight: bold;
+  transition: color 0.3s;
 }
 
-.main-nav a:hover {
+nav ul li a:hover {
+  color: var(--brown);
+}
+
+/* Burger Menu */
+.burger {
+  display: none;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.burger div {
+  width: 25px;
+  height: 3px;
+  background: var(--white);
+  transition: all 0.3s;
+}
+
+/* Hero Section */
+.hero {
+  background: url('https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+  color: var(--white);
+  text-align: center;
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(47, 79, 79, 0.6);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.btn {
+  background: var(--forest-green);
+  color: var(--white);
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.btn:hover {
+  background: var(--brown);
+}
+
+/* Footer */
+footer {
+  background: var(--dark-green);
+  color: var(--white);
+  text-align: center;
+  padding: 20px 10px;
+  margin-top: 40px;
+}
+
+footer a {
+  color: var(--white);
   text-decoration: underline;
 }
 
-.intro {
-  padding: 40px 20px;
-  text-align: center;
-}
+/* Responsive */
+@media (max-width: 768px) {
+  nav ul {
+    display: none;
+    flex-direction: column;
+    background: var(--dark-green);
+    position: absolute;
+    top: 70px;
+    right: 0;
+    width: 200px;
+    text-align: right;
+    padding: 10px;
+  }
 
-.highlights {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  padding: 20px;
-}
+  nav ul.nav-active {
+    display: flex;
+  }
 
-.highlight-box {
-  background-color: #ecf0f1;
-  padding: 20px;
-  border-radius: 8px;
-  width: 280px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-footer {
-  background-color: #2c3e50;
-  color: white;
-  text-align: center;
-  padding: 15px;
+  .burger {
+    display: flex;
+  }
 }
