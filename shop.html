@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css">
 
   <!-- PayPal Warenkorb Script (nur einmal pro Seite) -->
-  <script src="https://www.paypalobjects.com/ncp/cart/cart.js" 
+  <script src="https://www.paypalobjects.com/ncp/cart/cart.js"
           data-merchant-id="MN9CA6XTX8BSJ"></script>
 </head>
 <body>
@@ -21,14 +21,12 @@
         <ul class="nav-links">
           <li><a href="index.html">Start</a></li>
           <li><a href="kurse.html">Kurse</a></li>
+          <li><a href="preise.html">Preise</a></li>
           <li><a href="shop.html" class="active">Shop</a></li>
           <li><a href="kontakt.html">Kontakt</a></li>
           <li>
             <!-- Warenkorb anzeigen -->
             <paypal-cart-button data-id="pp-view-cart"></paypal-cart-button>
-            <script>
-              cartPaypal.Cart({ id: "pp-view-cart" });
-            </script>
           </li>
         </ul>
       </nav>
@@ -71,8 +69,15 @@
 
   <!-- Produktfunktionen -->
   <script>
+    // PayPal Cart initialisieren
+    document.addEventListener("DOMContentLoaded", function() {
+      window.cartPaypal = cartPaypal || {};
+      cartPaypal.Cart({ id: "pp-view-cart" }); // Initialisierung für Warenkorb-Button
+    });
+
     function addSurvivalKit() {
       cartPaypal.add({
+        id: "survival-kit",
         name: "Survival Kit",
         price: "49.00",
         currency: "EUR",
@@ -82,6 +87,7 @@
 
     function addKursGutschein() {
       cartPaypal.add({
+        id: "kurs-gutschein",
         name: "Kurs-Gutschein",
         price: "99.00",
         currency: "EUR",
@@ -93,6 +99,7 @@
       let amount = document.getElementById("voucherAmount").value;
       if (amount < 10) amount = 10;
       cartPaypal.add({
+        id: "wert-gutschein",
         name: "Wert-Gutschein",
         price: amount,
         currency: "EUR",
