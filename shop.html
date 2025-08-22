@@ -6,9 +6,38 @@
   <title>Shop – Pfalzventure</title>
   <link rel="stylesheet" href="style.css">
 
-  <!-- PayPal Warenkorb Script (nur einmal pro Seite) -->
+  <!-- PayPal Warenkorb Script -->
   <script src="https://www.paypalobjects.com/ncp/cart/cart.js" 
           data-merchant-id="MN9CA6XTX8BSJ"></script>
+
+  <style>
+    .product {
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 8px;
+      background: #f9f9f9;
+    }
+    .product h2 {
+      margin-top: 0;
+    }
+    .btn-add {
+      background: #0070ba;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+    .btn-add:hover {
+      background: #005c99;
+    }
+    .cart-btn {
+      margin-left: 15px;
+    }
+  </style>
 </head>
 <body>
   <!-- Header -->
@@ -24,12 +53,9 @@
           <li><a href="preise.html">Preise</a></li>
           <li><a href="shop.html" class="active">Shop</a></li>
           <li><a href="kontakt.html">Kontakt</a></li>
-          <li>
-            <!-- Warenkorb Button im Header -->
-            <paypal-cart-button 
-              data-id="pp-view-cart" 
-              data-button="view">
-            </paypal-cart-button>
+          <li class="cart-btn">
+            <!-- Warenkorb anzeigen -->
+            <paypal-cart-button data-id="pp-view-cart"></paypal-cart-button>
             <script>
               cartPaypal.Cart({ id: "pp-view-cart" })
             </script>
@@ -42,24 +68,13 @@
   <!-- Shop Bereich -->
   <main class="shop-section">
     <h1>Shop</h1>
-    <p>Wähle dein Produkt und lege es in den Warenkorb.</p>
 
     <!-- Produkt 1: Survival Kit -->
     <div class="product">
       <h2>Survival Kit</h2>
       <p>Alles, was du für dein Abenteuer brauchst.</p>
       <p><strong>49,00 €</strong></p>
-      <paypal-cart-button 
-        data-id="pp-add-to-cart1"
-        data-button="add"
-        data-name="Survival Kit"
-        data-price="49.00"
-        data-currency="EUR"
-        data-quantity="1">
-      </paypal-cart-button>
-      <script>
-        cartPaypal.Cart({ id: "pp-add-to-cart1" })
-      </script>
+      <button class="btn-add" onclick="addToCart('Survival Kit', 49.00)">In den Warenkorb</button>
     </div>
 
     <!-- Produkt 2: Kurs-Gutschein -->
@@ -67,17 +82,7 @@
       <h2>Kurs-Gutschein</h2>
       <p>Verschenke ein unvergessliches Erlebnis.</p>
       <p><strong>99,00 €</strong></p>
-      <paypal-cart-button 
-        data-id="pp-add-to-cart2"
-        data-button="add"
-        data-name="Kurs-Gutschein"
-        data-price="99.00"
-        data-currency="EUR"
-        data-quantity="1">
-      </paypal-cart-button>
-      <script>
-        cartPaypal.Cart({ id: "pp-add-to-cart2" })
-      </script>
+      <button class="btn-add" onclick="addToCart('Kurs-Gutschein', 99.00)">In den Warenkorb</button>
     </div>
 
     <!-- Produkt 3: Wert-Gutschein (frei wählbar) -->
@@ -86,30 +91,8 @@
       <p>Wähle selbst, wie viel dir das Abenteuer wert ist (mind. 10 €).</p>
       <label for="voucherAmount">Betrag in €:</label>
       <input type="number" id="voucherAmount" value="50" min="10" step="5">
-
-      <paypal-cart-button 
-        data-id="pp-add-to-cart3"
-        data-button="add"
-        data-name="Wert-Gutschein"
-        data-currency="EUR"
-        data-quantity="1">
-      </paypal-cart-button>
-
-      <script>
-        const voucherBtnId = "pp-add-to-cart3";
-        const voucherBtn = document.querySelector(`paypal-cart-button[data-id="${voucherBtnId}"]`);
-
-        function updateVoucherPrice() {
-          let amount = document.getElementById("voucherAmount").value;
-          if (amount < 10) amount = 10;
-          voucherBtn.setAttribute("data-price", amount);
-        }
-
-        updateVoucherPrice();
-        document.getElementById("voucherAmount").addEventListener("input", updateVoucherPrice);
-
-        cartPaypal.Cart({ id: voucherBtnId });
-      </script>
+      <br><br>
+      <button class="btn-add" onclick="addVoucher()">In den Warenkorb</button>
     </div>
   </main>
 
@@ -118,7 +101,30 @@
     <p>© 2025 Pfalzventure – Robert Prokasky</p>
     <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
   </footer>
+
+  <script>
+    // Artikel in den Warenkorb legen
+    function addToCart(name, price) {
+      cartPaypal.add({
+        name: name,
+        quantity: 1,
+        price: price,
+        currency: "EUR"
+      });
+    }
+
+    // Gutschein mit freiem Betrag hinzufügen
+    function addVoucher() {
+      let amount = parseFloat(document.getElementById("voucherAmount").value);
+      if (amount < 10) amount = 10;
+      cartPaypal.add({
+        name: "Wert-Gutschein",
+        quantity: 1,
+        price: amount,
+        currency: "EUR"
+      });
+    }
+  </script>
 </body>
 </html>
-
 
