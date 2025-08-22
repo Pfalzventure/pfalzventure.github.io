@@ -1,43 +1,14 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Shop – Pfalzventure</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css"/>
 
-  <!-- PayPal Warenkorb Script -->
-  <script src="https://www.paypalobjects.com/ncp/cart/cart.js" 
+  <!-- PayPal Cart Script (nur 1x einbinden) -->
+  <script src="https://www.paypalobjects.com/ncp/cart/cart.js"
           data-merchant-id="MN9CA6XTX8BSJ"></script>
-
-  <style>
-    .product {
-      border: 1px solid #ddd;
-      padding: 15px;
-      margin: 20px 0;
-      border-radius: 8px;
-      background: #f9f9f9;
-    }
-    .product h2 {
-      margin-top: 0;
-    }
-    .btn-add {
-      background: #0070ba;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background 0.3s;
-    }
-    .btn-add:hover {
-      background: #005c99;
-    }
-    .cart-btn {
-      margin-left: 15px;
-    }
-  </style>
 </head>
 <body>
   <!-- Header -->
@@ -50,10 +21,12 @@
         <ul class="nav-links">
           <li><a href="index.html">Start</a></li>
           <li><a href="kurse.html">Kurse</a></li>
+          <li><a href="preise.html">Preise</a></li>
           <li><a href="shop.html" class="active">Shop</a></li>
           <li><a href="kontakt.html">Kontakt</a></li>
-          <li class="cart-btn">
-            <!-- Warenkorb anzeigen -->
+
+          <!-- Warenkorb im Header -->
+          <li>
             <paypal-cart-button data-id="pp-view-cart"></paypal-cart-button>
           </li>
         </ul>
@@ -61,34 +34,34 @@
     </div>
   </header>
 
-  <!-- Shop Bereich -->
+  <!-- Shop -->
   <main class="shop-section">
     <h1>Shop</h1>
+    <p>Wähle dein Produkt und lege es in den Warenkorb.</p>
 
-    <!-- Produkt 1: Survival Kit -->
+    <!-- Produkt 1 -->
     <div class="product">
       <h2>Survival Kit</h2>
       <p>Alles, was du für dein Abenteuer brauchst.</p>
       <p><strong>49,00 €</strong></p>
-      <button class="btn-add" onclick="addToCart('Survival Kit', 49.00)">In den Warenkorb</button>
+      <button class="btn" onclick="addToCart('Survival Kit', 49.00)">In den Warenkorb</button>
     </div>
 
-    <!-- Produkt 2: Kurs-Gutschein -->
+    <!-- Produkt 2 -->
     <div class="product">
       <h2>Kurs-Gutschein</h2>
       <p>Verschenke ein unvergessliches Erlebnis.</p>
       <p><strong>99,00 €</strong></p>
-      <button class="btn-add" onclick="addToCart('Kurs-Gutschein', 99.00)">In den Warenkorb</button>
+      <button class="btn" onclick="addToCart('Kurs-Gutschein', 99.00)">In den Warenkorb</button>
     </div>
 
-    <!-- Produkt 3: Wert-Gutschein (frei wählbar) -->
+    <!-- Produkt 3 -->
     <div class="product">
       <h2>Wert-Gutschein</h2>
       <p>Wähle selbst, wie viel dir das Abenteuer wert ist (mind. 10 €).</p>
       <label for="voucherAmount">Betrag in €:</label>
-      <input type="number" id="voucherAmount" value="50" min="10" step="5">
-      <br><br>
-      <button class="btn-add" onclick="addVoucher()">In den Warenkorb</button>
+      <input type="number" id="voucherAmount" value="50" min="10" step="5" style="width:120px;margin:0 8px;">
+      <button class="btn" onclick="addVoucher()">In den Warenkorb</button>
     </div>
   </main>
 
@@ -99,31 +72,31 @@
   </footer>
 
   <script>
-    // 1. Cart initialisieren (muss einmalig passieren)
-    const myCart = cartPaypal.Cart({ id: "pp-view-cart" });
+    // 1) Warenkorb-Button im Header initialisieren
+    const cartInstance = cartPaypal.Cart({ id: "pp-view-cart" });
 
-    // 2. Artikel in den Warenkorb legen
-    function addToCart(name, price) {
-      myCart.add({
+    // 2) Add-to-Cart – wichtig: 'amount' (nicht 'price')
+    function addToCart(name, priceNumber) {
+      const amount = (Math.max(0, Number(priceNumber)) || 0).toFixed(2);
+      if (!cartPaypal || typeof cartPaypal.add !== "function") {
+        alert("PayPal-Warenkorb ist noch nicht bereit. Bitte kurz neu laden.");
+        return;
+      }
+      cartPaypal.add({
         name: name,
         quantity: 1,
-        price: price,
+        amount: amount,    // <- entscheidend für dieses PayPal-Cart
         currency: "EUR"
       });
     }
 
-    // 3. Gutschein mit freiem Betrag hinzufügen
     function addVoucher() {
-      let amount = parseFloat(document.getElementById("voucherAmount").value);
-      if (amount < 10) amount = 10;
-      myCart.add({
-        name: "Wert-Gutschein",
-        quantity: 1,
-        price: amount,
-        currency: "EUR"
-      });
+      let val = parseFloat(document.getElementById("voucherAmount").value);
+      if (isNaN(val) || val < 10) val = 10;
+      addToCart("Wert-Gutschein", val);
     }
   </script>
 </body>
 </html>
+
 
