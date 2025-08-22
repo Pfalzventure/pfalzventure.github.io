@@ -26,7 +26,10 @@
           <li><a href="kontakt.html">Kontakt</a></li>
           <li>
             <!-- Warenkorb Button im Header -->
-            <paypal-cart-button data-id="pp-view-cart"></paypal-cart-button>
+            <paypal-cart-button 
+              data-id="pp-view-cart" 
+              data-button="view">
+            </paypal-cart-button>
             <script>
               cartPaypal.Cart({ id: "pp-view-cart" })
             </script>
@@ -48,6 +51,7 @@
       <p><strong>49,00 €</strong></p>
       <paypal-cart-button 
         data-id="pp-add-to-cart1"
+        data-button="add"
         data-name="Survival Kit"
         data-price="49.00"
         data-currency="EUR"
@@ -65,6 +69,7 @@
       <p><strong>99,00 €</strong></p>
       <paypal-cart-button 
         data-id="pp-add-to-cart2"
+        data-button="add"
         data-name="Kurs-Gutschein"
         data-price="99.00"
         data-currency="EUR"
@@ -84,6 +89,7 @@
 
       <paypal-cart-button 
         data-id="pp-add-to-cart3"
+        data-button="add"
         data-name="Wert-Gutschein"
         data-currency="EUR"
         data-quantity="1">
@@ -99,11 +105,9 @@
           voucherBtn.setAttribute("data-price", amount);
         }
 
-        // Startwert setzen und Eventlistener
         updateVoucherPrice();
         document.getElementById("voucherAmount").addEventListener("input", updateVoucherPrice);
 
-        // PayPal-Button aktivieren
         cartPaypal.Cart({ id: voucherBtnId });
       </script>
     </div>
