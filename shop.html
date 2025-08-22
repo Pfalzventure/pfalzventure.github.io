@@ -32,25 +32,25 @@
   <!-- Shop Bereich -->
   <main class="shop-section">
     <h1>Shop</h1>
-
-    <!-- Warenkorb anzeigen -->
-    <paypal-cart-button data-id="pp-view-cart"></paypal-cart-button>
-    <script>
-      cartPaypal.Cart({ id: "pp-view-cart" })
-    </script>
+    <p>Wähle dein Produkt und lege es in den Warenkorb.</p>
 
     <!-- Produkt 1: Survival Kit -->
     <div class="product">
       <h2>Survival Kit</h2>
       <p>Alles, was du für dein Abenteuer brauchst.</p>
-      <paypal-cart-button data-id="pp-add-to-cart1" 
-        data-name="Survival Kit"
-        data-price="49.00"
-        data-currency="EUR"
-        data-quantity="1">
-      </paypal-cart-button>
+      <p><strong>49,00 €</strong></p>
+      <paypal-cart-button data-id="pp-add-to-cart1"></paypal-cart-button>
       <script>
-        cartPaypal.Cart({ id: "pp-add-to-cart1" })
+        cartPaypal.Button({
+          id: "pp-add-to-cart1",
+          type: "add",
+          items: [{
+            name: "Survival Kit",
+            quantity: 1,
+            price: "49.00",
+            currency: "EUR"
+          }]
+        })
       </script>
     </div>
 
@@ -58,53 +58,61 @@
     <div class="product">
       <h2>Kurs-Gutschein</h2>
       <p>Verschenke ein unvergessliches Erlebnis.</p>
-      <paypal-cart-button data-id="pp-add-to-cart2" 
-        data-name="Kurs-Gutschein"
-        data-price="99.00"
-        data-currency="EUR"
-        data-quantity="1">
-      </paypal-cart-button>
+      <p><strong>99,00 €</strong></p>
+      <paypal-cart-button data-id="pp-add-to-cart2"></paypal-cart-button>
       <script>
-        cartPaypal.Cart({ id: "pp-add-to-cart2" })
+        cartPaypal.Button({
+          id: "pp-add-to-cart2",
+          type: "add",
+          items: [{
+            name: "Kurs-Gutschein",
+            quantity: 1,
+            price: "99.00",
+            currency: "EUR"
+          }]
+        })
       </script>
     </div>
 
     <!-- Produkt 3: Wert-Gutschein (frei wählbar) -->
     <div class="product">
       <h2>Wert-Gutschein</h2>
-      <p>Wähle selbst, wie viel dir das Abenteuer wert ist.</p>
-
+      <p>Wähle selbst, wie viel dir das Abenteuer wert ist (mind. 10 €).</p>
       <label for="voucherAmount">Betrag in €:</label>
       <input type="number" id="voucherAmount" value="50" min="10" step="5">
 
-      <paypal-cart-button data-id="pp-add-to-cart3" 
-        data-name="Wert-Gutschein"
-        data-currency="EUR"
-        data-quantity="1">
-      </paypal-cart-button>
-
+      <paypal-cart-button data-id="pp-add-to-cart3"></paypal-cart-button>
       <script>
-        // Button initialisieren
-        const voucherBtnId = "pp-add-to-cart3";
-        const voucherBtn = document.querySelector(`paypal-cart-button[data-id="${voucherBtnId}"]`);
-
-        function updateVoucherPrice() {
+        function initVoucherButton() {
           let amount = document.getElementById("voucherAmount").value;
-          if (amount < 10) amount = 10; // Mindestwert
-          voucherBtn.setAttribute("data-price", amount);
+          if (amount < 10) amount = 10;
+          cartPaypal.Button({
+            id: "pp-add-to-cart3",
+            type: "add",
+            items: [{
+              name: "Wert-Gutschein",
+              quantity: 1,
+              price: amount.toString(),
+              currency: "EUR"
+            }]
+          })
         }
 
-        // Beim Ändern des Betrags aktualisieren
-        document.getElementById("voucherAmount").addEventListener("input", updateVoucherPrice);
+        // Initialisieren
+        initVoucherButton();
 
-        // Startwert setzen
-        updateVoucherPrice();
-
-        // PayPal Button aktivieren
-        cartPaypal.Cart({ id: voucherBtnId });
+        // Neu initialisieren, wenn Betrag geändert wird
+        document.getElementById("voucherAmount").addEventListener("input", initVoucherButton);
       </script>
     </div>
 
+    <!-- Warenkorb anzeigen (nur 1x pro Seite) -->
+    <div style="margin-top: 2rem; text-align: center;">
+      <paypal-cart-button data-id="pp-view-cart"></paypal-cart-button>
+      <script>
+        cartPaypal.Cart({ id: "pp-view-cart" })
+      </script>
+    </div>
   </main>
 
   <!-- Footer -->
@@ -114,4 +122,5 @@
   </footer>
 </body>
 </html>
+
 
