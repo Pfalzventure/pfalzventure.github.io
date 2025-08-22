@@ -29,32 +29,80 @@
   <main class="kontakt-section">
     <h1>Kontakt</h1>
     <p>Du hast Fragen zu unseren Kursen oder möchtest dich anmelden?<br>
-    So Schreibe uns einfach – wir freuen uns auf deine Nachricht!</p>
+       Schreibe uns einfach – wir freuen uns auf deine Nachricht!</p>
 
     <div class="kontakt-info">
       <p><strong>Email:</strong> <a href="mailto:info@pfalzventure.de">info@pfalzventure.de</a></p>
       <p><strong>Telefon:</strong> <a href="tel:+491708307443">0170 8307443</a></p>
     </div>
 
-  <form action="https://formspree.io/f/mldlyqdz" method="POST" class="kontakt-form" data-redirect="https://pfalzventure.de/danke.html">
-  <label for="name">Name:</label>
-  <input type="text" id="name" name="name" required>
+    <form id="contact-form" action="https://formspree.io/f/mldlyqdz" method="POST" class="kontakt-form">
+      <!-- optionaler Honeypot gegen Spam -->
+      <input type="text" name="_gotcha" style="display:none">
 
-  <label for="email">E-Mail:</label>
-  <input type="email" id="email" name="email" required>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
 
-  <label for="nachricht">Nachricht:</label>
-  <textarea id="nachricht" name="nachricht" rows="6" required></textarea>
+      <label for="email">E-Mail:</label>
+      <input type="email" id="email" name="email" required>
 
-  <button type="submit" class="btn">Nachricht senden</button>
-</form>
+      <label for="nachricht">Nachricht:</label>
+      <textarea id="nachricht" name="message" rows="6" required></textarea>
 
+      <button type="submit" class="btn">Nachricht senden</button>
+
+      <!-- Status-Ausgabe für Fehlerfälle -->
+      <p id="form-status" class="form-status" aria-live="polite" style="display:none; margin-top:1rem;"></p>
+    </form>
+  </main>
 
   <!-- Footer -->
   <footer>
     <p>© 2025 Pfalzventure – Robert Prokasky</p>
     <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
   </footer>
+
+  <!-- JS: Submit an Formspree + Redirect zu danke.html -->
+  <script>
+    (function () {
+      const form = document.getElementById('contact-form');
+      const status = document.getElementById('form-status');
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        status.style.display = 'none';
+        const data = new FormData(form);
+
+        try {
+          const res = await fetch(form.action, {
+            method: 'POST',
+            body: data,
+            headers: { 'Accept': 'application/json' }
+          });
+
+          if (res.ok) {
+            // Erfolg: auf Danke-Seite weiterleiten
+            window.location.href = 'danke.html';
+          } else {
+            // Fehlerdetails (z. B. 422) anzeigen
+            let msg = 'Senden fehlgeschlagen. Bitte versuche es später erneut.';
+            try {
+              const json = await res.json();
+              if (json && json.errors) {
+                msg = json.errors.map(e => e.message).join(', ');
+              }
+            } catch (_) {}
+            status.textContent = msg;
+            status.style.display = 'block';
+          }
+        } catch (err) {
+          status.textContent = 'Netzwerkfehler – bitte später erneut versuchen.';
+          status.style.display = 'block';
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
+
 
