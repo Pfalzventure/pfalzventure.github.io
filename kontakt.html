@@ -29,17 +29,14 @@
   <main class="kontakt-section">
     <h1>Kontakt</h1>
     <p>Du hast Fragen zu unseren Kursen oder möchtest dich anmelden?<br>
-    Drum Schreibe uns einfach – wir freuen uns auf deine Nachricht!</p>
+    So Schreibe uns einfach – wir freuen uns auf deine Nachricht!</p>
 
     <div class="kontakt-info">
       <p><strong>Email:</strong> <a href="mailto:info@pfalzventure.de">info@pfalzventure.de</a></p>
       <p><strong>Telefon:</strong> <a href="tel:+491708307443">0170 8307443</a></p>
     </div>
 
-   <form action="https://formspree.io/f/mldlyqdz" method="POST" class="kontakt-form">
-  <!-- Redirect zur Danke-Seite -->
-  <input type="hidden" name="redirect" value="https://pfalzventure.de/danke.html">
-
+  <form action="https://formspree.io/f/mldlyqdz" method="POST" class="kontakt-form" data-redirect="https://pfalzventure.de/danke.html">
   <label for="name">Name:</label>
   <input type="text" id="name" name="name" required>
 
@@ -51,6 +48,7 @@
 
   <button type="submit" class="btn">Nachricht senden</button>
 </form>
+
 
   <!-- Footer -->
   <footer>
