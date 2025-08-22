@@ -72,20 +72,26 @@
   </footer>
 
   <script>
-    // 1) Warenkorb-Button im Header initialisieren
-    const cartInstance = cartPaypal.Cart({ id: "pp-view-cart" });
+    let cartReady = false;
 
-    // 2) Add-to-Cart – wichtig: 'amount' (nicht 'price')
+    // warten bis das PayPal Script geladen ist
+    window.addEventListener("load", function() {
+      if (window.cartPaypal) {
+        cartPaypal.Cart({ id: "pp-view-cart" }); // Warenkorb-Button aktivieren
+        cartReady = true;
+      }
+    });
+
     function addToCart(name, priceNumber) {
-      const amount = (Math.max(0, Number(priceNumber)) || 0).toFixed(2);
-      if (!cartPaypal || typeof cartPaypal.add !== "function") {
-        alert("PayPal-Warenkorb ist noch nicht bereit. Bitte kurz neu laden.");
+      if (!cartReady) {
+        alert("Warenkorb ist noch nicht bereit, bitte kurz warten...");
         return;
       }
+      const amount = (Math.max(0, Number(priceNumber)) || 0).toFixed(2);
       cartPaypal.add({
         name: name,
         quantity: 1,
-        amount: amount,    // <- entscheidend für dieses PayPal-Cart
+        amount: amount,
         currency: "EUR"
       });
     }
@@ -98,5 +104,6 @@
   </script>
 </body>
 </html>
+
 
 
