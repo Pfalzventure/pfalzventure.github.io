@@ -56,9 +56,6 @@
           <li class="cart-btn">
             <!-- Warenkorb anzeigen -->
             <paypal-cart-button data-id="pp-view-cart"></paypal-cart-button>
-            <script>
-              cartPaypal.Cart({ id: "pp-view-cart" })
-            </script>
           </li>
         </ul>
       </nav>
@@ -103,9 +100,12 @@
   </footer>
 
   <script>
-    // Artikel in den Warenkorb legen
+    // 1. Cart initialisieren (muss einmalig passieren)
+    const myCart = cartPaypal.Cart({ id: "pp-view-cart" });
+
+    // 2. Artikel in den Warenkorb legen
     function addToCart(name, price) {
-      cartPaypal.add({
+      myCart.add({
         name: name,
         quantity: 1,
         price: price,
@@ -113,11 +113,11 @@
       });
     }
 
-    // Gutschein mit freiem Betrag hinzufügen
+    // 3. Gutschein mit freiem Betrag hinzufügen
     function addVoucher() {
       let amount = parseFloat(document.getElementById("voucherAmount").value);
       if (amount < 10) amount = 10;
-      cartPaypal.add({
+      myCart.add({
         name: "Wert-Gutschein",
         quantity: 1,
         price: amount,
