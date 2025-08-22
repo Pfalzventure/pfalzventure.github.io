@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop – Pfalzventure</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <a href="index.html" class="logo">
+        <img src="assets/logo.png" alt="Pfalzventure Logo">
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Start</a></li>
+          <li><a href="kurse.html">Kurse</a></li>
+          <li><a href="preise.html">Preise</a></li>
+          <li><a href="shop.html" class="active">Shop</a></li>
+          <li><a href="kontakt.html">Kontakt</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Shop-Bereich -->
+  <main class="shop-section">
+    <h1>Shop</h1>
+    <p>Hier kannst du unsere Survival-Produkte und Gutscheine direkt bestellen.</p>
+
+    <div class="shop-items">
+
+      <!-- Survival Kit -->
+      <div class="shop-item">
+        <h2>Survival Kit</h2>
+        <p>Unser kompaktes Set für jedes Abenteuer.</p>
+        <!-- PayPal Add-to-Cart Button (von PayPal ersetzen) -->
+        <form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+          <input type="hidden" name="cmd" value="_cart">
+          <input type="hidden" name="business" value="DEINE_PAYPAL_EMAIL">
+          <input type="hidden" name="item_name" value="Survival Kit">
+          <input type="hidden" name="amount" value="49.90">
+          <input type="hidden" name="currency_code" value="EUR">
+          <input type="hidden" name="add" value="1">
+          <button type="submit" class="btn">In den Warenkorb</button>
+        </form>
+      </div>
+
+      <!-- Gutschein Kurs -->
+      <div class="shop-item">
+        <h2>Kurs-Gutschein</h2>
+        <p>Verschenke einen Gutschein für einen Kurs deiner Wahl.</p>
+        <!-- PayPal Add-to-Cart Button -->
+        <form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+          <input type="hidden" name="cmd" value="_cart">
+          <input type="hidden" name="business" value="DEINE_PAYPAL_EMAIL">
+          <input type="hidden" name="item_name" value="Kurs-Gutschein">
+          <input type="hidden" name="amount" value="99.00">
+          <input type="hidden" name="currency_code" value="EUR">
+          <input type="hidden" name="add" value="1">
+          <button type="submit" class="btn">In den Warenkorb</button>
+        </form>
+      </div>
+
+      <!-- Wertgutschein -->
+      <div class="shop-item">
+        <h2>Wertgutschein</h2>
+        <p>Bestimme selbst den Betrag (mindestens 10 €).</p>
+        <!-- PayPal Add-to-Cart mit freier Eingabe -->
+        <form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+          <input type="hidden" name="cmd" value="_cart">
+          <input type="hidden" name="business" value="DEINE_PAYPAL_EMAIL">
+          <input type="hidden" name="item_name" value="Wertgutschein">
+          <input type="hidden" name="currency_code" value="EUR">
+          <input type="hidden" name="add" value="1">
+          <label for="amount">Betrag (€):</label>
+          <input type="number" name="amount" min="10" step="1" required>
+          <button type="submit" class="btn">In den Warenkorb</button>
+        </form>
+      </div>
+
+    </div>
+
+    <!-- Warenkorb anzeigen -->
+    <div class="cart-button">
+      <form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+        <input type="hidden" name="cmd" value="_cart">
+        <input type="hidden" name="business" value="DEINE_PAYPAL_EMAIL">
+        <input type="hidden" name="display" value="1">
+        <button type="submit" class="btn">🛒 Warenkorb ansehen</button>
+      </form>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Pfalzventure – Robert Prokasky</p>
+    <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
+  </footer>
+</body>
+</html>
