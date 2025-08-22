@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shop – Pfalzventure</title>
   <link rel="stylesheet" href="style.css">
+
+  <!-- PayPal Warenkorb Script (nur einmal pro Seite) -->
+  <script src="https://www.paypalobjects.com/ncp/cart/cart.js" 
+          data-merchant-id="MN9CA6XTX8BSJ"></script>
 </head>
 <body>
   <!-- Header -->
@@ -25,73 +29,82 @@
     </div>
   </header>
 
-  <!-- Shop-Bereich -->
+  <!-- Shop Bereich -->
   <main class="shop-section">
     <h1>Shop</h1>
-    <p>Hier kannst du unsere Survival-Produkte und Gutscheine direkt bestellen.</p>
-
-    <div class="shop-items">
-
-      <!-- Survival Kit -->
-      <div class="shop-item">
-        <h2>Survival Kit</h2>
-        <p>Unser kompaktes Set für jedes Abenteuer.</p>
-        <!-- PayPal Add-to-Cart Button (von PayPal ersetzen) -->
-        <form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
-          <input type="hidden" name="cmd" value="_cart">
-          <input type="hidden" name="business" value="DEINE_PAYPAL_EMAIL">
-          <input type="hidden" name="item_name" value="Survival Kit">
-          <input type="hidden" name="amount" value="49.90">
-          <input type="hidden" name="currency_code" value="EUR">
-          <input type="hidden" name="add" value="1">
-          <button type="submit" class="btn">In den Warenkorb</button>
-        </form>
-      </div>
-
-      <!-- Gutschein Kurs -->
-      <div class="shop-item">
-        <h2>Kurs-Gutschein</h2>
-        <p>Verschenke einen Gutschein für einen Kurs deiner Wahl.</p>
-        <!-- PayPal Add-to-Cart Button -->
-        <form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
-          <input type="hidden" name="cmd" value="_cart">
-          <input type="hidden" name="business" value="DEINE_PAYPAL_EMAIL">
-          <input type="hidden" name="item_name" value="Kurs-Gutschein">
-          <input type="hidden" name="amount" value="99.00">
-          <input type="hidden" name="currency_code" value="EUR">
-          <input type="hidden" name="add" value="1">
-          <button type="submit" class="btn">In den Warenkorb</button>
-        </form>
-      </div>
-
-      <!-- Wertgutschein -->
-      <div class="shop-item">
-        <h2>Wertgutschein</h2>
-        <p>Bestimme selbst den Betrag (mindestens 10 €).</p>
-        <!-- PayPal Add-to-Cart mit freier Eingabe -->
-        <form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
-          <input type="hidden" name="cmd" value="_cart">
-          <input type="hidden" name="business" value="DEINE_PAYPAL_EMAIL">
-          <input type="hidden" name="item_name" value="Wertgutschein">
-          <input type="hidden" name="currency_code" value="EUR">
-          <input type="hidden" name="add" value="1">
-          <label for="amount">Betrag (€):</label>
-          <input type="number" name="amount" min="10" step="1" required>
-          <button type="submit" class="btn">In den Warenkorb</button>
-        </form>
-      </div>
-
-    </div>
 
     <!-- Warenkorb anzeigen -->
-    <div class="cart-button">
-      <form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
-        <input type="hidden" name="cmd" value="_cart">
-        <input type="hidden" name="business" value="DEINE_PAYPAL_EMAIL">
-        <input type="hidden" name="display" value="1">
-        <button type="submit" class="btn">🛒 Warenkorb ansehen</button>
-      </form>
+    <paypal-cart-button data-id="pp-view-cart"></paypal-cart-button>
+    <script>
+      cartPaypal.Cart({ id: "pp-view-cart" })
+    </script>
+
+    <!-- Produkt 1: Survival Kit -->
+    <div class="product">
+      <h2>Survival Kit</h2>
+      <p>Alles, was du für dein Abenteuer brauchst.</p>
+      <paypal-cart-button data-id="pp-add-to-cart1" 
+        data-name="Survival Kit"
+        data-price="49.00"
+        data-currency="EUR"
+        data-quantity="1">
+      </paypal-cart-button>
+      <script>
+        cartPaypal.Cart({ id: "pp-add-to-cart1" })
+      </script>
     </div>
+
+    <!-- Produkt 2: Kurs-Gutschein -->
+    <div class="product">
+      <h2>Kurs-Gutschein</h2>
+      <p>Verschenke ein unvergessliches Erlebnis.</p>
+      <paypal-cart-button data-id="pp-add-to-cart2" 
+        data-name="Kurs-Gutschein"
+        data-price="99.00"
+        data-currency="EUR"
+        data-quantity="1">
+      </paypal-cart-button>
+      <script>
+        cartPaypal.Cart({ id: "pp-add-to-cart2" })
+      </script>
+    </div>
+
+    <!-- Produkt 3: Wert-Gutschein (frei wählbar) -->
+    <div class="product">
+      <h2>Wert-Gutschein</h2>
+      <p>Wähle selbst, wie viel dir das Abenteuer wert ist.</p>
+
+      <label for="voucherAmount">Betrag in €:</label>
+      <input type="number" id="voucherAmount" value="50" min="10" step="5">
+
+      <paypal-cart-button data-id="pp-add-to-cart3" 
+        data-name="Wert-Gutschein"
+        data-currency="EUR"
+        data-quantity="1">
+      </paypal-cart-button>
+
+      <script>
+        // Button initialisieren
+        const voucherBtnId = "pp-add-to-cart3";
+        const voucherBtn = document.querySelector(`paypal-cart-button[data-id="${voucherBtnId}"]`);
+
+        function updateVoucherPrice() {
+          let amount = document.getElementById("voucherAmount").value;
+          if (amount < 10) amount = 10; // Mindestwert
+          voucherBtn.setAttribute("data-price", amount);
+        }
+
+        // Beim Ändern des Betrags aktualisieren
+        document.getElementById("voucherAmount").addEventListener("input", updateVoucherPrice);
+
+        // Startwert setzen
+        updateVoucherPrice();
+
+        // PayPal Button aktivieren
+        cartPaypal.Cart({ id: voucherBtnId });
+      </script>
+    </div>
+
   </main>
 
   <!-- Footer -->
@@ -101,3 +114,4 @@
   </footer>
 </body>
 </html>
+
