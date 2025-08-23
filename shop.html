@@ -6,9 +6,8 @@
   <title>Shop – Pfalzventure</title>
   <link rel="stylesheet" href="style.css">
 
-  <!-- PayPal Warenkorb Script (nur einmal pro Seite) -->
-  <script src="https://www.paypalobjects.com/ncp/cart/cart.js"
-          data-merchant-id="MN9CA6XTX8BSJ"></script>
+  <!-- PayPal SDK mit deiner Client-ID -->
+  <script src="https://www.paypal.com/sdk/js?client-id=AY3ggbeRPqSjT7wEvKwTMuJMC_2agWKdCCms0AWs8GGyx_bxQxKqmMmkjmur7DSAch2YHQbL0b5hpRQY&currency=EUR"></script>
 </head>
 <body>
   <!-- Header -->
@@ -24,12 +23,10 @@
           <li><a href="preise.html">Preise</a></li>
           <li><a href="shop.html" class="active">Shop</a></li>
           <li><a href="kontakt.html">Kontakt</a></li>
-          <li>
-            <!-- Warenkorb anzeigen -->
-            <paypal-cart-button data-id="pp-view-cart"></paypal-cart-button>
-          </li>
         </ul>
       </nav>
+      <!-- Warenkorb Button im Header -->
+      <button onclick="toggleCart()" class="btn">🛒 Warenkorb (<span id="cart-count">0</span>)</button>
     </div>
   </header>
 
@@ -37,44 +34,38 @@
   <main class="shop-section">
     <h1>Shop</h1>
 
-    <!-- Produkt 1: Survival Kit -->
+    <!-- Produkt 1 -->
     <div class="product">
       <h2>Survival Kit</h2>
       <p>Alles, was du für dein Abenteuer brauchst.</p>
-      <div id="paypal-container-76787Z28LUKVQ"></div>
-<script>
-  paypal.HostedButtons({
-    hostedButtonId: "76787Z28LUKVQ",
-  }).render("#paypal-container-76787Z28LUKVQ")
-</script>
+      <button onclick="addToCart('Survival Kit', 49.00)">In den Warenkorb (49 €)</button>
     </div>
 
-    <!-- Produkt 2: Kurs-Gutschein -->
+    <!-- Produkt 2 -->
     <div class="product">
       <h2>Kurs-Gutschein</h2>
       <p>Verschenke ein unvergessliches Erlebnis.</p>
-<div id="paypal-container-76787Z28LUKVQ"></div>
-<script>
-  paypal.HostedButtons({
-    hostedButtonId: "76787Z28LUKVQ",
-  }).render("#paypal-container-76787Z28LUKVQ")
-</script>
+      <button onclick="addToCart('Kurs-Gutschein', 99.00)">In den Warenkorb (99 €)</button>
     </div>
 
-    <!-- Produkt 3: Wert-Gutschein -->
+    <!-- Produkt 3 -->
     <div class="product">
       <h2>Wert-Gutschein</h2>
       <p>Wähle selbst, wie viel dir das Abenteuer wert ist.</p>
       <label for="voucherAmount">Betrag in €:</label>
       <input type="number" id="voucherAmount" value="50" min="10" step="5">
-   <div id="paypal-container-76787Z28LUKVQ"></div>
-<script>
-  paypal.HostedButtons({
-    hostedButtonId: "76787Z28LUKVQ",
-  }).render("#paypal-container-76787Z28LUKVQ")
-</script>
+      <button onclick="addVoucher()">In den Warenkorb</button>
     </div>
   </main>
+
+  <!-- Warenkorb Popup -->
+  <div id="cart" style="display:none; position:fixed; top:80px; right:20px; background:white; border:1px solid #ccc; padding:20px; max-width:300px; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
+    <h3>Dein Warenkorb</h3>
+    <ul id="cart-items"></ul>
+    <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
+    <div id="paypal-button-container"></div>
+    <button onclick="toggleCart()">Schließen</button>
+  </div>
 
   <!-- Footer -->
   <footer>
@@ -82,48 +73,72 @@
     <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
   </footer>
 
-  <!-- Produktfunktionen -->
+  <!-- Warenkorb Logik -->
   <script>
-    // PayPal Cart initialisieren
-    document.addEventListener("DOMContentLoaded", function() {
-      window.cartPaypal = cartPaypal || {};
-      cartPaypal.Cart({ id: "pp-view-cart" }); // Initialisierung für Warenkorb-Button
-    });
+    let cart = [];
 
-    function addSurvivalKit() {
-      cartPaypal.add({
-        id: "survival-kit",
-        name: "Survival Kit",
-        price: "49.00",
-        currency: "EUR",
-        quantity: 1
-      });
+    function addToCart(name, price) {
+      cart.push({ name, price });
+      updateCart();
     }
 
-    function addKursGutschein() {
-      cartPaypal.add({
-        id: "kurs-gutschein",
-        name: "Kurs-Gutschein",
-        price: "99.00",
-        currency: "EUR",
-        quantity: 1
-      });
-    }
-
-    function addWertGutschein() {
-      let amount = document.getElementById("voucherAmount").value;
+    function addVoucher() {
+      let amount = parseFloat(document.getElementById("voucherAmount").value);
       if (amount < 10) amount = 10;
-      cartPaypal.add({
-        id: "wert-gutschein",
-        name: "Wert-Gutschein",
-        price: amount,
-        currency: "EUR",
-        quantity: 1
+      cart.push({ name: "Wert-Gutschein", price: amount });
+      updateCart();
+    }
+
+    function updateCart() {
+      document.getElementById("cart-count").innerText = cart.length;
+
+      let itemsList = document.getElementById("cart-items");
+      itemsList.innerHTML = "";
+      let total = 0;
+
+      cart.forEach((item, i) => {
+        total += item.price;
+        let li = document.createElement("li");
+        li.innerText = `${item.name} – ${item.price.toFixed(2)} €`;
+        itemsList.appendChild(li);
       });
+
+      document.getElementById("cart-total").innerText = total.toFixed(2);
+
+      // PayPal Button neu rendern
+      renderPayPalButton(total);
+    }
+
+    function toggleCart() {
+      let cartDiv = document.getElementById("cart");
+      cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
+    }
+
+    function renderPayPalButton(total) {
+      document.getElementById("paypal-button-container").innerHTML = ""; // reset
+
+      paypal.Buttons({
+        createOrder: function(data, actions) {
+          return actions.order.create({
+            purchase_units: [{
+              description: "Pfalzventure Warenkorb",
+              amount: {
+                currency_code: "EUR",
+                value: total.toFixed(2)
+              }
+            }]
+          });
+        },
+        onApprove: function(data, actions) {
+          return actions.order.capture().then(function(details) {
+            alert("Danke " + details.payer.name.given_name + "! Deine Bestellung wurde erfolgreich abgeschlossen.");
+            cart = [];
+            updateCart();
+            toggleCart();
+          });
+        }
+      }).render('#paypal-button-container');
     }
   </script>
 </body>
 </html>
-
-
-
