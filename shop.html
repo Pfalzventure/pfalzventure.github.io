@@ -41,14 +41,24 @@
     <div class="product">
       <h2>Survival Kit</h2>
       <p>Alles, was du für dein Abenteuer brauchst.</p>
-      <button onclick="addSurvivalKit()">In den Warenkorb</button>
+      <div id="paypal-container-76787Z28LUKVQ"></div>
+<script>
+  paypal.HostedButtons({
+    hostedButtonId: "76787Z28LUKVQ",
+  }).render("#paypal-container-76787Z28LUKVQ")
+</script>
     </div>
 
     <!-- Produkt 2: Kurs-Gutschein -->
     <div class="product">
       <h2>Kurs-Gutschein</h2>
       <p>Verschenke ein unvergessliches Erlebnis.</p>
-      <button onclick="addKursGutschein()">In den Warenkorb</button>
+<div id="paypal-container-76787Z28LUKVQ"></div>
+<script>
+  paypal.HostedButtons({
+    hostedButtonId: "76787Z28LUKVQ",
+  }).render("#paypal-container-76787Z28LUKVQ")
+</script>
     </div>
 
     <!-- Produkt 3: Wert-Gutschein -->
@@ -57,7 +67,12 @@
       <p>Wähle selbst, wie viel dir das Abenteuer wert ist.</p>
       <label for="voucherAmount">Betrag in €:</label>
       <input type="number" id="voucherAmount" value="50" min="10" step="5">
-      <button onclick="addWertGutschein()">In den Warenkorb</button>
+   <div id="paypal-container-76787Z28LUKVQ"></div>
+<script>
+  paypal.HostedButtons({
+    hostedButtonId: "76787Z28LUKVQ",
+  }).render("#paypal-container-76787Z28LUKVQ")
+</script>
     </div>
   </main>
 
