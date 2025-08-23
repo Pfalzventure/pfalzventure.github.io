@@ -1,25 +1,30 @@
+// api/webhook.js
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+    return res.status(405).send("Method Not Allowed");
   }
 
   try {
-    // Rohdaten vom PayPal Webhook
-    const event = req.body;
+    // PayPal schickt JSON
+    const body = req.body;
 
-    console.log("Webhook Event:", event);
+    // Deine neue Webhook-ID von PayPal
+    const WEBHOOK_ID = "85L6062605761571E";
 
-    // Beispiel: Kauf abgeschlossen
-    if (event.event_type === "CHECKOUT.ORDER.APPROVED") {
-      const payerEmail = event.resource.payer.email_address;
-
-      // TODO: Mailversand (z. B. über Nodemailer oder ein SMTP)
-      console.log(`Neue Bestellung von: ${payerEmail}`);
+    // Sicherheitsprüfung: stimmt die ID?
+    if (!body.id || body.id !== WEBHOOK_ID) {
+      return res.status(400).send("Ungültige Webhook-ID");
     }
 
-    return res.status(200).json({ status: "ok" });
+    // Hier kannst du auf Events reagieren:
+    if (body.event_type === "CHECKOUT.ORDER.APPROVED") {
+      console.log("Neue Bestellung eingegangen!");
+      // TODO: hier E-Mail-Bestätigung an Kunden versenden
+    }
+
+    res.status(200).send("OK");
   } catch (err) {
     console.error("Webhook Error:", err);
-    return res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).send("Internal Server Error");
   }
 }
