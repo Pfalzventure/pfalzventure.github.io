@@ -123,9 +123,18 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
+      gap: 10px;
     }
+
+    /* 👇 Fix für + / – Buttons und Anzahl */
+    .qty-control {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
+
     .cart-item button {
-      margin: 0 5px;
       padding: 4px 8px;
       border: none;
       border-radius: 4px;
@@ -139,6 +148,25 @@
       font-weight: bold;
       font-size: 18px;
       text-align: right;
+    }
+
+    #checkout-btn {
+      display: block;
+      width: 100%;
+      margin-top: 15px;
+      background: #0070ba;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    #checkout-btn:hover {
+      background: #005c99;
     }
 
     /* 📱 Mobile Optimierung */
@@ -196,6 +224,7 @@
       <h2>🛒 Dein Warenkorb</h2>
       <div id="cart-items"></div>
       <div class="cart-total" id="cart-total">Gesamt: 0 €</div>
+      <button id="checkout-btn">💳 Zur Kasse</button>
       <button onclick="closeCart()">Schließen</button>
     </div>
   </div>
@@ -253,9 +282,9 @@
         div.className = "cart-item";
         div.innerHTML = `
           <span>${item.name} ${item.termine ? "(" + item.termine.join(", ") + ")" : ""} – ${item.price}€</span>
-          <div>
+          <div class="qty-control">
             <button onclick="changeQty(${index}, -1)">-</button>
-            ${item.qty}
+            <span>${item.qty}</span>
             <button onclick="changeQty(${index}, 1)">+</button>
           </div>
         `;
@@ -303,6 +332,12 @@
     }
 
     loadTermine();
+
+    // 👉 Checkout-Button (PayPal redirect als Dummy)
+    document.getElementById("checkout-btn").addEventListener("click", () => {
+      alert("Hier geht's zur PayPal-Kasse (Integration folgt).");
+      // Hier später deine PayPal Checkout Integration einfügen
+    });
   </script>
 
 </body>
