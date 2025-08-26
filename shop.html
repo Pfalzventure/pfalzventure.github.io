@@ -99,87 +99,92 @@
       background: #218838;
     }
 
-    /* Warenkorb Overlay */
+    /* Warenkorb Modal */
     #cart-modal {
       display: none;
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5);
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
       justify-content: center;
       align-items: center;
+      z-index: 1000;
     }
+
     #cart-content {
       background: white;
       padding: 20px;
       border-radius: 12px;
       width: 90%;
       max-width: 500px;
-      max-height: 80%;
-      overflow-y: auto;
     }
-    #cart-content h2 { margin-top: 0; }
+
+    #cart-content h2 {
+      margin-top: 0;
+    }
+
     .cart-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
-      gap: 10px;
+      white-space: nowrap;
     }
 
-    /* 👇 Fix für + / – Buttons und Anzahl */
-    .qty-control {
+    .cart-item span {
+      flex: 1;
+    }
+
+    .qty-controls {
       display: flex;
       align-items: center;
       gap: 5px;
       white-space: nowrap;
     }
 
-    .cart-item button {
-      padding: 4px 8px;
-      border: none;
-      border-radius: 4px;
+    .qty-controls button {
+      padding: 2px 6px;
+      font-size: 14px;
       cursor: pointer;
-      background: #ddd;
-    }
-    .cart-item button:hover { background: #bbb; }
-
-    .cart-total {
-      margin-top: 15px;
-      font-weight: bold;
-      font-size: 18px;
-      text-align: right;
     }
 
-    #checkout-btn {
-      display: block;
-      width: 100%;
-      margin-top: 15px;
+    #checkout {
       background: #0070ba;
       color: white;
-      padding: 12px;
       border: none;
+      padding: 10px;
       border-radius: 8px;
+      width: 100%;
       font-size: 16px;
-      font-weight: bold;
+      margin-top: 10px;
       cursor: pointer;
-      text-align: center;
-    }
-
-    #checkout-btn:hover {
-      background: #005c99;
     }
 
     /* 📱 Mobile Optimierung */
     @media (max-width: 600px) {
-      nav { gap: 8px; }
-      nav a { font-size: 0.85rem; }
-      #cart-btn { padding: 6px 10px; font-size: 0.85rem; }
-      header img { height: 32px; }
+      nav {
+        gap: 8px;
+      }
+      nav a {
+        font-size: 0.85rem;
+      }
+      #cart-btn {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+      }
+      header img {
+        height: 32px;
+      }
     }
 
     @media (max-width: 400px) {
-      nav a { font-size: 0.75rem; }
-      #cart-btn { font-size: 0.75rem; padding: 5px 8px; }
+      nav a {
+        font-size: 0.75rem;
+      }
+      #cart-btn {
+        font-size: 0.75rem;
+        padding: 5px 8px;
+      }
     }
   </style>
 </head>
@@ -221,14 +226,15 @@
   <!-- Warenkorb Modal -->
   <div id="cart-modal">
     <div id="cart-content">
-      <h2>🛒 Dein Warenkorb</h2>
+      <h2>Warenkorb</h2>
       <div id="cart-items"></div>
-      <div class="cart-total" id="cart-total">Gesamt: 0 €</div>
-      <button id="checkout-btn">💳 Zur Kasse</button>
+      <button id="checkout">Zur Kasse</button>
       <button onclick="closeCart()">Schließen</button>
     </div>
   </div>
 
+  <!-- PayPal Integration -->
+  <script src="https://www.paypal.com/sdk/js?client-id=AX1yQqX6nXHk2YHgwWZQv6P7Q7vZKXrjYw4FjN8u6G8wOqjD2H2jK8mYJrZ8YhF2Jk6yW7tF3cQdVx9L&currency=EUR"></script>
   <script>
     // Warenkorb Logik
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -236,18 +242,41 @@
     const cartCount = cartBtn.querySelector('span');
     const cartModal = document.getElementById('cart-modal');
     const cartItemsDiv = document.getElementById('cart-items');
-    const cartTotalDiv = document.getElementById('cart-total');
 
     function updateCartDisplay() {
-      cartCount.textContent = `(${cart.length})`;
+      cartCount.textContent = `(${cart.reduce((sum, item) => sum + (item.qty || 1), 0)})`;
       localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    function renderCart() {
+      cartItemsDiv.innerHTML = "";
+      cart.forEach((item, i) => {
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `
+          <span>${item.name} – ${item.price} €</span>
+          <div class="qty-controls">
+            <button onclick="changeQty(${i}, -1)">-</button>
+            <span>${item.qty || 1}</span>
+            <button onclick="changeQty(${i}, 1)">+</button>
+          </div>
+        `;
+        cartItemsDiv.appendChild(div);
+      });
+    }
+
+    function changeQty(index, delta) {
+      if (!cart[index].qty) cart[index].qty = 1;
+      cart[index].qty += delta;
+      if (cart[index].qty <= 0) cart.splice(index, 1);
+      updateCartDisplay();
       renderCart();
     }
 
     function addToCart(name, price) {
-      let existing = cart.find(item => item.name === name);
+      const existing = cart.find(item => item.name === name && !item.termine);
       if (existing) {
-        existing.qty++;
+        existing.qty = (existing.qty || 1) + 1;
       } else {
         cart.push({ name, price, qty: 1 });
       }
@@ -261,49 +290,18 @@
         alert("Bitte wähle mindestens einen Termin.");
         return;
       }
-      cart.push({ name: "Kurs-Gutschein", price: 99, termine: selected, qty: 1 });
+      cart.push({ name: "Kurs-Gutschein", price: 99, qty: 1, termine: selected });
       updateCartDisplay();
     }
 
-    function renderCart() {
-      cartItemsDiv.innerHTML = "";
-      let total = 0;
-
-      if (cart.length === 0) {
-        cartItemsDiv.innerHTML = "<p>Dein Warenkorb ist leer.</p>";
-        cartTotalDiv.textContent = "Gesamt: 0 €";
-        return;
-      }
-
-      cart.forEach((item, index) => {
-        total += item.price * item.qty;
-
-        const div = document.createElement("div");
-        div.className = "cart-item";
-        div.innerHTML = `
-          <span>${item.name} ${item.termine ? "(" + item.termine.join(", ") + ")" : ""} – ${item.price}€</span>
-          <div class="qty-control">
-            <button onclick="changeQty(${index}, -1)">-</button>
-            <span>${item.qty}</span>
-            <button onclick="changeQty(${index}, 1)">+</button>
-          </div>
-        `;
-        cartItemsDiv.appendChild(div);
-      });
-
-      cartTotalDiv.textContent = `Gesamt: ${total} €`;
+    function openCart() {
+      renderCart();
+      cartModal.style.display = "flex";
     }
 
-    function changeQty(index, delta) {
-      cart[index].qty += delta;
-      if (cart[index].qty <= 0) {
-        cart.splice(index, 1);
-      }
-      updateCartDisplay();
+    function closeCart() {
+      cartModal.style.display = "none";
     }
-
-    function openCart() { cartModal.style.display = "flex"; }
-    function closeCart() { cartModal.style.display = "none"; }
 
     cartBtn.addEventListener("click", openCart);
 
@@ -332,12 +330,6 @@
     }
 
     loadTermine();
-
-    // 👉 Checkout-Button (PayPal redirect als Dummy)
-    document.getElementById("checkout-btn").addEventListener("click", () => {
-      alert("Hier geht's zur PayPal-Kasse (Integration folgt).");
-      // Hier später deine PayPal Checkout Integration einfügen
-    });
   </script>
 
 </body>
