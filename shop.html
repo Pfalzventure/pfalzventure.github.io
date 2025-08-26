@@ -3,361 +3,218 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shop – Pfalzventure</title>
-  <link rel="stylesheet" href="style.css">
-
-  <!-- PayPal SDK -->
-  <script src="https://www.paypal.com/sdk/js?client-id=AQbF-v1VWk6QCLKdNODfXJb-fUAcoTsnE1ux9JvHUWNYuJQE1xskgSu7ff_qniWdL168KWEw_oX7iCHB&currency=EUR"></script>
-
+  <title>Shop - Pfalzventure</title>
   <style>
-    /* Allgemein */
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      line-height: 1.5;
-      color: #222;
-    }
-    h1, h2, h3 {
-      margin-top: 0;
+      margin: 0;
+      padding: 0;
+      background: #fdfde7;
     }
 
     /* Header */
     header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 15px;
       background: #222;
       color: white;
-      padding: 10px 20px;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
     }
-    header .container {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-    }
-    .logo {
-      justify-self: start;
-    }
-    .logo img {
+
+    header img {
       height: 40px;
     }
+
     nav {
-      justify-self: center;
-    }
-    nav ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
+      flex: 1;
       display: flex;
-      gap: 20px;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: nowrap;
     }
+
     nav a {
       color: white;
       text-decoration: none;
-      font-size: 16px;
+      font-weight: bold;
+      padding: 5px 0;
+      font-size: 1rem;
+      transition: font-size 0.3s ease;
     }
-    nav a.active {
+
+    nav a:hover {
       text-decoration: underline;
     }
-    .cart-btn {
-      justify-self: end;
-    }
-    .btn {
-      background: #ff9800;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-    }
 
-    /* Shop */
-    .shop-section {
-      padding: 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-    .product {
-      border: 1px solid #ddd;
-      padding: 15px;
-      border-radius: 8px;
-      background: #fafafa;
-    }
-    .product button {
-      background: #4caf50;
+    #cart-btn {
+      background: orange;
       color: white;
       border: none;
-      padding: 10px;
-      border-radius: 6px;
-      width: 100%;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: bold;
       cursor: pointer;
-      font-size: 15px;
-    }
-    .product button:hover {
-      background: #43a047;
-    }
-    .product input,
-    .product select {
-      width: 100%;
-      padding: 8px;
-      margin-top: 6px;
-      margin-bottom: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 15px;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
     }
 
-    /* Warenkorb (als Overlay von unten) */
-    #cart {
-      display: none;
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      max-height: 70vh;
-      overflow-y: auto;
-      background: white;
-      border-top: 3px solid #222;
-      padding: 20px;
-      box-shadow: 0 -2px 15px rgba(0,0,0,0.3);
-      z-index: 2000;
-    }
-    #cart h3 {
-      margin-top: 0;
-    }
-    #cart ul {
-      padding: 0;
-      list-style: none;
-    }
-    #cart li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-      font-size: 14px;
-    }
-    #cart button {
-      padding: 6px 10px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
+    #cart-btn span {
       margin-left: 5px;
     }
-    #cart button:nth-child(1) {
-      background: #f44336;
-      color: white;
-    }
-    #cart button:nth-child(2) {
-      background: #4caf50;
-      color: white;
+
+    /* Shop Layout */
+    .shop-container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 10px;
     }
 
-    /* Footer */
-    footer {
-      background: #222;
-      color: white;
-      text-align: center;
-      padding: 15px;
-      margin-top: 40px;
+    .product {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-    footer a {
-      color: #ff9800;
-      text-decoration: none;
+
+    .product h2 {
+      margin-top: 0;
+    }
+
+    .product button {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    .product button:hover {
+      background: #218838;
+    }
+
+    /* 📱 Mobile Optimierung */
+    @media (max-width: 600px) {
+      nav {
+        gap: 8px;
+      }
+      nav a {
+        font-size: 0.85rem; /* kleiner auf kleinen Displays */
+      }
+      #cart-btn {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+      }
+      header img {
+        height: 32px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      nav a {
+        font-size: 0.75rem; /* noch kleiner wenn sehr eng */
+      }
+      #cart-btn {
+        font-size: 0.75rem;
+        padding: 5px 8px;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Header -->
+
   <header>
-    <div class="container">
-      <a href="index.html" class="logo">
-        <img src="assets/logo.png" alt="Pfalzventure Logo">
-      </a>
-      <nav>
-        <ul class="nav-links">
-          <li><a href="index.html">Start</a></li>
-          <li><a href="kurse.html">Kurse</a></li>
-          <li><a href="shop.html" class="active">Shop</a></li>
-          <li><a href="kontakt.html">Kontakt</a></li>
-        </ul>
-      </nav>
-      <div class="cart-btn">
-        <button onclick="toggleCart()" class="btn">🛒 Warenkorb (<span id="cart-count">0</span>)</button>
-      </div>
-    </div>
+    <!-- Logo links -->
+    <a href="index.html"><img src="assets/logo.png" alt="Pfalzventure Logo"></a>
+
+    <!-- Menü mittig -->
+    <nav>
+      <a href="index.html">Start</a>
+      <a href="kurse.html">Kurse</a>
+      <a href="shop.html">Shop</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+
+    <!-- Warenkorb rechts -->
+    <button id="cart-btn">🛒 <span>(0)</span></button>
   </header>
 
-  <!-- Shop -->
-  <main class="shop-section">
+  <div class="shop-container">
+    <h1>Shop</h1>
+
     <div class="product">
       <h2>Survival Kit</h2>
       <p>Alles, was du für dein Abenteuer brauchst.</p>
-      <button onclick="addToCart('Survival Kit', 49.00)">In den Warenkorb (49 €)</button>
+      <button onclick="addToCart('Survival Kit', 49)">In den Warenkorb (49 €)</button>
     </div>
 
     <div class="product">
       <h2>Kurs-Gutschein</h2>
-      <p>Verschenke ein unvergessliches Erlebnis. <br>Wähle passende Termine:</p>
-      <label for="kursTermine">Mögliche Termine:</label>
-      <select id="kursTermine" multiple size="4"></select>
-      <button onclick="addCourseVoucher()">In den Warenkorb (1 €)</button>
+      <p>Verschenke ein unvergessliches Erlebnis.<br>Wähle passende Termine:</p>
+      <select id="kursTermine" multiple></select>
+      <button onclick="addCourseToCart()">In den Warenkorb (ab 99 €)</button>
     </div>
-
-    <div class="product">
-      <h2>Wert-Gutschein</h2>
-      <p>Wähle selbst, wie viel dir das Abenteuer wert ist.</p>
-      <label for="voucherAmount">Betrag in €:</label>
-      <input type="number" id="voucherAmount" value="50" min="10" step="5">
-      <button onclick="addVoucher()">In den Warenkorb</button>
-    </div>
-  </main>
-
-  <!-- Warenkorb -->
-  <div id="cart">
-    <h3>Dein Warenkorb</h3>
-    <ul id="cart-items"></ul>
-    <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
-    <div id="paypal-button-container"></div>
-    <button onclick="toggleCart()" style="background:#222;color:white;width:100%;padding:12px;margin-top:10px;border-radius:6px;">Schließen</button>
   </div>
 
-  <!-- Footer -->
-  <footer>
-    <p>© 2025 Pfalzventure – Robert Prokasky</p>
-    <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
-  </footer>
-
-  <!-- Script -->
   <script>
-    let cart = [];
+    // Warenkorb Logik
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartBtn = document.getElementById('cart-btn');
+    const cartCount = cartBtn.querySelector('span');
 
-    // Kurstermine aus JSON laden
-    fetch("assets/kurstermine.json")
-      .then(res => res.json())
-      .then(data => {
-        let select = document.getElementById("kursTermine");
-        data.termine.forEach(t => {
-          let opt = document.createElement("option");
-          opt.value = t.id;
-          opt.textContent = t.text;
-          select.appendChild(opt);
-        });
-      });
+    function updateCartDisplay() {
+      cartCount.textContent = `(${cart.length})`;
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
 
     function addToCart(name, price) {
-      let existing = cart.find(item => item.name === name && item.price === price);
-      if (existing) {
-        existing.qty += 1;
-      } else {
-        cart.push({ name, price, qty: 1 });
-      }
-      saveCart();
+      cart.push({ name, price });
+      updateCartDisplay();
     }
 
-    function addCourseVoucher() {
-      let select = document.getElementById("kursTermine");
-      let selected = Array.from(select.selectedOptions).map(opt => opt.textContent);
+    function addCourseToCart() {
+      const select = document.getElementById('kursTermine');
+      const selected = Array.from(select.selectedOptions).map(opt => opt.value);
       if (selected.length === 0) {
-        alert("Bitte wähle mindestens einen Termin aus!");
+        alert("Bitte wähle mindestens einen Termin.");
         return;
       }
-      cart.push({ name: "Kurs-Gutschein", price: 1.00, qty: 1, termine: selected });
-      saveCart();
+      cart.push({ name: "Kurs-Gutschein", price: 99, termine: selected });
+      updateCartDisplay();
     }
 
-    function addVoucher() {
-      let amount = parseFloat(document.getElementById("voucherAmount").value);
-      if (amount < 10) amount = 10;
-      cart.push({ name: "Wert-Gutschein", price: amount, qty: 1 });
-      saveCart();
-    }
+    updateCartDisplay();
 
-    function increaseQty(index) {
-      cart[index].qty += 1;
-      saveCart();
-    }
+    // Kursdaten laden
+    async function loadTermine() {
+      try {
+        const res = await fetch("assets/kurse.json");
+        if (!res.ok) throw new Error("Datei nicht gefunden");
+        const data = await res.json();
 
-    function decreaseQty(index) {
-      cart[index].qty -= 1;
-      if (cart[index].qty <= 0) cart.splice(index, 1);
-      saveCart();
-    }
-
-    function getCartTotal() {
-      return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    }
-
-    function saveCart() {
-      localStorage.setItem("cart", JSON.stringify(cart));
-      updateCart();
-    }
-
-    function loadCart() {
-      let stored = localStorage.getItem("cart");
-      if (stored) cart = JSON.parse(stored);
-      updateCart();
-    }
-
-    function updateCart() {
-      document.getElementById("cart-count").innerText = cart.reduce((sum, item) => sum + item.qty, 0);
-      let itemsList = document.getElementById("cart-items");
-      itemsList.innerHTML = "";
-      let total = 0;
-      cart.forEach((item, i) => {
-        total += item.price * item.qty;
-        let li = document.createElement("li");
-        let text = `${item.name} – ${item.price.toFixed(2)} € × ${item.qty}`;
-        if (item.termine) {
-          text += ` (Termine: ${item.termine.join(", ")})`;
-        }
-        let span = document.createElement("span");
-        span.innerText = text;
-        let controls = document.createElement("div");
-        let minusBtn = document.createElement("button");
-        minusBtn.innerText = "➖";
-        minusBtn.onclick = () => decreaseQty(i);
-        let plusBtn = document.createElement("button");
-        plusBtn.innerText = "➕";
-        plusBtn.onclick = () => increaseQty(i);
-        controls.appendChild(minusBtn);
-        controls.appendChild(plusBtn);
-        li.appendChild(span);
-        li.appendChild(controls);
-        itemsList.appendChild(li);
-      });
-      document.getElementById("cart-total").innerText = total.toFixed(2);
-    }
-
-    function toggleCart() {
-      let cartDiv = document.getElementById("cart");
-      cartDiv.style.display = (cartDiv.style.display === "none" || cartDiv.style.display === "") ? "block" : "none";
-    }
-
-    paypal.Buttons({
-      createOrder: function(data, actions) {
-        return actions.order.create({
-          purchase_units: [{
-            description: cart.map(item => {
-              let desc = `${item.name} x${item.qty}`;
-              if (item.termine) desc += ` [${item.termine.join(", ")}]`;
-              return desc;
-            }).join("; "),
-            amount: { currency_code: "EUR", value: getCartTotal().toFixed(2) }
-          }]
+        const select = document.getElementById("kursTermine");
+        select.innerHTML = "";
+        data.termine.forEach(t => {
+          const option = document.createElement("option");
+          option.value = `${t.datum} – ${t.name}`;
+          option.textContent = `${t.datum} – ${t.name}`;
+          select.appendChild(option);
         });
-      },
-      onApprove: function(data, actions) {
-        return actions.order.capture().then(function(details) {
-          alert("Danke " + details.payer.name.given_name + "! Deine Bestellung wurde erfolgreich abgeschlossen.");
-          cart = [];
-          saveCart();
-          toggleCart();
-        });
+      } catch (err) {
+        console.error("Fehler beim Laden:", err);
+        document.getElementById("kursTermine").innerHTML =
+          '<option disabled>⚠️ Termine konnten nicht geladen werden.</option>';
       }
-    }).render('#paypal-button-container');
+    }
 
-    loadCart();
+    loadTermine();
   </script>
+
 </body>
 </html>
