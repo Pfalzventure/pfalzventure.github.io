@@ -295,7 +295,7 @@
     // Kursdaten laden
     async function loadTermine() {
       try {
-        const res = await fetch("assets/kurse.json");
+        const res = await fetch("assets/kurstermine.json");
         if (!res.ok) throw new Error("Datei nicht gefunden");
         const data = await res.json();
 
