@@ -1,90 +1,134 @@
-// ===========================
-// Warenkorb zentral mit localStorage
-// ===========================
+/* =====================================================
+   Globale Warenkorb-Logik für ALLE Seiten
+   ===================================================== */
 
-// Warenkorb laden oder neu erstellen
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// Warenkorb speichern
+// 🟢 Warenkorb speichern
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartUI();
 }
 
-// Artikel hinzufügen
-function addToCart(product, price) {
-  let item = cart.find(i => i.product === product);
-  if (item) {
-    item.qty++;
+// 🟢 Produkt zum Warenkorb hinzufügen
+function addToCart(productId, title, price, qty = 1, extraInfo = "") {
+  const existing = cart.find(item => item.id === productId && item.extraInfo === extraInfo);
+  if (existing) {
+    existing.qty += qty;
   } else {
-    cart.push({ product, price, qty: 1 });
+    cart.push({ id: productId, title, price, qty, extraInfo });
   }
   saveCart();
-  renderCart();
 }
 
-// Artikelanzahl ändern
-function updateQty(product, delta) {
-  let item = cart.find(i => i.product === product);
-  if (!item) return;
-  item.qty += delta;
-  if (item.qty <= 0) {
-    cart = cart.filter(i => i.product !== product);
+// 🟢 Produktmenge ändern
+function updateCartItem(productId, extraInfo, change) {
+  const item = cart.find(i => i.id === productId && i.extraInfo === extraInfo);
+  if (item) {
+    item.qty += change;
+    if (item.qty <= 0) {
+      cart = cart.filter(i => !(i.id === productId && i.extraInfo === extraInfo));
+    }
+    saveCart();
   }
-  saveCart();
-  renderCart();
 }
 
-// Gesamtsumme berechnen
-function getTotal() {
-  return cart.reduce((sum, i) => sum + i.price * i.qty, 0).toFixed(2);
+// 🟢 Gesamtsumme berechnen
+function getCartTotal() {
+  return cart.reduce((sum, item) => sum + item.price * item.qty, 0).toFixed(2);
 }
 
-// Warenkorb öffnen/schließen
+// 🟢 Warenkorb-UI aktualisieren
+function updateCartUI() {
+  const cartList = document.querySelector(".cart-list");
+  const cartTotal = document.querySelector(".cart-total");
+
+  if (!cartList) return; // Falls UI auf einer Seite nicht existiert
+
+  cartList.innerHTML = "";
+
+  cart.forEach(item => {
+    const li = document.createElement("li");
+    li.classList.add("cart-item");
+
+    // Text links
+    const text = document.createElement("span");
+    text.textContent = item.title + (item.extraInfo ? " (" + item.extraInfo + ")" : "");
+
+    // Steuerung rechts
+    const controls = document.createElement("div");
+    controls.classList.add("cart-controls");
+
+    const btnMinus = document.createElement("button");
+    btnMinus.textContent = "−";
+    btnMinus.onclick = () => updateCartItem(item.id, item.extraInfo, -1);
+
+    const qty = document.createElement("span");
+    qty.classList.add("cart-qty");
+    qty.textContent = item.qty;
+
+    const btnPlus = document.createElement("button");
+    btnPlus.textContent = "+";
+    btnPlus.onclick = () => updateCartItem(item.id, item.extraInfo, 1);
+
+    const price = document.createElement("span");
+    price.classList.add("cart-price");
+    price.textContent = (item.price * item.qty).toFixed(2) + " €";
+
+    controls.appendChild(btnMinus);
+    controls.appendChild(qty);
+    controls.appendChild(btnPlus);
+    controls.appendChild(price);
+
+    li.appendChild(text);
+    li.appendChild(controls);
+
+    cartList.appendChild(li);
+  });
+
+  if (cartTotal) {
+    cartTotal.textContent = "Gesamt: " + getCartTotal() + " €";
+  }
+}
+
+// 🟢 Warenkorb öffnen/schließen
 function toggleCart() {
-  const container = document.getElementById("cart-container");
-  if (container) {
-    container.classList.toggle("active");
+  document.querySelector(".cart-dropdown").classList.toggle("active");
+}
+
+// =====================================================
+// Initialisierung (aufgerufen NACH Laden des Headers)
+// =====================================================
+function initShopScripts() {
+  // Warenkorb-Button aktivieren
+  const cartBtn = document.querySelector(".cart-btn");
+  if (cartBtn) {
+    cartBtn.onclick = toggleCart;
+  }
+
+  // Warenkorb UI initial laden
+  updateCartUI();
+
+  // PayPal Buttons (falls vorhanden)
+  if (document.getElementById("paypal-button-container")) {
+    paypal.Buttons({
+      createOrder: function(data, actions) {
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: getCartTotal()
+            }
+          }]
+        });
+      },
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+          alert("Danke, " + details.payer.name.given_name + "! Deine Bestellung war erfolgreich.");
+          cart = [];
+          saveCart();
+        });
+      }
+    }).render("#paypal-button-container");
   }
 }
 
-// Warenkorb im HTML anzeigen
-function renderCart() {
-  const container = document.getElementById("cart-container");
-  const countSpan = document.getElementById("cart-count");
-
-  if (!container) return;
-
-  if (cart.length === 0) {
-    container.innerHTML = `<p>🛒 Warenkorb ist leer</p>`;
-    if (countSpan) countSpan.textContent = "0";
-    return;
-  }
-
-  let html = `
-    <h3>Warenkorb</h3>
-    <ul>
-      ${cart.map(item => `
-        <li>
-          <span>${item.product} - ${item.price} €</span>
-          <div class="quantity-controls">
-            <button onclick="updateQty('${item.product}', -1)">-</button>
-            <span>${item.qty}</span>
-            <button onclick="updateQty('${item.product}', 1)">+</button>
-          </div>
-        </li>
-      `).join("")}
-    </ul>
-    <p><b>Gesamt: ${getTotal()} €</b></p>
-    <button class="checkout-btn">Jetzt kaufen</button>
-  `;
-  container.innerHTML = html;
-
-  // 🛒 Zähler im Header aktualisieren
-  if (countSpan) {
-    let totalQty = cart.reduce((sum, i) => sum + i.qty, 0);
-    countSpan.textContent = totalQty;
-  }
-}
-
-// Beim Laden einmal rendern
-document.addEventListener("DOMContentLoaded", renderCart);
