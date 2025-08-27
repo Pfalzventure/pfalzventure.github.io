@@ -1,430 +1,194 @@
-/* ============================
-   Farben vom Logo
-   ============================ */
-:root {
-  --dark-green: #2f4f4f;
-  --forest-green: #3b6e4d;
-  --brown: #8b5a2b;
-  --beige: #f5f5dc;
-  --white: #fff;
+// =============================
+// Zentrale Warenkorb-Logik
+// =============================
+let cart = [];
+
+// =============================
+// Cart laden beim Start
+// =============================
+function loadCart() {
+  let stored = localStorage.getItem("cart");
+  if (stored) cart = JSON.parse(stored);
+  updateCart();
+}
+loadCart();
+
+// =============================
+// Produkt hinzufügen
+// =============================
+function addToCart(name, price) {
+  let existing = cart.find(item => item.name === name && item.price === price);
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({ name, price, qty: 1 });
+  }
+  saveCart();
 }
 
-/* ============================
-   Reset
-   ============================ */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+// Kurs-Gutschein hinzufügen
+function addCourseVoucher() {
+  let select = document.getElementById("kursTermine");
+  if (!select) return;
 
-body {
-  font-family: Arial, sans-serif;
-  background: var(--beige);
-  color: var(--dark-green);
-  line-height: 1.6;
-}
-
-/* ============================
-   Header
-   ============================ */
-header {
-  background: var(--dark-green);
-  color: var(--white);
-  padding: 0.5rem 0;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-
-header .container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 0 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo img {
-  height: 60px;
-}
-
-nav ul {
-  display: flex;
-  list-style: none;
-}
-
-nav ul li {
-  margin-left: 20px;
-}
-
-nav ul li a {
-  text-decoration: none;
-  color: var(--white);
-  font-weight: bold;
-  transition: color 0.3s;
-}
-
-nav ul li a:hover {
-  color: var(--brown);
-}
-
-/* ============================
-   Burger Menu (Mobil)
-   ============================ */
-.burger {
-  display: none;
-  cursor: pointer;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.burger div {
-  width: 25px;
-  height: 3px;
-  background: var(--white);
-  transition: all 0.3s;
-}
-
-/* ============================
-   Hero Section (Startseite)
-   ============================ */
-.hero {
-  background: url("assets/wald.png") no-repeat center center/cover;
-  color: var(--white);
-  text-align: center;
-  height: 90vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.hero::after {
-  content: "";
-  position: absolute;
-  top: 0; 
-  left: 0;
-  width: 100%; 
-  height: 100%;
-  background: rgba(47, 79, 79, 0.6);
-}
-
-.hero-content {
-  position: relative;
-  z-index: 1;
-}
-
-.hero h1 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-.hero p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-}
-
-.hero-logo {
-  max-width: 300px;
-  margin-bottom: 1.5rem;
-  filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
-}
-
-/* ============================
-   Allgemeine Buttons
-   ============================ */
-.btn {
-  background: var(--forest-green);
-  color: var(--white);
-  padding: 10px 20px;
-  border-radius: 5px;
-  text-decoration: none;
-  transition: background 0.3s;
-  cursor: pointer;
-  border: none;
-}
-
-.btn:hover {
-  background: var(--brown);
-}
-
-/* 🟠 Warenkorb Button */
-.cart-btn {
-  background-color: orange;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.cart-btn:hover {
-  background-color: darkorange;
-}
-
-/* 🟢 Add-to-Cart Buttons */
-.add-btn {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  margin-top: 8px;
-}
-
-.add-btn:hover {
-  background-color: #218838;
-}
-
-/* ============================
-   Footer
-   ============================ */
-footer {
-  background: var(--dark-green);
-  color: var(--white);
-  text-align: center;
-  padding: 20px 10px;
-  margin-top: 40px;
-}
-
-footer a {
-  color: var(--white);
-  text-decoration: underline;
-}
-
-/* ============================
-   Responsive Design
-   ============================ */
-@media (max-width: 768px) {
-  nav ul {
-    display: none;
-    flex-direction: column;
-    background: var(--dark-green);
-    position: absolute;
-    top: 70px;
-    right: 0;
-    width: 200px;
-    text-align: right;
-    padding: 10px;
+  let selected = Array.from(select.selectedOptions).map(opt => opt.textContent);
+  if (selected.length === 0) {
+    alert("Bitte wähle einen Termin aus!");
+    return;
   }
 
-  nav ul.nav-active {
-    display: flex;
+  cart.push({
+    name: "Kurs-Gutschein",
+    price: 1.00,
+    qty: 1,
+    termine: selected
+  });
+  saveCart();
+}
+
+// Wert-Gutschein hinzufügen
+function addVoucher() {
+  let amountInput = document.getElementById("voucherAmount");
+  if (!amountInput) return;
+
+  let amount = parseFloat(amountInput.value);
+  if (amount < 10) amount = 10;
+  cart.push({ name: "Wert-Gutschein", price: amount, qty: 1 });
+  saveCart();
+}
+
+// =============================
+// Menge ändern
+// =============================
+function increaseQty(index) {
+  cart[index].qty += 1;
+  saveCart();
+}
+
+function decreaseQty(index) {
+  cart[index].qty -= 1;
+  if (cart[index].qty <= 0) cart.splice(index, 1);
+  saveCart();
+}
+
+// =============================
+// Warenkorb speichern & updaten
+// =============================
+function saveCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCart();
+}
+
+function getCartTotal() {
+  return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+}
+
+// =============================
+// Warenkorb anzeigen
+// =============================
+function updateCart() {
+  // Header-Cart-Zähler updaten
+  let countEl = document.getElementById("cart-count");
+  if (countEl) {
+    countEl.innerText = cart.reduce((sum, item) => sum + item.qty, 0);
   }
 
-  .burger {
-    display: flex;
+  // Container suchen
+  let container = document.getElementById("cart-container");
+  if (!container) return;
+
+  // Warenkorb-HTML bauen
+  container.innerHTML = `
+    <div id="cart" style="display:none; position:fixed; top:80px; right:20px; background:white; border:1px solid #ccc; padding:20px; max-width:340px; box-shadow:0 2px 10px rgba(0,0,0,0.2); z-index:9999;">
+      <h3>Dein Warenkorb</h3>
+      <ul id="cart-items" class="cart-list"></ul>
+      <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
+      <div id="paypal-button-container"></div>
+      <button onclick="toggleCart()" class="btn">Schließen</button>
+    </div>
+
+    <!-- Floating Button oben rechts -->
+    <button id="cart-toggle" onclick="toggleCart()" style="position:fixed; top:20px; right:20px; background:#333; color:#fff; border:none; padding:10px 15px; border-radius:5px; cursor:pointer; z-index:10000;">
+      🛒 <span id="cart-count">${cart.reduce((sum, item) => sum + item.qty, 0)}</span>
+    </button>
+  `;
+
+  // Warenkorb-Liste füllen
+  let itemsList = container.querySelector("#cart-items");
+  cart.forEach((item, i) => {
+    let li = document.createElement("li");
+    li.classList.add("cart-item");
+
+    let span = document.createElement("span");
+    span.innerText = `${item.name} – ${item.price.toFixed(2)} €`;
+    if (item.termine) {
+      span.innerText += `\n(Termine: ${item.termine.join(", ")})`;
+    }
+
+    let controls = document.createElement("div");
+    controls.classList.add("cart-controls");
+
+    let minusBtn = document.createElement("button");
+    minusBtn.innerText = "➖";
+    minusBtn.onclick = () => decreaseQty(i);
+
+    let qtySpan = document.createElement("span");
+    qtySpan.innerText = item.qty;
+    qtySpan.classList.add("cart-qty");
+
+    let plusBtn = document.createElement("button");
+    plusBtn.innerText = "➕";
+    plusBtn.onclick = () => increaseQty(i);
+
+    controls.appendChild(minusBtn);
+    controls.appendChild(qtySpan);
+    controls.appendChild(plusBtn);
+
+    li.appendChild(span);
+    li.appendChild(controls);
+    itemsList.appendChild(li);
+  });
+
+  // Gesamtpreis setzen
+  container.querySelector("#cart-total").innerText = getCartTotal().toFixed(2);
+
+  // PayPal Buttons rendern
+  if (typeof paypal !== "undefined") {
+    paypal.Buttons({
+      createOrder: function(data, actions) {
+        return actions.order.create({
+          purchase_units: [{
+            description: cart.map(item => {
+              let desc = `${item.name} x${item.qty}`;
+              if (item.termine) {
+                desc += ` [${item.termine.join(", ")}]`;
+              }
+              return desc;
+            }).join("; "),
+            amount: {
+              currency_code: "EUR",
+              value: getCartTotal().toFixed(2)
+            }
+          }]
+        });
+      },
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+          alert("Vielen Dank, " + details.payer.name.given_name + "! Deine Bestellung war erfolgreich.");
+          cart = [];
+          saveCart();
+          toggleCart();
+        });
+      }
+    }).render('#paypal-button-container');
   }
 }
 
-/* ============================
-   Kontakt-Seite
-   ============================ */
-.kontakt-section {
-  max-width: 800px;
-  margin: 4rem auto;
-  padding: 2rem;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-}
-
-.kontakt-section h1 {
-  text-align: center;
-  margin-bottom: 1rem;
-  color: var(--dark-green);
-}
-
-.kontakt-info {
-  margin-bottom: 2rem;
-  font-size: 1.1rem;
-}
-
-.kontakt-info a {
-  color: var(--forest-green);
-  text-decoration: none;
-}
-
-.kontakt-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.kontakt-form input,
-.kontakt-form textarea {
-  padding: 0.8rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-}
-
-.kontakt-form button {
-  background: var(--forest-green);
-  color: white;
-  border: none;
-  padding: 0.8rem;
-  font-size: 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.kontakt-form button:hover {
-  background: var(--dark-green);
-}
-
-/* ============================
-   Zusatzinfos auf Kurse-Seite
-   ============================ */
-.preis-info {
-  margin-top: 3rem;
-  background: #eaf2e0;
-  padding: 2rem;
-  border-radius: 12px;
-  text-align: left;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.preis-info h2 {
-  margin-bottom: 1rem;
-  color: var(--forest-green);
-}
-
-.preis-info ul {
-  list-style: none;
-  padding: 0;
-}
-
-.preis-info ul li {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #ccc;
-}
-
-.preis-info ul li:last-child {
-  border-bottom: none;
-}
-
-/* ============================
-   Shop-Seite
-   ============================ */
-.shop-section {
-  max-width: 1200px;
-  margin: 3rem auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-.shop-section h1 {
-  margin-bottom: 2rem;
-  color: var(--forest-green);
-}
-
-.product {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  padding: 2rem;
-  margin-bottom: 2rem;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-}
-
-.product h2 {
-  margin-bottom: 1rem;
-  color: var(--dark-green);
-}
-
-.product p {
-  margin-bottom: 1.5rem;
-  font-size: 1.1rem;
-}
-
-.product input {
-  padding: 0.5rem;
-  margin: 0.5rem 0 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 100px;
-  text-align: center;
-}
-
-/* =========================================================
-   ➕➖ Warenkorb-Layout (NEU) – fügt NUR Styles hinzu
-   und ändert nichts am restlichen Design
-   ========================================================= */
-
-/* Liste im Warenkorb zurücksetzen */
-.cart-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 12px 0;
-}
-
-/* Jede Zeile: Text links, Steuerung rechts */
-.cart-item {
-  display: flex;
-  justify-content: space-between;  /* Links/Rechts auf eine Linie */
-  align-items: center;             /* Vertikal mittig */
-  gap: 12px;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #ddd;
-}
-
-/* Produkttext darf umbrechen (für "Termine: …") */
-.cart-item span {
-  white-space: pre-line;
-}
-
-/* Rechte Seite: ➖ [Anzahl] ➕ [Preis] nebeneinander */
-.cart-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* Plus/Minus Buttons dezent grau */
-.cart-controls button {
-  background: #eee;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
-  padding: 2px 8px;
-  font-size: 14px;
-  line-height: 1;
-}
-.cart-controls button:hover {
-  background: #ddd;
-}
-
-/* Anzahl mittig, fixe Breite */
-.cart-qty {
-  min-width: 24px;
-  text-align: center;
-  font-weight: bold;
-}
-
-/* Einzelpositionspreis rechts ausgerichtet (optional, falls genutzt) */
-.cart-price {
-  min-width: 70px;
-  text-align: right;
-  font-weight: bold;
-  color: var(--dark-green);
-}
-
-/* Gesamtsumme unten (optional, falls als separate Zeile gewünscht) */
-.cart-total {
-  text-align: right;
-  font-weight: bold;
-  margin-top: 8px;
+// =============================
+// Warenkorb auf/zu
+// =============================
+function toggleCart() {
+  let cartDiv = document.getElementById("cart");
+  if (!cartDiv) return;
+  cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
 }
