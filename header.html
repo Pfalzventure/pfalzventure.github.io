@@ -1,34 +1,38 @@
-<!-- ============================
-     Header + Warenkorb
-     ============================ -->
 <header>
   <div class="container">
-    <a href="index.html" class="logo">
-      <img src="assets/logo.png" alt="Pfalzventure Logo">
-    </a>
+    <!-- 🔰 Logo -->
+    <div class="logo">
+      <a href="index.html">
+        <img src="assets/logo.png" alt="Logo">
+      </a>
+    </div>
+
+    <!-- 🔰 Navigation -->
     <nav>
-      <ul class="nav-links">
+      <ul>
         <li><a href="index.html">Start</a></li>
         <li><a href="kurse.html">Kurse</a></li>
         <li><a href="shop.html">Shop</a></li>
         <li><a href="kontakt.html">Kontakt</a></li>
       </ul>
     </nav>
-    <!-- 🟠 Warenkorb Button -->
-    <button onclick="toggleCart()" class="btn cart-btn">
-      🛒 Warenkorb (<span id="cart-count">0</span>)
-    </button>
+
+    <!-- 🔰 Warenkorb-Button -->
+    <button class="cart-btn">🛒</button>
+
+    <!-- 🔰 Burger Menü (mobil) -->
+    <div class="burger">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+
+  <!-- 🔰 Warenkorb-Dropdown -->
+  <div class="cart-dropdown">
+    <ul class="cart-list"></ul>
+    <div class="cart-total"></div>
+    <div id="paypal-button-container"></div>
   </div>
 </header>
 
-<!-- ============================
-     Warenkorb Popup
-     ============================ -->
-<div id="cart" style="display:none; position:fixed; top:80px; right:20px; background:white; border:1px solid #ccc; padding:20px; max-width:340px; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
-  <h3>Dein Warenkorb</h3>
-  <br>
-  <ul id="cart-items" class="cart-list"></ul>
-  <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
-  <div id="paypal-button-container"></div>
-  <button onclick="toggleCart()" class="btn">Schließen</button>
-</div>
