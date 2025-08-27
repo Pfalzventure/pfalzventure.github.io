@@ -1,4 +1,6 @@
-/* Farben vom Logo: */
+/* ============================
+   Farben vom Logo
+   ============================ */
 :root {
   --dark-green: #2f4f4f;
   --forest-green: #3b6e4d;
@@ -7,7 +9,9 @@
   --white: #fff;
 }
 
-/* Reset */
+/* ============================
+   Reset
+   ============================ */
 * {
   margin: 0;
   padding: 0;
@@ -21,7 +25,9 @@ body {
   line-height: 1.6;
 }
 
-/* Header */
+/* ============================
+   Header
+   ============================ */
 header {
   background: var(--dark-green);
   color: var(--white);
@@ -64,7 +70,9 @@ nav ul li a:hover {
   color: var(--brown);
 }
 
-/* Burger Menu */
+/* ============================
+   Burger Menu (Mobil)
+   ============================ */
 .burger {
   display: none;
   cursor: pointer;
@@ -79,7 +87,9 @@ nav ul li a:hover {
   transition: all 0.3s;
 }
 
-/* Hero Section */
+/* ============================
+   Hero Section (Startseite)
+   ============================ */
 .hero {
   background: url("assets/wald.png") no-repeat center center/cover;
   color: var(--white);
@@ -117,12 +127,14 @@ nav ul li a:hover {
 }
 
 .hero-logo {
-  max-width: 300px;   /* Größe, kannst du anpassen */
+  max-width: 300px;
   margin-bottom: 1.5rem;
-  filter: drop-shadow(0 0 10px rgba(0,0,0,0.7)); /* hebt es vom Hintergrund ab */
+  filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
 }
 
-
+/* ============================
+   Allgemeine Buttons
+   ============================ */
 .btn {
   background: var(--forest-green);
   color: var(--white);
@@ -130,13 +142,48 @@ nav ul li a:hover {
   border-radius: 5px;
   text-decoration: none;
   transition: background 0.3s;
+  cursor: pointer;
+  border: none;
 }
 
 .btn:hover {
   background: var(--brown);
 }
 
-/* Footer */
+/* 🟠 Warenkorb Button */
+.cart-btn {
+  background-color: orange;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.cart-btn:hover {
+  background-color: darkorange;
+}
+
+/* 🟢 Add-to-Cart Buttons */
+.add-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.add-btn:hover {
+  background-color: #218838;
+}
+
+/* ============================
+   Footer
+   ============================ */
 footer {
   background: var(--dark-green);
   color: var(--white);
@@ -150,7 +197,9 @@ footer a {
   text-decoration: underline;
 }
 
-/* Responsive */
+/* ============================
+   Responsive Design
+   ============================ */
 @media (max-width: 768px) {
   nav ul {
     display: none;
@@ -171,8 +220,11 @@ footer a {
   .burger {
     display: flex;
   }
-  
-  /* Kontakt-Seite */
+}
+
+/* ============================
+   Kontakt-Seite
+   ============================ */
 .kontakt-section {
   max-width: 800px;
   margin: 4rem auto;
@@ -185,7 +237,7 @@ footer a {
 .kontakt-section h1 {
   text-align: center;
   margin-bottom: 1rem;
-  color: var(--darkgreen);
+  color: var(--dark-green);
 }
 
 .kontakt-info {
@@ -194,7 +246,7 @@ footer a {
 }
 
 .kontakt-info a {
-  color: var(--forestgreen);
+  color: var(--forest-green);
   text-decoration: none;
 }
 
@@ -213,7 +265,7 @@ footer a {
 }
 
 .kontakt-form button {
-  background: var(--forestgreen);
+  background: var(--forest-green);
   color: white;
   border: none;
   padding: 0.8rem;
@@ -224,64 +276,12 @@ footer a {
 }
 
 .kontakt-form button:hover {
-  background: var(--darkgreen);
+  background: var(--dark-green);
 }
 
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kontakt – Pfalzventure</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <!-- Header -->
-  <header>
-    <div class="container">
-      <a href="index.html" class="logo">
-        <img src="assets/logo.png" alt="Pfalzventure Logo">
-      </a>
-      <nav>
-        <ul class="nav-links">
-          <li><a href="index.html">Start</a></li>
-          <li><a href="kurse.html">Kurse</a></li>
-          <li><a href="preise.html">Preise</a></li>
-          <li><a href="shop.html">Shop</a></li>
-          <li><a href="kontakt.html" class="active">Kontakt</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Kontakt-Bereich -->
-  <main class="kontakt-section">
-    <h1>Kontakt</h1>
-    <p>Du hast Fragen zu unseren Kursen oder möchtest dich anmelden?<br>
-    Schreibe uns einfach – wir freuen uns auf deine Nachricht!</p>
-
-    <div class="kontakt-info">
-      <p><strong>Email:</strong> info@pfalzventure.de</p>
-      <p><strong>Telefon:</strong> 0170 8307443</p>
- 
-    </div>
-
-    <!-- Formular mit Formspree -->
-    <form action="https://formspree.io/f/mldlyqdz" method="POST" class="kontakt-form">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" required>
-
-      <label for="email">E-Mail:</label>
-      <input type="email" id="email" name="_replyto" required>
-
-      <label for="nachricht">Nachricht:</label>
-      <textarea id="nachricht" name="message" rows="6" required></textarea>
-
-      <button type="submit" class="btn">Nachricht senden</button>
-    </form>
-  </main>
-  
-/* Zusatzinfos auf Kurse-Seite */
+/* ============================
+   Zusatzinfos auf Kurse-Seite
+   ============================ */
 .preis-info {
   margin-top: 3rem;
   background: #eaf2e0;
@@ -307,21 +307,14 @@ footer a {
   padding: 0.5rem 0;
   border-bottom: 1px solid #ccc;
 }
+
 .preis-info ul li:last-child {
   border-bottom: none;
 }
-  
-  <!-- Footer -->
-  <footer>
-    <p>© 2025 Pfalzventure – Robert Prokasky</p>
-    <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
-  </footer>
-</body>
-</html>
 
-}
-
-/* Shop-Seite */
+/* ============================
+   Shop-Seite
+   ============================ */
 .shop-section {
   max-width: 1200px;
   margin: 3rem auto;
