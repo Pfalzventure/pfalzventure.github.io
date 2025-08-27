@@ -7,7 +7,9 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Header mit Logo + Navigation -->
+   <!-- ============================
+       Header mit Navigation
+       ============================ -->
   <header>
     <div class="container">
       <a href="index.html" class="logo">
@@ -15,17 +17,14 @@
       </a>
       <nav>
         <ul class="nav-links">
-          <li><a href="index.html">Start</a></li>
+          <li><a href="index.html" class="active">Start</a></li>
           <li><a href="kurse.html">Kurse</a></li>
           <li><a href="shop.html">Shop</a></li>
           <li><a href="kontakt.html">Kontakt</a></li>
         </ul>
-        <div class="burger">
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
       </nav>
+      <!-- 🟠 Warenkorb Button -->
+      <button onclick="toggleCart()" class="btn cart-btn">🛒 Warenkorb (<span id="cart-count">0</span>)</button>
     </div>
   </header>
 
