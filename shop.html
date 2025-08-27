@@ -223,7 +223,7 @@
       },
       onApprove: function(data, actions) {
         return actions.order.capture().then(function(details) {
-          alert("Danke " + details.payer.name.given_name + "! Deine Bestellung wurde erfolgreich abgeschlossen.");
+          alert("Vielen Dank! " + details.payer.name.given_name + " Deine Bestellung wurde erfolgreich abgeschlossen. Du erhältst in Kürze deine Bestellbestätigung per Mail");
           cart = [];
           saveCart();
           toggleCart();
