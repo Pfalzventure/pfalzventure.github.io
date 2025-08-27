@@ -25,6 +25,86 @@ function addToCart(name, price) {
   }
   saveCart();
 }
+/* Warenkorb-Button im Header */
+.cart-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 6px 10px;
+}
+
+.cart-btn:hover {
+  color: #ddd;
+}
+
+/* Overlay für den Warenkorb */
+#cart-container {
+  display: none; /* ausgeblendet bis geöffnet */
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  width: 320px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+
+#cart-container.active {
+  display: block;
+}
+
+#cart-container h3 {
+  margin-top: 0;
+  font-size: 18px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+}
+
+#cart-container ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#cart-container li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+#cart-container .quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+#cart-container button {
+  cursor: pointer;
+  background: #2c5530;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+#cart-container button:hover {
+  background: #3e7342;
+}
+
+#cart-container .checkout-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  background: #2c5530;
+  border-radius: 8px;
+  font-size: 16px;
+}
 
 // Kurs-Gutschein hinzufügen
 function addCourseVoucher() {
