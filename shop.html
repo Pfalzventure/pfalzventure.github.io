@@ -72,8 +72,7 @@
        ============================ -->
   <div id="cart" style="display:none; position:fixed; top:80px; right:20px; background:white; border:1px solid #ccc; padding:20px; max-width:340px; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
     <h3>Dein Warenkorb</h3>
-    <br>
-    <ul id="cart-items" style="list-style:none; padding:0;"></ul>
+    <ul id="cart-items" class="cart-list"></ul>
     <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
     <div id="paypal-button-container"></div>
     <button onclick="toggleCart()" class="btn">Schließen</button>
@@ -178,32 +177,36 @@
 
       let itemsList = document.getElementById("cart-items");
       itemsList.innerHTML = "";
-      let total = 0;
 
       cart.forEach((item, i) => {
-        total += item.price * item.qty;
-
         let li = document.createElement("li");
-        li.style.marginBottom = "8px";
+        li.classList.add("cart-item");
 
-        let text = `${item.name} – ${item.price.toFixed(2)} € × ${item.qty}`;
+        // Produkttext
+        let span = document.createElement("span");
+        span.innerText = `${item.name} – ${item.price.toFixed(2)} €`;
         if (item.termine) {
-          text += `\n(Termine: ${item.termine.join(", ")})`;
+          span.innerText += `\n(Termine: ${item.termine.join(", ")})`;
         }
 
-        let span = document.createElement("span");
-        span.innerText = text;
-
+        // Steuerung (➖ Anzahl ➕)
         let controls = document.createElement("div");
+        controls.classList.add("cart-controls");
+
         let minusBtn = document.createElement("button");
         minusBtn.innerText = "➖";
         minusBtn.onclick = () => decreaseQty(i);
+
+        let qtySpan = document.createElement("span");
+        qtySpan.innerText = item.qty;
+        qtySpan.classList.add("cart-qty");
 
         let plusBtn = document.createElement("button");
         plusBtn.innerText = "➕";
         plusBtn.onclick = () => increaseQty(i);
 
         controls.appendChild(minusBtn);
+        controls.appendChild(qtySpan);
         controls.appendChild(plusBtn);
 
         li.appendChild(span);
@@ -211,7 +214,7 @@
         itemsList.appendChild(li);
       });
 
-      document.getElementById("cart-total").innerText = total.toFixed(2);
+      document.getElementById("cart-total").innerText = getCartTotal().toFixed(2);
     }
 
     // Warenkorb anzeigen/verbergen
@@ -241,7 +244,7 @@
       },
       onApprove: function(data, actions) {
         return actions.order.capture().then(function(details) {
-          alert("Vielen Dank! " + details.payer.name.given_name + " Deine Bestellung wurde erfolgreich abgeschlossen.Du erhältst in kürze deine Bestellbestätigung per Mail");
+          alert("Danke " + details.payer.name.given_name + "! Deine Bestellung wurde erfolgreich abgeschlossen.");
           cart = [];
           saveCart();
           toggleCart();
