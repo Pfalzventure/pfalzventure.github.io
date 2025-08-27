@@ -1,13 +1,13 @@
 <header>
   <div class="container">
-    <!-- 🔰 Logo -->
+    <!-- Logo -->
     <div class="logo">
       <a href="index.html">
         <img src="assets/logo.png" alt="Logo">
       </a>
     </div>
 
-    <!-- 🔰 Navigation -->
+    <!-- Navigation -->
     <nav>
       <ul>
         <li><a href="index.html">Start</a></li>
@@ -17,10 +17,10 @@
       </ul>
     </nav>
 
-    <!-- 🔰 Warenkorb-Button -->
-    <button class="cart-btn">🛒</button>
+    <!-- Warenkorb-Button -->
+    <button class="cart-btn" onclick="toggleCart()">🛒</button>
 
-    <!-- 🔰 Burger Menü (mobil) -->
+    <!-- Burger Menü (mobil) -->
     <div class="burger">
       <div></div>
       <div></div>
@@ -28,10 +28,10 @@
     </div>
   </div>
 
-  <!-- 🔰 Warenkorb-Dropdown -->
-  <div class="cart-dropdown">
-    <ul class="cart-list"></ul>
-    <div class="cart-total"></div>
+  <!-- Warenkorb-Dropdown -->
+  <div class="cart-dropdown" id="cart" style="display:none;">
+    <ul class="cart-list" id="cart-items"></ul>
+    <div class="cart-total">Gesamt: <span id="cart-total">0.00</span> €</div>
     <div id="paypal-button-container"></div>
   </div>
 </header>
