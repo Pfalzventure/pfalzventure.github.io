@@ -122,7 +122,7 @@
       let selected = Array.from(select.selectedOptions).map(opt => opt.textContent);
 
       if (selected.length === 0) {
-        alert("Bitte wähle mindestens einen Termin aus!");
+        alert("Bitte wähle einen für dich passenden Termin aus!");
         return;
       }
 
@@ -244,7 +244,7 @@
       },
       onApprove: function(data, actions) {
         return actions.order.capture().then(function(details) {
-          alert("Danke " + details.payer.name.given_name + "! Deine Bestellung wurde erfolgreich abgeschlossen.");
+          alert("Vielen Dank! " + details.payer.name.given_name + " Deine Bestellung wurde erfolgreich abgeschlossen. Du erhältst in kürze deine Bestellbestätigung per Mail");
           cart = [];
           saveCart();
           toggleCart();
