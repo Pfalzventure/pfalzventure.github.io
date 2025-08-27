@@ -6,7 +6,7 @@
   <title>Shop – Pfalzventure</title>
   <link rel="stylesheet" href="style.css">
 
-  <!-- PayPal SDK -->
+  <!-- PayPal SDK (in head ist okay) -->
   <script src="https://www.paypal.com/sdk/js?client-id=AQbF-v1VWk6QCLKdNODfXJb-fUAcoTsnE1ux9JvHUWNYuJQE1xskgSu7ff_qniWdL168KWEw_oX7iCHB&currency=EUR"></script>
 </head>
 <body>
@@ -19,14 +19,12 @@
   <main class="shop-section">
     <h1>Shop</h1>
 
-    <!-- Produkt 1 -->
     <div class="product">
       <h2>Survival Kit</h2>
       <p>Alles, was du für deine Abenteuer brauchst.</p>
       <button class="btn add-btn" onclick="addToCart('Survival Kit', 49.00)">In den Warenkorb (49 €)</button>
     </div>
 
-    <!-- Produkt 2: Kurs-Gutschein -->
     <div class="product">
       <h2>Kurs-Gutschein</h2>
       <p>Verschenke ein unvergessliches Erlebnis. <br>Wähle einen für dich passenden Termin:</p>
@@ -37,7 +35,6 @@
       <button class="btn add-btn" onclick="addCourseVoucher()">In den Warenkorb (1 €)</button>
     </div>
 
-    <!-- Produkt 3 -->
     <div class="product">
       <h2>Wert-Gutschein</h2>
       <p>Wähle selbst, wie viel dir das Abenteuer wert ist.</p>
@@ -47,28 +44,31 @@
     </div>
   </main>
 
-  <!-- ============================
-       Footer
-       ============================ -->
+  <!-- Footer -->
   <footer>
     <p>© 2025 Pfalzventure – Robert Prokasky</p>
     <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
   </footer>
 
-  <!-- ============================
-       Header laden + Shop-Logik
-       ============================ -->
+  <!-- Header laden und erst danach cart.js nachladen + starten -->
   <script>
-    // Header laden und danach cart.js nachladen
     fetch("header.html")
       .then(res => res.text())
       .then(data => {
         document.getElementById("header-placeholder").innerHTML = data;
 
-        // cart.js nachladen, wenn Header im DOM ist
-        const script = document.createElement("script");
-        script.src = "cart.js";
-        document.body.appendChild(script);
+        // cart.js nachladen — erst jetzt sicher, weil Header-Elemente vorhanden sind
+        const s = document.createElement("script");
+        s.src = "cart.js";
+        s.onload = () => {
+          if (typeof initShopScripts === "function") {
+            initShopScripts();
+          }
+        };
+        document.body.appendChild(s);
+      })
+      .catch(err => {
+        console.error("Fehler beim Laden von header.html:", err);
       });
   </script>
 </body>
