@@ -23,23 +23,18 @@
     <div class="product">
       <h2>Survival Kit</h2>
       <p>Alles, was du für deine Abenteuer brauchst.</p>
-      <button class="btn add-btn" onclick="addToCart('Survival Kit', 49.00)">
-        In den Warenkorb (49 €)
-      </button>
+      <button class="btn add-btn" onclick="addToCart('Survival Kit', 49.00)">In den Warenkorb (49 €)</button>
     </div>
 
     <!-- Produkt 2: Kurs-Gutschein -->
     <div class="product">
       <h2>Kurs-Gutschein</h2>
-      <p>Verschenke ein unvergessliches Erlebnis. <br>
-         Wähle einen für dich passenden Termin:</p>
+      <p>Verschenke ein unvergessliches Erlebnis. <br>Wähle einen für dich passenden Termin:</p>
 
       <label for="kursTermine">Mögliche Termine:</label><br>
       <select id="kursTermine" multiple size="4" style="width:100%; max-width:320px;"></select>
       <br><br>
-      <button class="btn add-btn" onclick="addCourseVoucher()">
-        In den Warenkorb (1 €)
-      </button>
+      <button class="btn add-btn" onclick="addCourseVoucher()">In den Warenkorb (1 €)</button>
     </div>
 
     <!-- Produkt 3 -->
@@ -48,9 +43,7 @@
       <p>Wähle selbst, wie viel dir das Abenteuer wert ist.</p>
       <label for="voucherAmount">Betrag in €:</label>
       <input type="number" id="voucherAmount" value="50" min="10" step="5">
-      <button class="btn add-btn" onclick="addVoucher()">
-        In den Warenkorb
-      </button>
+      <button class="btn add-btn" onclick="addVoucher()">In den Warenkorb</button>
     </div>
   </main>
 
@@ -59,10 +52,7 @@
        ============================ -->
   <footer>
     <p>© 2025 Pfalzventure – Robert Prokasky</p>
-    <p>
-      <a href="impressum.html">Impressum</a> |
-      <a href="datenschutz.html">Datenschutz</a>
-    </p>
+    <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
   </footer>
 
   <!-- ============================
@@ -75,14 +65,9 @@
       .then(data => {
         document.getElementById("header-placeholder").innerHTML = data;
 
-        // cart.js erst laden, wenn Header fertig ist
+        // cart.js nachladen, wenn Header im DOM ist
         const script = document.createElement("script");
         script.src = "cart.js";
-        script.onload = () => {
-          if (typeof initShopScripts === "function") {
-            initShopScripts();
-          }
-        };
         document.body.appendChild(script);
       });
   </script>
