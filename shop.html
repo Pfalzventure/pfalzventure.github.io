@@ -10,7 +10,9 @@
   <script src="https://www.paypal.com/sdk/js?client-id=AQbF-v1VWk6QCLKdNODfXJb-fUAcoTsnE1ux9JvHUWNYuJQE1xskgSu7ff_qniWdL168KWEw_oX7iCHB&currency=EUR"></script>
 </head>
 <body>
-  <!-- Header -->
+  <!-- ============================
+       Header mit Navigation
+       ============================ -->
   <header>
     <div class="container">
       <a href="index.html" class="logo">
@@ -24,12 +26,14 @@
           <li><a href="kontakt.html">Kontakt</a></li>
         </ul>
       </nav>
-      <!-- Warenkorb Button -->
-      <button onclick="toggleCart()" class="btn">🛒 Warenkorb (<span id="cart-count">0</span>)</button>
+      <!-- 🟠 Warenkorb Button -->
+      <button onclick="toggleCart()" class="btn cart-btn">🛒 Warenkorb (<span id="cart-count">0</span>)</button>
     </div>
   </header>
 
-  <!-- Shop -->
+  <!-- ============================
+       Shop-Bereich
+       ============================ -->
   <main class="shop-section">
     <h1>Shop</h1>
 
@@ -37,7 +41,7 @@
     <div class="product">
       <h2>Survival Kit</h2>
       <p>Alles, was du für dein Abenteuer brauchst.</p>
-      <button onclick="addToCart('Survival Kit', 49.00)">In den Warenkorb (49 €)</button>
+      <button class="btn add-btn" onclick="addToCart('Survival Kit', 49.00)">In den Warenkorb (49 €)</button>
     </div>
 
     <!-- Produkt 2: Kurs-Gutschein -->
@@ -50,7 +54,7 @@
         <!-- Optionen werden dynamisch aus JSON geladen -->
       </select>
       <br><br>
-      <button onclick="addCourseVoucher()">In den Warenkorb (1 €)</button>
+      <button class="btn add-btn" onclick="addCourseVoucher()">In den Warenkorb (1 €)</button>
     </div>
 
     <!-- Produkt 3 -->
@@ -59,26 +63,32 @@
       <p>Wähle selbst, wie viel dir das Abenteuer wert ist.</p>
       <label for="voucherAmount">Betrag in €:</label>
       <input type="number" id="voucherAmount" value="50" min="10" step="5">
-      <button onclick="addVoucher()">In den Warenkorb</button>
+      <button class="btn add-btn" onclick="addVoucher()">In den Warenkorb</button>
     </div>
   </main>
 
-  <!-- Warenkorb -->
+  <!-- ============================
+       Warenkorb Popup
+       ============================ -->
   <div id="cart" style="display:none; position:fixed; top:80px; right:20px; background:white; border:1px solid #ccc; padding:20px; max-width:340px; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
     <h3>Dein Warenkorb</h3>
     <ul id="cart-items" style="list-style:none; padding:0;"></ul>
     <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
     <div id="paypal-button-container"></div>
-    <button onclick="toggleCart()">Schließen</button>
+    <button onclick="toggleCart()" class="btn">Schließen</button>
   </div>
 
-  <!-- Footer -->
+  <!-- ============================
+       Footer
+       ============================ -->
   <footer>
     <p>© 2025 Pfalzventure – Robert Prokasky</p>
     <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
   </footer>
 
-  <!-- Script -->
+  <!-- ============================
+       Shop-Script (Warenkorb + PayPal)
+       ============================ -->
   <script>
     let cart = [];
 
@@ -95,6 +105,7 @@
         });
       });
 
+    // Produkt hinzufügen
     function addToCart(name, price) {
       let existing = cart.find(item => item.name === name && item.price === price);
       if (existing) {
@@ -105,6 +116,7 @@
       saveCart();
     }
 
+    // Kurs-Gutschein hinzufügen
     function addCourseVoucher() {
       let select = document.getElementById("kursTermine");
       let selected = Array.from(select.selectedOptions).map(opt => opt.textContent);
@@ -123,6 +135,7 @@
       saveCart();
     }
 
+    // Wert-Gutschein hinzufügen
     function addVoucher() {
       let amount = parseFloat(document.getElementById("voucherAmount").value);
       if (amount < 10) amount = 10;
@@ -130,6 +143,7 @@
       saveCart();
     }
 
+    // Warenkorb-Logik (Menge ändern etc.)
     function increaseQty(index) {
       cart[index].qty += 1;
       saveCart();
@@ -145,6 +159,7 @@
       return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
     }
 
+    // Warenkorb speichern & laden
     function saveCart() {
       localStorage.setItem("cart", JSON.stringify(cart));
       updateCart();
@@ -156,6 +171,7 @@
       updateCart();
     }
 
+    // Warenkorb aktualisieren
     function updateCart() {
       document.getElementById("cart-count").innerText = cart.reduce((sum, item) => sum + item.qty, 0);
 
@@ -197,12 +213,13 @@
       document.getElementById("cart-total").innerText = total.toFixed(2);
     }
 
+    // Warenkorb anzeigen/verbergen
     function toggleCart() {
       let cartDiv = document.getElementById("cart");
       cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
     }
 
-    // PayPal
+    // PayPal Integration
     paypal.Buttons({
       createOrder: function(data, actions) {
         return actions.order.create({
@@ -223,7 +240,7 @@
       },
       onApprove: function(data, actions) {
         return actions.order.capture().then(function(details) {
-          alert("Vielen Dank! " + details.payer.name.given_name + " Deine Bestellung wurde erfolgreich abgeschlossen. Du erhältst in Kürze deine Bestellbestätigung per Mail");
+          alert("Vielen Dank! " + details.payer.name.given_name + " Deine Bestellung wurde erfolgreich abgeschlossen.Du erhältst in kürze deine Bestellbestätigung per Mail");
           cart = [];
           saveCart();
           toggleCart();
