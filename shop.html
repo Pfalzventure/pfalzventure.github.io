@@ -13,21 +13,28 @@
   <!-- ============================
        Header mit Navigation
        ============================ -->
-  <header>
-    <div class="container">
-      <a href="index.html" class="logo">
-        <img src="assets/logo.png" alt="Pfalzventure Logo">
-      </a>
-      <nav>
-        <ul class="nav-links">
-          <li><a href="index.html">Start</a></li>
-          <li><a href="kurse.html">Kurse</a></li>
-          <li><a href="shop.html" class="active">Shop</a></li>
-          <li><a href="kontakt.html">Kontakt</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+<header>
+  <div class="container">
+    <a href="index.html" class="logo">
+      <img src="assets/logo.png" alt="Pfalzventure Logo">
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Start</a></li>
+        <li><a href="kurse.html">Kurse</a></li>
+        <li><a href="shop.html" class="active">Shop</a></li>
+        <li><a href="kontakt.html">Kontakt</a></li>
+        <!-- 🛒 Warenkorb Button -->
+        <li>
+          <button id="cart-toggle" onclick="toggleCart()" class="cart-btn">
+            🛒 <span id="cart-count">0</span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
 
   <!-- ============================
        Shop-Bereich
