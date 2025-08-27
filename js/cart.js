@@ -8,13 +8,21 @@ function initShopScripts() {
     .then(res => res.json())
     .then(data => {
       let select = document.getElementById("kursTermine");
-      if (select) {
+      if (select && data.termine) {
         data.termine.forEach(t => {
           let opt = document.createElement("option");
           opt.value = t.id;
           opt.textContent = t.text;
           select.appendChild(opt);
         });
+      }
+    })
+    .catch(() => {
+      let select = document.getElementById("kursTermine");
+      if (select) {
+        let opt = document.createElement("option");
+        opt.textContent = "Keine Termine verfügbar";
+        select.appendChild(opt);
       }
     });
 
@@ -45,6 +53,7 @@ function initShopScripts() {
       return;
     }
 
+    // Nur neuen Kurs hinzufügen, wenn er nicht identisch vorhanden ist
     cart.push({
       name: "Kurs-Gutschein",
       price: 1.00,
@@ -62,7 +71,8 @@ function initShopScripts() {
     if (!amountInput) return;
 
     let amount = parseFloat(amountInput.value);
-    if (amount < 10) amount = 10;
+    if (isNaN(amount) || amount < 10) amount = 10;
+
     cart.push({ name: "Wert-Gutschein", price: amount, qty: 1 });
     saveCart();
   };
@@ -146,9 +156,44 @@ function initShopScripts() {
       itemsList.appendChild(li);
     });
 
+    // Gesamtbetrag
     let totalEl = document.getElementById("cart-total");
     if (totalEl) {
       totalEl.innerText = getCartTotal().toFixed(2);
+    }
+
+    // PayPal Buttons nur aktivieren, wenn es Produkte gibt
+    let paypalContainer = document.getElementById("paypal-button-container");
+    if (paypalContainer) {
+      paypalContainer.innerHTML = "";
+      if (cart.length > 0) {
+        paypal.Buttons({
+          createOrder: function(data, actions) {
+            return actions.order.create({
+              purchase_units: [{
+                description: cart.map(item => {
+                  let desc = `${item.name} x${item.qty}`;
+                  if (item.termine) desc += ` [${item.termine.join(", ")}]`;
+                  return desc;
+                }).join("; "),
+                amount: {
+                  currency_code: "EUR",
+                  value: getCartTotal().toFixed(2)
+                }
+              }]
+            });
+          },
+          onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+              alert("Vielen Dank, " + details.payer.name.given_name +
+                "! Deine Bestellung wurde erfolgreich abgeschlossen.");
+              cart = [];
+              saveCart();
+              toggleCart();
+            });
+          }
+        }).render('#paypal-button-container');
+      }
     }
   }
 
@@ -158,45 +203,11 @@ function initShopScripts() {
   window.toggleCart = function() {
     let cartDiv = document.getElementById("cart");
     if (!cartDiv) return;
-    cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
+    cartDiv.style.display = (cartDiv.style.display === "block") ? "none" : "block";
   };
-
-  // ============================
-  // PayPal
-  // ============================
-  if (document.getElementById("paypal-button-container")) {
-    paypal.Buttons({
-      createOrder: function(data, actions) {
-        return actions.order.create({
-          purchase_units: [{
-            description: cart.map(item => {
-              let desc = `${item.name} x${item.qty}`;
-              if (item.termine) desc += ` [${item.termine.join(", ")}]`;
-              return desc;
-            }).join("; "),
-            amount: {
-              currency_code: "EUR",
-              value: getCartTotal().toFixed(2)
-            }
-          }]
-        });
-      },
-      onApprove: function(data, actions) {
-        return actions.order.capture().then(function(details) {
-          alert("Vielen Dank! " + details.payer.name.given_name +
-            " Deine Bestellung wurde erfolgreich abgeschlossen.");
-          cart = [];
-          saveCart();
-          toggleCart();
-        });
-      }
-    }).render('#paypal-button-container');
-  }
 
   // ============================
   // Start
   // ============================
   loadCart();
 }
-
-
