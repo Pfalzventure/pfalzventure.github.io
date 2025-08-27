@@ -1,15 +1,11 @@
 <header>
   <div class="container">
-    <!-- Logo -->
-    <div class="logo">
-      <a href="index.html">
-        <img src="assets/logo.png" alt="Logo">
-      </a>
-    </div>
+    <a href="index.html" class="logo">
+      <img src="assets/logo.png" alt="Pfalzventure Logo">
+    </a>
 
-    <!-- Navigation -->
     <nav>
-      <ul>
+      <ul class="nav-links">
         <li><a href="index.html">Start</a></li>
         <li><a href="kurse.html">Kurse</a></li>
         <li><a href="shop.html">Shop</a></li>
@@ -17,22 +13,24 @@
       </ul>
     </nav>
 
-    <!-- Warenkorb-Button -->
-    <button class="cart-btn" onclick="toggleCart()">🛒</button>
+    <!-- Warenkorb-Button mit Zähler -->
+    <button class="btn cart-btn" id="cart-button" onclick="toggleCart()">
+      🛒 Warenkorb (<span id="cart-count">0</span>)
+    </button>
 
-    <!-- Burger Menü (mobil) -->
+    <!-- Burger (mobil) -->
     <div class="burger">
-      <div></div>
-      <div></div>
-      <div></div>
+      <div></div><div></div><div></div>
     </div>
   </div>
 
-  <!-- Warenkorb-Dropdown -->
-  <div class="cart-dropdown" id="cart" style="display:none;">
-    <ul class="cart-list" id="cart-items"></ul>
-    <div class="cart-total">Gesamt: <span id="cart-total">0.00</span> €</div>
+  <!-- Warenkorb-Dropdown / Popup -->
+  <div id="cart" class="cart-dropdown" style="display:none; position:fixed; top:80px; right:20px; background:white; border:1px solid #ccc; padding:20px; max-width:340px; box-shadow:0 2px 10px rgba(0,0,0,0.2); z-index:2000;">
+    <h3>Dein Warenkorb</h3>
+    <ul id="cart-items" class="cart-list"></ul>
+    <p class="cart-total">Gesamt: <span id="cart-total">0.00</span> €</p>
+    <!-- Hier rendert cart.js die PayPal-Buttons nur wenn Warenkorb nicht leer ist -->
     <div id="paypal-button-container"></div>
+    <button onclick="toggleCart()" class="btn">Schließen</button>
   </div>
 </header>
-
