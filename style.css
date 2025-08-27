@@ -1,120 +1,107 @@
 /* ============================
-   Grundlayout
+   Allgemeine Stile
    ============================ */
 body {
-  margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #fafafa;
+  margin: 0;
+  padding: 0;
+  background: #f9f9f9;
   color: #333;
-  line-height: 1.6;
 }
 
 .container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
-  margin: auto;
-  padding: 0 20px;
+  padding: 10px 20px;
 }
 
-/* ============================
-   Header & Navigation
-   ============================ */
 header {
   background: #222;
   color: white;
-  padding: 12px 0;
+  padding: 10px 0;
 }
 
-header .logo img {
+.logo img {
   height: 50px;
 }
 
-.nav-links {
+nav ul {
   list-style: none;
   display: flex;
-  gap: 20px;
+  gap: 15px;
   margin: 0;
   padding: 0;
 }
 
-.nav-links a {
+nav a {
   color: white;
   text-decoration: none;
   font-weight: bold;
-  transition: color 0.2s ease;
 }
 
-.nav-links a:hover,
-.nav-links a.active {
-  color: orange;
+nav a.active {
+  text-decoration: underline;
 }
 
-/* ============================
-   Hauptbereich
-   ============================ */
-main {
-  max-width: 1000px;
-  margin: 30px auto;
-  padding: 0 20px;
-}
-
-h1, h2, h3 {
-  margin-top: 0;
-}
-
-/* ============================
-   Shop-Produkte
-   ============================ */
-.product {
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-}
-
-.product h2 {
-  margin-bottom: 8px;
-}
-
-.product p {
-  margin-bottom: 12px;
+footer {
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+  background: #eee;
+  font-size: 14px;
 }
 
 /* ============================
    Buttons
    ============================ */
 .btn {
-  display: inline-block;
-  padding: 8px 14px;
+  cursor: pointer;
+  border: none;
   border-radius: 6px;
   font-weight: bold;
-  cursor: pointer;
-  text-align: center;
-  transition: background 0.2s ease;
 }
 
-/* 🟠 Warenkorb Button */
+/* Warenkorb Button (orange) */
 .cart-btn {
   background-color: orange;
   color: white;
-  border: none;
+  padding: 10px 16px;
 }
 .cart-btn:hover {
   background-color: darkorange;
 }
 
-/* 🟢 Add-to-Cart Buttons */
+/* Add-to-cart Buttons (grün) */
 .add-btn {
   background-color: #28a745;
   color: white;
-  border: none;
+  padding: 8px 14px;
+  margin-top: 8px;
 }
 .add-btn:hover {
   background-color: #218838;
+}
+
+/* ============================
+   Shop
+   ============================ */
+.shop-section {
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.product {
+  background: white;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.product h2 {
+  margin-top: 0;
 }
 
 /* ============================
@@ -124,28 +111,30 @@ h1, h2, h3 {
   border-radius: 8px;
   max-height: 80vh;
   overflow-y: auto;
-  z-index: 1000;
-}
-
-#cart h3 {
-  margin-top: 0;
 }
 
 .cart-list {
   list-style: none;
   padding: 0;
-  margin: 0 0 16px 0;
+  margin: 0 0 15px 0;
 }
 
 .cart-item {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* Text links, Controls rechts */
   align-items: center;
   margin-bottom: 12px;
-  border-bottom: 1px solid #eee;
   padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
 }
 
+.cart-item span {
+  white-space: pre-line; /* Zeilenumbruch für Termine */
+}
+
+/* ============================
+   Plus/Minus Steuerung
+   ============================ */
 .cart-controls {
   display: flex;
   align-items: center;
@@ -153,17 +142,14 @@ h1, h2, h3 {
 }
 
 .cart-controls button {
-  background: #eee;
-  border: 1px solid #ccc;
+  background: #ddd;
+  border: none;
+  padding: 4px 8px;
   border-radius: 4px;
   cursor: pointer;
-  padding: 2px 6px;
-  font-size: 14px;
-  line-height: 1;
 }
-
 .cart-controls button:hover {
-  background: #ddd;
+  background: #ccc;
 }
 
 .cart-qty {
@@ -172,22 +158,3 @@ h1, h2, h3 {
   font-weight: bold;
 }
 
-/* ============================
-   Footer
-   ============================ */
-footer {
-  background: #222;
-  color: white;
-  text-align: center;
-  padding: 16px 10px;
-  margin-top: 40px;
-}
-
-footer a {
-  color: orange;
-  text-decoration: none;
-}
-
-footer a:hover {
-  text-decoration: underline;
-}
