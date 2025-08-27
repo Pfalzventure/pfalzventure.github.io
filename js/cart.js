@@ -1,134 +1,202 @@
-/* =====================================================
-   Globale Warenkorb-Logik für ALLE Seiten
-   ===================================================== */
+function initShopScripts() {
+  let cart = [];
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  // ============================
+  // Kurstermine laden
+  // ============================
+  fetch("assets/kurstermine.json")
+    .then(res => res.json())
+    .then(data => {
+      let select = document.getElementById("kursTermine");
+      if (select) {
+        data.termine.forEach(t => {
+          let opt = document.createElement("option");
+          opt.value = t.id;
+          opt.textContent = t.text;
+          select.appendChild(opt);
+        });
+      }
+    });
 
-// 🟢 Warenkorb speichern
-function saveCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
-  updateCartUI();
-}
-
-// 🟢 Produkt zum Warenkorb hinzufügen
-function addToCart(productId, title, price, qty = 1, extraInfo = "") {
-  const existing = cart.find(item => item.id === productId && item.extraInfo === extraInfo);
-  if (existing) {
-    existing.qty += qty;
-  } else {
-    cart.push({ id: productId, title, price, qty, extraInfo });
-  }
-  saveCart();
-}
-
-// 🟢 Produktmenge ändern
-function updateCartItem(productId, extraInfo, change) {
-  const item = cart.find(i => i.id === productId && i.extraInfo === extraInfo);
-  if (item) {
-    item.qty += change;
-    if (item.qty <= 0) {
-      cart = cart.filter(i => !(i.id === productId && i.extraInfo === extraInfo));
+  // ============================
+  // Produkt hinzufügen
+  // ============================
+  window.addToCart = function(name, price) {
+    let existing = cart.find(item => item.name === name && item.price === price);
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cart.push({ name, price, qty: 1 });
     }
     saveCart();
-  }
-}
+  };
 
-// 🟢 Gesamtsumme berechnen
-function getCartTotal() {
-  return cart.reduce((sum, item) => sum + item.price * item.qty, 0).toFixed(2);
-}
+  // ============================
+  // Kurs-Gutschein
+  // ============================
+  window.addCourseVoucher = function() {
+    let select = document.getElementById("kursTermine");
+    if (!select) return;
 
-// 🟢 Warenkorb-UI aktualisieren
-function updateCartUI() {
-  const cartList = document.querySelector(".cart-list");
-  const cartTotal = document.querySelector(".cart-total");
+    let selected = Array.from(select.selectedOptions).map(opt => opt.textContent);
 
-  if (!cartList) return; // Falls UI auf einer Seite nicht existiert
+    if (selected.length === 0) {
+      alert("Bitte wähle einen Termin aus!");
+      return;
+    }
 
-  cartList.innerHTML = "";
+    cart.push({
+      name: "Kurs-Gutschein",
+      price: 1.00,
+      qty: 1,
+      termine: selected
+    });
+    saveCart();
+  };
 
-  cart.forEach(item => {
-    const li = document.createElement("li");
-    li.classList.add("cart-item");
+  // ============================
+  // Wert-Gutschein
+  // ============================
+  window.addVoucher = function() {
+    let amountInput = document.getElementById("voucherAmount");
+    if (!amountInput) return;
 
-    // Text links
-    const text = document.createElement("span");
-    text.textContent = item.title + (item.extraInfo ? " (" + item.extraInfo + ")" : "");
+    let amount = parseFloat(amountInput.value);
+    if (amount < 10) amount = 10;
+    cart.push({ name: "Wert-Gutschein", price: amount, qty: 1 });
+    saveCart();
+  };
 
-    // Steuerung rechts
-    const controls = document.createElement("div");
-    controls.classList.add("cart-controls");
-
-    const btnMinus = document.createElement("button");
-    btnMinus.textContent = "−";
-    btnMinus.onclick = () => updateCartItem(item.id, item.extraInfo, -1);
-
-    const qty = document.createElement("span");
-    qty.classList.add("cart-qty");
-    qty.textContent = item.qty;
-
-    const btnPlus = document.createElement("button");
-    btnPlus.textContent = "+";
-    btnPlus.onclick = () => updateCartItem(item.id, item.extraInfo, 1);
-
-    const price = document.createElement("span");
-    price.classList.add("cart-price");
-    price.textContent = (item.price * item.qty).toFixed(2) + " €";
-
-    controls.appendChild(btnMinus);
-    controls.appendChild(qty);
-    controls.appendChild(btnPlus);
-    controls.appendChild(price);
-
-    li.appendChild(text);
-    li.appendChild(controls);
-
-    cartList.appendChild(li);
-  });
-
-  if (cartTotal) {
-    cartTotal.textContent = "Gesamt: " + getCartTotal() + " €";
-  }
-}
-
-// 🟢 Warenkorb öffnen/schließen
-function toggleCart() {
-  document.querySelector(".cart-dropdown").classList.toggle("active");
-}
-
-// =====================================================
-// Initialisierung (aufgerufen NACH Laden des Headers)
-// =====================================================
-function initShopScripts() {
-  // Warenkorb-Button aktivieren
-  const cartBtn = document.querySelector(".cart-btn");
-  if (cartBtn) {
-    cartBtn.onclick = toggleCart;
+  // ============================
+  // Menge ändern
+  // ============================
+  function increaseQty(i) { cart[i].qty++; saveCart(); }
+  function decreaseQty(i) {
+    cart[i].qty--;
+    if (cart[i].qty <= 0) cart.splice(i, 1);
+    saveCart();
   }
 
-  // Warenkorb UI initial laden
-  updateCartUI();
+  // ============================
+  // Gesamt
+  // ============================
+  function getCartTotal() {
+    return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+  }
 
-  // PayPal Buttons (falls vorhanden)
+  // ============================
+  // Cart speichern/laden
+  // ============================
+  function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCart();
+  }
+  function loadCart() {
+    let stored = localStorage.getItem("cart");
+    if (stored) cart = JSON.parse(stored);
+    updateCart();
+  }
+
+  // ============================
+  // Cart anzeigen
+  // ============================
+  function updateCart() {
+    // Anzahl im Header
+    let countEl = document.getElementById("cart-count");
+    if (countEl) {
+      countEl.innerText = cart.reduce((sum, item) => sum + item.qty, 0);
+    }
+
+    // Warenkorb-Items
+    let itemsList = document.getElementById("cart-items");
+    if (!itemsList) return;
+    itemsList.innerHTML = "";
+
+    cart.forEach((item, i) => {
+      let li = document.createElement("li");
+      li.classList.add("cart-item");
+
+      let span = document.createElement("span");
+      span.innerText = `${item.name} – ${item.price.toFixed(2)} €`;
+      if (item.termine) {
+        span.innerText += `\n(Termine: ${item.termine.join(", ")})`;
+      }
+
+      let controls = document.createElement("div");
+      controls.classList.add("cart-controls");
+
+      let minusBtn = document.createElement("button");
+      minusBtn.innerText = "➖";
+      minusBtn.onclick = () => decreaseQty(i);
+
+      let qtySpan = document.createElement("span");
+      qtySpan.innerText = item.qty;
+      qtySpan.classList.add("cart-qty");
+
+      let plusBtn = document.createElement("button");
+      plusBtn.innerText = "➕";
+      plusBtn.onclick = () => increaseQty(i);
+
+      controls.appendChild(minusBtn);
+      controls.appendChild(qtySpan);
+      controls.appendChild(plusBtn);
+
+      li.appendChild(span);
+      li.appendChild(controls);
+      itemsList.appendChild(li);
+    });
+
+    let totalEl = document.getElementById("cart-total");
+    if (totalEl) {
+      totalEl.innerText = getCartTotal().toFixed(2);
+    }
+  }
+
+  // ============================
+  // Cart anzeigen/verbergen
+  // ============================
+  window.toggleCart = function() {
+    let cartDiv = document.getElementById("cart");
+    if (!cartDiv) return;
+    cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
+  };
+
+  // ============================
+  // PayPal
+  // ============================
   if (document.getElementById("paypal-button-container")) {
     paypal.Buttons({
       createOrder: function(data, actions) {
         return actions.order.create({
           purchase_units: [{
+            description: cart.map(item => {
+              let desc = `${item.name} x${item.qty}`;
+              if (item.termine) desc += ` [${item.termine.join(", ")}]`;
+              return desc;
+            }).join("; "),
             amount: {
-              value: getCartTotal()
+              currency_code: "EUR",
+              value: getCartTotal().toFixed(2)
             }
           }]
         });
       },
       onApprove: function(data, actions) {
         return actions.order.capture().then(function(details) {
-          alert("Danke, " + details.payer.name.given_name + "! Deine Bestellung war erfolgreich.");
+          alert("Vielen Dank! " + details.payer.name.given_name +
+            " Deine Bestellung wurde erfolgreich abgeschlossen.");
           cart = [];
           saveCart();
+          toggleCart();
         });
       }
-    }).render("#paypal-button-container");
+    }).render('#paypal-button-container');
   }
+
+  // ============================
+  // Start
+  // ============================
+  loadCart();
 }
+
 
