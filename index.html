@@ -38,6 +38,17 @@
   </div>
 </section>
 
+  <!-- ============================
+       Warenkorb Popup
+       ============================ -->
+  <div id="cart" style="display:none; position:fixed; top:80px; right:20px; background:white; border:1px solid #ccc; padding:20px; max-width:340px; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
+    <h3>Dein Warenkorb</h3>
+    <br>
+    <ul id="cart-items" class="cart-list"></ul>
+    <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
+    <button onclick="toggleCart()" class="btn">Schließen</button>
+  </div>
+
   <!-- Footer -->
   <footer>
     <p>© 2025 Pfalzventure – Robert Prokasky</p>
@@ -48,10 +59,97 @@
     // Burger Menü für Mobile
     const burger = document.querySelector('.burger');
     const nav = document.querySelector('.nav-links');
-    burger.addEventListener('click', () => {
-      nav.classList.toggle('nav-active');
-      burger.classList.toggle('toggle');
-    });
+    if (burger) {
+      burger.addEventListener('click', () => {
+        nav.classList.toggle('nav-active');
+        burger.classList.toggle('toggle');
+      });
+    }
+
+    // ============================
+    // Warenkorb-Logik (abgespeckt)
+    // ============================
+    let cart = [];
+
+    function increaseQty(index) {
+      cart[index].qty += 1;
+      saveCart();
+    }
+
+    function decreaseQty(index) {
+      cart[index].qty -= 1;
+      if (cart[index].qty <= 0) cart.splice(index, 1);
+      saveCart();
+    }
+
+    function getCartTotal() {
+      return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    }
+
+    function saveCart() {
+      localStorage.setItem("cart", JSON.stringify(cart));
+      updateCart();
+    }
+
+    function loadCart() {
+      let stored = localStorage.getItem("cart");
+      if (stored) cart = JSON.parse(stored);
+      updateCart();
+    }
+
+    function updateCart() {
+      document.getElementById("cart-count").innerText = cart.reduce((sum, item) => sum + item.qty, 0);
+
+      let itemsList = document.getElementById("cart-items");
+      itemsList.innerHTML = "";
+
+      cart.forEach((item, i) => {
+        let li = document.createElement("li");
+        li.classList.add("cart-item");
+
+        // Produkttext
+        let span = document.createElement("span");
+        span.innerText = `${item.name} – ${item.price.toFixed(2)} €`;
+        if (item.termine) {
+          span.innerText += `\n(Termine: ${item.termine.join(", ")})`;
+        }
+
+        // Steuerung (➖ Anzahl ➕)
+        let controls = document.createElement("div");
+        controls.classList.add("cart-controls");
+
+        let minusBtn = document.createElement("button");
+        minusBtn.innerText = "➖";
+        minusBtn.onclick = () => decreaseQty(i);
+
+        let qtySpan = document.createElement("span");
+        qtySpan.innerText = item.qty;
+        qtySpan.classList.add("cart-qty");
+
+        let plusBtn = document.createElement("button");
+        plusBtn.innerText = "➕";
+        plusBtn.onclick = () => increaseQty(i);
+
+        controls.appendChild(minusBtn);
+        controls.appendChild(qtySpan);
+        controls.appendChild(plusBtn);
+
+        li.appendChild(span);
+        li.appendChild(controls);
+        itemsList.appendChild(li);
+      });
+
+      document.getElementById("cart-total").innerText = getCartTotal().toFixed(2);
+    }
+
+    function toggleCart() {
+      let cartDiv = document.getElementById("cart");
+      cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
+    }
+
+    // Warenkorb laden beim Start
+    loadCart();
   </script>
 </body>
 </html>
+
