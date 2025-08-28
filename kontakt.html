@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pfalzventure – Bushcraft & Survival</title>
   <link rel="stylesheet" href="style.css">
+  <!-- PayPal SDK laden (achte darauf, deine eigene Client-ID einzutragen!) -->
+  <script src="https://www.paypal.com/sdk/js?client-id=DEINE_CLIENT_ID&currency=EUR"></script>
 </head>
 <body>
    <!-- ============================
@@ -46,6 +48,8 @@
     <br>
     <ul id="cart-items" class="cart-list"></ul>
     <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
+    <!-- PayPal Buttons -->
+    <div id="paypal-button-container"></div>
     <button onclick="toggleCart()" class="btn">Schließen</button>
   </div>
 
@@ -67,7 +71,7 @@
     }
 
     // ============================
-    // Warenkorb-Logik (abgespeckt)
+    // Warenkorb-Logik
     // ============================
     let cart = [];
 
@@ -140,11 +144,45 @@
       });
 
       document.getElementById("cart-total").innerText = getCartTotal().toFixed(2);
+
+      // PayPal Buttons neu rendern
+      renderPayPal();
     }
 
     function toggleCart() {
       let cartDiv = document.getElementById("cart");
       cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
+    }
+
+    // ============================
+    // PayPal Integration
+    // ============================
+    function renderPayPal() {
+      const container = document.getElementById("paypal-button-container");
+      container.innerHTML = ""; // alten Button löschen
+
+      if (cart.length === 0) return; // Kein Checkout bei leerem Warenkorb
+
+      paypal.Buttons({
+        createOrder: function(data, actions) {
+          return actions.order.create({
+            purchase_units: [{
+              amount: {
+                value: getCartTotal().toFixed(2),
+                currency_code: "EUR"
+              }
+            }]
+          });
+        },
+        onApprove: function(data, actions) {
+          return actions.order.capture().then(function(details) {
+            alert("Danke, " + details.payer.name.given_name + "! Deine Bestellung war erfolgreich.");
+            cart = [];
+            saveCart();
+            toggleCart();
+          });
+        }
+      }).render("#paypal-button-container");
     }
 
     // Warenkorb laden beim Start
