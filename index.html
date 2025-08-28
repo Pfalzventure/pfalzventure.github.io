@@ -37,7 +37,17 @@
     <a href="kurse.html" class="btn">Zu den Kursen</a>
   </div>
 </section>
-
+ <!-- ============================
+       Warenkorb Popup
+       ============================ -->
+  <div id="cart" style="display:none; position:fixed; top:80px; right:20px; background:white; border:1px solid #ccc; padding:20px; max-width:340px; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
+    <h3>Dein Warenkorb</h3>
+    <br>
+    <ul id="cart-items" class="cart-list"></ul>
+    <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
+    <div id="paypal-button-container"></div>
+    <button onclick="toggleCart()" class="btn">Schließen</button>
+  </div>
   <!-- Footer -->
   <footer>
     <p>© 2025 Pfalzventure – Robert Prokasky</p>
