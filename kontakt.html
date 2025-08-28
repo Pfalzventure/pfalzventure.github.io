@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kontakt – Pfalzventure</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=EUR"></script>
 </head>
 <body>
     <!-- ============================
@@ -18,10 +17,10 @@
       </a>
       <nav>
         <ul class="nav-links">
-          <li><a href="index.html">Start</a></li>
+          <li><a href="index.html" class="active">Start</a></li>
           <li><a href="kurse.html">Kurse</a></li>
           <li><a href="shop.html">Shop</a></li>
-          <li><a href="kontakt.html" class="active">Kontakt</a></li>
+          <li><a href="kontakt.html">Kontakt</a></li>
         </ul>
       </nav>
       <!-- 🟠 Warenkorb Button -->
@@ -88,7 +87,6 @@
             // Erfolg: auf Danke-Seite weiterleiten
             window.location.href = 'danke.html';
           } else {
-            // Fehlerdetails (z. B. 422) anzeigen
             let msg = 'Senden fehlgeschlagen. Bitte versuche es später erneut.';
             try {
               const json = await res.json();
@@ -162,9 +160,18 @@
         let li = document.createElement("li");
         li.classList.add("cart-item");
 
+        // Name + Preis
         let span = document.createElement("span");
-        // ✅ Kursname + Preis + Termin anzeigen
-        span.innerText = `${item.name} – ${item.price.toFixed(2)} € (${item.termin || "kein Termin"})`;
+        span.innerText = `${item.name} – ${item.price.toFixed(2)} €`;
+        li.appendChild(span);
+
+        // 📅 Termin anzeigen, falls vorhanden
+        if (item.termin) {
+          let terminDiv = document.createElement("div");
+          terminDiv.classList.add("cart-termin");
+          terminDiv.innerText = `📅 Termin: ${item.termin}`;
+          li.appendChild(terminDiv);
+        }
 
         let controls = document.createElement("div");
         controls.classList.add("cart-controls");
@@ -185,7 +192,6 @@
         controls.appendChild(qtySpan);
         controls.appendChild(plusBtn);
 
-        li.appendChild(span);
         li.appendChild(controls);
         itemsList.appendChild(li);
       });
@@ -208,8 +214,9 @@
             createOrder: function(data, actions) {
               return actions.order.create({
                 purchase_units: [{
-                  // ✅ Termin mit in die PayPal-Beschreibung
-                  description: cart.map(item => `${item.name} (${item.termin || "kein Termin"}) x${item.qty}`).join("; "),
+                  description: cart.map(item =>
+                    `${item.name} x${item.qty}${item.termin ? " ("+item.termin+")" : ""}`
+                  ).join("; "),
                   amount: {
                     currency_code: "EUR",
                     value: getCartTotal().toFixed(2)
@@ -219,7 +226,7 @@
             },
             onApprove: function(data, actions) {
               return actions.order.capture().then(function(details) {
-                alert("Vielen Dank! " + details.payer.name.given_name + 
+                alert("Vielen Dank! " + details.payer.name.given_name +
                       " Deine Bestellung wurde erfolgreich abgeschlossen.");
                 cart = [];
                 saveCart();
@@ -235,5 +242,8 @@
 
     loadCart();
   </script>
+
+  <!-- PayPal SDK einbinden -->
+  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=EUR"></script>
 </body>
 </html>
