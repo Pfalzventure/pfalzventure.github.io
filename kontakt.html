@@ -58,7 +58,18 @@
       <p id="form-status" class="form-status" aria-live="polite" style="display:none; margin-top:1rem;"></p>
     </form>
   </main>
-
+  
+  <!-- ============================
+       Warenkorb Popup
+       ============================ -->
+  <div id="cart" style="display:none; position:fixed; top:80px; right:20px; background:white; border:1px solid #ccc; padding:20px; max-width:340px; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
+    <h3>Dein Warenkorb</h3>
+    <br>
+    <ul id="cart-items" class="cart-list"></ul>
+    <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
+    <button onclick="toggleCart()" class="btn">Schließen</button>
+  </div>
+  
   <!-- Footer -->
   <footer>
     <p>© 2025 Pfalzventure – Robert Prokasky</p>
