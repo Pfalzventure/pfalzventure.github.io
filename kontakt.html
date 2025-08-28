@@ -5,9 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kontakt – Pfalzventure</title>
   <link rel="stylesheet" href="style.css">
+
+  <!-- PayPal SDK -->
+  <script src="https://www.paypal.com/sdk/js?client-id=AQbF-v1VWk6QCLKdNODfXJb-fUAcoTsnE1ux9JvHUWNYuJQE1xskgSu7ff_qniWdL168KWEw_oX7iCHB&currency=EUR"></script>
 </head>
 <body>
-    <!-- ============================
+  <!-- ============================
        Header mit Navigation
        ============================ -->
   <header>
@@ -17,10 +20,10 @@
       </a>
       <nav>
         <ul class="nav-links">
-          <li><a href="index.html" class="active">Start</a></li>
+          <li><a href="index.html">Start</a></li>
           <li><a href="kurse.html">Kurse</a></li>
           <li><a href="shop.html">Shop</a></li>
-          <li><a href="kontakt.html">Kontakt</a></li>
+          <li><a href="kontakt.html" class="active">Kontakt</a></li>
         </ul>
       </nav>
       <!-- 🟠 Warenkorb Button -->
@@ -28,106 +31,96 @@
     </div>
   </header>
 
-  <!-- Kontakt-Bereich -->
-  <main class="kontakt-section">
+  <!-- ============================
+       Kontaktformular
+       ============================ -->
+  <main class="contact-section">
     <h1>Kontakt</h1>
-    <p>Du hast Fragen zu unseren Kursen oder möchtest dich anmelden?<br>
-       Schreibe uns einfach – wir freuen uns auf deine Nachricht!</p>
+    <p>Schreibe uns eine Nachricht, wir melden uns schnellstmöglich zurück.</p>
 
-    <div class="kontakt-info">
-      <p><strong>Email:</strong> <a href="mailto:info@pfalzventure.de">info@pfalzventure.de</a></p>
-      <p><strong>Telefon:</strong> <a href="tel:+491708307443">0170 8307443</a></p>
-    </div>
+    <form>
+      <label for="name">Name:</label><br>
+      <input type="text" id="name" name="name" required><br><br>
 
-    <form id="contact-form" action="https://formspree.io/f/mldlyqdz" method="POST" class="kontakt-form">
-      <!-- optionaler Honeypot gegen Spam -->
-      <input type="text" name="_gotcha" style="display:none">
+      <label for="email">E-Mail:</label><br>
+      <input type="email" id="email" name="email" required><br><br>
 
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" required>
+      <label for="message">Nachricht:</label><br>
+      <textarea id="message" name="message" rows="6" required></textarea><br><br>
 
-      <label for="email">E-Mail:</label>
-      <input type="email" id="email" name="email" required>
-
-      <label for="nachricht">Nachricht:</label>
-      <textarea id="nachricht" name="message" rows="6" required></textarea>
-
-      <button type="submit" class="btn">Nachricht senden</button>
-
-      <!-- Status-Ausgabe für Fehlerfälle -->
-      <p id="form-status" class="form-status" aria-live="polite" style="display:none; margin-top:1rem;"></p>
+      <button type="submit" class="btn">Absenden</button>
     </form>
   </main>
 
-  <!-- Footer -->
+  <!-- ============================
+       Warenkorb Popup
+       ============================ -->
+  <div id="cart" style="display:none; position:fixed; top:80px; right:20px; background:white; border:1px solid #ccc; padding:20px; max-width:340px; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
+    <h3>Dein Warenkorb</h3>
+    <br>
+    <ul id="cart-items" class="cart-list"></ul>
+    <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
+    <div id="paypal-button-container"></div>
+    <button onclick="toggleCart()" class="btn">Schließen</button>
+  </div>
+
+  <!-- ============================
+       Footer
+       ============================ -->
   <footer>
     <p>© 2025 Pfalzventure – Robert Prokasky</p>
     <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
   </footer>
 
-  <!-- JS: Submit an Formspree + Redirect zu danke.html -->
-  <script>
-    (function () {
-      const form = document.getElementById('contact-form');
-      const status = document.getElementById('form-status');
-
-      form.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        status.style.display = 'none';
-        const data = new FormData(form);
-
-        try {
-          const res = await fetch(form.action, {
-            method: 'POST',
-            body: data,
-            headers: { 'Accept': 'application/json' }
-          });
-
-          if (res.ok) {
-            // Erfolg: auf Danke-Seite weiterleiten
-            window.location.href = 'danke.html';
-          } else {
-            let msg = 'Senden fehlgeschlagen. Bitte versuche es später erneut.';
-            try {
-              const json = await res.json();
-              if (json && json.errors) {
-                msg = json.errors.map(e => e.message).join(', ');
-              }
-            } catch (_) {}
-            status.textContent = msg;
-            status.style.display = 'block';
-          }
-        } catch (err) {
-          status.textContent = 'Netzwerkfehler – bitte später erneut versuchen.';
-          status.style.display = 'block';
-        }
-      });
-    })();
-  </script>
-
   <!-- ============================
-     Warenkorb Popup
-     ============================ -->
-<div id="cart" style="display:none; position:fixed; top:80px; right:20px; background:white; border:1px solid #ccc; padding:20px; max-width:340px; box-shadow:0 2px 10px rgba(0,0,0,0.2); z-index:1000;">
-  <h3>Dein Warenkorb</h3>
-  <br>
-  <ul id="cart-items" class="cart-list"></ul>
-  <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
-  <div id="paypal-button-container"></div>
-  <button onclick="toggleCart()" class="btn">Schließen</button>
-</div>
-
-  <!-- ============================
-       Warenkorb-Logik
+       Warenkorb + PayPal Script
        ============================ -->
   <script>
     let cart = [];
 
+    // Produkt hinzufügen (z. B. aus Shop übernommen)
+    function addToCart(name, price) {
+      let existing = cart.find(item => item.name === name && item.price === price);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ name, price, qty: 1 });
+      }
+      saveCart();
+    }
+
+    // Kurs-Gutschein hinzufügen (mit Terminen aus JSON)
+    function addCourseVoucher() {
+      let select = document.getElementById("kursTermine");
+      let selected = Array.from(select.selectedOptions).map(opt => opt.textContent);
+
+      if (selected.length === 0) {
+        alert("Bitte wähle einen Termin aus!");
+        return;
+      }
+
+      cart.push({
+        name: "Kurs-Gutschein",
+        price: 1.00,
+        qty: 1,
+        termine: selected
+      });
+      saveCart();
+    }
+
+    // Wert-Gutschein hinzufügen
+    function addVoucher() {
+      let amount = parseFloat(document.getElementById("voucherAmount").value);
+      if (amount < 10) amount = 10;
+      cart.push({ name: "Wert-Gutschein", price: amount, qty: 1 });
+      saveCart();
+    }
+
+    // Menge ändern
     function increaseQty(index) {
       cart[index].qty += 1;
       saveCart();
     }
-
     function decreaseQty(index) {
       cart[index].qty -= 1;
       if (cart[index].qty <= 0) cart.splice(index, 1);
@@ -138,20 +131,20 @@
       return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
     }
 
+    // Warenkorb speichern & laden
     function saveCart() {
       localStorage.setItem("cart", JSON.stringify(cart));
       updateCart();
     }
-
     function loadCart() {
       let stored = localStorage.getItem("cart");
       if (stored) cart = JSON.parse(stored);
       updateCart();
     }
 
+    // Warenkorb aktualisieren (inkl. Termine)
     function updateCart() {
-      document.getElementById("cart-count").innerText =
-        cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById("cart-count").innerText = cart.reduce((sum, item) => sum + item.qty, 0);
 
       let itemsList = document.getElementById("cart-items");
       itemsList.innerHTML = "";
@@ -160,19 +153,14 @@
         let li = document.createElement("li");
         li.classList.add("cart-item");
 
-        // Name + Preis
+        // Produkttext
         let span = document.createElement("span");
         span.innerText = `${item.name} – ${item.price.toFixed(2)} €`;
-        li.appendChild(span);
-
-        // 📅 Termin anzeigen, falls vorhanden
-        if (item.termin) {
-          let terminDiv = document.createElement("div");
-          terminDiv.classList.add("cart-termin");
-          terminDiv.innerText = `📅 Termin: ${item.termin}`;
-          li.appendChild(terminDiv);
+        if (item.termine) {
+          span.innerText += `\n(Termine: ${item.termine.join(", ")})`;
         }
 
+        // Steuerung (➖ Anzahl ➕)
         let controls = document.createElement("div");
         controls.classList.add("cart-controls");
 
@@ -192,58 +180,52 @@
         controls.appendChild(qtySpan);
         controls.appendChild(plusBtn);
 
+        li.appendChild(span);
         li.appendChild(controls);
         itemsList.appendChild(li);
       });
 
-      document.getElementById("cart-total").innerText =
-        getCartTotal().toFixed(2);
+      document.getElementById("cart-total").innerText = getCartTotal().toFixed(2);
     }
 
+    // Warenkorb anzeigen/verbergen
     function toggleCart() {
       let cartDiv = document.getElementById("cart");
-      let isHidden = (cartDiv.style.display === "none");
-
-      if (isHidden) {
-        cartDiv.style.display = "block";
-
-        // PayPal Buttons neu rendern
-        document.getElementById("paypal-button-container").innerHTML = "";
-        if (cart.length > 0) {
-          paypal.Buttons({
-            createOrder: function(data, actions) {
-              return actions.order.create({
-                purchase_units: [{
-                  description: cart.map(item =>
-                    `${item.name} x${item.qty}${item.termin ? " ("+item.termin+")" : ""}`
-                  ).join("; "),
-                  amount: {
-                    currency_code: "EUR",
-                    value: getCartTotal().toFixed(2)
-                  }
-                }]
-              });
-            },
-            onApprove: function(data, actions) {
-              return actions.order.capture().then(function(details) {
-                alert("Vielen Dank! " + details.payer.name.given_name +
-                      " Deine Bestellung wurde erfolgreich abgeschlossen.");
-                cart = [];
-                saveCart();
-                toggleCart();
-              });
-            }
-          }).render('#paypal-button-container');
-        }
-      } else {
-        cartDiv.style.display = "none";
-      }
+      cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
     }
 
+    // PayPal Integration
+    paypal.Buttons({
+      createOrder: function(data, actions) {
+        return actions.order.create({
+          purchase_units: [{
+            description: cart.map(item => {
+              let desc = `${item.name} x${item.qty}`;
+              if (item.termine) {
+                desc += ` [${item.termine.join(", ")}]`;
+              }
+              return desc;
+            }).join("; "),
+            amount: {
+              currency_code: "EUR",
+              value: getCartTotal().toFixed(2)
+            }
+          }]
+        });
+      },
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+          alert("Vielen Dank! " + details.payer.name.given_name + " – Deine Bestellung wurde erfolgreich abgeschlossen.");
+          cart = [];
+          saveCart();
+          toggleCart();
+        });
+      }
+    }).render('#paypal-button-container');
+
+    // Warenkorb laden beim Start
     loadCart();
   </script>
-
-  <!-- PayPal SDK einbinden -->
-  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=EUR"></script>
 </body>
 </html>
+
