@@ -120,7 +120,7 @@ nav ul li a:hover {
   nav ul {
     display: none;
     flex-direction: column;
-    background: var(--beige);
+    background: #f5f5dc;
     position: absolute;
     top: 70px;   /* unterhalb Header */
     right: 20px;
