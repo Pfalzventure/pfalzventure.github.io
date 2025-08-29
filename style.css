@@ -368,9 +368,9 @@ footer a {
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   padding: 2rem;
   margin-bottom: 2rem;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  display: inline-block;       /* Container wächst mit Inhalt */
+  min-width: fit-content;      /* mindestens so breit wie nötig */
+  max-width: none;             /* keine harte Begrenzung */
   text-align: center;
 }
 
@@ -391,6 +391,19 @@ footer a {
   border-radius: 6px;
   width: 100px;
   text-align: center;
+}
+
+/* Buttons für Kurse nebeneinander ohne Umbruch */
+.kurs-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: nowrap;         /* niemals umbrechen */
+}
+
+.kurs-buttons .btn {
+  white-space: nowrap;       /* Buttontext bleibt in einer Zeile */
+  flex: 0 0 auto;            /* Button schrumpft nicht */
 }
 
 /* =========================================================
