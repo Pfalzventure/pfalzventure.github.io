@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-      <!-- Tracking Snippet -->
-      <script defer data-domain="pfalzventure.de" src="https://plausible.io/js/script.js"></script>
+  <!-- Tracking Snippet -->
+  <script defer data-domain="pfalzventure.de" src="https://plausible.io/js/script.js"></script>
   
   <title>Kurse – Pfalzventure</title>
   <link rel="stylesheet" href="style.css">
@@ -14,7 +14,7 @@
   <script src="https://www.paypal.com/sdk/js?client-id=AQbF-v1VWk6QCLKdNODfXJb-fUAcoTsnE1ux9JvHUWNYuJQE1xskgSu7ff_qniWdL168KWEw_oX7iCHB&currency=EUR"></script>
 </head>
 <body>
-   <!-- ============================
+  <!-- ============================
        Header mit Navigation
        ============================ -->
   <header>
@@ -22,26 +22,22 @@
       <a href="index.html" class="logo">
         <img src="assets/logo.png" alt="Pfalzventure Logo">
       </a>
-                <!-- Burger Button für kleine Bildschirme -->
-    <div class="burger" onclick="toggleMenu()">☰</div>
-<script>
-  // Menü öffnen/schließen
-  function toggleMenu() {
-    document.querySelector("nav ul").classList.toggle("nav-active");
-  }
 
-  // Klick außerhalb schließt das Menü
-  document.addEventListener("click", function(event) {
-    const menu = document.querySelector("nav ul");
-    const burger = document.querySelector(".burger");
+      <!-- Burger Button -->
+      <div class="burger" onclick="toggleMenu()">☰</div>
+      <script>
+        function toggleMenu() {
+          document.querySelector("nav ul").classList.toggle("nav-active");
+        }
+        document.addEventListener("click", function(event) {
+          const menu = document.querySelector("nav ul");
+          const burger = document.querySelector(".burger");
+          if (!menu.contains(event.target) && !burger.contains(event.target)) {
+            menu.classList.remove("nav-active");
+          }
+        });
+      </script>
 
-    // Wenn Klick NICHT auf Burger und NICHT im Menü
-    if (!menu.contains(event.target) && !burger.contains(event.target)) {
-      menu.classList.remove("nav-active");
-    }
-  });
-
-</script>
       <nav>
         <ul class="nav-links">
           <li><a href="index.html">Start</a></li>
@@ -50,45 +46,44 @@
           <li><a href="kontakt.html">Kontakt</a></li>
         </ul>
       </nav>
+
       <!-- 🟠 Warenkorb Button -->
-      <button onclick="toggleCart()" class="btn cart-btn">
-        🛒 Warenkorb (<span id="cart-count">0</span>)
-      </button>
+      <button onclick="toggleCart()" class="btn cart-btn">🛒 Warenkorb (<span id="cart-count">0</span>)</button>
     </div>
   </header>
 
-  <!-- Hauptbereich -->
-  <main class="kurse-section">
+  <!-- ============================
+       Kurs-Bereich
+       ============================ -->
+  <main class="shop-section">
     <h1>Kurse & Preise</h1>
     <p>Erlebe die Natur hautnah und lerne wertvolle Survival- und Bushcraft-Techniken im Pfälzerwald.</p>
 
-    <div class="kurse-grid">
-      <!-- Kurs 1 -->
-      <div class="kurs-card">
-        <h2>1-Tages Kurs</h2>
-        <p>Ein kompakter Einstieg in die Welt des Survivals. Perfekt für Einsteiger.</p>
-        <p class="preis">60 €</p>
-        <a href="kontakt.html" class="btn">Anfragen</a>
-      </div>
-
-      <!-- Kurs 2 -->
-      <div class="kurs-card">
-        <h2>2-Tages Kurs</h2>
-        <p>Intensiver Kurs über zwei Tage mit Übernachtung in der Natur.</p>
-        <p class="preis">120 €</p>
-        <a href="kontakt.html" class="btn">Anfragen</a>
-      </div>
-
-      <!-- Kurs 3 -->
-      <div class="kurs-card">
-        <h2>Bushcraft Kurs</h2>
-        <p>Lerne Feuer machen, Shelter bauen und Orientierungstechniken im Wald.</p>
-        <p class="preis">120 €</p>
-        <a href="kontakt.html" class="btn">Anfragen</a>
-      </div>
+    <!-- Kurs 1 -->
+    <div class="product">
+      <h2>1-Tages Kurs</h2>
+      <p>Ein kompakter Einstieg in die Welt des Survivals. Perfekt für Einsteiger.</p>
+      <p><strong>60 €</strong></p>
+      <button class="btn add-btn" onclick="addToCart('1-Tages Kurs', 60)">In den Warenkorb</button>
     </div>
 
-    <!-- Zusatzinfo -->
+    <!-- Kurs 2 -->
+    <div class="product">
+      <h2>2-Tages Kurs</h2>
+      <p>Intensiver Kurs über zwei Tage mit Übernachtung in der Natur.</p>
+      <p><strong>120 €</strong></p>
+      <button class="btn add-btn" onclick="addToCart('2-Tages Kurs', 120)">In den Warenkorb</button>
+    </div>
+
+    <!-- Kurs 3 -->
+    <div class="product">
+      <h2>Bushcraft Kurs</h2>
+      <p>Lerne Feuer machen, Shelter bauen und Orientierungstechniken im Wald.</p>
+      <p><strong>120 €</strong></p>
+      <button class="btn add-btn" onclick="addToCart('Bushcraft Kurs', 120)">In den Warenkorb</button>
+    </div>
+
+    <!-- Zusatzinfos -->
     <div class="preis-info">
       <h2>Zusatzinfos</h2>
       <ul>
@@ -111,7 +106,9 @@
     <button onclick="toggleCart()" class="btn">Schließen</button>
   </div>
 
-  <!-- Footer -->
+  <!-- ============================
+       Footer
+       ============================ -->
   <footer>
     <p>© 2025 Pfalzventure – Robert Prokasky</p>
     <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
@@ -123,7 +120,6 @@
   <script>
     let cart = [];
 
-    // Produkt hinzufügen (z. B. aus Shop übernommen)
     function addToCart(name, price) {
       let existing = cart.find(item => item.name === name && item.price === price);
       if (existing) {
@@ -134,34 +130,6 @@
       saveCart();
     }
 
-    // Kurs-Gutschein hinzufügen (mit Terminen aus JSON)
-    function addCourseVoucher() {
-      let select = document.getElementById("kursTermine");
-      let selected = Array.from(select.selectedOptions).map(opt => opt.textContent);
-
-      if (selected.length === 0) {
-        alert("Bitte wähle einen Termin aus!");
-        return;
-      }
-
-      cart.push({
-        name: "Kurs-Gutschein",
-        price: 1.00,
-        qty: 1,
-        termine: selected
-      });
-      saveCart();
-    }
-
-    // Wert-Gutschein hinzufügen
-    function addVoucher() {
-      let amount = parseFloat(document.getElementById("voucherAmount").value);
-      if (amount < 10) amount = 10;
-      cart.push({ name: "Wert-Gutschein", price: amount, qty: 1 });
-      saveCart();
-    }
-
-    // Menge ändern
     function increaseQty(index) {
       cart[index].qty += 1;
       saveCart();
@@ -176,7 +144,6 @@
       return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
     }
 
-    // Warenkorb speichern & laden
     function saveCart() {
       localStorage.setItem("cart", JSON.stringify(cart));
       updateCart();
@@ -187,25 +154,17 @@
       updateCart();
     }
 
-    // Warenkorb aktualisieren (inkl. Termine)
     function updateCart() {
       document.getElementById("cart-count").innerText = cart.reduce((sum, item) => sum + item.qty, 0);
-
       let itemsList = document.getElementById("cart-items");
       itemsList.innerHTML = "";
-
       cart.forEach((item, i) => {
         let li = document.createElement("li");
         li.classList.add("cart-item");
 
-        // Produkttext
         let span = document.createElement("span");
         span.innerText = `${item.name} – ${item.price.toFixed(2)} €`;
-        if (item.termine) {
-          span.innerText += `\n(Termine: ${item.termine.join(", ")})`;
-        }
 
-        // Steuerung (➖ Anzahl ➕)
         let controls = document.createElement("div");
         controls.classList.add("cart-controls");
 
@@ -229,38 +188,26 @@
         li.appendChild(controls);
         itemsList.appendChild(li);
       });
-
       document.getElementById("cart-total").innerText = getCartTotal().toFixed(2);
     }
 
-    // Warenkorb anzeigen/verbergen
     function toggleCart() {
       let cartDiv = document.getElementById("cart");
       cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
     }
 
-    // PayPal Integration
     paypal.Buttons({
       createOrder: function(data, actions) {
         return actions.order.create({
           purchase_units: [{
-            description: cart.map(item => {
-              let desc = `${item.name} x${item.qty}`;
-              if (item.termine) {
-                desc += ` [${item.termine.join(", ")}]`;
-              }
-              return desc;
-            }).join("; "),
-            amount: {
-              currency_code: "EUR",
-              value: getCartTotal().toFixed(2)
-            }
+            description: cart.map(item => `${item.name} x${item.qty}`).join("; "),
+            amount: { currency_code: "EUR", value: getCartTotal().toFixed(2) }
           }]
         });
       },
       onApprove: function(data, actions) {
         return actions.order.capture().then(function(details) {
-          alert("Vielen Dank! " + details.payer.name.given_name + " – Deine Bestellung wurde erfolgreich abgeschlossen.");
+          alert("Vielen Dank! " + details.payer.name.given_name + " – deine Buchung war erfolgreich.");
           cart = [];
           saveCart();
           toggleCart();
@@ -268,7 +215,6 @@
       }
     }).render('#paypal-button-container');
 
-    // Warenkorb laden beim Start
     loadCart();
   </script>
 </body>
