@@ -12,6 +12,104 @@
 
   <!-- PayPal SDK -->
   <script src="https://www.paypal.com/sdk/js?client-id=AQbF-v1VWk6QCLKdNODfXJb-fUAcoTsnE1ux9JvHUWNYuJQE1xskgSu7ff_qniWdL168KWEw_oX7iCHB&currency=EUR"></script>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Tracking Snippet -->
+  <script defer data-domain="pfalzventure.de" src="https://plausible.io/js/script.js"></script>
+  
+  <title>Kurse – Pfalzventure</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- PayPal SDK -->
+  <script src="https://www.paypal.com/sdk/js?client-id=AQbF-v1VWk6QCLKdNODfXJb-fUAcoTsnE1ux9JvHUWNYuJQE1xskgSu7ff_qniWdL168KWEw_oX7iCHB&currency=EUR"></script>
+
+  <!-- ✅ Zusatz-CSS nur fürs Burger-Popup -->
+  <style>
+    .burger {
+      position: relative;
+      cursor: pointer;
+      font-size: 1.8rem;
+      user-select: none;
+      z-index: 1001; /* über allem */
+    }
+
+    nav ul {
+      list-style: none;
+      display: none;
+      position: absolute;
+      top: 100%;        /* direkt unter dem Burger */
+      left: 50%;        /* mittig */
+      transform: translateX(-50%);
+      background: white;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      min-width: 160px;
+      z-index: 1000;
+    }
+
+    nav ul.nav-active {
+      display: block;
+    }
+
+    nav ul li {
+      margin: 0.5rem 0;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+   <!-- ============================
+       Header mit Navigation
+       ============================ -->
+  <header>
+    <div class="container">
+      <a href="index.html" class="logo">
+        <img src="assets/logo.png" alt="Pfalzventure Logo">
+      </a>
+
+      <!-- Burger Button für kleine Bildschirme -->
+      <div class="burger" onclick="toggleMenu()">☰</div>
+
+      <script>
+        // Menü öffnen/schließen
+        function toggleMenu() {
+          document.querySelector("nav ul").classList.toggle("nav-active");
+        }
+
+        // Klick außerhalb schließt das Menü
+        document.addEventListener("click", function(event) {
+          const menu = document.querySelector("nav ul");
+          const burger = document.querySelector(".burger");
+
+          if (!menu.contains(event.target) && !burger.contains(event.target)) {
+            menu.classList.remove("nav-active");
+          }
+        });
+      </script>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Start</a></li>
+          <li><a href="kurse.html" class="active">Kurse</a></li>
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="kontakt.html">Kontakt</a></li>
+        </ul>
+      </nav>
+
+      <!-- 🟠 Warenkorb Button -->
+      <button onclick="toggleCart()" class="btn cart-btn">
+        🛒 Warenkorb (<span id="cart-count">0</span>)
+      </button>
+    </div>
+  </header>
+
+  <!-- Rest deiner Seite bleibt unverändert ... -->
+
 </head>
 <body>
   <!-- ============================
