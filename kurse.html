@@ -22,6 +22,26 @@
       <a href="index.html" class="logo">
         <img src="assets/logo.png" alt="Pfalzventure Logo">
       </a>
+                <!-- Burger Button für kleine Bildschirme -->
+    <div class="burger" onclick="toggleMenu()">☰</div>
+<script>
+  // Menü öffnen/schließen
+  function toggleMenu() {
+    document.querySelector("nav ul").classList.toggle("nav-active");
+  }
+
+  // Klick außerhalb schließt das Menü
+  document.addEventListener("click", function(event) {
+    const menu = document.querySelector("nav ul");
+    const burger = document.querySelector(".burger");
+
+    // Wenn Klick NICHT auf Burger und NICHT im Menü
+    if (!menu.contains(event.target) && !burger.contains(event.target)) {
+      menu.classList.remove("nav-active");
+    }
+  });
+
+</script>
       <nav>
         <ul class="nav-links">
           <li><a href="index.html">Start</a></li>
