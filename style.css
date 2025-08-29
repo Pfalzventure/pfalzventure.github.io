@@ -45,7 +45,7 @@ header .container {
 }
 
 .logo {
-  flex: 1;
+  flex: 0;
 }
 
 .burger {
