@@ -17,35 +17,48 @@
   <!-- ============================
        Header mit Navigation
        ============================ -->
-  <header>
-    <div class="container">
-      <a href="index.html" class="logo">
-        <img src="assets/logo.png" alt="Pfalzventure Logo">
+ <header>
+  <div class="container">
+    <!-- Logo -->
+    <div class="logo">
+      <a href="index.html">
+        <img src="assets/logo.png" alt="Logo">
       </a>
+    </div>
 
-      <!-- Burger Button -->
-      <div class="burger" onclick="toggleMenu()">☰</div>
-      <script>
-        function toggleMenu() {
-          document.querySelector("nav ul").classList.toggle("nav-active");
-        }
-        document.addEventListener("click", function(event) {
-          const menu = document.querySelector("nav ul");
-          const burger = document.querySelector(".burger");
-          if (!menu.contains(event.target) && !burger.contains(event.target)) {
-            menu.classList.remove("nav-active");
-          }
-        });
-      </script>
+    <!-- Normale Navigation (Desktop) -->
+    <nav>
+      <ul>
+        <li><a href="index.html">Start</a></li>
+        <li><a href="kurse.html">Kurse</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="kontakt.html">Kontakt</a></li>
+      </ul>
 
-      <nav>
-        <ul class="nav-links">
-          <li><a href="index.html">Start</a></li>
-          <li><a href="kurse.html" class="active">Kurse</a></li>
-          <li><a href="shop.html">Shop</a></li>
-          <li><a href="kontakt.html">Kontakt</a></li>
-        </ul>
-      </nav>
+      <!-- Burger (nur mobil sichtbar) -->
+      <div class="burger" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+
+      <!-- Popup-Menü fürs Burger -->
+      <ul class="mobile-menu">
+        <li><a href="index.html">Start</a></li>
+        <li><a href="kurse.html">Kurse</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="kontakt.html">Kontakt</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  function toggleMenu() {
+    document.querySelector('.mobile-menu').classList.toggle('nav-active');
+  }
+</script>
+
 
       <!-- 🟠 Warenkorb Button -->
       <button onclick="toggleCart()" class="btn cart-btn">🛒 Warenkorb (<span id="cart-count">0</span>)</button>
