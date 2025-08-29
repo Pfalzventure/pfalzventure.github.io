@@ -13,25 +13,31 @@
    <!-- ============================
        Header mit Navigation
        ============================ -->
-  <header>
-    <div class="container">
-      <a href="index.html" class="logo">
-        <img src="assets/logo.png" alt="Pfalzventure Logo">
-      </a>
-      <nav>
-        <ul class="nav-links">
-          <li><a href="index.html" class="active">Start</a></li>
-          <li><a href="kurse.html">Kurse</a></li>
-          <li><a href="shop.html">Shop</a></li>
-          <li><a href="kontakt.html">Kontakt</a></li>
-        </ul>
-      </nav>
-      <!-- 🟠 Warenkorb Button -->
-      <button onclick="toggleCart()" class="btn cart-btn">
-        🛒 Warenkorb (<span id="cart-count">0</span>)
-      </button>
-    </div>
-  </header>
+<header>
+  <div class="container">
+    <a href="index.html" class="logo">
+      <img src="assets/logo.png" alt="Pfalzventure Logo">
+    </a>
+    
+    <!-- Burger Button für kleine Bildschirme -->
+    <div class="burger" onclick="toggleMenu()">☰</div>
+
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Start</a></li>
+        <li><a href="kurse.html">Kurse</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="kontakt.html">Kontakt</a></li>
+      </ul>
+    </nav>
+
+    <!-- 🟠 Warenkorb Button -->
+    <button onclick="toggleCart()" class="btn cart-btn">
+      🛒 Warenkorb (<span id="cart-count">0</span>)
+    </button>
+  </div>
+</header>
+
 
  <!-- Hero-Bereich -->
 <section class="hero">
