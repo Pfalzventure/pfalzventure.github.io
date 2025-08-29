@@ -489,23 +489,41 @@ footer a {
   bottom: 0;
   left: 0;
   right: 0;
-  background: #f1f1f1;
-  padding: 15px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 1rem 1.5rem;
   display: none;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid #ccc;
+  border-top: 2px solid var(--forest-green);
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.15);
+  font-family: inherit;
   z-index: 9999;
 }
+
 .paypal-banner p {
   margin: 0;
-  font-size: 14px;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.4;
 }
+
+.paypal-banner a {
+  color: var(--forest-green);
+  text-decoration: underline;
+  font-weight: 500;
+}
+
 .paypal-banner button {
-  background: #0070ba;
+  background: var(--forest-green);
   color: #fff;
   border: none;
-  padding: 8px 14px;
-  border-radius: 4px;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.paypal-banner button:hover {
+  background: var(--dark-green);
 }
