@@ -167,7 +167,7 @@ nav ul li a:hover {
 
 /* 🟢 Add-to-Cart Buttons */
 .add-btn {
-  background-color: #28a745;
+  background-color: #3b6e4d;
   color: white;
   border: none;
   padding: 8px 14px;
@@ -178,7 +178,7 @@ nav ul li a:hover {
 }
 
 .add-btn:hover {
-  background-color: #3b6e4d;
+  background-color: #2f4f4f;
 }
 
 /* ============================
