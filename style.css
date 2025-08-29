@@ -511,3 +511,13 @@ footer a {
 .cart-btn.added {
   animation: cart-bounce 0.4s ease;
 }
+.kurs-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap;   /* ❌ kein Umbruch */
+}
+
+.kurs-buttons .btn {
+  white-space: nowrap; /* Buttontext bleibt in einer Zeile */
+  flex: 0 0 auto;      /* Button schrumpft nicht */
+}
