@@ -57,6 +57,7 @@ header .container {
 .cart-btn {
   flex: 0;
   text-align: right;
+  display: inline-block; /* Breite = Inhalt */
 
 }
 
