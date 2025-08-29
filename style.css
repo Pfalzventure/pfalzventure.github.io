@@ -39,13 +39,27 @@ header {
 }
 
 header .container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
+.logo {
+  flex: 1;
+}
+
+.burger {
+  flex: 1;
+  text-align: center; /* horizontal mittig */
+  font-size: 2rem;
+}
+
+.cart-btn {
+  flex: 1;
+  text-align: right;
+
+}
+
 
 .logo img {
   height: 70px;
