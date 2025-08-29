@@ -133,6 +133,12 @@
       let existing = cart.find(item => item.name === name && item.price === price);
       if (existing) {
         existing.qty += 1;
+         // Animation für den Warenkorb-Button
+  const cartBtn = document.querySelector(".cart-btn");
+  cartBtn.classList.remove("added");        // reset
+  void cartBtn.offsetWidth;                 // reflow -> Trick damit Animation neu startet
+  cartBtn.classList.add("added");           // Animation triggern
+}
       } else {
         cart.push({ name, price, qty: 1 });
       }
