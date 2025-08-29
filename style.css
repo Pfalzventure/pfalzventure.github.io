@@ -145,7 +145,7 @@ nav ul li a:hover {
 
   .burger {
   display: flex;
-  font-size: 4rem; /* Größe des Symbols, einfach anpassen */
+  font-size: 3rem; /* Größe des Symbols, einfach anpassen */
   cursor: pointer;
   user-select: none;
    }
