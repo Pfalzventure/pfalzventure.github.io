@@ -89,6 +89,42 @@ nav ul li a:hover {
 }
 
 /* ============================
+   Responsive Navigation
+   ============================ */
+
+/* Standard: Burger ausgeblendet */
+.burger {
+  display: none;
+  font-size: 2rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Mobile Ansicht */
+@media (max-width: 768px) {
+  nav {
+    display: none; /* Normale Navigation ausblenden */
+  }
+  .burger {
+    display: block; /* Burger anzeigen */
+  }
+  .nav-active {
+    display: block !important; /* Dropdown sichtbar machen */
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+  .nav-active li {
+    display: block;
+    margin: 1rem;
+  }
+}
+
+/* ============================
    Hero Section (Startseite)
    ============================ */
 .hero {
