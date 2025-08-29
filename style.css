@@ -7,6 +7,7 @@
   --brown: #8b5a2b;
   --beige: #f5f5dc;
   --white: #fff;
+  --hellgrün: #28a745;
 }
 
 /* ============================
@@ -178,7 +179,7 @@ nav ul li a:hover {
 }
 
 .add-btn:hover {
-  background-color: #2f4f4f;
+  background-color: #28a745;
 }
 
 /* ============================
