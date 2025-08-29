@@ -34,24 +34,35 @@
   <!-- ============================
        Kontaktformular
        ============================ -->
-  <main class="kontakt-section">
+<main class="kontakt-section">
     <h1>Kontakt</h1>
-    <p>Schreibe uns eine Nachricht, wir melden uns schnellstmöglich zurück.</p>
+    <p>Du hast Fragen zu unseren Kursen oder möchtest dich anmelden?<br>
+       Schreibe uns einfach – wir freuen uns auf deine Nachricht!</p>
 
-    <form>
-      <label for="name">Name:</label><br>
-      <input type="text" id="name" name="name" required><br><br>
+    <div class="kontakt-info">
+      <p><strong>Email:</strong> <a href="mailto:info@pfalzventure.de">info@pfalzventure.de</a></p>
+      <p><strong>Telefon:</strong> <a href="tel:+491708307443">0170 8307443</a></p>
+    </div>
 
-      <label for="email">E-Mail:</label><br>
-      <input type="email" id="email" name="email" required><br><br>
+    <form id="contact-form" action="https://formspree.io/f/mldlyqdz" method="POST" class="kontakt-form">
+      <!-- optionaler Honeypot gegen Spam -->
+      <input type="text" name="_gotcha" style="display:none">
 
-      <label for="message">Nachricht:</label><br>
-      <textarea id="message" name="message" rows="6" required></textarea><br><br>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
 
-      <button type="submit" class="btn">Absenden</button>
+      <label for="email">E-Mail:</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="nachricht">Nachricht:</label>
+      <textarea id="nachricht" name="message" rows="6" required></textarea>
+
+      <button type="submit" class="btn">Nachricht senden</button>
+
+      <!-- Status-Ausgabe für Fehlerfälle -->
+      <p id="form-status" class="form-status" aria-live="polite" style="display:none; margin-top:1rem;"></p>
     </form>
   </main>
-
   <!-- ============================
        Warenkorb Popup
        ============================ -->
