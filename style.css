@@ -1,4 +1,32 @@
 /* ============================
+   Farben vom Logo
+   ============================ */
+:root {
+  --dark-green: #2f4f4f;
+  --forest-green: #3b6e4d;
+  --brown: #8b5a2b;
+  --beige: #f5f5dc;
+  --white: #fff;
+  --hellgrün: #28a745;
+}
+
+/* ============================
+   Reset
+   ============================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: var(--beige);
+  color: var(--dark-green);
+  line-height: 1.6;
+}
+
+/* ============================
    Header
    ============================ */
 header {
@@ -21,8 +49,10 @@ header .container {
 }
 
 /* ============================
-   Standard-Nav (Desktop)
+   Navigation & Burger Menü
    ============================ */
+
+/* Normale Navigation */
 nav ul {
   display: flex;
   list-style: none;
@@ -43,18 +73,14 @@ nav ul li a:hover {
   color: var(--brown);
 }
 
-/* ============================
-   Burger Menü
-   ============================ */
+/* Burger Standard (mobil ausgeblendet) */
 .burger {
   display: none;
   flex-direction: column;
   gap: 5px;
   cursor: pointer;
   user-select: none;
-  position: relative; /* Referenz fürs Popup */
-  font-size: 2rem;
-  text-align: center;
+  position: relative;
   z-index: 1001;
 }
 
@@ -65,43 +91,404 @@ nav ul li a:hover {
   transition: all 0.3s;
 }
 
+/* Popup-Menü fürs Burger */
+nav ul.mobile-menu {
+  list-style: none;
+  display: none;
+  position: absolute;
+  top: 100%;            /* direkt unter dem Burger */
+  left: 50%;            /* mittig unter Burger */
+  transform: translateX(-50%);
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  min-width: 160px;
+  z-index: 1000;
+  flex-direction: column;
+}
+
+nav ul.mobile-menu li {
+  margin: 0.5rem 0;
+  text-align: center;
+}
+
+nav ul.mobile-menu li a {
+  color: var(--dark-green);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* sichtbar, wenn aktiv */
+nav ul.mobile-menu.nav-active {
+  display: flex;
+}
+
 /* ============================
-   Responsive Navigation (Mobile)
+   Responsive Navigation
    ============================ */
 @media (max-width: 600px) {
-  /* Desktop-Nav ausblenden */
-  nav ul {
+  /* Normale Nav ausblenden */
+  nav ul:not(.mobile-menu) {
     display: none;
-    position: absolute;
-    top: 100%;              /* direkt unter dem Burger */
-    left: 50%;              /* horizontale Mitte */
-    transform: translateX(-50%);
-    flex-direction: column;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    padding: 1rem;
-    min-width: 160px;
-    z-index: 1000;
   }
 
-  /* wenn aktiv sichtbar */
-  nav ul.nav-active {
-    display: flex;
-  }
-
-  nav ul li {
-    margin: 10px 0;
-    text-align: center;
-  }
-
-  nav ul li a {
-    color: var(--dark-green); /* dunkler Text auf weiß */
-  }
-
-  /* Burger sichtbar machen */
+  /* Burger sichtbar */
   .burger {
     display: flex;
-    font-size: 2rem;
   }
+}
+
+/* ============================
+   Hero Section (Startseite)
+   ============================ */
+.hero {
+  background: url("assets/wald.png") no-repeat center center/cover;
+  color: var(--white);
+  text-align: center;
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  top: 0; 
+  left: 0;
+  width: 100%; 
+  height: 100%;
+  background: rgba(47, 79, 79, 0.6);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.hero-logo {
+  max-width: 300px;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
+}
+
+/* ============================
+   Allgemeine Buttons
+   ============================ */
+.btn {
+  background: var(--forest-green);
+  color: var(--white);
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background 0.3s;
+  cursor: pointer;
+  border: none;
+}
+
+.btn:hover {
+  background: #28a745;
+}
+
+/* 🟠 Warenkorb Button */
+.cart-btn {
+  background-color: orange;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.cart-btn:hover {
+  background-color: darkorange;
+}
+
+/* 🟢 Add-to-Cart Buttons */
+.add-btn {
+  background-color: #3b6e4d;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.add-btn:hover {
+  background-color: #28a745;
+}
+
+/* ============================
+   Footer
+   ============================ */
+footer {
+  background: var(--dark-green);
+  color: var(--white);
+  text-align: center;
+  padding: 20px 10px;
+  margin-top: 40px;
+}
+
+footer a {
+  color: var(--white);
+  text-decoration: underline;
+}
+
+/* ============================
+   Kontakt-Seite
+   ============================ */
+.kontakt-section {
+  max-width: 800px;
+  margin: 4rem auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.kontakt-section h1 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--dark-green);
+}
+
+.kontakt-info {
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.kontakt-info a {
+  color: var(--forest-green);
+  text-decoration: none;
+}
+
+.kontakt-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.kontakt-form input,
+.kontakt-form textarea {
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.kontakt-form button {
+  background: var(--forest-green);
+  color: white;
+  border: none;
+  padding: 0.8rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.kontakt-form button:hover {
+  background: #28a745;
+}
+
+/* ============================
+   Zusatzinfos auf Kurse-Seite
+   ============================ */
+.preis-info {
+  margin-top: 3rem;
+  background: #eaf2e0;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: left;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.preis-info h2 {
+  margin-bottom: 1rem;
+  color: var(--forest-green);
+}
+
+.preis-info ul {
+  list-style: none;
+  padding: 0;
+}
+
+.preis-info ul li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.preis-info ul li:last-child {
+  border-bottom: none;
+}
+
+/* ============================
+   Shop-Seite
+   ============================ */
+.shop-section {
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.shop-section h1 {
+  margin-bottom: 2rem;
+  color: var(--forest-green);
+}
+
+.product {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.product h2 {
+  margin-bottom: 1rem;
+  color: var(--dark-green);
+}
+
+.product p {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.product input {
+  padding: 0.5rem;
+  margin: 0.5rem 0 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100px;
+  text-align: center;
+}
+
+/* =========================================================
+   ➕➖ Warenkorb-Layout
+   ========================================================= */
+.cart-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px 0;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.cart-item span {
+  white-space: pre-line;
+}
+
+.cart-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cart-controls button {
+  background: #eee;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 2px 8px;
+  font-size: 14px;
+  line-height: 1;
+}
+.cart-controls button:hover {
+  background: #ddd;
+}
+
+.cart-qty {
+  min-width: 24px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.cart-price {
+  min-width: 70px;
+  text-align: right;
+  font-weight: bold;
+  color: var(--dark-green);
+}
+
+.cart-total {
+  text-align: right;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+/* ============================
+   Paypal-Banner
+   ============================ */
+.paypal-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 1rem 1.5rem;
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 2px solid var(--forest-green);
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.15);
+  font-family: inherit;
+  z-index: 9999;
+}
+
+.paypal-banner p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.4;
+}
+
+.paypal-banner a {
+  color: var(--forest-green);
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.paypal-banner button {
+  background: var(--forest-green);
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.paypal-banner button:hover {
+  background: var(--dark-green);
 }
