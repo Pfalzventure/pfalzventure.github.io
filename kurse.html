@@ -64,7 +64,10 @@
       <h2>1-Tages Kurs</h2>
       <p>Ein kompakter Einstieg in die Welt des Survivals. Perfekt für Einsteiger.</p>
       <p><strong>60 €</strong></p>
-      <button class="btn add-btn" onclick="addToCart('1-Tages Kurs', 60)">In den Warenkorb</button>
+      <div class="btn-group">
+        <a href="shop.html" class="btn">Zum Shop</a>
+        <a href="kontakt.html" class="btn">Kontakt aufnehmen</a>
+      </div>
     </div>
 
     <!-- Kurs 2 -->
@@ -72,7 +75,10 @@
       <h2>2-Tages Kurs</h2>
       <p>Intensiver Kurs über zwei Tage mit Übernachtung in der Natur.</p>
       <p><strong>120 €</strong></p>
-      <button class="btn add-btn" onclick="addToCart('2-Tages Kurs', 120)">In den Warenkorb</button>
+      <div class="btn-group">
+        <a href="shop.html" class="btn">Zum Shop</a>
+        <a href="kontakt.html" class="btn">Kontakt aufnehmen</a>
+      </div>
     </div>
 
     <!-- Kurs 3 -->
@@ -80,7 +86,10 @@
       <h2>Bushcraft Kurs</h2>
       <p>Lerne Feuer machen, Shelter bauen und Orientierungstechniken im Wald.</p>
       <p><strong>120 €</strong></p>
-      <button class="btn add-btn" onclick="addToCart('Bushcraft Kurs', 120)">In den Warenkorb</button>
+      <div class="btn-group">
+        <a href="shop.html" class="btn">Zum Shop</a>
+        <a href="kontakt.html" class="btn">Kontakt aufnehmen</a>
+      </div>
     </div>
 
     <!-- Zusatzinfos -->
@@ -95,7 +104,7 @@
   </main>
 
   <!-- ============================
-       Warenkorb Popup
+       Warenkorb Popup (bleibt)
        ============================ -->
   <div id="cart" style="display:none; position:fixed; top:80px; right:20px; background:white; border:1px solid #ccc; padding:20px; max-width:340px; box-shadow:0 2px 10px rgba(0,0,0,0.2); z-index:1000;">
     <h3>Dein Warenkorb</h3>
@@ -119,16 +128,6 @@
        ============================ -->
   <script>
     let cart = [];
-
-    function addToCart(name, price) {
-      let existing = cart.find(item => item.name === name && item.price === price);
-      if (existing) {
-        existing.qty += 1;
-      } else {
-        cart.push({ name, price, qty: 1 });
-      }
-      saveCart();
-    }
 
     function increaseQty(index) {
       cart[index].qty += 1;
