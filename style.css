@@ -55,7 +55,7 @@ header .container {
 }
 
 .cart-btn {
-  flex: 1;
+  flex: 0;
   text-align: right;
 
 }
