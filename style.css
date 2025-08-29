@@ -259,30 +259,7 @@ footer a {
   text-decoration: underline;
 }
 
-/* ============================
-   Responsive Design
-   ============================ */
-@media (max-width: 768px) {
-  nav ul {
-    display: none;
-    flex-direction: column;
-    background: var(--dark-green);
-    position: absolute;
-    top: 70px;
-    right: 0;
-    width: 200px;
-    text-align: right;
-    padding: 10px;
-  }
 
-  nav ul.nav-active {
-    display: flex;
-  }
-
-  .burger {
-    display: flex;
-  }
-}
 
 /* ============================
    Kontakt-Seite
