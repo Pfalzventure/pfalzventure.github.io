@@ -72,13 +72,37 @@ nav ul li a:hover {
 }
 
 /* ============================
-   Burger Menu (Mobil)
+   Navigation & Burger Menü
    ============================ */
+
+/* Standard-Nav */
+nav ul {
+  display: flex;
+  list-style: none;
+}
+
+nav ul li {
+  margin-left: 20px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: var(--white);
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+nav ul li a:hover {
+  color: var(--brown);
+}
+
+/* Burger Standard */
 .burger {
   display: none;
-  cursor: pointer;
   flex-direction: column;
   gap: 5px;
+  cursor: pointer;
+  user-select: none;
 }
 
 .burger div {
@@ -91,38 +115,39 @@ nav ul li a:hover {
 /* ============================
    Responsive Navigation
    ============================ */
-
-/* Standard: Burger ausgeblendet */
-.burger {
-  display: none;
-  font-size: 2rem;
-  cursor: pointer;
-  user-select: none;
-}
-
-/* Mobile Ansicht */
 @media (max-width: 768px) {
-  nav {
-    display: none; /* Normale Navigation ausblenden */
-  }
-  .burger {
-    display: block; /* Burger anzeigen */
-  }
-  .nav-active {
-    display: block !important; /* Dropdown sichtbar machen */
+  /* Normale Nav ausblenden */
+  nav ul {
+    display: none;
+    flex-direction: column;
+    background: var(--white);
     position: absolute;
-    top: 70px;
+    top: 70px;   /* unterhalb Header */
     right: 20px;
-    background: white;
-    border: 1px solid #ccc;
+    width: 200px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    padding: 10px;
   }
-  .nav-active li {
-    display: block;
-    margin: 1rem;
+
+  nav ul.nav-active {
+    display: flex;
+  }
+
+  nav ul li {
+    margin: 10px 0;
+    text-align: right;
+  }
+
+  nav ul li a {
+    color: var(--dark-green); /* dunkler Text auf weiß */
+  }
+
+  .burger {
+    display: flex;
   }
 }
+
 
 /* ============================
    Hero Section (Startseite)
