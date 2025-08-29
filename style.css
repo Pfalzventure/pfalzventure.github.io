@@ -44,15 +44,27 @@ header .container {
   align-items: center;
 }
 
+.logo {
+  flex: 0;
+}
+
+.burger {
+  flex: 1;
+  text-align: center; /* horizontal mittig */
+  font-size: 2rem;
+  position: relative; /* wichtig für Menü-Positionierung */
+}
+
+.cart-btn {
+  flex: 0 !important;
+  display: inline-block;
+  width: auto;
+}
+
 .logo img {
   height: 70px;
 }
 
-/* ============================
-   Navigation & Burger Menü
-   ============================ */
-
-/* Normale Navigation */
 nav ul {
   display: flex;
   list-style: none;
@@ -73,15 +85,17 @@ nav ul li a:hover {
   color: var(--brown);
 }
 
-/* Burger Standard (mobil ausgeblendet) */
+/* ============================
+   Navigation & Burger Menü
+   ============================ */
+
+/* Burger Standard */
 .burger {
   display: none;
   flex-direction: column;
   gap: 5px;
   cursor: pointer;
   user-select: none;
-  position: relative;
-  z-index: 1001;
 }
 
 .burger div {
@@ -91,51 +105,45 @@ nav ul li a:hover {
   transition: all 0.3s;
 }
 
-/* Popup-Menü fürs Burger */
-nav ul.mobile-menu {
-  list-style: none;
-  display: none;
-  position: absolute;
-  top: 100%;            /* direkt unter dem Burger */
-  left: 50%;            /* mittig unter Burger */
-  transform: translateX(-50%);
-  background: white;
-  padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  min-width: 160px;
-  z-index: 1000;
-  flex-direction: column;
-}
-
-nav ul.mobile-menu li {
-  margin: 0.5rem 0;
-  text-align: center;
-}
-
-nav ul.mobile-menu li a {
-  color: var(--dark-green);
-  text-decoration: none;
-  font-weight: bold;
-}
-
-/* sichtbar, wenn aktiv */
-nav ul.mobile-menu.nav-active {
-  display: flex;
-}
-
 /* ============================
    Responsive Navigation
    ============================ */
 @media (max-width: 600px) {
   /* Normale Nav ausblenden */
-  nav ul:not(.mobile-menu) {
+  nav ul {
     display: none;
+    flex-direction: column;
+    background: #f5f5dc;
+    position: absolute;
+    top: 100%;               /* direkt unter Burger */
+    left: 50%;               /* horizontal zentrieren */
+    transform: translateX(-50%);
+    min-width: 180px;        /* Breite flexibel, aber nicht zu klein */
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    padding: 10px;
+    z-index: 999;
   }
 
-  /* Burger sichtbar */
+  nav ul.nav-active {
+    display: flex;
+  }
+
+  nav ul li {
+    margin: 10px 0;
+    text-align: center; /* zentrierte Links */
+  }
+
+  nav ul li a {
+    color: var(--dark-green);
+  }
+
   .burger {
     display: flex;
+    font-size: 3rem;
+    cursor: pointer;
+    user-select: none;
+    position: relative; /* wichtig für Menü-Positionierung */
   }
 }
 
@@ -386,7 +394,7 @@ footer a {
 }
 
 /* =========================================================
-   ➕➖ Warenkorb-Layout
+   ➕➖ Warenkorb-Layout (NEU)
    ========================================================= */
 .cart-list {
   list-style: none;
@@ -446,9 +454,6 @@ footer a {
   margin-top: 8px;
 }
 
-/* ============================
-   Paypal-Banner
-   ============================ */
 .paypal-banner {
   position: fixed;
   bottom: 0;
