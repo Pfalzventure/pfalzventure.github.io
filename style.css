@@ -106,8 +106,8 @@ nav ul li a:hover {
 }
 
 .burger div {
-  width: 145px;
-  height: 16px;
+  width: 35px;
+  height: 3px;
   background: var(--white);
   transition: all 0.3s;
 }
@@ -144,8 +144,11 @@ nav ul li a:hover {
   }
 
   .burger {
-    display: flex;
-  }
+  display: flex;
+  font-size: 2.5rem; /* Größe des Symbols, einfach anpassen */
+  cursor: pointer;
+  user-select: none;
+   }
 }
 
 
