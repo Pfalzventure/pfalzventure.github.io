@@ -368,9 +368,8 @@ footer a {
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   padding: 2rem;
   margin-bottom: 2rem;
-  display: inline-block;       /* Container wächst mit Inhalt */
-  min-width: fit-content;      /* mindestens so breit wie nötig */
-  max-width: none;             /* keine harte Begrenzung */
+  display: block;       /* Container wächst mit Inhalt */
+
   text-align: center;
 }
 
