@@ -73,6 +73,7 @@ header .container {
   flex: 0 !important;
   display: inline-block;
   width: auto;
+  padding-right: 15px; /* Abstand rechts */
 }
 
 nav ul {
