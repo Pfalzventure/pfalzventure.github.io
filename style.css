@@ -48,6 +48,8 @@ header .container {
   display: block;
   width: 120px;
   height: auto;
+  padding-left: 15px; /* Abstand links */
+}
 
   clip-path: url(#shield-clip);
 
