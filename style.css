@@ -44,31 +44,31 @@ header .container {
   align-items: center;
 }
 
-.logo {
-  display: inline-block; /* oder block, wenn du volle Kontrolle willst */
-}
-
 .logo img {
-  display: block;         /* entfernt Lücken durch inline-img */
+  display: block;
   width: 120px;
   height: auto;
 
-  /* Wappenform */
+  /* Schildform */
   clip-path: polygon(
-    50% 0%,   /* oben Mitte */
-    95% 20%,  /* oben rechts */
-    95% 80%,  /* unten rechts */
-    50% 100%, /* unten Mitte */
-    5% 80%,   /* unten links */
-    5% 20%    /* oben links */
+    50% 0%,    /* oben Mitte */
+    90% 0%,    /* oben rechts */
+    100% 30%,  /* rechts oben */
+    85% 100%,  /* rechts unten */
+    15% 100%,  /* links unten */
+    0% 30%,    /* links oben */
+    10% 0%     /* oben links */
   );
 
   border: 3px solid var(--forest-green);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
   background: white;
 
-
+  /* plastischer Schatten */
+  box-shadow: 
+    0 4px 8px rgba(0,0,0,0.25),     /* weicher Schatten */
+    inset 0 2px 4px rgba(255,255,255,0.4); /* innen Lichtkante für Relief */
 }
+
 
 .burger {
   flex: 1;
