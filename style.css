@@ -45,7 +45,29 @@ header .container {
 }
 
 .logo {
-  flex: 0;
+  display: inline-block; /* oder block, wenn du volle Kontrolle willst */
+}
+
+.logo img {
+  display: block;         /* entfernt Lücken durch inline-img */
+  width: 120px;
+  height: auto;
+
+  /* Wappenform */
+  clip-path: polygon(
+    50% 0%,   /* oben Mitte */
+    95% 20%,  /* oben rechts */
+    95% 80%,  /* unten rechts */
+    50% 100%, /* unten Mitte */
+    5% 80%,   /* unten links */
+    5% 20%    /* oben links */
+  );
+
+  border: 3px solid var(--forest-green);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  background: white;
+
+
 }
 
 .burger {
