@@ -51,7 +51,7 @@ header .container {
 
   clip-path: url(#shield-clip);
 
-  border: 3px solid var(--forest-green);
+  /*border: 3px solid var(--forest-green);
   background: white;
 
   /* plastischer Schatten */
