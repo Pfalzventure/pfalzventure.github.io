@@ -49,24 +49,22 @@ header .container {
   width: 120px;
   height: auto;
 
-  /* Schildform (oben breit, unten spitz) */
-  clip-path: polygon(
-    50% 0%,   /* oben Mitte */
-    100% 0%,  /* oben rechts */
-    100% 70%, /* rechts senkrecht runter */
-    50% 100%, /* unten Spitze */
-    0% 70%,   /* links senkrecht runter */
-    0% 0%     /* oben links */
-  );
+  /* 🛡️ Rund zulaufende Schildform */
+  clip-path: path("M 50 0 
+                   C 80 0, 100 20, 100 55 
+                   C 100 85, 75 100, 50 100 
+                   C 25 100, 0 85, 0 55 
+                   C 0 20, 20 0, 50 0 Z");
 
   border: 3px solid var(--forest-green);
   background: white;
 
   /* plastischer Schatten */
   box-shadow: 
-    0 4px 8px rgba(0,0,0,0.25),
-    inset 0 2px 4px rgba(255,255,255,0.4);
+    0 8px 16px rgba(0,0,0,0.45),   /* kräftiger äußerer Schatten */
+    inset 0 3px 6px rgba(255,255,255,0.6); /* innen Glanz */
 }
+
 
 
 .burger {
