@@ -49,15 +49,14 @@ header .container {
   width: 120px;
   height: auto;
 
-  /* Schildform */
+  /* Schildform (oben breit, unten spitz) */
   clip-path: polygon(
-    50% 0%,    /* Mitte oben */
-    95% 0%,    /* oben rechts */
-    95% 60%,   /* gerade runter rechte Seite */
-    70% 100%,  /* unten rechts */
-    30% 100%,  /* unten links */
-    5% 60%,    /* gerade runter linke Seite */
-    5% 0%      /* oben links */
+    50% 0%,   /* oben Mitte */
+    100% 0%,  /* oben rechts */
+    100% 70%, /* rechts senkrecht runter */
+    50% 100%, /* unten Spitze */
+    0% 70%,   /* links senkrecht runter */
+    0% 0%     /* oben links */
   );
 
   border: 3px solid var(--forest-green);
