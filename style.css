@@ -51,13 +51,13 @@ header .container {
 
   /* Schildform */
   clip-path: polygon(
-    50% 0%,    /* oben Mitte */
-    90% 0%,    /* oben rechts */
-    100% 30%,  /* rechts oben */
-    85% 100%,  /* rechts unten */
-    15% 100%,  /* links unten */
-    0% 30%,    /* links oben */
-    10% 0%     /* oben links */
+    50% 0%,    /* Mitte oben */
+    95% 0%,    /* oben rechts */
+    95% 60%,   /* gerade runter rechte Seite */
+    70% 100%,  /* unten rechts */
+    30% 100%,  /* unten links */
+    5% 60%,    /* gerade runter linke Seite */
+    5% 0%      /* oben links */
   );
 
   border: 3px solid var(--forest-green);
@@ -65,8 +65,8 @@ header .container {
 
   /* plastischer Schatten */
   box-shadow: 
-    0 4px 8px rgba(0,0,0,0.25),     /* weicher Schatten */
-    inset 0 2px 4px rgba(255,255,255,0.4); /* innen Lichtkante für Relief */
+    0 4px 8px rgba(0,0,0,0.25),
+    inset 0 2px 4px rgba(255,255,255,0.4);
 }
 
 
