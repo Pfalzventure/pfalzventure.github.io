@@ -49,23 +49,16 @@ header .container {
   width: 120px;
   height: auto;
 
-  /* 🛡️ Rund zulaufende Schildform */
-  clip-path: path("M 50 0 
-                   C 80 0, 100 20, 100 55 
-                   C 100 85, 75 100, 50 100 
-                   C 25 100, 0 85, 0 55 
-                   C 0 20, 20 0, 50 0 Z");
+  clip-path: url(#shield-clip);
 
   border: 3px solid var(--forest-green);
   background: white;
 
   /* plastischer Schatten */
   box-shadow: 
-    0 8px 16px rgba(0,0,0,0.45),   /* kräftiger äußerer Schatten */
-    inset 0 3px 6px rgba(255,255,255,0.6); /* innen Glanz */
+    0 8px 16px rgba(0,0,0,0.45),
+    inset 0 3px 6px rgba(255,255,255,0.6);
 }
-
-
 
 .burger {
   flex: 1;
