@@ -82,26 +82,6 @@ header .container {
   width: auto;
 }
 
-/* ============================
-   Logo im Header als Wappenform
-   ============================ */
-.logo img {
-  width: 120px;          /* Größe kannst du nach Bedarf anpassen */
-  height: auto;
-  clip-path: polygon(
-    50% 0%,   /* oben Mitte */
-    95% 20%,  /* oben rechts */
-    95% 80%,  /* unten rechts */
-    50% 100%, /* unten Mitte */
-    5% 80%,   /* unten links */
-    5% 20%    /* oben links */
-  );
-  border: 3px solid var(--forest-green);   /* Rahmenfarbe aus deinem Style */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25); /* dezenter Schatten */
-  background: white;                       /* falls dein Logo transparent ist */
-}
-
-
 nav ul {
   display: flex;
   list-style: none;
