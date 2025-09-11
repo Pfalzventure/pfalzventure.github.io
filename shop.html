@@ -161,91 +161,105 @@ In den Kursen kannst du entweder mit deiner eigenen Ausrüstung oder mit diesem 
        Shop-Script (Warenkorb + PayPal) - angepasst mit Bounce-Trigger
        ============================ -->
   <script>
-    // Kern-Daten
-    let cart = [];
+  <script>
+  // Kern-Daten
+  let cart = [];
 
-    // Button-Element für Animation (wird nach DOM-Laden vorhanden sein, da Script am Ende)
-    const cartBtn = document.querySelector(".cart-btn");
+  // Button-Element für Animation (wird nach DOM-Laden vorhanden sein, da Script am Ende)
+  const cartBtn = document.querySelector(".cart-btn");
 
-    // Kleine Helper-Funktion: Bounce-Animation triggern
-    function triggerCartBounce() {
-      if (!cartBtn) return;
-      cartBtn.classList.remove("added");   // Reset (falls Klasse noch hängt)
-      void cartBtn.offsetWidth;            // Reflow -> sorgt dafür, dass Animation wieder abgespielt wird
-      cartBtn.classList.add("added");      // Start Animation (CSS muss .cart-btn.added definieren)
+  // Kleine Helper-Funktion: Bounce-Animation triggern
+  function triggerCartBounce() {
+    if (!cartBtn) return;
+    cartBtn.classList.remove("added");   // Reset (falls Klasse noch hängt)
+    void cartBtn.offsetWidth;            // Reflow -> sorgt dafür, dass Animation wieder abgespielt wird
+    cartBtn.classList.add("added");      // Start Animation (CSS muss .cart-btn.added definieren)
+  }
+
+  // ============================
+  // Kurstermine laden
+  // ============================
+  fetch("assets/kurstermine_1_tag.json")
+    .then(res => res.json())
+    .then(data => {
+      let select = document.getElementById("kursTermine1");
+      if (!select) return;
+      data.termine.forEach(t => {
+        let opt = document.createElement("option");
+        opt.value = t.id;
+        opt.textContent = t.text;
+        select.appendChild(opt);
+      });
+    }).catch(()=>{});
+
+  fetch("assets/kurstermine_2_tage.json")
+    .then(res => res.json())
+    .then(data => {
+      let select = document.getElementById("kursTermine2");
+      if (!select) return;
+      data.termine.forEach(t => {
+        let opt = document.createElement("option");
+        opt.value = t.id;
+        opt.textContent = t.text;
+        select.appendChild(opt);
+      });
+    }).catch(()=>{});
+
+  fetch("assets/kurstermine_3_tage.json")
+    .then(res => res.json())
+    .then(data => {
+      let select = document.getElementById("kursTermine3");
+      if (!select) return;
+      data.termine.forEach(t => {
+        let opt = document.createElement("option");
+        opt.value = t.id;
+        opt.textContent = t.text;
+        select.appendChild(opt);
+      });
+    }).catch(()=>{});
+
+  // ============================
+  // Produkte hinzufügen
+  // ============================
+
+  function addToCart(name, price) {
+    let existing = cart.find(item => item.name === name && item.price === price);
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cart.push({ name, price, qty: 1 });
+    }
+    saveCart();
+    triggerCartBounce();
+  }
+
+  // Kurs-Gutschein hinzufügen
+  function addCourseVoucher(selectId, kursName, kursPreis) {
+    let select = document.getElementById(selectId);
+    if (!select) {
+      alert("Keine Termine verfügbar.");
+      return;
     }
 
-    // Kurstermine1 aus JSON laden (falls vorhanden)
-    fetch("assets/kurstermine_1_tag.json")
-      .then(res => res.json())
-      .then(data => {
-        let select = document.getElementById("kursTermine1");
-        if (!select) return;
-        data.termine.forEach(t => {
-          let opt = document.createElement("option");
-          opt.value = t.id;
-          opt.textContent = t.text;
-          select.appendChild(opt);
-        });
-      }).catch(()=>{/* Falls Datei fehlt - kein Fatal */});
+    let selected = Array.from(select.selectedOptions).map(opt => opt.textContent);
 
-     // Kurstermine2 aus JSON laden (falls vorhanden)
-    fetch("assets/kurstermine_2_tage.json")
-      .then(res => res.json())
-      .then(data => {
-        let select = document.getElementById("kursTermine2");
-        if (!select) return;
-        data.termine.forEach(t => {
-          let opt = document.createElement("option");
-          opt.value = t.id;
-          opt.textContent = t.text;
-          select.appendChild(opt);
-        });
-      }).catch(()=>{/* Falls Datei fehlt - kein Fatal */});
-    // Produkt hinzufügen
-
- // Kurstermine3 aus JSON laden (falls vorhanden)
-    fetch("assets/kurstermine_3_tage.json")
-      .then(res => res.json())
-      .then(data => {
-        let select = document.getElementById("kursTermine3");
-        if (!select) return;
-        data.termine.forEach(t => {
-          let opt = document.createElement("option");
-          opt.value = t.id;
-          opt.textContent = t.text;
-          select.appendChild(opt);
-        });
-      }).catch(()=>{/* Falls Datei fehlt - kein Fatal */});
-    
-    function addToCart(name, price) {
-      let existing = cart.find(item => item.name === name && item.price === price);
-      if (existing) {
-        existing.qty += 1;
-      } else {
-        cart.push({ name, price, qty: 1 });
-      }
-      saveCart();
-
-      // Animation auslösen
-      triggerCartBounce();
+    if (selected.length === 0) {
+      alert("Bitte wähle einen Termin aus!");
+      return;
     }
 
-    // Kurs-Gutschein hinzufügen
-    function addCourseVoucher() {
-      let select = document.getElementById("kursTermine");
-      if (!select) {
-        alert("Keine Termine verfügbar.");
-        return;
-      }
-      let selected = Array.from(select.selectedOptions).map(opt => opt.textContent);
+    cart.push({
+      name: kursName,
+      price: kursPreis,
+      qty: 1,
+      termine: selected
+    });
+    saveCart();
+    triggerCartBounce();
+  }
 
-      if (selected.length === 0) {
-        alert("Bitte wähle einen für dich passenden Termin aus!");
-        return;
-      }
-      
-function addVoucher() {
+  // Wert-Gutschein hinzufügen
+  function addVoucher() {
     const amount = document.getElementById("voucherAmount").value;
     const message = document.getElementById("voucherMessage").value;
 
@@ -254,148 +268,144 @@ function addVoucher() {
       return;
     }
 
-    const product = {
+    cart.push({
       name: "Wert-Gutschein",
       price: parseFloat(amount),
+      qty: 1,
       message: message || "(keine Widmung angegeben)"
-    };
+    });
 
-    addToCart(product);
+    saveCart();
+    triggerCartBounce();
   }
 
-      cart.push({
-        name: "Kurs-Gutschein",
-        price: 1.00,
-        qty: 1,
-        termine: selected
-      });
-      saveCart();
+  // ============================
+  // Warenkorb-Logik
+  // ============================
 
-      // Animation auslösen
-      triggerCartBounce();
+  function increaseQty(index) {
+    cart[index].qty += 1;
+    saveCart();
+  }
+
+  function decreaseQty(index) {
+    cart[index].qty -= 1;
+    if (cart[index].qty <= 0) cart.splice(index, 1);
+    saveCart();
+  }
+
+  function getCartTotal() {
+    return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+  }
+
+  function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCart();
+  }
+
+  function loadCart() {
+    let stored = localStorage.getItem("cart");
+    if (stored) cart = JSON.parse(stored);
+    updateCart();
+  }
+
+  function updateCart() {
+    const countEl = document.getElementById("cart-count");
+    if (countEl) {
+      countEl.innerText = cart.reduce((sum, item) => sum + item.qty, 0);
     }
 
-    // Menge ändern
-    function increaseQty(index) {
-      cart[index].qty += 1;
-      saveCart();
-    }
+    let itemsList = document.getElementById("cart-items");
+    if (!itemsList) return;
+    itemsList.innerHTML = "";
 
-    function decreaseQty(index) {
-      cart[index].qty -= 1;
-      if (cart[index].qty <= 0) cart.splice(index, 1);
-      saveCart();
-    }
+    cart.forEach((item, i) => {
+      let li = document.createElement("li");
+      li.classList.add("cart-item");
 
-    function getCartTotal() {
-      return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    }
+      let span = document.createElement("span");
+      span.innerText = `${item.name} – ${item.price.toFixed(2)} €`;
 
-    // Warenkorb speichern & laden
-    function saveCart() {
-      localStorage.setItem("cart", JSON.stringify(cart));
-      updateCart();
-    }
-
-    function loadCart() {
-      let stored = localStorage.getItem("cart");
-      if (stored) cart = JSON.parse(stored);
-      updateCart();
-    }
-
-    // Warenkorb aktualisieren
-    function updateCart() {
-      const countEl = document.getElementById("cart-count");
-      if (countEl) {
-        countEl.innerText = cart.reduce((sum, item) => sum + item.qty, 0);
+      if (item.termine) {
+        span.innerText += `\n(Termine: ${item.termine.join(", ")})`;
+      }
+      if (item.message) {
+        span.innerText += `\n(Widmung: "${item.message}")`;
       }
 
-      let itemsList = document.getElementById("cart-items");
-      if (!itemsList) return;
-      itemsList.innerHTML = "";
+      let controls = document.createElement("div");
+      controls.classList.add("cart-controls");
 
-      cart.forEach((item, i) => {
-        let li = document.createElement("li");
-        li.classList.add("cart-item");
+      let minusBtn = document.createElement("button");
+      minusBtn.innerText = "➖";
+      minusBtn.onclick = () => decreaseQty(i);
 
-        // Produkttext
-        let span = document.createElement("span");
-       span.innerText = `${item.name} – ${item.price.toFixed(2)} €`;
-if (item.termine) {
-  span.innerText += `\n(Termine: ${item.termine.join(", ")})`;
-}
-if (item.message) {
-  span.innerText += `\n(Widmung: "${item.message}")`;
-}
+      let qtySpan = document.createElement("span");
+      qtySpan.innerText = item.qty;
+      qtySpan.classList.add("cart-qty");
 
+      let plusBtn = document.createElement("button");
+      plusBtn.innerText = "➕";
+      plusBtn.onclick = () => increaseQty(i);
 
-        // Steuerung (➖ Anzahl ➕)
-        let controls = document.createElement("div");
-        controls.classList.add("cart-controls");
+      controls.appendChild(minusBtn);
+      controls.appendChild(qtySpan);
+      controls.appendChild(plusBtn);
 
-        let minusBtn = document.createElement("button");
-        minusBtn.innerText = "➖";
-        minusBtn.onclick = () => decreaseQty(i);
+      li.appendChild(span);
+      li.appendChild(controls);
+      itemsList.appendChild(li);
+    });
 
-        let qtySpan = document.createElement("span");
-        qtySpan.innerText = item.qty;
-        qtySpan.classList.add("cart-qty");
+    const totalEl = document.getElementById("cart-total");
+    if (totalEl) totalEl.innerText = getCartTotal().toFixed(2);
+  }
 
-        let plusBtn = document.createElement("button");
-        plusBtn.innerText = "➕";
-        plusBtn.onclick = () => increaseQty(i);
+  function toggleCart() {
+    let cartDiv = document.getElementById("cart");
+    if (!cartDiv) return;
+    cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
+  }
 
-        controls.appendChild(minusBtn);
-        controls.appendChild(qtySpan);
-        controls.appendChild(plusBtn);
+  // ============================
+  // PayPal Integration
+  // ============================
 
-        li.appendChild(span);
-        li.appendChild(controls);
-        itemsList.appendChild(li);
-      });
-
-      const totalEl = document.getElementById("cart-total");
-      if (totalEl) totalEl.innerText = getCartTotal().toFixed(2);
-    }
-
-    // Warenkorb anzeigen/verbergen
-    function toggleCart() {
-      let cartDiv = document.getElementById("cart");
-      if (!cartDiv) return;
-      cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
-    }
-
-    // PayPal Integration
-    paypal.Buttons({
-      createOrder: function(data, actions) {
-        return actions.order.create({
-          purchase_units: [{
-            description: cart.map(item => {
-              let desc = `${item.name} x${item.qty}`;
-              if (item.termine) {
-                desc += ` [${item.termine.join(", ")}]`;
-              }
-              return desc;
-            }).join("; "),
-            amount: {
-              currency_code: "EUR",
-              value: getCartTotal().toFixed(2)
+  paypal.Buttons({
+    createOrder: function(data, actions) {
+      return actions.order.create({
+        purchase_units: [{
+          description: cart.map(item => {
+            let desc = `${item.name} x${item.qty}`;
+            if (item.termine) {
+              desc += ` [${item.termine.join(", ")}]`;
             }
-          }]
-        });
-      },
-      onApprove: function(data, actions) {
-        return actions.order.capture().then(function(details) {
-          alert("Vielen Dank! " + (details.payer?.name?.given_name || "") + " Deine Bestellung wurde erfolgreich abgeschlossen. Du erhältst in Kürze deine Bestellbestätigung per Mail");
-          cart = [];
-          saveCart();
-          toggleCart();
-        });
-      }
-    }).render('#paypal-button-container');
+            if (item.message) {
+              desc += ` (Widmung: ${item.message})`;
+            }
+            return desc;
+          }).join("; "),
+          amount: {
+            currency_code: "EUR",
+            value: getCartTotal().toFixed(2)
+          }
+        }]
+      });
+    },
+    onApprove: function(data, actions) {
+      return actions.order.capture().then(function(details) {
+        alert("Vielen Dank! " + (details.payer?.name?.given_name || "") + " Deine Bestellung wurde erfolgreich abgeschlossen.");
+        cart = [];
+        saveCart();
+        toggleCart();
+      });
+    }
+  }).render('#paypal-button-container');
 
-    // Warenkorb laden beim Start
-    loadCart();
+  // Beim Start Warenkorb laden
+  loadCart();
+</script>
+
   </script>
 
   <!-- ============================
