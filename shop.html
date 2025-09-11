@@ -247,6 +247,23 @@ In den Kursen kannst du entweder mit deiner eigenen Ausrüstung oder mit diesem 
         alert("Bitte wähle einen für dich passenden Termin aus!");
         return;
       }
+function addVoucher() {
+  const amount = document.getElementById("voucherAmount").value;
+  const message = document.getElementById("voucherMessage").value;
+
+  if (!amount || amount < 10) {
+    alert("Bitte einen Betrag ab 10 € eingeben.");
+    return;
+  }
+
+  const product = {
+    name: "Wert-Gutschein",
+    price: parseFloat(amount),
+    message: message || "(keine Nachricht angegeben)"
+  };
+
+  addToCart(product); // <- dein bestehender Warenkorb-Handler
+}
 
       cart.push({
         name: "Kurs-Gutschein",
