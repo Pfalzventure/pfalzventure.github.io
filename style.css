@@ -254,6 +254,28 @@ nav ul li a:hover {
   background-color: #28a745;
 }
 
+.btn {
+  background: var(--forest-green);
+  color: var(--white);
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background 0.3s;
+  cursor: pointer;
+  border: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  background: #28a745;
+}
+
+.cta {
+  text-align: center;    /* zentriert den Button */
+  margin-top: 20px;      /* Abstand nach oben */
+}
+
+
 /* ============================
    Footer
    ============================ */
