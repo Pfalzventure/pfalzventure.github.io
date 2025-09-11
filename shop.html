@@ -120,24 +120,21 @@ In den Kursen kannst du entweder mit deiner eigenen Ausrüstung oder mit diesem 
       <button class="btn add-btn" onclick="addCourseVoucher()">In den Warenkorb (299,90 €)</button>
     </div>
     
- <!-- Produkt 5: Wert-Gutschein -->
+<!-- Produkt 5: Kurs-Gutschein -->
 <div class="product">
   <h2>Wert-Gutschein</h2>
-  <p>
-    Auf der Suche nach einem außergewöhnlichem Geschenk?  
-    Wähle deinen Wunschbetrag und schreibe eine persönliche Widmung dazu.
-  </p>
+  <p>Auf der Suche nach einem außergewöhnlichem Geschenk?  
+     Wähle deinen Wunschbetrag und erhalte einen schön gestalteten Gutschein.</p>
 
   <label for="voucherAmount">Betrag in €:</label><br>
-  <input type="number" id="voucherAmount" value="50" min="10" step="5" style="max-width: 200px;">
-  <br><br>
+  <input type="number" id="voucherAmount" value="50" min="10" step="5"><br><br>
 
-  <label for="voucherMessage">Freitext für Glückwünsche oder Kreatives:</label><br>
-  <textarea id="voucherMessage" rows="3" placeholder="Deine Nachricht..." style="width:100%; max-width:320px;"></textarea>
-  <br><br>
+  <label for="voucherMessage">Widmung / Freitext:</label><br>
+  <textarea id="voucherMessage" rows="3" style="width:100%; max-width:320px;"></textarea><br><br>
 
   <button class="btn add-btn" onclick="addVoucher()">In den Warenkorb</button>
 </div>
+
 
 
   <!-- ============================
@@ -247,23 +244,24 @@ In den Kursen kannst du entweder mit deiner eigenen Ausrüstung oder mit diesem 
         alert("Bitte wähle einen für dich passenden Termin aus!");
         return;
       }
+      
 function addVoucher() {
-  const amount = document.getElementById("voucherAmount").value;
-  const message = document.getElementById("voucherMessage").value;
+    const amount = document.getElementById("voucherAmount").value;
+    const message = document.getElementById("voucherMessage").value;
 
-  if (!amount || amount < 10) {
-    alert("Bitte einen Betrag ab 10 € eingeben.");
-    return;
+    if (!amount || amount < 10) {
+      alert("Bitte einen Betrag ab 10 € eingeben.");
+      return;
+    }
+
+    const product = {
+      name: "Wert-Gutschein",
+      price: parseFloat(amount),
+      message: message || "(keine Widmung angegeben)"
+    };
+
+    addToCart(product);
   }
-
-  const product = {
-    name: "Wert-Gutschein",
-    price: parseFloat(amount),
-    message: message || "(keine Nachricht angegeben)"
-  };
-
-  addToCart(product); // <- dein bestehender Warenkorb-Handler
-}
 
       cart.push({
         name: "Kurs-Gutschein",
@@ -271,17 +269,6 @@ function addVoucher() {
         qty: 1,
         termine: selected
       });
-      saveCart();
-
-      // Animation auslösen
-      triggerCartBounce();
-    }
-
-    // Wert-Gutschein hinzufügen
-    function addVoucher() {
-      let amount = parseFloat(document.getElementById("voucherAmount").value);
-      if (isNaN(amount) || amount < 10) amount = 10;
-      cart.push({ name: "Wert-Gutschein", price: amount, qty: 1 });
       saveCart();
 
       // Animation auslösen
@@ -333,10 +320,14 @@ function addVoucher() {
 
         // Produkttext
         let span = document.createElement("span");
-        span.innerText = `${item.name} – ${item.price.toFixed(2)} €`;
-        if (item.termine) {
-          span.innerText += `\n(Termine: ${item.termine.join(", ")})`;
-        }
+       span.innerText = `${item.name} – ${item.price.toFixed(2)} €`;
+if (item.termine) {
+  span.innerText += `\n(Termine: ${item.termine.join(", ")})`;
+}
+if (item.message) {
+  span.innerText += `\n(Widmung: "${item.message}")`;
+}
+
 
         // Steuerung (➖ Anzahl ➕)
         let controls = document.createElement("div");
