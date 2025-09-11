@@ -120,15 +120,25 @@ In den Kursen kannst du entweder mit deiner eigenen Ausrüstung oder mit diesem 
       <button class="btn add-btn" onclick="addCourseVoucher()">In den Warenkorb (299,90 €)</button>
     </div>
     
-    <!-- Produkt 5: Kurs-Gutschein -->
-    <div class="product">
-      <h2>Wert-Gutschein</h2>
-      <p>Wähle selbst, wie viel dir das Abenteuer wert ist.</p>
-      <label for="voucherAmount">Betrag in €:</label>
-      <input type="number" id="voucherAmount" value="50" min="10" step="5">
-      <button class="btn add-btn" onclick="addVoucher()">In den Warenkorb</button>
-    </div>
-  </main>
+ <!-- Produkt 5: Wert-Gutschein -->
+<div class="product">
+  <h2>Wert-Gutschein</h2>
+  <p>
+    Auf der Suche nach einem außergewöhnlichem Geschenk?  
+    Wähle deinen Wunschbetrag und schreibe eine persönliche Widmung dazu.
+  </p>
+
+  <label for="voucherAmount">Betrag in €:</label><br>
+  <input type="number" id="voucherAmount" value="50" min="10" step="5" style="max-width: 200px;">
+  <br><br>
+
+  <label for="voucherMessage">Freitext für Glückwünsche oder Kreatives:</label><br>
+  <textarea id="voucherMessage" rows="3" placeholder="Deine Nachricht..." style="width:100%; max-width:320px;"></textarea>
+  <br><br>
+
+  <button class="btn add-btn" onclick="addVoucher()">In den Warenkorb</button>
+</div>
+
 
   <!-- ============================
        Warenkorb Popup
