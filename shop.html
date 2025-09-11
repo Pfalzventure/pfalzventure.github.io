@@ -90,8 +90,8 @@ In den Kursen kannst du entweder mit deiner eigenen Ausrüstung oder mit diesem 
       <h2>1 Tages Survival Crashkurs</h2>
       <p>Erlerne an nur einem Tag die wichtigsten Skills um in der Natur überleben zu können. <br>Bitte wähle einen Termin aus der Liste an dem du den Kurs besuchen möchtest.</p>
 
-      <label for="kursTermine">Mögliche Termine:</label><br>
-      <select id="kursTermine" multiple size="4" style="width:100%; max-width:320px;"></select>
+      <label for="kursTermine1">Mögliche Termine:</label><br>
+      <select id="kursTermine1" multiple size="4" style="width:100%; max-width:320px;"></select>
       <br><br>
       <button class="btn add-btn" onclick="addCourseVoucher()">In den Warenkorb (59,90 €)</button>
     </div>
@@ -102,8 +102,8 @@ In den Kursen kannst du entweder mit deiner eigenen Ausrüstung oder mit diesem 
       <p>Erlerne an zwei Tagen die wichtigsten Skills um in der Natur überleben zu können und festige diese in einem realitätsnahen Szenario. 
         <br>Bitte wähle einen Termin aus der Liste an dem du den Kurs besuchen möchtest.</p>
 
-      <label for="kursTermine">Mögliche Termine:</label><br>
-      <select id="kursTermine" multiple size="4" style="width:100%; max-width:320px;"></select>
+      <label for="kursTermine2">Mögliche Termine:</label><br>
+      <select id="kursTermine2" multiple size="4" style="width:100%; max-width:320px;"></select>
       <br><br>
       <button class="btn add-btn" onclick="addCourseVoucher()">In den Warenkorb (149,90 €)</button>
     </div>
@@ -114,8 +114,8 @@ In den Kursen kannst du entweder mit deiner eigenen Ausrüstung oder mit diesem 
       <p>Du suchst eine echte Herausforderung und liebst es an deine Grenzen zu gehen? Lerne in 3 Tagen selbst ohne Hilfsmittel in der Natur zu überleben. 
         <br>Bitte wähle einen Termin aus der Liste an dem du den Kurs besuchen möchtest.</p>
 
-      <label for="kursTermine">Mögliche Termine:</label><br>
-      <select id="kursTermine" multiple size="4" style="width:100%; max-width:320px;"></select>
+      <label for="kursTermine3">Mögliche Termine:</label><br>
+      <select id="kursTermine3" multiple size="4" style="width:100%; max-width:320px;"></select>
       <br><br>
       <button class="btn add-btn" onclick="addCourseVoucher()">In den Warenkorb (299,90 €)</button>
     </div>
@@ -168,11 +168,11 @@ In den Kursen kannst du entweder mit deiner eigenen Ausrüstung oder mit diesem 
       cartBtn.classList.add("added");      // Start Animation (CSS muss .cart-btn.added definieren)
     }
 
-    // Kurstermine aus JSON laden (falls vorhanden)
-    fetch("assets/kurstermine.json")
+    // Kurstermine1 aus JSON laden (falls vorhanden)
+    fetch("assets/kurstermine_1_tag.json")
       .then(res => res.json())
       .then(data => {
-        let select = document.getElementById("kursTermine");
+        let select = document.getElementById("kursTermine1");
         if (!select) return;
         data.termine.forEach(t => {
           let opt = document.createElement("option");
@@ -182,7 +182,35 @@ In den Kursen kannst du entweder mit deiner eigenen Ausrüstung oder mit diesem 
         });
       }).catch(()=>{/* Falls Datei fehlt - kein Fatal */});
 
+     // Kurstermine2 aus JSON laden (falls vorhanden)
+    fetch("assets/kurstermine_2_tage.json")
+      .then(res => res.json())
+      .then(data => {
+        let select = document.getElementById("kursTermine2");
+        if (!select) return;
+        data.termine.forEach(t => {
+          let opt = document.createElement("option");
+          opt.value = t.id;
+          opt.textContent = t.text;
+          select.appendChild(opt);
+        });
+      }).catch(()=>{/* Falls Datei fehlt - kein Fatal */});
     // Produkt hinzufügen
+
+ // Kurstermine3 aus JSON laden (falls vorhanden)
+    fetch("assets/kurstermine_3_tage.json")
+      .then(res => res.json())
+      .then(data => {
+        let select = document.getElementById("kursTermine3");
+        if (!select) return;
+        data.termine.forEach(t => {
+          let opt = document.createElement("option");
+          opt.value = t.id;
+          opt.textContent = t.text;
+          select.appendChild(opt);
+        });
+      }).catch(()=>{/* Falls Datei fehlt - kein Fatal */});
+    
     function addToCart(name, price) {
       let existing = cart.find(item => item.name === name && item.price === price);
       if (existing) {
