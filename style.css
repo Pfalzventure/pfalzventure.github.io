@@ -406,7 +406,7 @@ footer a {
   margin-right: auto;
   padding: 2rem; 
   margin-bottom: 2rem;
-  margin: 2rem auto;    /* Abstand oben/unten + zentrieren links/rechts */
+  margin: 4rem auto;    /* Abstand oben/unten + zentrieren links/rechts */
   display: block;       /* Container wächst mit Inhalt */
   text-align: center;
 }
