@@ -398,17 +398,14 @@ footer a {
 }
 
 .product {
-  background: white;
+  margin-top: 3rem;
+  background: #eaf2e0;
+  padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  text-align: left;
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
-  padding: 2rem; 
-  margin-bottom: 2rem;
-  margin: 4rem auto;    /* Abstand oben/unten + zentrieren links/rechts */
-  display: block;       /* Container wächst mit Inhalt */
-  text-align: center;
 }
 
 .product h2 {
