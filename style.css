@@ -404,7 +404,7 @@ footer a {
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
-  padding: 0 1rem; 
+  padding: 2rem; 
   margin-bottom: 2rem;
   margin: 2rem auto;    /* Abstand oben/unten + zentrieren links/rechts */
   display: block;       /* Container wächst mit Inhalt */
