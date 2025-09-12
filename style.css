@@ -405,7 +405,7 @@ footer a {
   margin-left: auto;
   margin-right: auto;
   padding: 2rem;
-  padding-inline: 2rem;   /* 🔥 seitlicher Abstand auch bei kleinen Screens */
+  padding-inline: clamp(1rem, 5vw, 2rem);  /* seitlicher Abstand auch bei kleinen Screens */
   margin-bottom: 2rem;
   margin: 2rem auto;    /* Abstand oben/unten + zentrieren links/rechts */
   display: block;       /* Container wächst mit Inhalt */
