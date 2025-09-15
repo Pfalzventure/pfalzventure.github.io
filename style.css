@@ -279,7 +279,6 @@ nav ul li a:hover {
 /* ============================
    Footer
    ============================ */
-<footer>
 footer {
   background: var(--dark-green);
   color: var(--white);
@@ -293,7 +292,7 @@ footer a {
   color: var(--white);
   text-decoration: underline;
 }
-<footer>
+
 /* ============================
    Kontakt-Seite
    ============================ */
