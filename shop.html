@@ -93,7 +93,7 @@ In den Kursen kannst du entweder mit deiner eigenen Ausrüstung oder mit diesem 
       <label for="kursTermine1">Mögliche Termine:</label><br>
       <select id="kursTermine1" multiple size="4" style="width:100%; max-width:320px;"></select>
       <br><br>
-      <button class="btn add-btn" onclick="addCourseVoucher()">In den Warenkorb (59,90 €)</button>
+      <button class="btn add-btn" onclick="addCourseVoucher('kursTermine1','1 Tages Survival Crashkurs',59.90)">In den Warenkorb (59,90 €)</button>
     </div>
 
     <!-- Produkt 3: Kurs -->
@@ -105,7 +105,7 @@ In den Kursen kannst du entweder mit deiner eigenen Ausrüstung oder mit diesem 
       <label for="kursTermine2">Mögliche Termine:</label><br>
       <select id="kursTermine2" multiple size="4" style="width:100%; max-width:320px;"></select>
       <br><br>
-      <button class="btn add-btn" onclick="addCourseVoucher()">In den Warenkorb (149,90 €)</button>
+      <button class="btn add-btn" onclick="addCourseVoucher('kursTermine2','2 Tages Survival Intensivkurs',149.90)">In den Warenkorb (149,90 €)</button>
     </div>
 
      <!-- Produkt 4: Kurs -->
@@ -117,7 +117,7 @@ In den Kursen kannst du entweder mit deiner eigenen Ausrüstung oder mit diesem 
       <label for="kursTermine3">Mögliche Termine:</label><br>
       <select id="kursTermine3" multiple size="4" style="width:100%; max-width:320px;"></select>
       <br><br>
-      <button class="btn add-btn" onclick="addCourseVoucher()">In den Warenkorb (299,90 €)</button>
+      <button class="btn add-btn" onclick="addCourseVoucher('kursTermine3','3 Tages Bushcraft Kurs',299.90)">In den Warenkorb (299,90 €)</button>
     </div>
     
 <!-- Produkt 5: Kurs-Gutschein -->
@@ -233,30 +233,41 @@ In den Kursen kannst du entweder mit deiner eigenen Ausrüstung oder mit diesem 
     triggerCartBounce();
   }
 
-  // Kurs-Gutschein hinzufügen
-  function addCourseVoucher(selectId, kursName, kursPreis) {
-    let select = document.getElementById(selectId);
-    if (!select) {
-      alert("Keine Termine verfügbar.");
-      return;
-    }
-
-    let selected = Array.from(select.selectedOptions).map(opt => opt.textContent);
-
-    if (selected.length === 0) {
-      alert("Bitte wähle einen Termin aus!");
-      return;
-    }
-
-    cart.push({
-      name: kursName,
-      price: kursPreis,
-      qty: 1,
-      termine: selected
-    });
-    saveCart();
-    triggerCartBounce();
+ // Kurs mit Termin hinzufügen
+function addCourseVoucher(selectId, kursName, kursPreis) {
+  let select = document.getElementById(selectId);
+  if (!select) {
+    alert("Keine Termine verfügbar.");
+    return;
   }
+
+  let selected = Array.from(select.selectedOptions).map(opt => opt.textContent);
+
+  if (selected.length === 0) {
+    alert("Bitte wähle einen Termin aus!");
+    return;
+  }
+
+  // Für jeden ausgewählten Termin ein eigenes Cart-Item
+  selected.forEach(term => {
+    let name = `${kursName} – Termin: ${term}`;
+    let existing = cart.find(item => item.name === name && item.price === kursPreis);
+
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cart.push({
+        name: name,
+        price: kursPreis,
+        qty: 1
+      });
+    }
+  });
+
+  saveCart();
+  triggerCartBounce();
+}
+
 
   // Wert-Gutschein hinzufügen
   function addVoucher() {
