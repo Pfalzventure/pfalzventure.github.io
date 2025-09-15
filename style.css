@@ -51,9 +51,7 @@ header .container {
   padding-left: 15px; /* Abstand links */
 }
 
-  clip-path: url(#shield-clip);
-
-  /* plastischer Schatten */
+   /* plastischer Schatten */
   box-shadow: 
     0 8px 16px rgba(0,0,0,0.45),
     inset 0 3px 6px rgba(255,255,255,0.6);
