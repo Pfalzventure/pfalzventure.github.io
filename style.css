@@ -51,7 +51,7 @@ header {
 }
 
 /* Mobile: ohne Einbuchtung */
-@media (max-width: 550px) {
+@media (max-width: 650px) {
   header {
     clip-path: none;
   }
