@@ -42,10 +42,10 @@ header {
     0 0,       /* links oben */
     100% 0,    /* rechts oben */
     100% 100%, /* rechts unten */
-    60% 100%,  /* rechts neben Einbuchtung */
-    60% 85%,   /* hoch zur Einbuchtung */
-    40% 85%,   /* rüber zur linken Einbuchtungskante */
-    40% 100%,  /* runter zurück */
+    20% 100%,  /* rechts neben Einbuchtung */
+    20% 85%,   /* hoch zur Einbuchtung */
+    20% 85%,   /* rüber zur linken Einbuchtungskante */
+    20% 100%,  /* runter zurück */
     0 100%     /* links unten */
   );
 }
