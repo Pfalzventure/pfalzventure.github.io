@@ -37,7 +37,7 @@ header {
   top: 0;
   z-index: 1000;
 
- /* Rechteckige Einbuchtung unten in der Mitte */
+  /* Rechteckige Einbuchtung unten in der Mitte */
   clip-path: polygon(
     0 0,       /* links oben */
     100% 0,    /* rechts oben */
@@ -45,7 +45,7 @@ header {
     93% 100%,  /* rechts neben Einbuchtung */
     85% 85%,   /* hoch zur Einbuchtung */
     15% 85%,   /* rüber zur linken Einbuchtungskante */
-    7% 100%,  /* runter zurück */
+    7% 100%,   /* runter zurück */
     0 100%     /* links unten */
   );
 }
@@ -71,26 +71,13 @@ header .container {
   padding-left: 15px; /* Abstand links */
 }
 
-   /* plastischer Schatten */
-  box-shadow: 
-    0 8px 16px rgba(0,0,0,0.45),
-    inset 0 3px 6px rgba(255,255,255,0.6);
-}
-
-.burger {
-  flex: 1;
-  text-align: center; /* horizontal mittig */
-  font-size: 2rem;
-  position: relative; /* wichtig für Menü-Positionierung */
-}
-
 .cart-btn {
   flex: 0 !important;
   display: inline-block;
   width: auto;
   margin-right: 15px; /* Abstand rechts */
 
-     /* plastischer Schatten */
+  /* plastischer Schatten */
   box-shadow: 
     0 8px 16px rgba(0,0,0,0.45),
     inset 0 3px 6px rgba(255,255,255,0.6);
@@ -122,7 +109,7 @@ nav ul li a:hover {
 
 /* Burger Standard */
 .burger {
-  display: none;
+  display: none; /* erst im Mobile sichtbar */
   flex-direction: column;
   gap: 5px;
   cursor: pointer;
@@ -172,15 +159,9 @@ nav ul li a:hover {
   nav ul li a {
     color: var(--dark-green);
   }
+
   .burger {
-    display: flex; /* erst im Mobile sichtbar */
-  }
- /* .burger {
-    display: flex;
-    font-size: 3rem;
-    cursor: pointer;
-    user-select: none;
-    position: relative; /* wichtig für Menü-Positionierung */
+    display: flex; /* hier wird er aktiv */
   }
 }
 
