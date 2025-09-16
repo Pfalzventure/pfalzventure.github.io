@@ -99,7 +99,7 @@ nav ul li a {
   transition: color 0.3s;
 
   display: inline-block;   /* nötig, damit padding wirkt */
-  padding-top: 2px;       /* nach unten Abstand */
+  padding-top: 10px;       /* nach unten Abstand */
   padding-bottom: 0;      /* optional: keine extra Höhe unten */
   line-height: 1;          /* sorgt dafür, dass Text kompakt bleibt */
 }
