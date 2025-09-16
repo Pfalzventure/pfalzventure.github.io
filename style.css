@@ -183,6 +183,9 @@ nav ul li a:hover {
   align-items: center;
   justify-content: center;
   position: relative;
+  padding-top: 70px; /* Höhe des Headers */
+}
+
 }
 
 .hero::after {
