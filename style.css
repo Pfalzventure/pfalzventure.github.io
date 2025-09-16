@@ -127,10 +127,6 @@ nav ul li a:hover {
   transition: all 0.3s;
 }
 
-.burger {
-  scale: 3; /* vergrößert den kompletten Container */
-}
-
 
 /* ============================
    Responsive Navigation
