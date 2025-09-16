@@ -51,7 +51,7 @@ header {
 }
 
 /* Mobile: ohne Einbuchtung */
-@media (max-width: 600px) {
+@media (max-width: 550px) {
   header {
     clip-path: none;
   }
@@ -138,7 +138,7 @@ nav ul li a:hover {
 /* ============================
    Responsive Navigation
    ============================ */
-@media (max-width: 600px) {
+@media (max-width: 550px) {
   /* Normale Nav ausblenden */
   nav ul {
     display: none;
