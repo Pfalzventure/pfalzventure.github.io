@@ -44,8 +44,8 @@ header {
     100% 100%, /* rechts unten */
     90% 100%,  /* rechts neben Einbuchtung */
     90% 85%,   /* hoch zur Einbuchtung */
-    20% 85%,   /* rüber zur linken Einbuchtungskante */
-    20% 100%,  /* runter zurück */
+    10% 85%,   /* rüber zur linken Einbuchtungskante */
+    10% 100%,  /* runter zurück */
     0 100%     /* links unten */
   );
 }
@@ -183,7 +183,7 @@ nav ul li a:hover {
   align-items: center;
   justify-content: center;
   position: relative;
-  /*padding-top: 70px; /* Höhe des Headers */
+  margin-top: -70px; /* Höhe des Headers */
 }
 
 }
