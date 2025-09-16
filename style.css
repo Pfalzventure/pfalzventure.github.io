@@ -102,7 +102,7 @@ nav ul li a {
   line-height: 1;
 
   position: relative;
-  top: -4px; /* nach oben verschoben */
+  top: -10px; /* nach oben verschoben */
 }
 
 nav ul li a:hover {
