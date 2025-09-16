@@ -50,6 +50,12 @@ header {
   );
 }
 
+/* Mobile: ohne Einbuchtung */
+@media (max-width: 768px) {
+  header {
+    clip-path: none;
+  }
+}
 
 header .container {
   display: flex;
