@@ -39,14 +39,16 @@ header {
 
   /* Rechteckige Einbuchtung unten in der Mitte */
   clip-path: polygon(
-    0 0,       /* links oben */
-    100% 0,    /* rechts oben */
-    100% 100%, /* rechts unten */
-    91% 100%,  /* rechts neben Einbuchtung */
-    83% 50%,   /* hoch zur Einbuchtung */
-    16% 50%,   /* rüber zur linken Einbuchtungskante */
-    8% 100%,   /* runter zurück */
-    0 100%     /* links unten */
+  0 0,
+  100% 0,
+  100% 100%,
+  91% 100%,
+  83% calc(100% - 20px), 
+  16% calc(100% - 20px), 
+  8% 100%,
+  0 100%
+);
+
   );
 }
 
