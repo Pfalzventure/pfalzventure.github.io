@@ -121,8 +121,8 @@ nav ul li a:hover {
 }
 
 .burger div {
-  width: 55px;
-  height: 6px;
+  width: 75px;
+  height: 8px;
   background: var(--white);
   transition: all 0.3s;
 }
