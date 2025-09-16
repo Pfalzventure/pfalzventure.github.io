@@ -107,24 +107,22 @@ nav ul li a:hover {
    Navigation & Burger Menü
    ============================ */
 
+/* ============================
+   Navigation & Burger Menü
+   ============================ */
+
 /* Burger Standard */
 .burger {
   display: none; /* erst im Mobile sichtbar */
-  flex-direction: column;
-  gap: 5px;
   cursor: pointer;
   user-select: none;
 
   position: absolute;   /* absolute Zentrierung */
   left: 50%;
   transform: translateX(-50%);
-}
 
-.burger div {
-  width: 40px;
-  height: 4px;
-  background: var(--white);
-  transition: all 0.3s;
+  font-size: 2.5rem; /* Größe einstellen */
+  line-height: 1;    /* vertikale Zentrierung */
 }
 
 
