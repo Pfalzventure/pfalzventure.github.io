@@ -189,7 +189,7 @@ nav ul li a:hover {
   align-items: center;
   justify-content: center;
   position: relative;
-  margin-top: -15px; /* Höhe des Headers */
+  margin-top: -20px; /* Höhe des Headers */
 }
 
 }
@@ -221,7 +221,7 @@ nav ul li a:hover {
 
 .hero-logo {
   max-width: 300px;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
 }
 
