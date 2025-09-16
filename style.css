@@ -61,6 +61,7 @@ header .container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative; /* wichtig für absolute Platzierung vom Burger */
 }
 
 .logo img {
@@ -126,6 +127,10 @@ nav ul li a:hover {
   gap: 5px;
   cursor: pointer;
   user-select: none;
+
+  position: absolute;   /* absolute Zentrierung */
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .burger div {
@@ -167,8 +172,10 @@ nav ul li a:hover {
   nav ul li a {
     color: var(--dark-green);
   }
-
   .burger {
+    display: flex; /* erst im Mobile sichtbar */
+  }
+ /* .burger {
     display: flex;
     font-size: 3rem;
     cursor: pointer;
