@@ -43,8 +43,8 @@ header {
     100% 0,    /* rechts oben */
     100% 100%, /* rechts unten */
     93% 100%,  /* rechts neben Einbuchtung */
-    85% 75%,   /* hoch zur Einbuchtung */
-    15% 75%,   /* rüber zur linken Einbuchtungskante */
+    85% 65%,   /* hoch zur Einbuchtung */
+    15% 65%,   /* rüber zur linken Einbuchtungskante */
     7% 100%,   /* runter zurück */
     0 100%     /* links unten */
   );
@@ -102,10 +102,6 @@ nav ul li a {
 nav ul li a:hover {
   color: var(--brown);
 }
-
-/* ============================
-   Navigation & Burger Menü
-   ============================ */
 
 /* ============================
    Navigation & Burger Menü
@@ -176,7 +172,7 @@ nav ul li a:hover {
   align-items: center;
   justify-content: center;
   position: relative;
-  margin-top: -20px; /* Höhe des Headers */
+  margin-top: -30px; /* Höhe des Headers */
 }
 
 }
