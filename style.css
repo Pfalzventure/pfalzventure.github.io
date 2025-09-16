@@ -98,10 +98,11 @@ nav ul li a {
   font-weight: bold;
   transition: color 0.3s;
 
-  display: inline-block;   /* nötig, damit padding wirkt */
-  padding-top: 10px;       /* nach unten Abstand */
-  padding-bottom: 0;      /* optional: keine extra Höhe unten */
-  line-height: 1;          /* sorgt dafür, dass Text kompakt bleibt */
+  display: inline-block;
+  line-height: 1;
+
+  position: relative;
+  top: -4px; /* nach oben verschoben */
 }
 
 nav ul li a:hover {
