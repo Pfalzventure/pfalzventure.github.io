@@ -44,7 +44,7 @@ header {
     100% 100%, /* rechts unten */
     60% 100%,  /* rechts neben Einbuchtung */
     60% 85%,   /* hoch zur Einbuchtung */
-    40% 85%,   /* rüber zur linken Einbuchtungskante */
+    20% 85%,   /* rüber zur linken Einbuchtungskante */
     40% 100%,  /* runter zurück */
     0 100%     /* links unten */
   );
