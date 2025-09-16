@@ -42,8 +42,8 @@ header {
     0 0,       /* links oben */
     100% 0,    /* rechts oben */
     100% 100%, /* rechts unten */
-    92% 100%,  /* rechts neben Einbuchtung */
-    84% 65%,   /* hoch zur Einbuchtung */
+    91% 100%,  /* rechts neben Einbuchtung */
+    83% 65%,   /* hoch zur Einbuchtung */
     15% 65%,   /* rüber zur linken Einbuchtungskante */
     7% 100%,   /* runter zurück */
     0 100%     /* links unten */
@@ -102,7 +102,7 @@ nav ul li a {
   line-height: 1;
 
   position: relative;
-  top: -10px; /* nach oben verschoben */
+  top: -30px; /* nach oben verschoben */
 }
 
 nav ul li a:hover {
