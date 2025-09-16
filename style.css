@@ -177,7 +177,7 @@ nav ul li a:hover {
   align-items: center;
   justify-content: center;
   position: relative;
-  margin-top: -30px; /* Höhe des Headers */
+  margin-top: -40px; /* Höhe des Headers */
 }
 
 }
