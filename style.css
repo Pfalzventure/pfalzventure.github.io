@@ -36,6 +36,12 @@ header {
   position: sticky;
   top: 0;
   z-index: 1000;
+
+  /* Form definieren */
+  clip-path: polygon(
+    0 0, 100% 0, 100% 100%, 0 100%, 
+    0 0, 40% 0, 50% 20%, 60% 0, 100% 0
+  );
 }
 
 header .container {
