@@ -36,39 +36,24 @@ header {
   position: sticky;
   top: 0;
   z-index: 1000;
-  position: relative; /* wichtig für ::after */
-  overflow: visible;   /* falls was rausguckt */
-}
 
-/* Einbuchtung nur als Pseudo-Element */
-header::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 60px; /* Höhe der Einbuchtung */
-  background: var(--dark-green);
-  
-  /* Rechteckige Einbuchtung unten in der Mitte */
+  /* EINBUCHTUNG direkt am Header */
   clip-path: polygon(
     0 0,
     100% 0,
     100% 100%,
-    calc(88% - 50px) 100%, 
-    78% 50%, 
-    18% 50%, 
-    calc(9% + 50px) 100%, 
+    93% 100%,
+    85% 65%,
+    15% 65%,
+    7% 100%,
     0 100%
   );
-  z-index: -1; /* hinter den Inhalt */
 }
 
 /* Mobile: ohne Einbuchtung */
 @media (max-width: 650px) {
-  header::after {
+  header {
     clip-path: none;
-    height: 0;
   }
 }
 
@@ -185,6 +170,14 @@ nav ul li a:hover {
 /* ============================
    Hero Section (Startseite)
    ============================ */
+
+
+.hero-logo {
+  max-width: 300px;
+  margin-bottom: 2rem;
+  filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
+}
+
 .hero {
   background: url("assets/wald.png") no-repeat center center/cover;
   color: var(--white);
@@ -195,9 +188,8 @@ nav ul li a:hover {
   justify-content: center;
   position: relative;
 
-  /* sorgt dafür, dass Hero nicht hinter Header rutscht */
-  margin-top: 0; 
-  padding-top: 120px; /* Höhe Header + Einbuchtung */
+  /* Statt margin-top → Abstand exakt anpassen */
+  padding-top: 140px; /* Höhe Header + Einbuchtung */
 }
 
 .hero::after {
@@ -214,13 +206,6 @@ nav ul li a:hover {
   position: relative;
   z-index: 1;
 }
-
-.hero-logo {
-  max-width: 300px;
-  margin-bottom: 2rem;
-  filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
-}
-
 
 /* ============================
    Allgemeine Buttons
