@@ -106,8 +106,8 @@ nav ul li a {
   display: inline-block;
   line-height: 1;
 
-  /*position: relative;
-  top: -30px; /* nach oben verschoben */
+  position: relative;
+  top: -40px; /* nach oben verschoben */
 }
 
 nav ul li a:hover {
