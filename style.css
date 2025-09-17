@@ -65,7 +65,7 @@ header .container {
 }
 
 .logo img {
-  display: block;
+  display: flex;
   width: 120px;
   height: auto;
   padding-left: 15px; /* Abstand links */
@@ -211,7 +211,6 @@ nav ul li a:hover {
 .hero-logo {
   max-width: 300px;
   margin-bottom: 8rem;
-     position: absolute;
   filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
 }
 
