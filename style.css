@@ -20,17 +20,19 @@
 }
 
 /* ============================
-   Header fixiert mit Relief-Kerbe
+   Header fixiert
    ============================ */
 header {
-  position: fixed;
+  position: fixed;      /* immer oben kleben */
   top: 0;
   left: 0;
-  width: 100%;
-  z-index: 1000;
+  width: 100%;          /* volle Breite */
+  background: var(--dark-green);
+  color: var(--white);
   padding: 0.5rem 0;
+  z-index: 1000;
 
-  background: linear-gradient(to bottom, #2f4f4f 0%, #274040 100%);
+  /* Rechteckige Einbuchtung unten in der Mitte */
   clip-path: polygon(
      0 0, 
     100% 0, 
@@ -41,29 +43,8 @@ header {
     calc(9% + 50px) 90%, 
     0 90%
   );
-
-  /* Äußerer Schatten = Schweben */
-  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
-  position: relative;
-  overflow: visible;
 }
 
-/* Schatten direkt in der Kerbe */
-header::after {
-  content: "";
-  position: absolute;
-  bottom: 10%; /* sitzt an der Kerbe */
-  left: 18%;
-  width: 60%;
-  height: 30px;
-
-  background: radial-gradient(ellipse at center, rgba(0,0,0,0.4), transparent 70%);
-  z-index: 2;
-  pointer-events: none;
-  clip-path: polygon(
-    0 100%, 20% 0, 80% 0, 100% 100%
-  );
-}
 /* Platzhalter, damit der Inhalt nicht unter dem Header rutscht */
 body {
   font-family: Arial, sans-serif;
@@ -87,7 +68,6 @@ header .container {
   align-items: center;
   position: relative; /* wichtig für absolute Platzierung vom Burger */
 }
-
 
 .logo img {
   display: flex;
@@ -235,7 +215,7 @@ nav ul li a:hover {
 
 .hero-logo {
   max-width: 300px;
-  margin-top: 10rem;   /* schiebt das Logo nach unten */
+  margin-top: 5rem;   /* schiebt das Logo nach unten */
   margin-bottom: 2rem; /* falls du Abstand nach unten brauchst */
   filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
 }
