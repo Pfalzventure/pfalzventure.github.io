@@ -8,6 +8,7 @@
   --beige: #f5f5dc;
   --white: #fff;
   --hellgrün: #28a745;
+  --header-height: 140px; /* zentrale Höhe fürs Layout */
 }
 
 /* ============================
@@ -32,13 +33,25 @@ body {
 header {
   background: var(--dark-green);
   color: var(--white);
-  padding: 0.5rem 0;
   position: sticky;
   top: 0;
   z-index: 1000;
   position: relative;
+  min-height: var(--header-height);
+  overflow: visible; /* wichtig */
+}
 
-  /* optische Einbuchtung */
+/* Einbuchtung nur optisch */
+header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px; /* Höhe der Einbuchtung */
+  background: var(--dark-green);
+
+  /* Dynamische Schräge */
   clip-path: polygon(
     0 0,
     100% 0,
@@ -50,18 +63,16 @@ header {
     0 100%
   );
 
-  /* LOGISCHE Höhe für Layout (z. B. Hero-Start & Dropdown) */
-  min-height: 140px;
+  z-index: -1; /* hinter Header-Inhalt */
 }
-
 
 /* Mobile: ohne Einbuchtung */
 @media (max-width: 650px) {
-  header {
+  header::after {
     clip-path: none;
+    height: 0;
   }
 }
-
 
 header .container {
   display: flex;
@@ -140,45 +151,27 @@ nav ul li a:hover {
 @media (max-width: 550px) {
   nav ul {
     position: absolute;
-    top: 140px;  /* gleiche Höhe wie Header */
+    top: var(--header-height); /* Dropdown hängt immer direkt am Header */
     left: 50%;
     transform: translateX(-50%);
-    min-width: 180px;        /* Breite flexibel, aber nicht zu klein */
+    min-width: 180px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     padding: 10px;
     z-index: 999;
+    display: none;
+    flex-direction: column;
+    background: #f5f5dc;
   }
 
   nav ul.nav-active {
     display: flex;
-  }
-
-  nav ul li {
-    margin: 10px 0;
-    text-align: center; /* zentrierte Links */
-  }
-
-  nav ul li a {
-    color: var(--dark-green);
-  }
-
-  .burger {
-    display: flex; /* hier wird er aktiv */
   }
 }
 
 /* ============================
    Hero Section (Startseite)
    ============================ */
-
-
-.hero-logo {
-  max-width: 300px;
-  margin-bottom: 2rem;
-  filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
-}
-
 .hero {
   background: url("assets/wald.png") no-repeat center center/cover;
   color: var(--white);
@@ -189,8 +182,8 @@ nav ul li a:hover {
   justify-content: center;
   position: relative;
 
-  /* sorgt dafür, dass es beim Scrollen nie hinter den Header rutscht */
-  scroll-margin-top: 140px;
+  /* sorgt dafür, dass Hero nie hinter Header rutscht */
+  scroll-margin-top: var(--header-height);
 }
 
 .hero::after {
@@ -208,6 +201,11 @@ nav ul li a:hover {
   z-index: 1;
 }
 
+.hero-logo {
+  max-width: 300px;
+  margin-bottom: 2rem;
+  filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
+}
 /* ============================
    Allgemeine Buttons
    ============================ */
