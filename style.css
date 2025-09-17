@@ -36,19 +36,24 @@ header {
   position: sticky;
   top: 0;
   z-index: 1000;
+  position: relative;
 
-  /* EINBUCHTUNG direkt am Header */
+  /* optische Einbuchtung */
   clip-path: polygon(
     0 0,
     100% 0,
     100% 100%,
-    93% 100%,
+    calc(93%) 100%,
     85% 65%,
     15% 65%,
-    7% 100%,
+    calc(7%) 100%,
     0 100%
   );
+
+  /* LOGISCHE Höhe für Layout (z. B. Hero-Start & Dropdown) */
+  min-height: 140px;
 }
+
 
 /* Mobile: ohne Einbuchtung */
 @media (max-width: 650px) {
@@ -133,14 +138,10 @@ nav ul li a:hover {
    Responsive Navigation
    ============================ */
 @media (max-width: 550px) {
-  /* Normale Nav ausblenden */
   nav ul {
-    display: none;
-    flex-direction: column;
-    background: #f5f5dc;
     position: absolute;
-    top: 100%;               /* direkt unter Burger */
-    left: 50%;               /* horizontal zentrieren */
+    top: 140px;  /* gleiche Höhe wie Header */
+    left: 50%;
     transform: translateX(-50%);
     min-width: 180px;        /* Breite flexibel, aber nicht zu klein */
     border-radius: 12px;
@@ -188,8 +189,8 @@ nav ul li a:hover {
   justify-content: center;
   position: relative;
 
-  /* Statt margin-top → Abstand exakt anpassen */
-  padding-top: 140px; /* Höhe Header + Einbuchtung */
+  /* sorgt dafür, dass es beim Scrollen nie hinter den Header rutscht */
+  scroll-margin-top: 140px;
 }
 
 .hero::after {
