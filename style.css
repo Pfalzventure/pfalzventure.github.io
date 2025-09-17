@@ -106,7 +106,7 @@ nav ul li a {
   display: inline-block;
   line-height: 1;
 
-  position: relative;
+  /*position: relative;
   top: -30px; /* nach oben verschoben */
 }
 
@@ -149,7 +149,7 @@ nav ul li a:hover {
     min-width: 180px;        /* Breite flexibel, aber nicht zu klein */
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    padding: 5px;
+    padding: 10px;
     z-index: 999;
   }
 
