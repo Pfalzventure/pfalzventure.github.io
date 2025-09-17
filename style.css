@@ -38,8 +38,8 @@ header {
     100% 0, 
     100% 90%, 
     calc(88% - 50px) 90%, 
-    78% 30%, 
-    18% 30%, 
+    78% 35%, 
+    18% 35%, 
     calc(9% + 50px) 90%, 
     0 90%
   );
@@ -149,7 +149,7 @@ nav ul li a:hover {
     min-width: 180px;        /* Breite flexibel, aber nicht zu klein */
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    padding: 10px;
+    padding: 5px;
     z-index: 999;
   }
 
