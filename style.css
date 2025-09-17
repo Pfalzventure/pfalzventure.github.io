@@ -29,7 +29,6 @@ body {
 /* ============================
    Header
    ============================ */
-
 header {
   background: var(--dark-green);
   color: var(--white);
@@ -37,20 +36,21 @@ header {
   position: sticky;
   top: 0;
   z-index: 1000;
-  position: relative; /* wichtig für ::after */
+  position: relative; /* nötig für ::after */
+  min-height: 140px;   /* logische Höhe */
 }
 
-/* Einbuchtung separat */
+/* Nur der untere Teil kriegt die Form */
 header::after {
   content: "";
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 100%; /* gleiche Höhe wie Header */
+  height: 60px; /* Höhe der Einbuchtung */
   background: var(--dark-green);
 
-  clip-path: polygon( 
+  clip-path: polygon(
     0 0, 
     100% 0, 
     100% 100%, 
@@ -59,10 +59,12 @@ header::after {
     18% 50%, 
     calc(9% + 50px) 100%, 
     0 100%
-  ); 
+  );
 
-  z-index: -1; /* nur die Einbuchtung hinter den Header */
+  z-index: -1; /* nur die Einbuchtung hinter den Inhalt */
 }
+
+
 
 /* Mobile: ohne Einbuchtung */
 @media (max-width: 650px) {
