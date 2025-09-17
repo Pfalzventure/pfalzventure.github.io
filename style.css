@@ -36,8 +36,20 @@ header {
   position: sticky;
   top: 0;
   z-index: 1000;
+  position: relative; /* wichtig für ::after */
+  overflow: visible;   /* falls was rausguckt */
 
-  /* Rechteckige Einbuchtung unten in der Mitte */
+/* Einbuchtung nur als Pseudo-Element */
+header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px; /* Höhe der Einbuchtung */
+  background: var(--dark-green);
+  
+   /* Rechteckige Einbuchtung unten in der Mitte */
   clip-path: polygon(
   0 0,
   100% 0,
@@ -48,14 +60,15 @@ header {
   calc(9% + 50px) 100%, 
   0 100%
 );
-
-  );
+  z-index: -1; /* hinter den Inhalt */
+  
 }
 
 /* Mobile: ohne Einbuchtung */
 @media (max-width: 650px) {
-  header {
+  header::after {
     clip-path: none;
+      height: 0;
   }
 }
 
