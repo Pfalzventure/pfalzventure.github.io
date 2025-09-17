@@ -61,7 +61,7 @@ header::after {
   0 100%
 );
   z-index: -1; /* hinter den Inhalt */
-  
+  );
 }
 
 /* Mobile: ohne Einbuchtung */
