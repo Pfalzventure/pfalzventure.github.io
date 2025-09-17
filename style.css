@@ -68,30 +68,6 @@ header::after {
   );
 }
 
-
-/* Zweite Ebene (Reliefkante) */
-header::after {
-  content: "";
-  position: absolute;
-  top: 5px;   /* leicht nach unten versetzt */
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  background: #1e2d2d; /* dunkler für Schatten-Effekt */
-  z-index: -1;         /* hinter dem Header */
-  clip-path: polygon(
-     0 0, 
-    100% 0, 
-    100% 90%, 
-    calc(88% - 50px) 90%, 
-    78% 35%, 
-    18% 35%, 
-    calc(9% + 50px) 90%, 
-    0 90%
-  );
-}
-
 /* Platzhalter, damit der Inhalt nicht unter dem Header rutscht */
 body {
   font-family: Arial, sans-serif;
@@ -115,6 +91,7 @@ header .container {
   align-items: center;
   position: relative; /* wichtig für absolute Platzierung vom Burger */
 }
+
 
 .logo img {
   display: flex;
