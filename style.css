@@ -37,17 +37,18 @@ header {
   top: 0;
   z-index: 1000;
 
- /* Rechteckige Einbuchtung unten in der Mitte */ 
-   clip-path: polygon( 
-      0 0, 
-      100% 0, 
-      100% 100%, 
-      calc(88% - 50px) 100%, 
-      78% 50%, 
-      18% 50%, 
-      calc(9% + 50px) 100%, 
-      0 100% ); 
-   z-index: -1; /* hinter den Inhalt */ 
+  /* Rechteckige Einbuchtung unten in der Mitte */ 
+  clip-path: polygon( 
+    0 0, 
+    100% 0, 
+    100% 100%, 
+    calc(88% - 50px) 100%, 
+    78% 50%, 
+    18% 50%, 
+    calc(9% + 50px) 100%, 
+    0 100%
+  ); 
+  z-index: -1; /* hinter den Inhalt */
 }
 
 /* Mobile: ohne Einbuchtung */
@@ -211,6 +212,7 @@ nav ul li a:hover {
   margin-bottom: 2rem;
   filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
 }
+
 
 /* ============================
    Allgemeine Buttons
