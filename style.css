@@ -19,13 +19,6 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  background: var(--beige);
-  color: var(--dark-green);
-  line-height: 1.6;
-}
-
 /* ============================
    Header fixiert
    ============================ */
@@ -44,10 +37,10 @@ header {
      0 0, 
     100% 0, 
     100% 100%, 
-    calc(88% - 50px) 100%, 
+    calc(88% - 35px) 100%, 
     78% 50%, 
     18% 50%, 
-    calc(9% + 50px) 100%, 
+    calc(9% + 35px) 100%, 
     0 100%
   );
 }
