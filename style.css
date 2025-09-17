@@ -37,17 +37,17 @@ header {
   top: 0;
   z-index: 1000;
 
-  /* Rechteckige Einbuchtung unten in der Mitte */
-  clip-path: polygon(
-    0 0,       /* links oben */
-    100% 0,    /* rechts oben */
-    100% 100%, /* rechts unten */
-    91% 100%,  /* rechts neben Einbuchtung */
-    83% 50%,   /* hoch zur Einbuchtung */
-    16% 50%,   /* rüber zur linken Einbuchtungskante */
-    8% 100%,   /* runter zurück */
-    0 100%     /* links unten */
-  );
+ /* Rechteckige Einbuchtung unten in der Mitte */ 
+   clip-path: polygon( 
+      0 0, 
+      100% 0, 
+      100% 100%, 
+      calc(88% - 50px) 100%, 
+      78% 50%, 
+      18% 50%, 
+      calc(9% + 50px) 100%, 
+      0 100% ); 
+   z-index: -1; /* hinter den Inhalt */ );
 }
 
 /* Mobile: ohne Einbuchtung */
