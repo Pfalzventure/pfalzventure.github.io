@@ -183,7 +183,7 @@ nav ul li a:hover {
   align-items: center;
   justify-content: center;
   position: relative;
-  margin-top: -30px; /* Höhe des Headers */
+  margin-top: -35px; /* Höhe des Headers */
 }
 
 }
@@ -215,8 +215,8 @@ nav ul li a:hover {
 
 .hero-logo {
   max-width: 300px;
-  margin-top: 5rem;   /* schiebt das Logo nach unten */
-  margin-bottom: 2rem; /* falls du Abstand nach unten brauchst */
+  margin-top: 7rem;   /* schiebt das Logo nach unten */
+  margin-bottom: 1rem; /* falls du Abstand nach unten brauchst */
   filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
 }
 
