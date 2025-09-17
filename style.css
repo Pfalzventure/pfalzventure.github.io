@@ -27,14 +27,16 @@ body {
 }
 
 /* ============================
-   Header
+   Header fixiert
    ============================ */
 header {
+  position: fixed;      /* immer oben kleben */
+  top: 0;
+  left: 0;
+  width: 100%;          /* volle Breite */
   background: var(--dark-green);
   color: var(--white);
   padding: 0.5rem 0;
-  position: sticky;
-  top: 0;
   z-index: 1000;
 
   /* Rechteckige Einbuchtung unten in der Mitte */
@@ -48,6 +50,16 @@ header {
     calc(9% + 50px) 100%, 
     0 100%
   );
+}
+
+/* Platzhalter, damit der Inhalt nicht unter dem Header rutscht */
+body {
+  font-family: Arial, sans-serif;
+  background: var(--beige);
+  color: var(--dark-green);
+  line-height: 1.6;
+
+  padding-top: 80px; /* Höhe vom Header ausgleichen */
 }
 
 /* Mobile: ohne Einbuchtung */
