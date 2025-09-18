@@ -51,7 +51,6 @@ body {
   background: var(--beige);
   color: var(--dark-green);
   line-height: 1.6;
-
   padding-top: 80px; /* Höhe vom Header ausgleichen */
 }
 
@@ -81,13 +80,14 @@ header .container {
   display: inline-block;
   width: auto;
   margin-right: 15px; /* Abstand rechts */
-
-  /* plastischer Schatten */
   box-shadow: 
     0 8px 16px rgba(0,0,0,0.45),
     inset 0 3px 6px rgba(255,255,255,0.6);
 }
 
+/* ============================
+   Navigation Desktop
+   ============================ */
 nav ul {
   display: flex;
   list-style: none;
@@ -102,12 +102,11 @@ nav ul li a {
   color: var(--white);
   font-weight: bold;
   transition: color 0.3s;
-
   display: inline-block;
   line-height: 1;
 
   position: relative;
-  top: -40px; /* nach oben verschoben */
+  top: -40px; /* Desktop: hochschieben */
 }
 
 nav ul li a:hover {
@@ -115,10 +114,8 @@ nav ul li a:hover {
 }
 
 /* ============================
-   Navigation & Burger Menü
+   Burger Standard
    ============================ */
-
-/* Burger Standard */
 .burger {
   display: none; /* erst im Mobile sichtbar */
   cursor: pointer;
@@ -131,7 +128,6 @@ nav ul li a:hover {
   font-size: 2.5rem; /* Größe einstellen */
   line-height: 1;    /* vertikale Zentrierung */
 }
-
 
 /* ============================
    Responsive Navigation
@@ -163,6 +159,7 @@ nav ul li a:hover {
   }
 
   nav ul li a {
+    top: 0; /* Mobile: NICHT hochschieben */
     color: var(--dark-green);
   }
 
@@ -170,6 +167,7 @@ nav ul li a:hover {
     display: flex; /* hier wird er aktiv */
   }
 }
+
 
 /* ============================
    Hero Section (Startseite)
