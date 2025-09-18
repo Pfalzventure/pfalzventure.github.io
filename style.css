@@ -173,7 +173,7 @@ nav ul li a:hover {
    Hero Section (Startseite)
    ============================ */
 .hero {
-  background: url("assets/Wald2.png") no-repeat center center/cover;
+  background: url("assets/wald.png") no-repeat center center/cover;
   color: var(--white);
   text-align: center;
   min-height: 100vh; /* mindestens volle Höhe */
@@ -182,7 +182,7 @@ nav ul li a:hover {
   align-items: center;
   justify-content: center;
   position: relative;
-  margin-top: 0px; /* Höhe des Headers */
+  margin-top: -40px; /* Höhe des Headers */
 }
 
 }
