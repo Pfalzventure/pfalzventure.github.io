@@ -169,52 +169,50 @@ nav ul li a:hover {
 }
 
 
-/* ============================
-   Hero Section (Startseite)
-   ============================ */
-.hero {
-  background: url("assets/wald.png") no-repeat center center/cover;
-  color: var(--white);
-  text-align: center;
-  min-height: 100vh; /* mindestens volle Höhe */
-  height: auto;      /* wächst mit Inhalt */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  margin-top: -40px; /* Höhe des Headers */
-}
+/* ============================ 
+Hero Section (Startseite) 
+============================ */ 
 
-.hero::after {
-  content: "";
-  position: absolute;
-  top: 0; 
-  left: 0;
-  width: 100%; 
-  height: 100%;
-  background: rgba(47, 79, 79, 0.6);
-}
-
-.hero-content {
-  position: relative;
-  z-index: 1;
-}
-
-.hero h1 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-.hero p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-}
-
-.hero-logo {
-  max-width: 300px;
-  margin-top: 7rem;   /* schiebt das Logo nach unten */
-  margin-bottom: 1rem; /* falls du Abstand nach unten brauchst */
-  filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
+.hero { background: url("assets/wald.png") 
+   no-repeat center center/cover; 
+       color: var(--white); 
+       text-align: center; 
+       min-height: 100vh; /* mindestens volle Höhe */ 
+       height: auto; /* wächst mit Inhalt */ 
+       display: flex; 
+       align-items: center; 
+       justify-content: center; 
+       position: relative; 
+       margin-top: -40px; /* Höhe des Headers */ 
+      }
+} 
+.hero::after { 
+   content: ""; 
+   position: absolute; 
+   top: 0; 
+   left: 0; 
+   width: 100%; 
+   height: 100%; 
+   background: rgba(47, 79, 79, 0.6); 
+} 
+.hero-content { 
+   position: relative; 
+   z-index: 1; 
+} 
+.hero h1 { 
+   font-size: 3rem; 
+   margin-bottom: 1rem; 
+} 
+.hero p { 
+   font-size: 1.2rem; 
+   margin-bottom: 2rem; 
+} 
+.hero-logo { 
+   max-width: 300px; 
+   margin-top: 7rem; /* schiebt das Logo nach unten */ 
+   margin-bottom: 1rem; /* falls du Abstand nach unten brauchst */ 
+   filter: drop-shadow(0 0 10px rgba(0,0,0,0.7)
+                      ); 
 }
 
 /* ============================
