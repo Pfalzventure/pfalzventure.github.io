@@ -185,8 +185,6 @@ nav ul li a:hover {
   margin-top: -40px; /* Höhe des Headers */
 }
 
-}
-
 .hero::after {
   content: "";
   position: absolute;
@@ -218,6 +216,29 @@ nav ul li a:hover {
   margin-bottom: 1rem; /* falls du Abstand nach unten brauchst */
   filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
 }
+
+/* ============================
+   Anpassung für Handy-Querformat
+   ============================ */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero {
+    min-height: 140vh; /* mehr Platz geben */
+  }
+
+  .hero h1 {
+    font-size: 2rem; /* Schrift verkleinern */
+  }
+
+  .hero p {
+    font-size: 1rem;
+  }
+
+  .hero-logo {
+    max-width: 200px;
+    margin-top: 3rem;
+  }
+}
+
 
 
 /* ============================
