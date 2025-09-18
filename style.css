@@ -107,7 +107,7 @@ nav ul li a {
   line-height: 1;
 
   position: relative;
-  top: -20px; /* nach oben verschoben */
+  top: -50px; /* nach oben verschoben */
 }
 
 nav ul li a:hover {
@@ -183,7 +183,7 @@ nav ul li a:hover {
   align-items: center;
   justify-content: center;
   position: relative;
-  margin-top: -35px; /* Höhe des Headers */
+  margin-top: -40px; /* Höhe des Headers */
 }
 
 }
