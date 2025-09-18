@@ -176,7 +176,7 @@ nav ul li a:hover {
   background: url("assets/wald.png") no-repeat center center/cover;
   color: var(--white);
   text-align: center;
-  height: 90vh;
+  height: 110vh;
   display: flex;
   align-items: center;
   justify-content: center;
