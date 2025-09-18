@@ -176,7 +176,8 @@ nav ul li a:hover {
   background: url("assets/Wald2.png") no-repeat center center/cover;
   color: var(--white);
   text-align: center;
-  height: 200vh;
+  min-height: 100vh; /* mindestens volle Höhe */
+  height: auto;      /* wächst mit Inhalt */
   display: flex;
   align-items: center;
   justify-content: center;
