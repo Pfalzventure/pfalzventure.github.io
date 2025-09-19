@@ -88,75 +88,91 @@ In den Kursen kannst du entweder mit deiner eigenen Ausrüstung oder mit diesem 
     <!-- Produkt 2: Kurs -->
     <div class="product" id="crashkurs">
       <h2>1 Tages Survival Crashkurs</h2>
-      <p>Erlerne an nur einem Tag die wichtigsten Skills um in der Natur überleben zu können. <br>Bitte wähle einen Termin aus der Liste an dem du den Kurs besuchen möchtest.</p>
-
-      <label for="kursTermine1">Mögliche Termine:</label><br>
-      <select id="kursTermine1" size="4" style="width:100%; max-width:320px;"></select>
-      <br><br>
-      <button class="btn add-btn" onclick="addCourseVoucher('kursTermine1','1 Tages Survival Crashkurs',59.90)">In den Warenkorb (59,90 €)</button>
-    </div>
-
-    <!-- Produkt 3: Kurs -->
-    <div class="product" id="intensivkurs">
-      <h2>2 Tages Survival Intensivkurs</h2>
-      <p>Erlerne an zwei Tagen die wichtigsten Skills um in der Natur überleben zu können und festige diese in einem realitätsnahen Szenario. 
-        <br>Bitte wähle einen Termin aus der Liste an dem du den Kurs besuchen möchtest.</p>
-
-      <label for="kursTermine2">Mögliche Termine:</label><br>
-      <select id="kursTermine2" size="4" style="width:100%; max-width:320px;"></select>
-      <br><br>
-      <button class="btn add-btn" onclick="addCourseVoucher('kursTermine2','2 Tages Survival Intensivkurs',149.90)">In den Warenkorb (149,90 €)</button>
-    </div>
-
-     <!-- Produkt 4: Kurs -->
-    <div class="product" id="bushcraftkurs">
-      <h2>3 Tages Bushcraft Kurs</h2>
-      <p>Du suchst eine echte Herausforderung und liebst es an deine Grenzen zu gehen? Lerne in 3 Tagen selbst ohne Hilfsmittel in der Natur zu überleben. 
-        <br>Bitte wähle einen Termin aus der Liste an dem du den Kurs besuchen möchtest.</p>
-
-      <label for="kursTermine3">Mögliche Termine:</label><br>
-      <select id="kursTermine3" size="4" style="width:100%; max-width:320px;"></select>
-      <br><br>
-      <button class="btn add-btn" onclick="addCourseVoucher('kursTermine3','3 Tages Bushcraft Kurs',299.90)">In den Warenkorb (299,90 €)</button>
-    </div>
-    
-<!-- Produkt 5: Kurs-Gutschein -->
-<div class="product" id="gutschein">
-  <h2>Wert-Gutschein</h2>
-  <p>Auf der Suche nach einem außergewöhnlichem Geschenk?  
-     Wähle deinen Wunschbetrag und erhalte einen schön gestalteten Gutschein.</p>
-
-  <label for="voucherAmount">Betrag in €:</label><br>
-  <input type="number" id="voucherAmount" value="50" min="10" step="5"><br><br>
-
-  <label for="voucherMessage">Widmung / Freitext:</label><br>
-  <textarea id="voucherMessage" rows="3" style="width:100%; max-width:320px;"></textarea><br><br>
-
-  <button class="btn add-btn" onclick="addVoucher()">In den Warenkorb</button>
-</div>
-
-
-
-  <!-- ============================
-       Warenkorb Popup
-       ============================ -->
-  <div id="cart" style="display:none; position:fixed; top:80px; right:20px; background:white; border:1px solid #ccc; padding:20px; max-width:340px; box-shadow:0 2px 10px rgba(0,0,0,0.2); z-index:1000;">
-    <h3>Dein Warenkorb</h3>
-    <br>
-    <ul id="cart-items" class="cart-list"></ul>
-    <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
-    <div id="paypal-button-container"></div>
-    <button onclick="toggleCart()" class="btn">Schließen</button>
-  </div>
-</main>
-  <!-- ============================
-       Footer
-       ============================ -->
-  <footer>
-    <p>© 2025 Pfalzventure – Robert Prokasky</p>
+      <p>Erlerne an nur einem Tag die wichokasky</p>
     <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
   </footer>
 
+   <!-- ============================
+       Shop-Bereich
+       ============================ -->
+<main class="shop-section">
+  <h1>Shop</h1>
+
+  <!-- Produkt 1 -->
+  <div class="product" id="survivalkit">
+    <h2>Survival Kit</h2>
+    <p>Dein Handwerkszeug zum Überleben. Mit diesem Kit hast du alles was du brauchst um in der Natur zu überleben: 
+      <br>
+      <br> - Feuerstahl
+      <br> - Messer
+      <br> - Trinkgefäß
+      <br> - Kompass
+      <br> - Medipack
+      <br> - Schnur
+      <br> - Panzertape
+      <br> - Rettungsdecke 
+      <br> - und vieles mehr
+    </p>
+    In den Kursen kannst du entweder mit deiner eigenen Ausrüstung oder mit diesem Kit umgehen lernen.
+    <br>Spar Tipp: Das Kit gibt es vergünstigt in den Kursen.
+    </p>
+    <button class="btn add-btn" onclick="addToCart('Survival Kit', 44.90)">In den Warenkorb (44,90 €)</button>
+  </div>
+
+  <!-- Produkt 2: Kurs -->
+  <div class="product" id="crashkurs">
+    <h2>1 Tages Survival Crashkurs</h2>
+    <p>Erlerne an nur einem Tag die wichtigsten Skills um in der Natur überleben zu können. <br>Bitte wähle einen Termin aus der Liste an dem du den Kurs besuchen möchtest.</p>
+
+    <label for="kursTermine1">Mögliche Termine:</label><br>
+    <select id="kursTermine1" size="4" style="width:100%; max-width:320px;"></select>
+    <br><br>
+    <a href="kurse.html#crashkurs" class="btn info-btn">ℹ️ Mehr Infos</a><br><br>
+    <button class="btn add-btn" onclick="addCourseVoucher('kursTermine1','1 Tages Survival Crashkurs',59.90)">In den Warenkorb (59,90 €)</button>
+  </div>
+
+  <!-- Produkt 3: Kurs -->
+  <div class="product" id="intensivkurs">
+    <h2>2 Tages Survival Intensivkurs</h2>
+    <p>Erlerne an zwei Tagen die wichtigsten Skills um in der Natur überleben zu können und festige diese in einem realitätsnahen Szenario. 
+      <br>Bitte wähle einen Termin aus der Liste an dem du den Kurs besuchen möchtest.</p>
+
+    <label for="kursTermine2">Mögliche Termine:</label><br>
+    <select id="kursTermine2" size="4" style="width:100%; max-width:320px;"></select>
+    <br><br>
+    <a href="kurse.html#intensivkurs" class="btn info-btn">ℹ️ Mehr Infos</a><br><br>
+    <button class="btn add-btn" onclick="addCourseVoucher('kursTermine2','2 Tages Survival Intensivkurs',149.90)">In den Warenkorb (149,90 €)</button>
+  </div>
+
+  <!-- Produkt 4: Kurs -->
+  <div class="product" id="bushcraftkurs">
+    <h2>3 Tages Bushcraft Kurs</h2>
+    <p>Du suchst eine echte Herausforderung und liebst es an deine Grenzen zu gehen? Lerne in 3 Tagen selbst ohne Hilfsmittel in der Natur zu überleben. 
+      <br>Bitte wähle einen Termin aus der Liste an dem du den Kurs besuchen möchtest.</p>
+
+    <label for="kursTermine3">Mögliche Termine:</label><br>
+    <select id="kursTermine3" size="4" style="width:100%; max-width:320px;"></select>
+    <br><br>
+    <a href="kurse.html#bushcraftkurs" class="btn info-btn">ℹ️ Mehr Infos</a><br><br>
+    <button class="btn add-btn" onclick="addCourseVoucher('kursTermine3','3 Tages Bushcraft Kurs',299.90)">In den Warenkorb (299,90 €)</button>
+  </div>
+  
+  <!-- Produkt 5: Kurs-Gutschein -->
+  <div class="product" id="gutschein">
+    <h2>Wert-Gutschein</h2>
+    <p>Auf der Suche nach einem außergewöhnlichem Geschenk?  
+      Wähle deinen Wunschbetrag und erhalte einen schön gestalteten Gutschein.</p>
+
+    <label for="voucherAmount">Betrag in €:</label><br>
+    <input type="number" id="voucherAmount" value="50" min="10" step="5"><br><br>
+
+    <label for="voucherMessage">Widmung / Freitext:</label><br>
+    <textarea id="voucherMessage" rows="3" style="width:100%; max-width:320px;"></textarea><br><br>
+
+    <button class="btn add-btn" onclick="addVoucher()">In den Warenkorb</button>
+  </div>
+</main>   
+      
   <!-- ============================
        Shop-Script (Warenkorb + PayPal) - angepasst mit Bounce-Trigger
        ============================ -->
