@@ -477,6 +477,16 @@ main {
   width: 100px;
   text-align: center;
 }
+/* Highlight-Effekt für angesprungene Kurs-Blöcke */
+.product:target {
+  animation: highlight 1.5s ease;
+}
+
+@keyframes highlight {
+  0%   { background-color: rgba(40, 167, 69, 0.4); } /* hellgrün halbtransparent */
+  100% { background-color: transparent; }
+}
+
 
 /* Buttons für Kurse nebeneinander ohne Umbruch */
 .kurs-buttons {
