@@ -457,6 +457,7 @@ main {
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
+  scroll-margin-top: 50px; /* Höhe deines Headers */
 }
 
 .product h2 {
