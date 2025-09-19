@@ -483,8 +483,8 @@ main {
 }
 
 @keyframes highlight {
-  0%   { background-color: rgba(40, 167, 69, 0.4); } /* hellgrün halbtransparent */
-  100% { background-color: transparent; }
+  0%   { box-shadow: 0 0 20px rgba(40, 167, 69, 0.8); }
+  100% { box-shadow: none; }
 }
 
 
