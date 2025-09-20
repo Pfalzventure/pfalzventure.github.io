@@ -58,40 +58,6 @@
     });
   </script>
 
-  <!-- ============================
-       Shop-Bereich
-       ============================ -->
-  <main class="shop-section">
-    <h1>Shop</h1>
-
-    <!-- Produkt 1 -->
-    <div class="product" id="survivalkit">
-      <h2>Survival Kit</h2>
-       <p>Dein Handwerkszeug zum Überleben. Mit diesem Kit hast du alles was du brauchst um in der Natur zu überleben: 
-        <br>
-        <br> - Feuerstahl
-        <br> - Messer
-        <br> - Trinkgefäß
-        <br> - Kompass
-        <br> - Medipack
-        <br> - Schnur
-        <br> - Panzertape
-        <br> - Rettungsdecke 
-        <br> - und vieles mehr
-        </p>
-In den Kursen kannst du entweder mit deiner eigenen Ausrüstung oder mit diesem Kit umgehen lernen.
- <br>Spar Tipp: Das Kit gibt es vergünstigt in den Kursen.
-</p>
-      <button class="btn add-btn" onclick="addToCart('Survival Kit', 44.90)">In den Warenkorb (44,90 €)</button>
-    </div>
-
-    <!-- Produkt 2: Kurs -->
-    <div class="product" id="crashkurs">
-      <h2>1 Tages Survival Crashkurs</h2>
-      <p>Erlerne an nur einem Tag die wichokasky</p>
-    <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
-  </footer>
-
    <!-- ============================
        Shop-Bereich
        ============================ -->
@@ -393,7 +359,14 @@ function addCourseVoucher(selectId, kursName, kursPreis) {
     if (!cartDiv) return;
     cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
   }
-
+    
+  //<!-- ============================
+     //  Footer
+     //  ============================ -->
+  <footer>
+    <p>© 2025 Pfalzventure – Robert Prokasky</p>
+    <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
+  </footer>
   // ============================
   // PayPal Integration
   // ============================
