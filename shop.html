@@ -241,7 +241,16 @@ function addCourseVoucher(selectId, kursName, kursPreis) {
     alert("Bitte wähle einen Termin aus!");
     return;
   }
-
+  cart.push({
+      name: kursName,
+      price: kursPreis,
+      qty: 1,
+      termine: selected
+    });
+    saveCart();
+    triggerCartBounce();
+  }
+    
   // Für jeden ausgewählten Termin ein eigenes Cart-Item
   selected.forEach(term => {
     let name = `${kursName} – Termin: ${term}`;
