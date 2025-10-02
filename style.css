@@ -630,3 +630,42 @@ main {
   white-space: nowrap; /* Buttontext bleibt in einer Zeile */
   flex: 0 0 auto;      /* Button schrumpft nicht */
 }
+
+.cart-discount {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border-top: 1px solid #ddd;
+}
+
+.cart-discount label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: bold;
+}
+
+.cart-discount input {
+  padding: 0.4rem;
+  width: 60%;
+  max-width: 200px;
+  margin-right: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.cart-discount button {
+  background: var(--forest-green);
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cart-discount button:hover {
+  background: var(--dark-green);
+}
+
+#voucherMessage {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
