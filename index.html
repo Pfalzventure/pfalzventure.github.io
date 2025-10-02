@@ -193,6 +193,26 @@ Wir zeigen dir alles zum Thema Bushcraft und Survival. Ob es dir um reines Aneig
       return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
     }
 
+<div class="cart-list">
+  <!-- Einzelne Artikel -->
+  <div class="cart-item">
+    <span>Kurs Bushcraft</span>
+    <span class="cart-price">29,00 €</span>
+  </div>
+
+  <!-- Gesamtbetrag -->
+  <p class="cart-total" data-total="29.00">Gesamt: 29,00 €</p>
+
+  <!-- 🎟️ Gutschein-Eingabe -->
+  <div class="cart-discount">
+    <label for="voucherCode">🎟️ Gutschein einlösen:</label>
+    <input type="text" id="voucherCode" placeholder="Code eingeben" />
+    <button onclick="applyVoucher()">Einlösen</button>
+    <p id="voucherMessage"></p>
+  </div>
+</div>
+
+    
     // Warenkorb speichern & laden
     function saveCart() {
       localStorage.setItem("cart", JSON.stringify(cart));
