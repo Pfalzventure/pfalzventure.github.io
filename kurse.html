@@ -203,6 +203,15 @@ Eine Gruppe, gute Laune und robuste Kleidung
       return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
     }
 
+  <!-- 🎟️ Gutschein-Eingabe -->
+  <div class="cart-discount">
+    <label for="voucherCode">🎟️ Gutschein einlösen:</label>
+    <input type="text" id="voucherCode" placeholder="Code eingeben" />
+    <button onclick="applyVoucher()">Einlösen</button>
+    <p id="voucherMessage"></p>
+  </div>
+</div>
+    
     function saveCart() {
       localStorage.setItem("cart", JSON.stringify(cart));
       updateCart();
