@@ -134,137 +134,7 @@ Wir zeigen dir alles zum Thema Bushcraft und Survival. Ob es dir um reines Aneig
     <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
   </footer>
 
-  <!-- ============================
-       Warenkorb + PayPal Script
-       ============================ -->
-  <script>
-    let cart = [];
-
-    // Produkt hinzufügen (z. B. aus Shop übernommen)
-    function addToCart(name, price) {
-      let existing = cart.find(item => item.name === name && item.price === price);
-      if (existing) {
-        existing.qty += 1;
-      } else {
-        cart.push({ name, price, qty: 1 });
-      }
-      saveCart();
-    }
-
-    // Kurs-Gutschein hinzufügen (mit Terminen aus JSON)
-    function addCourseVoucher() {
-      let select = document.getElementById("kursTermine");
-      let selected = Array.from(select.selectedOptions).map(opt => opt.textContent);
-
-      if (selected.length === 0) {
-        alert("Bitte wähle einen Termin aus!");
-        return;
-      }
-
-      cart.push({
-        name: "Kurs-Gutschein",
-        price: 1.00,
-        qty: 1,
-        termine: selected
-      });
-      saveCart();
-    }
-
-    // Wert-Gutschein hinzufügen
-    function addVoucher() {
-      let amount = parseFloat(document.getElementById("voucherAmount").value);
-      if (amount < 10) amount = 10;
-      cart.push({ name: "Wert-Gutschein", price: amount, qty: 1 });
-      saveCart();
-    }
-
-    // Menge ändern
-    function increaseQty(index) {
-      cart[index].qty += 1;
-      saveCart();
-    }
-    function decreaseQty(index) {
-      cart[index].qty -= 1;
-      if (cart[index].qty <= 0) cart.splice(index, 1);
-      saveCart();
-    }
-
-    function getCartTotal() {
-      return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    }
-
-  <!-- 🎟️ Gutschein-Eingabe -->
-  <div class="cart-discount">
-    <label for="voucherCode">🎟️ Gutschein einlösen:</label>
-    <input type="text" id="voucherCode" placeholder="Code eingeben" />
-    <button onclick="applyVoucher()">Einlösen</button>
-    <p id="voucherMessage"></p>
-  </div>
-</div>
-
-    
-    // Warenkorb speichern & laden
-    function saveCart() {
-      localStorage.setItem("cart", JSON.stringify(cart));
-      updateCart();
-    }
-    function loadCart() {
-      let stored = localStorage.getItem("cart");
-      if (stored) cart = JSON.parse(stored);
-      updateCart();
-    }
-
-    // Warenkorb aktualisieren (inkl. Termine)
-    function updateCart() {
-      document.getElementById("cart-count").innerText = cart.reduce((sum, item) => sum + item.qty, 0);
-
-      let itemsList = document.getElementById("cart-items");
-      itemsList.innerHTML = "";
-
-      cart.forEach((item, i) => {
-        let li = document.createElement("li");
-        li.classList.add("cart-item");
-
-        // Produkttext
-        let span = document.createElement("span");
-        span.innerText = `${item.name} – ${item.price.toFixed(2)} €`;
-        if (item.termine) {
-          span.innerText += `\n(Termine: ${item.termine.join(", ")})`;
-        }
-
-        // Steuerung (➖ Anzahl ➕)
-        let controls = document.createElement("div");
-        controls.classList.add("cart-controls");
-
-        let minusBtn = document.createElement("button");
-        minusBtn.innerText = "➖";
-        minusBtn.onclick = () => decreaseQty(i);
-
-        let qtySpan = document.createElement("span");
-        qtySpan.innerText = item.qty;
-        qtySpan.classList.add("cart-qty");
-
-        let plusBtn = document.createElement("button");
-        plusBtn.innerText = "➕";
-        plusBtn.onclick = () => increaseQty(i);
-
-        controls.appendChild(minusBtn);
-        controls.appendChild(qtySpan);
-        controls.appendChild(plusBtn);
-
-        li.appendChild(span);
-        li.appendChild(controls);
-        itemsList.appendChild(li);
-      });
-
-      document.getElementById("cart-total").innerText = getCartTotal().toFixed(2);
-    }
-
-    // Warenkorb anzeigen/verbergen
-    function toggleCart() {
-      let cartDiv = document.getElementById("cart");
-      cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
-    }
+ 
 
     // PayPal Integration
     paypal.Buttons({
@@ -277,7 +147,102 @@ Wir zeigen dir alles zum Thema Bushcraft und Survival. Ob es dir um reines Aneig
                 desc += ` [${item.termine.join(", ")}]`;
               }
               return desc;
-            }).join("; "),
+            }).join("; "),<!-- ============================
+     Warenkorb-Bereich
+     ============================ -->
+<div id="cart" style="display:none; border:1px solid #ccc; padding:1rem; margin:1rem 0;">
+  <h2>🛒 Dein Warenkorb</h2>
+  <ul id="cart-items"></ul>
+
+  <!-- Gesamtbetrag -->
+  <p>Gesamt: <span id="cart-total">0.00</span> €</p>
+
+  <!-- 🎟️ Gutschein-Eingabe -->
+  <div class="cart-discount" style="margin-top:1rem;">
+    <label for="voucherCode">🎟️ Gutschein einlösen:</label><br>
+    <input type="text" id="voucherCode" placeholder="Code eingeben" />
+    <button onclick="applyVoucher()">Einlösen</button>
+    <p id="voucherMessage" style="color:green;"></p>
+  </div>
+</div>
+
+<!-- ============================
+     Script: Warenkorb Logik
+     ============================ -->
+<script>
+  let cart = [];
+
+  // Beispielprodukt hinzufügen (nur zum Test)
+  function addTestItem() {
+    cart.push({ name: "Survival Kurs", price: 100, qty: 1 });
+    saveCart();
+  }
+
+  // Warenkorb speichern & laden
+  function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCart();
+  }
+  function loadCart() {
+    let stored = localStorage.getItem("cart");
+    if (stored) cart = JSON.parse(stored);
+    updateCart();
+  }
+
+  // Gesamtbetrag berechnen
+  function getCartTotal() {
+    return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+  }
+
+  // Warenkorb aktualisieren
+  function updateCart() {
+    let itemsList = document.getElementById("cart-items");
+    itemsList.innerHTML = "";
+
+    cart.forEach((item, i) => {
+      let li = document.createElement("li");
+      li.innerText = `${item.name} – ${item.price.toFixed(2)} € x ${item.qty}`;
+      itemsList.appendChild(li);
+    });
+
+    document.getElementById("cart-total").innerText = getCartTotal().toFixed(2);
+  }
+
+  // 🎟️ Gutschein anwenden
+  async function applyVoucher() {
+    let code = document.getElementById("voucherCode").value.trim();
+    if (!code) {
+      document.getElementById("voucherMessage").innerText = "Bitte Code eingeben!";
+      return;
+    }
+
+    // 👉 HIER deine Google-Script-URL einsetzen
+    let url = "DEINE_GOOGLE_SCRIPT_WEBAPP_URL" + "?action=redeem&text=" + encodeURIComponent(code) + "&value=" + getCartTotal();
+
+    try {
+      let response = await fetch(url);
+      let html = await response.text();
+
+      if (html.includes("Neuer Code") || html.includes("eingelöst")) {
+        document.getElementById("voucherMessage").innerText = "✅ Gutschein erfolgreich eingelöst!";
+        document.getElementById("cart-total").innerText = "0.00"; // kompletter Betrag wird abgezogen
+      } else {
+        document.getElementById("voucherMessage").innerText = "❌ Code ungültig oder verbraucht.";
+      }
+    } catch (err) {
+      document.getElementById("voucherMessage").innerText = "⚠️ Fehler bei der Verbindung zum Gutschein-Server.";
+      console.error(err);
+    }
+  }
+
+  // Beim Laden einmal Warenkorb holen
+  loadCart();
+</script>
+
+<!-- Testbutton um Produkt hinzuzufügen -->
+<button onclick="addTestItem()">➕ Testprodukt in Warenkorb legen</button>
+<button onclick="document.getElementById('cart').style.display='block'">🛒 Warenkorb anzeigen</button>
+
             amount: {
               currency_code: "EUR",
               value: getCartTotal().toFixed(2)
