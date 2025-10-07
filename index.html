@@ -3,45 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-    <!-- Tracking Snippet -->
-      <script defer data-domain="pfalzventure.de" src="https://plausible.io/js/script.js"></script>
-  
   <title>Pfalzventure – Bushcraft & Survival</title>
+  
+  <!-- Tracking -->
+  <script defer data-domain="pfalzventure.de" src="https://plausible.io/js/script.js"></script>
+
+  <!-- Styles -->
   <link rel="stylesheet" href="style.css">
 
   <!-- PayPal SDK -->
   <script src="https://www.paypal.com/sdk/js?client-id=AQbF-v1VWk6QCLKdNODfXJb-fUAcoTsnE1ux9JvHUWNYuJQE1xskgSu7ff_qniWdL168KWEw_oX7iCHB&currency=EUR"></script>
 </head>
 <body>
-   <!-- ============================
-       Header mit Navigation
-       ============================ -->
+
+<!-- ============================
+     Header
+     ============================ -->
 <header>
   <div class="container">
     <a href="index.html" class="logo">
       <img src="assets/Logo2.png" alt="Pfalzventure Logo">
     </a>
-    
-    <!-- Burger Button für kleine Bildschirme -->
+
+    <!-- Burger Button -->
     <div class="burger" onclick="toggleMenu()">☰</div>
-<script>
-  // Menü öffnen/schließen
-  function toggleMenu() {
-    document.querySelector("nav ul").classList.toggle("nav-active");
-  }
-
-  // Klick außerhalb schließt das Menü
-  document.addEventListener("click", function(event) {
-    const menu = document.querySelector("nav ul");
-    const burger = document.querySelector(".burger");
-
-    // Wenn Klick NICHT auf Burger und NICHT im Menü
-    if (!menu.contains(event.target) && !burger.contains(event.target)) {
-      menu.classList.remove("nav-active");
-    }
-  });
-</script>
 
     <nav>
       <ul class="nav-links">
@@ -51,225 +36,196 @@
         <li><a href="kontakt.html">Kontakt</a></li>
       </ul>
     </nav>
-   
-    <!-- 🟠 Warenkorb Button -->
+
+    <!-- 🛒 Warenkorb Button -->
     <button onclick="toggleCart()" class="btn cart-btn">
       🛒 Warenkorb (<span id="cart-count">0</span>)
     </button>
   </div>
 </header>
 
+<!-- Burger-Menü Script -->
+<script>
+function toggleMenu() {
+  document.querySelector(".nav-links").classList.toggle("nav-active");
+}
+document.addEventListener("click", function(event) {
+  const menu = document.querySelector("nav ul");
+  const burger = document.querySelector(".burger");
+  if (!menu.contains(event.target) && !burger.contains(event.target)) {
+    menu.classList.remove("nav-active");
+  }
+});
+</script>
 
- <!-- Hero-Bereich -->
+<!-- ============================
+     Hero
+     ============================ -->
 <section class="hero">
   <div class="hero-content">
     <img src="assets/Logo2.png" alt="Pfalzventure Logo" class="hero-logo">
     <h1>Willkommen bei Pfalzventure</h1>
     <p>Dein Abenteuer in der Natur – Bushcraft & Survival im Pfälzerwald</p>
- 
   </div>
 </section>
 
-   <!-- Einleitung -->
-  <div class="product">
-    <h2>Was ist Bushcraft & Survival?</h2>
-    <p>Survival bedeutet, in Extremsituationen mit minimalen Mitteln zu überleben – Feuer entfachen, Wasser und Nahrung finden, Orientierung behalten und Schutz aufbauen. Auch geht es darum, in Ausnahmesituationen ruhig zu bleiben und handlungsfähig zu sein.
-<br>Bushcraft geht über das klassische Survival hinaus, es ist das Leben in und mit der Natur. Dabei verzichtet man bewusst auf moderne Hilfsmittel und stellt sich der Herausforderung, mit traditionellen Techniken klarzukommen. Hier geht es darum sich in der Natur zu Hause zu fühlen - auch wenn‘s oft hart wird.
-</p>
-    </div>
-  </div>
-
-  <!-- Über uns -->
-  <div class="product">
-    <h2>Wer führt die Kurse durch?</h2>
-    <p>
-Robert Prokasky
-<br>-	37 Jahre  
-<br>-	Survival Trainer
-<br>-	Über 10 Jahre Erfahrung im Bereich Bushcraft & Survival
-<br>-	Ausgebildeter Ersthelfer
-<br>-	Ehrenamtlicher Vereinstrainer seit über 13 Jahren
-</p>
-    </div>
-  </div>
-  
- <!-- Wo finden die Kurse statt? -->
-  <div class="product">
-    <h2>Wo finden die Kurse statt?</h2>
-    <p>
-Die Kurse finden aktuell alle in Lindenberg in der Pfalz statt. Je nach Kurs in unserem Basecamp, oder auch großräumig in dessen Umgebung.
-</p>
-    </div>
-  </div>
-  
- <!-- Was bieten wir dir? -->
-  <div class="product">
-    <h2>Was bieten wir dir?</h2>
-    <p>
-Wir zeigen dir alles zum Thema Bushcraft und Survival. Ob es dir um reines Aneignen nützlichen Wissens geht, oder du dabei ein Abenteuer erleben willst, bei dem du über deine Grenzen hinaus wächst: Schau dir einfach unsere Kurse an, bei uns ist wirklich für jeden was dabei.
-</p>
-    </div>
-  </div>
- <!-- Button in eigener Box -->
-  <div class="cta">
-    <a href="kurse.html" class="btn">Zu den Kursen</a>
-  </div>
+<!-- ============================
+     Inhalte
+     ============================ -->
+<div class="product">
+  <h2>Was ist Bushcraft & Survival?</h2>
+  <p>Survival bedeutet, in Extremsituationen mit minimalen Mitteln zu überleben – Feuer entfachen, Wasser und Nahrung finden, Orientierung behalten und Schutz aufbauen. Bushcraft geht darüber hinaus – es ist das Leben in und mit der Natur.</p>
 </div>
-  
+
+<div class="product">
+  <h2>Wer führt die Kurse durch?</h2>
+  <p>Robert Prokasky – 37 Jahre, Survival-Trainer mit über 10 Jahren Erfahrung im Bereich Bushcraft & Survival, ausgebildeter Ersthelfer und ehrenamtlicher Vereinstrainer.</p>
+</div>
+
+<div class="product">
+  <h2>Wo finden die Kurse statt?</h2>
+  <p>Unsere Kurse finden in Lindenberg (Pfalz) statt – im Basecamp oder in der umliegenden Natur.</p>
+</div>
+
+<div class="product">
+  <h2>Was bieten wir dir?</h2>
+  <p>Wir zeigen dir alles rund ums Überleben in der Wildnis. Von Basiswissen bis zu echten Herausforderungen – bei uns findest du dein Abenteuer.</p>
+</div>
+
+<div class="cta">
+  <a href="kurse.html" class="btn">Zu den Kursen</a>
+</div>
+
 <!-- ============================
      Warenkorb Popup
      ============================ -->
 <div id="cart" style="display:none; position:fixed; top:80px; right:20px; background:white; border:1px solid #ccc; padding:20px; max-width:340px; box-shadow:0 2px 10px rgba(0,0,0,0.2); z-index:1000;">
-  <h3>Dein Warenkorb</h3>
-  <br>
+  <h3>🛒 Dein Warenkorb</h3>
   <ul id="cart-items" class="cart-list"></ul>
   <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
+
+  <!-- 🎟️ Gutschein-Eingabe -->
+  <div class="cart-discount">
+    <label for="voucherCode">🎟️ Gutschein einlösen:</label>
+    <input type="text" id="voucherCode" placeholder="Code eingeben" />
+    <button onclick="applyVoucher()">Einlösen</button>
+    <p id="voucherMessage"></p>
+  </div>
+
+  <!-- PayPal -->
   <div id="paypal-button-container"></div>
+
   <button onclick="toggleCart()" class="btn">Schließen</button>
 </div>
 
-  <!-- Footer -->
-  <footer>
-    <p>© 2025 Pfalzventure – Robert Prokasky</p>
-    <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
-  </footer>
-
- 
-
-    // PayPal Integration
-    paypal.Buttons({
-      createOrder: function(data, actions) {
-        return actions.order.create({
-          purchase_units: [{
-            description: cart.map(item => {
-              let desc = `${item.name} x${item.qty}`;
-              if (item.termine) {
-                desc += ` [${item.termine.join(", ")}]`;
-              }
-              return desc;
-            }).join("; "),<!-- ============================
-     Warenkorb-Bereich
+<!-- ============================
+     Footer
      ============================ -->
-<div id="cart" style="display:none; border:1px solid #ccc; padding:1rem; margin:1rem 0;">
-  <h2>🛒 Dein Warenkorb</h2>
-  <ul id="cart-items"></ul>
-
-  <!-- Gesamtbetrag -->
-  <p>Gesamt: <span id="cart-total">0.00</span> €</p>
-
-  <!-- 🎟️ Gutschein-Eingabe -->
-  <div class="cart-discount" style="margin-top:1rem;">
-    <label for="voucherCode">🎟️ Gutschein einlösen:</label><br>
-    <input type="text" id="voucherCode" placeholder="Code eingeben" />
-    <button onclick="applyVoucher()">Einlösen</button>
-    <p id="voucherMessage" style="color:green;"></p>
-  </div>
-</div>
+<footer>
+  <p>© 2025 Pfalzventure – Robert Prokasky</p>
+  <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
+</footer>
 
 <!-- ============================
-     Script: Warenkorb Logik
+     Warenkorb Script
      ============================ -->
 <script>
-  let cart = [];
+let cart = [];
 
-  // Beispielprodukt hinzufügen (nur zum Test)
-  function addTestItem() {
-    cart.push({ name: "Survival Kurs", price: 100, qty: 1 });
-    saveCart();
+// Produkt hinzufügen (Testfunktion)
+function addTestItem() {
+  cart.push({ name: "Survival Kurs", price: 100, qty: 1 });
+  saveCart();
+}
+
+// Warenkorb speichern/laden
+function saveCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCart();
+}
+function loadCart() {
+  let stored = localStorage.getItem("cart");
+  if (stored) cart = JSON.parse(stored);
+  updateCart();
+}
+
+// Gesamtbetrag
+function getCartTotal() {
+  return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+}
+
+// Warenkorb anzeigen
+function updateCart() {
+  document.getElementById("cart-count").innerText = cart.reduce((sum, i) => sum + i.qty, 0);
+  let list = document.getElementById("cart-items");
+  list.innerHTML = "";
+  cart.forEach(item => {
+    let li = document.createElement("li");
+    li.innerText = `${item.name} – ${item.price.toFixed(2)} € x ${item.qty}`;
+    list.appendChild(li);
+  });
+  document.getElementById("cart-total").innerText = getCartTotal().toFixed(2);
+}
+
+// Warenkorb öffnen/schließen
+function toggleCart() {
+  const cartDiv = document.getElementById("cart");
+  cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
+}
+
+// Gutschein anwenden
+async function applyVoucher() {
+  let code = document.getElementById("voucherCode").value.trim();
+  if (!code) {
+    document.getElementById("voucherMessage").innerText = "Bitte Code eingeben!";
+    return;
   }
 
-  // Warenkorb speichern & laden
-  function saveCart() {
-    localStorage.setItem("cart", JSON.stringify(cart));
-    updateCart();
-  }
-  function loadCart() {
-    let stored = localStorage.getItem("cart");
-    if (stored) cart = JSON.parse(stored);
-    updateCart();
-  }
+  // 👉 HIER deine Google Script URL eintragen:
+  let url = "DEINE_GOOGLE_SCRIPT_WEBAPP_URL?action=redeem&text=" + encodeURIComponent(code) + "&value=" + getCartTotal();
 
-  // Gesamtbetrag berechnen
-  function getCartTotal() {
-    return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+  try {
+    let response = await fetch(url);
+    let html = await response.text();
+
+    if (html.includes("eingelöst")) {
+      document.getElementById("voucherMessage").innerText = "✅ Gutschein erfolgreich eingelöst!";
+      document.getElementById("cart-total").innerText = "0.00";
+    } else {
+      document.getElementById("voucherMessage").innerText = "❌ Code ungültig oder verbraucht.";
+    }
+  } catch (err) {
+    document.getElementById("voucherMessage").innerText = "⚠️ Fehler bei der Verbindung.";
+    console.error(err);
   }
+}
 
-  // Warenkorb aktualisieren
-  function updateCart() {
-    let itemsList = document.getElementById("cart-items");
-    itemsList.innerHTML = "";
-
-    cart.forEach((item, i) => {
-      let li = document.createElement("li");
-      li.innerText = `${item.name} – ${item.price.toFixed(2)} € x ${item.qty}`;
-      itemsList.appendChild(li);
+// PayPal Integration
+paypal.Buttons({
+  createOrder: function(data, actions) {
+    return actions.order.create({
+      purchase_units: [{
+        description: cart.map(item => `${item.name} x${item.qty}`).join("; "),
+        amount: { currency_code: "EUR", value: getCartTotal().toFixed(2) }
+      }]
     });
-
-    document.getElementById("cart-total").innerText = getCartTotal().toFixed(2);
+  },
+  onApprove: function(data, actions) {
+    return actions.order.capture().then(function(details) {
+      alert("Danke " + details.payer.name.given_name + "!");
+      cart = [];
+      saveCart();
+      toggleCart();
+    });
   }
+}).render('#paypal-button-container');
 
-  // 🎟️ Gutschein anwenden
-  async function applyVoucher() {
-    let code = document.getElementById("voucherCode").value.trim();
-    if (!code) {
-      document.getElementById("voucherMessage").innerText = "Bitte Code eingeben!";
-      return;
-    }
-
-    // 👉 HIER deine Google-Script-URL einsetzen
-    let url = "DEINE_GOOGLE_SCRIPT_WEBAPP_URL" + "?action=redeem&text=" + encodeURIComponent(code) + "&value=" + getCartTotal();
-
-    try {
-      let response = await fetch(url);
-      let html = await response.text();
-
-      if (html.includes("Neuer Code") || html.includes("eingelöst")) {
-        document.getElementById("voucherMessage").innerText = "✅ Gutschein erfolgreich eingelöst!";
-        document.getElementById("cart-total").innerText = "0.00"; // kompletter Betrag wird abgezogen
-      } else {
-        document.getElementById("voucherMessage").innerText = "❌ Code ungültig oder verbraucht.";
-      }
-    } catch (err) {
-      document.getElementById("voucherMessage").innerText = "⚠️ Fehler bei der Verbindung zum Gutschein-Server.";
-      console.error(err);
-    }
-  }
-
-  // Beim Laden einmal Warenkorb holen
-  loadCart();
+// Init
+loadCart();
 </script>
 
-<!-- Testbutton um Produkt hinzuzufügen -->
-<button onclick="addTestItem()">➕ Testprodukt in Warenkorb legen</button>
-<button onclick="document.getElementById('cart').style.display='block'">🛒 Warenkorb anzeigen</button>
+<!-- Optional: externer Gutschein-Code -->
+<script src="gutscheine.js"></script>
 
-            amount: {
-              currency_code: "EUR",
-              value: getCartTotal().toFixed(2)
-            }
-          }]
-        });
-      },
-      onApprove: function(data, actions) {
-        return actions.order.capture().then(function(details) {
-          alert("Vielen Dank! " + details.payer.name.given_name + " – Deine Bestellung wurde erfolgreich abgeschlossen.");
-          cart = [];
-          saveCart();
-          toggleCart();
-        });
-      }
-    }).render('#paypal-button-container');
-
-    // Warenkorb laden beim Start
-    loadCart();
-  </script>
-  <script>
-  function toggleMenu() {
-    document.querySelector(".nav-links").classList.toggle("nav-active");
-  }
-</script>
-
-  <script src="gutscheine.js"></script>
-  
 </body>
 </html>
