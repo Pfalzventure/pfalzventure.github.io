@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-      <!-- Tracking Snippet -->
-      <script defer data-domain="pfalzventure.de" src="https://plausible.io/js/script.js"></script>
+  <!-- Tracking Snippet -->
+  <script defer data-domain="pfalzventure.de" src="https://plausible.io/js/script.js"></script>
   
   <title>Kontakt – Pfalzventure</title>
   <link rel="stylesheet" href="style.css">
@@ -22,26 +22,22 @@
       <a href="index.html" class="logo">
         <img src="assets/Logo2.png" alt="Pfalzventure Logo">
       </a>
-          <!-- Burger Button für kleine Bildschirme -->
-    <div class="burger" onclick="toggleMenu()">☰</div>
-<script>
-  // Menü öffnen/schließen
-  function toggleMenu() {
-    document.querySelector("nav ul").classList.toggle("nav-active");
-  }
 
-  // Klick außerhalb schließt das Menü
-  document.addEventListener("click", function(event) {
-    const menu = document.querySelector("nav ul");
-    const burger = document.querySelector(".burger");
+      <!-- Burger Button -->
+      <div class="burger" onclick="toggleMenu()">☰</div>
+      <script>
+        function toggleMenu() {
+          document.querySelector("nav ul").classList.toggle("nav-active");
+        }
+        document.addEventListener("click", function(event) {
+          const menu = document.querySelector("nav ul");
+          const burger = document.querySelector(".burger");
+          if (!menu.contains(event.target) && !burger.contains(event.target)) {
+            menu.classList.remove("nav-active");
+          }
+        });
+      </script>
 
-    // Wenn Klick NICHT auf Burger und NICHT im Menü
-    if (!menu.contains(event.target) && !burger.contains(event.target)) {
-      menu.classList.remove("nav-active");
-    }
-  });
-
-</script>
       <nav>
         <ul class="nav-links">
           <li><a href="index.html">Start</a></li>
@@ -50,6 +46,7 @@
           <li><a href="kontakt.html" class="active">Kontakt</a></li>
         </ul>
       </nav>
+
       <!-- 🟠 Warenkorb Button -->
       <button onclick="toggleCart()" class="btn cart-btn">🛒 Warenkorb (<span id="cart-count">0</span>)</button>
     </div>
@@ -58,18 +55,18 @@
   <!-- ============================
        Kontaktformular
        ============================ -->
-<main class="kontakt-section">
+  <main class="kontakt-section">
     <h1>Kontakt</h1>
     <p>Du hast Fragen zu unserem Angebot oder möchtest dich anmelden?<br>
        Schreibe uns einfach – wir freuen uns auf deine Nachricht!</p>
-<br>
+    <br>
+
     <div class="kontakt-info">
       <p><strong>Email:</strong> <a href="mailto:info@pfalzventure.de">info@pfalzventure.de</a></p>
       <p><strong>Telefon:</strong> <a href="tel:+491708307443">+49 170 8307443</a></p>
     </div>
 
     <form id="contact-form" action="https://formspree.io/f/mldlyqdz" method="POST" class="kontakt-form">
-      <!-- optionaler Honeypot gegen Spam -->
       <input type="text" name="_gotcha" style="display:none">
 
       <label for="name">Dein Name:</label>
@@ -82,11 +79,10 @@
       <textarea id="nachricht" name="message" rows="6" required></textarea>
 
       <button type="submit" class="btn">Nachricht senden</button>
-
-      <!-- Status-Ausgabe für Fehlerfälle -->
       <p id="form-status" class="form-status" aria-live="polite" style="display:none; margin-top:1rem;"></p>
     </form>
   </main>
+
   <!-- ============================
        Warenkorb Popup
        ============================ -->
@@ -95,10 +91,19 @@
     <br>
     <ul id="cart-items" class="cart-list"></ul>
     <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
+
+    <!-- 🎟️ Gutschein-Eingabe -->
+    <div class="cart-discount">
+      <label for="voucherCode">🎟️ Gutschein einlösen:</label>
+      <input type="text" id="voucherCode" placeholder="Code eingeben" />
+      <button onclick="applyVoucher()">Einlösen</button>
+      <p id="voucherMessage"></p>
+    </div>
+
     <div id="paypal-button-container"></div>
     <button onclick="toggleCart()" class="btn">Schließen</button>
   </div>
-</main>
+
   <!-- ============================
        Footer
        ============================ -->
@@ -113,7 +118,6 @@
   <script>
     let cart = [];
 
-    // Produkt hinzufügen (z. B. aus Shop übernommen)
     function addToCart(name, price) {
       let existing = cart.find(item => item.name === name && item.price === price);
       if (existing) {
@@ -124,16 +128,13 @@
       saveCart();
     }
 
-    // Kurs-Gutschein hinzufügen (mit Terminen aus JSON)
     function addCourseVoucher() {
       let select = document.getElementById("kursTermine");
       let selected = Array.from(select.selectedOptions).map(opt => opt.textContent);
-
       if (selected.length === 0) {
         alert("Bitte wähle einen Termin aus!");
         return;
       }
-
       cart.push({
         name: "Kurs-Gutschein",
         price: 1.00,
@@ -143,7 +144,6 @@
       saveCart();
     }
 
-    // Wert-Gutschein hinzufügen
     function addVoucher() {
       let amount = parseFloat(document.getElementById("voucherAmount").value);
       if (amount < 10) amount = 10;
@@ -151,7 +151,6 @@
       saveCart();
     }
 
-    // Menge ändern
     function increaseQty(index) {
       cart[index].qty += 1;
       saveCart();
@@ -166,17 +165,6 @@
       return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
     }
 
-  <!-- 🎟️ Gutschein-Eingabe -->
-  <div class="cart-discount">
-    <label for="voucherCode">🎟️ Gutschein einlösen:</label>
-    <input type="text" id="voucherCode" placeholder="Code eingeben" />
-    <button onclick="applyVoucher()">Einlösen</button>
-    <p id="voucherMessage"></p>
-  </div>
-</div>
-
-    
-    // Warenkorb speichern & laden
     function saveCart() {
       localStorage.setItem("cart", JSON.stringify(cart));
       updateCart();
@@ -187,7 +175,6 @@
       updateCart();
     }
 
-    // Warenkorb aktualisieren (inkl. Termine)
     function updateCart() {
       document.getElementById("cart-count").innerText = cart.reduce((sum, item) => sum + item.qty, 0);
 
@@ -198,14 +185,12 @@
         let li = document.createElement("li");
         li.classList.add("cart-item");
 
-        // Produkttext
         let span = document.createElement("span");
         span.innerText = `${item.name} – ${item.price.toFixed(2)} €`;
         if (item.termine) {
           span.innerText += `\n(Termine: ${item.termine.join(", ")})`;
         }
 
-        // Steuerung (➖ Anzahl ➕)
         let controls = document.createElement("div");
         controls.classList.add("cart-controls");
 
@@ -233,28 +218,21 @@
       document.getElementById("cart-total").innerText = getCartTotal().toFixed(2);
     }
 
-    // Warenkorb anzeigen/verbergen
     function toggleCart() {
       let cartDiv = document.getElementById("cart");
       cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
     }
 
-    // PayPal Integration
     paypal.Buttons({
       createOrder: function(data, actions) {
         return actions.order.create({
           purchase_units: [{
             description: cart.map(item => {
               let desc = `${item.name} x${item.qty}`;
-              if (item.termine) {
-                desc += ` [${item.termine.join(", ")}]`;
-              }
+              if (item.termine) desc += ` [${item.termine.join(", ")}]`;
               return desc;
             }).join("; "),
-            amount: {
-              currency_code: "EUR",
-              value: getCartTotal().toFixed(2)
-            }
+            amount: { currency_code: "EUR", value: getCartTotal().toFixed(2) }
           }]
         });
       },
@@ -268,7 +246,6 @@
       }
     }).render('#paypal-button-container');
 
-    // Warenkorb laden beim Start
     loadCart();
   </script>
 
@@ -276,4 +253,3 @@
   
 </body>
 </html>
-
