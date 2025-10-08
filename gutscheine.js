@@ -10,7 +10,7 @@ async function applyVoucher() {
   }
 
   try {
-    const url = "https://script.google.com/macros/s/AKfycbx9kfETnDlG7mSFurzxlwPGwsto9QHx6DJE6AQDk_kYngxOqZ_HSgu2Yj9VUk1jLVxs/exec"; // deine WebApp-URL
+    const url = "https://script.google.com/macros/s/AKfycbxGcPWBwnwqyMvn3t3KYKQeOcfCwMjESGvjkGJTrdPemqDIai2e5n327kSLGON3ydsr/exec"; // deine WebApp-URL
 
     const res = await fetch(url, {
       method: "POST",
