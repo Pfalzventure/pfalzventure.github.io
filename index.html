@@ -167,30 +167,6 @@ function updateCart() {
   document.getElementById("cart-total").innerText = getCartTotal().toFixed(2);
 }
 
-// Warenkorb öffnen/schließen
-function toggleCart() {
-  const cartDiv = document.getElementById("cart");
-  cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
-}
-
-  // 👉 HIER deine Google Script URL eintragen:
-  let url = "DEINE_GOOGLE_SCRIPT_WEBAPP_URL?action=redeem&text=" + encodeURIComponent(code) + "&value=" + getCartTotal();
-
-  try {
-    let response = await fetch(url);
-    let html = await response.text();
-
-    if (html.includes("eingelöst")) {
-      document.getElementById("voucherMessage").innerText = "✅ Gutschein erfolgreich eingelöst!";
-      document.getElementById("cart-total").innerText = "0.00";
-    } else {
-      document.getElementById("voucherMessage").innerText = "❌ Code ungültig oder verbraucht.";
-    }
-  } catch (err) {
-    document.getElementById("voucherMessage").innerText = "⚠️ Fehler bei der Verbindung.";
-    console.error(err);
-  }
-}
 
 // PayPal Integration
 paypal.Buttons({
