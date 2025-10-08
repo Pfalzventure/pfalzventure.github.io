@@ -11,12 +11,11 @@ async function applyVoucher() {
   }
 
   message.innerText = "🔎 Gutschein wird geprüft…";
-  console.log("Sende Payload an WebApp (ohne Content-Type):", { action: "redeem", value: total, text: code });
+  console.log("Sende Payload an WebApp:", { action: "redeem", value: total, text: code });
 
   try {
-    const url = "https://script.google.com/macros/s/AKfycbwuTDDNjFgUdAo_JaHXadHltZhbUDJUhqoSj7Z1CeRpPfYDJYnFHRf2or1hcEi8HnO3/exec"; // deine exec-URL
+    const url = "https://script.google.com/macros/s/AKfycbwuTDDNjFgUdAo_JaHXadHltZhbUDJUhqoSj7Z1CeRpPfYDJYnFHRf2or1hcEi8HnO3/exec";
 
-    // WICHTIG: kein headers: { "Content-Type": "application/json" }
     const res = await fetch(url, {
       method: "POST",
       body: JSON.stringify({ action: "redeem", value: total, text: code })
@@ -26,7 +25,6 @@ async function applyVoucher() {
     const text = await res.text();
     console.log("Roh-Antwort:", text);
 
-    // Versuch JSON zu parsen
     let result;
     try {
       result = JSON.parse(text);
@@ -36,7 +34,10 @@ async function applyVoucher() {
     }
 
     if (result.status === "ok") {
-      totalElement.innerText = (typeof result.newTotal !== "undefined" ? Number(result.newTotal).toFixed(2) : 0).replace(".", ",");
+      totalElement.innerText = (typeof result.newTotal !== "undefined"
+        ? Number(result.newTotal).toFixed(2)
+        : 0
+      ).replace(".", ",");
       message.innerText = result.message || "✅ Gutschein angewendet!";
       if (result.newCode) message.innerText += ` Neuer Code: ${result.newCode}`;
     } else {
@@ -46,4 +47,9 @@ async function applyVoucher() {
     console.error("Fetch-Fehler:", err);
     message.innerText = "⚠️ Fehler bei der Verbindung zum Server.";
   }
+}
+
+  });
+});
+
 }
