@@ -166,6 +166,11 @@ function updateCart() {
   });
   document.getElementById("cart-total").innerText = getCartTotal().toFixed(2);
 }
+// Warenkorb öffnen/schließen
+function toggleCart() {
+  const cartDiv = document.getElementById("cart");
+  cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
+}
 
 
 // PayPal Integration
