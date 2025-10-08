@@ -14,7 +14,7 @@ async function applyVoucher() {
   console.log("Sende Payload an WebApp (ohne Content-Type):", { action: "redeem", value: total, text: code });
 
   try {
-    const url = "https://script.google.com/macros/s/AKfycbxGcPWBwnwqyMvn3t3KYKQeOcfCwMjESGvjkGJTrdPemqDIai2e5n327kSLGON3ydsr/exec"; // deine exec-URL
+    const url = "https://script.google.com/macros/s/AKfycbwXO0xmIP2V0K5b3LKG_4AYp3MOGTn4lB9UIXbOxnhlJpLYiZ7ZjbD6xTIz9aR93JIT/exec"; // deine exec-URL
 
     // WICHTIG: kein headers: { "Content-Type": "application/json" }
     const res = await fetch(url, {
