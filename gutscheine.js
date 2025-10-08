@@ -1,32 +1,41 @@
 async function applyVoucher() {
   const code = document.getElementById("voucherCode").value.trim();
-  const totalElement = document.querySelector(".cart-total");
-  let total = parseFloat(totalElement.dataset.total);
+  const message = document.getElementById("voucherMessage");
+  const totalElement = document.getElementById("cart-total");
+  let total = parseFloat(totalElement.innerText.replace(",", "."));
 
   if (!code) {
-    document.getElementById("voucherMessage").innerText = "❌ Bitte einen Code eingeben.";
+    message.innerText = "❌ Bitte einen Code eingeben.";
     return;
   }
 
   try {
-    const url = "https://script.google.com/macros/s/AKfycbxxxxxxxxxxxx/exec";
+    const url = "https://script.google.com/macros/s/AKfycbxxxxxxxxxxxx/exec"; // deine WebApp-URL
 
     const res = await fetch(url, {
       method: "POST",
-      body: JSON.stringify({ action: "redeem", value: total, text: code }),
-      headers: { "Content-Type": "application/json" }
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "redeem",
+        value: total,
+        text: code
+      })
     });
 
-    const result = await res.text();
+    const result = await res.json();
 
-    if (result.includes("Neuer Code") || result.includes("vollständig eingelöst")) {
-      document.getElementById("voucherMessage").innerText = "✅ Gutschein angewendet!";
-      // 👉 Hier: totalElement.innerText anpassen mit neuem Betrag
+    if (result.status === "ok") {
+      totalElement.innerText = result.newTotal.toFixed(2).replace(".", ",");
+      message.innerText = result.message;
+
+      if (result.newCode) {
+        message.innerText += ` Neuer Code: ${result.newCode}`;
+      }
     } else {
-      document.getElementById("voucherMessage").innerText = "❌ Ungültiger oder verbrauchter Code.";
+      message.innerText = result.message;
     }
   } catch (err) {
-    console.error(err);
-    document.getElementById("voucherMessage").innerText = "⚠️ Fehler beim Prüfen des Gutscheins.";
+    console.error("Fehler beim Gutschein-Check:", err);
+    message.innerText = "⚠️ Fehler bei der Verbindung zum Server.";
   }
 }
