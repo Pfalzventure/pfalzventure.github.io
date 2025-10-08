@@ -173,14 +173,6 @@ function toggleCart() {
   cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
 }
 
-// Gutschein anwenden
-async function applyVoucher() {
-  let code = document.getElementById("voucherCode").value.trim();
-  if (!code) {
-    document.getElementById("voucherMessage").innerText = "Bitte Code eingeben!";
-    return;
-  }
-
   // 👉 HIER deine Google Script URL eintragen:
   let url = "DEINE_GOOGLE_SCRIPT_WEBAPP_URL?action=redeem&text=" + encodeURIComponent(code) + "&value=" + getCartTotal();
 
