@@ -18,7 +18,15 @@ async function applyVoucher() {
 
     const res = await fetch(url, {
       method: "POST",
-      body: JSON.stringify({ action: "redeem", value: total, text: code })
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        action: "redeem",
+        value: total,
+        text: code,
+        origin: window.location.origin
+      })
     });
 
     console.log("HTTP-Status:", res.status, res.statusText);
@@ -47,9 +55,4 @@ async function applyVoucher() {
     console.error("Fetch-Fehler:", err);
     message.innerText = "⚠️ Fehler bei der Verbindung zum Server.";
   }
-}
-
-  });
-});
-
 }
