@@ -14,7 +14,7 @@ async function applyVoucher() {
   console.log("Sende Payload an WebApp:", { action: "redeem", value: total, text: code });
 
   try {
-    const url = "https://script.google.com/macros/s/AKfycbwuTDDNjFgUdAo_JaHXadHltZhbUDJUhqoSj7Z1CeRpPfYDJYnFHRf2or1hcEi8HnO3/exec";
+    const url = "https://script.google.com/macros/s/AKfycbyh6uHVcWC7woSTrtA1I87M_4Ek3EVD5iK7pWJ7-huynFY5KZBZr9YeA8wr2EmmT5yy/exec";
 
     const res = await fetch(url, {
       method: "POST",
