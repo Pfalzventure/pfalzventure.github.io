@@ -3,30 +3,39 @@ async function applyVoucher() {
   const totalElement = document.querySelector(".cart-total");
   let total = parseFloat(totalElement.dataset.total);
 
+  const message = document.getElementById("voucherMessage");
+
   if (!code) {
-    document.getElementById("voucherMessage").innerText = "❌ Bitte einen Code eingeben.";
+    message.innerText = "❌ Bitte einen Code eingeben.";
     return;
   }
 
   try {
-    const url = "https://script.google.com/macros/s/AKfycbyVvw64C9FdPzk0MVqITgYrDXMa7LGx3kQ8Ql-oGsn4HaaBrsgRb7WXaJPumbL2A6SS/exec";
-
-    const res = await fetch(url, {
+    // 🔒 Sicherer Zugriff über deine eigene API
+    const res = await fetch("/api/checkVoucher", {
       method: "POST",
-      body: JSON.stringify({ action: "redeem", value: total, text: code }),
-      headers: { "Content-Type": "application/json" }
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code }),
     });
 
-    const result = await res.text();
+    const data = await res.json();
 
-    if (result.includes("Neuer Code") || result.includes("vollständig eingelöst")) {
-      document.getElementById("voucherMessage").innerText = "✅ Gutschein angewendet!";
-      // 👉 Hier: totalElement.innerText anpassen mit neuem Betrag
+    if (data.valid) {
+      // ✅ Gutschein gültig
+      const newTotal = Math.max(total - data.value, 0);
+      totalElement.dataset.total = newTotal.toFixed(2);
+      totalElement.innerText = newTotal.toFixed(2) + " €";
+      message.innerText = `✅ Gutschein gültig! (${data.value} € abgezogen)`;
+
+      // Optional: Kunde anzeigen
+      console.log("Gutscheininhaber:", data.customer);
+    } else if (data.error) {
+      message.innerText = "⚠️ Fehler: " + data.error;
     } else {
-      document.getElementById("voucherMessage").innerText = "❌ Ungültiger oder verbrauchter Code.";
+      message.innerText = "❌ Ungültiger oder verbrauchter Code.";
     }
   } catch (err) {
     console.error(err);
-    document.getElementById("voucherMessage").innerText = "⚠️ Fehler beim Prüfen des Gutscheins.";
+    message.innerText = "⚠️ Fehler beim Prüfen des Gutscheins.";
   }
 }
