@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   // Nur POST-Anfragen zulassen
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -34,5 +34,4 @@ export default async function handler(req, res) {
     console.error("Error:", err);
     return res.status(500).json({ error: "Internal server error", details: err.message });
   }
-}
-
+};
