@@ -12,7 +12,7 @@ export default async function handler(req, res) {
     }
 
     // --- Deine Google Apps Script WebApp URL ---
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbYOURSCRIPTID/exec";
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbyVvw64C9FdPzk0MVqITgYrDXMa7LGx3kQ8Ql-oGsn4HaaBrsgRb7WXaJPumbL2A6SS/exec";
 
     // --- Secret aus Vercel-Umgebung ---
     const secret = process.env.GSHEET_SECRET;
