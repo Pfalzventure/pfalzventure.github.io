@@ -1,30 +1,38 @@
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  // Nur POST-Anfragen zulassen
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
-
-  const { code } = req.body;
-  if (!code) {
-    return res.status(400).json({ error: 'Missing code' });
-  }
-
-  // Google Apps Script WebApp URL (Deploy-Link)
-  const scriptUrl = 'https://script.google.com/macros/s/DEIN_SCRIPT_ID/exec';
-  const secret = process.env.GSHEET_SECRET;
 
   try {
+    // --- Eingehende Daten ---
+    const { code } = req.body;
+    if (!code) {
+      return res.status(400).json({ error: "Missing code" });
+    }
+
+    // --- Deine Google Apps Script WebApp URL ---
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbYOURSCRIPTID/exec";
+
+    // --- Secret aus Vercel-Umgebung ---
+    const secret = process.env.GSHEET_SECRET;
+
+    // --- Anfrage an dein Apps Script ---
     const response = await fetch(`${scriptUrl}?secret=${secret}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code })
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code }),
     });
 
+    // --- Antwort lesen ---
     const data = await response.json();
+
+    // --- Durchreichen an deine Homepage ---
     return res.status(200).json(data);
 
   } catch (err) {
-    console.error('Error contacting Apps Script:', err);
-    return res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error:", err);
+    return res.status(500).json({ error: "Internal server error", details: err.message });
   }
 }
 
