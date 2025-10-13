@@ -1,37 +1,44 @@
-module.exports = async (req, res) => {
-  // Nur POST-Anfragen zulassen
+// /api/checkVoucher.js
+
+import { kv } from "@vercel/kv";
+
+export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
+  const { code } = req.body;
+  if (!code) {
+    return res.status(400).json({ error: "Kein Code übergeben" });
+  }
+
   try {
-    // --- Eingehende Daten ---
-    const { code } = req.body;
-    if (!code) {
-      return res.status(400).json({ error: "Missing code" });
+    // Gutschein aus DB lesen
+    const voucher = await kv.hgetall(`voucher:${code}`);
+
+    if (!voucher || !voucher.value) {
+      return res.status(200).json({ valid: false });
     }
 
-    // --- Deine Google Apps Script WebApp URL ---
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbyVvw64C9FdPzk0MVqITgYrDXMa7LGx3kQ8Ql-oGsn4HaaBrsgRb7WXaJPumbL2A6SS/exec";
+    if (voucher.used === "true") {
+      return res.status(200).json({ valid: false });
+    }
 
-    // --- Secret aus Vercel-Umgebung ---
-    const secret = process.env.GSHEET_SECRET;
+    // Atomar entwerten: Nur wenn nicht benutzt
+    const alreadyUsed = await kv.hget(`voucher:${code}`, "used");
+    if (alreadyUsed === "true") {
+      return res.status(200).json({ valid: false });
+    }
 
-    // --- Anfrage an dein Apps Script ---
-    const response = await fetch(`${scriptUrl}?secret=${secret}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code }),
+    await kv.hset(`voucher:${code}`, { used: "true", usedAt: Date.now() });
+
+    return res.status(200).json({
+      valid: true,
+      value: parseFloat(voucher.value),
+      customer: voucher.customer || null,
     });
-
-    // --- Antwort lesen ---
-    const data = await response.json();
-
-    // --- Durchreichen an deine Homepage ---
-    return res.status(200).json(data);
-
   } catch (err) {
-    console.error("Error:", err);
-    return res.status(500).json({ error: "Internal server error", details: err.message });
+    console.error("Fehler in checkVoucher:", err);
+    return res.status(500).json({ error: "Serverfehler beim Prüfen" });
   }
-};
+}
