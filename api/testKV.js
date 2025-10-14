@@ -1,28 +1,32 @@
-import { Redis } from "@upstash/redis";
-
-const redis = new Redis({
-  url: process.env.KV_REST_API_URL,
-  token: process.env.KV_REST_API_TOKEN,
-});
-
 export default async function handler(req, res) {
   try {
-    // Testwert schreiben und lesen
-    await redis.set("testKey", "Hallo Pfalzventure!");
-    const value = await redis.get("testKey");
+    const url = `${process.env.KV_REST_API_URL}/get/testkey`;
 
-    return res.status(200).json({
-      success: true,
-      message: "Verbindung zu Upstash funktioniert 🎉",
-      value,
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}`,
+      },
     });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({
+
+    if (!response.ok) {
+      throw new Error(`Upstash Error: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+
+    res.status(200).json({
+      success: true,
+      message: "Direkter REST-API-Test erfolgreich 🎉",
+      value: data.result ?? null,
+    });
+  } catch (error) {
+    res.status(500).json({
       success: false,
-      error: err.message,
+      message: "Fehler bei REST-Test",
+      error: error.message,
     });
   }
 }
+
 
  
