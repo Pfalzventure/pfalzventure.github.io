@@ -1,10 +1,10 @@
 export default async function handler(req, res) {
   try {
-    const url = `${process.env.KV_REST_API_URL}/get/testkey`;
+    const url = `${process.env.UPSTASH_REDIS_REST_URL}/get/testkey`;
 
     const response = await fetch(url, {
       headers: {
-        Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}`,
+        Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`,
       },
     });
 
@@ -16,7 +16,7 @@ export default async function handler(req, res) {
 
     res.status(200).json({
       success: true,
-      message: "Direkter REST-API-Test erfolgreich 🎉",
+      message: "Verbindung zu Upstash funktioniert 🎉",
       value: data.result ?? null,
     });
   } catch (error) {
@@ -27,6 +27,5 @@ export default async function handler(req, res) {
     });
   }
 }
-
 
  
