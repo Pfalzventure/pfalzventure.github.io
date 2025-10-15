@@ -12,7 +12,7 @@ async function applyVoucher() {
 
   try {
     // 🔒 Anfrage an dein Google Apps Script (statt /api/checkVoucher)
-    const res = await fetch("https://script.google.com/macros/s/AKfycbxgqye4_cEEy5ntfrsemwGviVQMWRSAo-BWZe5iYtccW-9XOMFHMCLpKRjB1Pc07M7ieQ/exec", {
+    const res = await fetch("https://script.google.com/macros/s/AKfycbzHL23yHZ7I9-VT13pgp78tqakpyPEdDPEaopxCamfwNCL8wLkuWN0Aqw7gfNmMKMjg/exec", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ code }),
