@@ -11,29 +11,19 @@ async function applyVoucher() {
   }
 
   try {
-    // 🔒 Anfrage an dein Google Apps Script (statt /api/checkVoucher)
-    const res = await fetch("https://script.google.com/macros/s/AKfycbySiYaKoaMVc1CDn_lEAmr_jOj8_JoI-egqwDE_CzzjpuVxJXKmR3CaT8GaLxrGjVQRfg/exec", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code }),
-    });
-
+    // ✅ Anfrage an dein Google Apps Script mit Code als URL-Parameter
+    const res = await fetch(`https://script.google.com/macros/s/AKfycbySiYaKoaMVc1CDn_lEAmr_jOj8_JoI-egqwDE_CzzjpuVxJXKmR3CaT8GaLxrGjVQRfg/exec?code=${encodeURIComponent(code)}`);
     const data = await res.json();
 
     if (data.valid) {
-      // ✅ Gutschein gültig
-      const newTotal = Math.max(total - parseFloat(data.balance), 0);
+      const newTotal = Math.max(total - data.balance, 0);
       totalElement.dataset.total = newTotal.toFixed(2);
       totalElement.innerText = newTotal.toFixed(2) + " €";
       message.innerText = `✅ Gutschein gültig! (${data.balance} € abgezogen)`;
-
-      console.log("Restwert:", data.balance, "€");
-    } else if (data.redeemed) {
-      message.innerText = "❌ Gutschein wurde bereits eingelöst.";
     } else if (data.error) {
       message.innerText = "⚠️ Fehler: " + data.error;
     } else {
-      message.innerText = "❌ Ungültiger Gutschein-Code.";
+      message.innerText = "❌ Ungültiger oder verbrauchter Code.";
     }
   } catch (err) {
     console.error(err);
