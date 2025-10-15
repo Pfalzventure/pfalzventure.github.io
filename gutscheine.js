@@ -12,7 +12,7 @@ async function applyVoucher() {
 
   try {
     // ✅ Anfrage an dein Google Apps Script mit Code als URL-Parameter
-    const res = await fetch(`https://script.google.com/macros/s/AKfycbySiYaKoaMVc1CDn_lEAmr_jOj8_JoI-egqwDE_CzzjpuVxJXKmR3CaT8GaLxrGjVQRfg/exec?code=${encodeURIComponent(code)}`);
+    const res = await fetch(`https://script.google.com/macros/s/AKfycbxTBqioaz-T7m9eoETXCVPEmWK_16bDCEh2CGUqfU2yLXgCKhIKZCO3Hgz-hz-k3q8urg/exec?code=${encodeURIComponent(code)}`);
     const data = await res.json();
 
     if (data.valid) {
