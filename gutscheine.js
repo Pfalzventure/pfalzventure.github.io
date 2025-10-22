@@ -1,32 +1,38 @@
-async function applyVoucher() {
-  const code = document.getElementById("voucherCode").value.trim();
-  const totalElement = document.querySelector(".cart-total");
-  const message = document.getElementById("voucherMessage");
+// ============================
+// Gutscheine
+// ============================
+const gutscheine = [
+  { code: "PFALZ10", wert: 10 },
+  { code: "ABENTEUER25", wert: 25 },
+  { code: "SOMMER50", wert: 50 },
+  { code: "GRATIS100", wert: 100 }
+];
 
-  let total = parseFloat(totalElement?.dataset.total || 0);
+// ============================
+// Gutschein anwenden
+// ============================
+function applyVoucher() {
+  const code = document.getElementById("voucherCode").value.trim().toUpperCase();
+  const msg = document.getElementById("voucherMessage");
+  const found = gutscheine.find(g => g.code === code);
 
-  if (!code) {
-    message.innerText = "❌ Bitte einen Code eingeben.";
+  if (!found) {
+    msg.innerText = "❌ Gutschein ungültig oder abgelaufen.";
+    msg.style.color = "red";
+    eingelösterGutschein = null;
+    saveCart();
+    updateCart();
+    document.getElementById("paypal-button-container").style.display = "block";
     return;
   }
 
-  try {
-    // ✅ Anfrage an dein Google Apps Script mit Code als URL-Parameter
-    const res = await fetch(`https://script.google.com/macros/s/AKfycbw_PoTi00WXNZTlhhxn8BZgIiIcDXqo2OkwZeiTMBueOkKhCk2EjJZTwiAfk5DY9Jk2/exec?code=${encodeURIComponent(code)}`);
-    const data = await res.json();
+  eingelösterGutschein = found;
+  msg.innerHTML = `✅ Gutschein "${found.code}" eingelöst (${found.wert.toFixed(2)} € Rabatt).<br>
+  Bitte <strong>nicht direkt bezahlen</strong> – du erhältst eine angepasste Rechnung per E-Mail.`;
+  msg.style.color = "green";
 
-    if (data.valid) {
-      const newTotal = Math.max(total - data.balance, 0);
-      totalElement.dataset.total = newTotal.toFixed(2);
-      totalElement.innerText = newTotal.toFixed(2) + " €";
-      message.innerText = `✅ Gutschein gültig! (${data.balance} € abgezogen)`;
-    } else if (data.error) {
-      message.innerText = "⚠️ Fehler: " + data.error;
-    } else {
-      message.innerText = "❌ Ungültiger oder verbrauchter Code.";
-    }
-  } catch (err) {
-    console.error(err);
-    message.innerText = "⚠️ Fehler beim Prüfen des Gutscheins.";
-  }
+  // PayPal ausblenden, wenn Gutschein genutzt wird
+  document.getElementById("paypal-button-container").style.display = "none";
+  saveCart();
+  updateCart();
 }
