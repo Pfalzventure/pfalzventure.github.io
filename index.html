@@ -100,15 +100,16 @@ document.addEventListener("click", function(event) {
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     // Pfad relativ statt absolut -> funktioniert auch bei GitHub Pages
-    fetch("partials/cart.html")
-      .then(res => {
-        if (!res.ok) throw new Error("Warenkorb konnte nicht geladen werden");
-        return res.text();
-      })
-      .then(html => {
-        // Warenkorb anhängen
-        document.body.insertAdjacentHTML("beforeend", html);
-
+<script>
+  fetch("partials/cart.html")
+    .then(res => res.text())
+    .then(html => {
+      document.body.insertAdjacentHTML("beforeend", html);
+      // Jetzt erst das Warenkorb-Script nachladen
+      const script = document.createElement("script");
+      script.src = "cart.js";
+      document.body.appendChild(script);
+    });
         // Nachträglich die Scripts aus cart.html aktivieren
         const scripts = document.body.querySelectorAll("script");
         scripts.forEach(script => {
