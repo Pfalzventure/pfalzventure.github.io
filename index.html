@@ -96,135 +96,99 @@ document.addEventListener("click", function(event) {
   <a href="kurse.html" class="btn">Zu den Kursen</a>
 </div>
 
-<!-- ============================
-     Warenkorb Popup
-     ============================ -->
-<div id="cart" style="display:none; position:fixed; top:80px; right:20px; background:white; border:1px solid #ccc; padding:20px; max-width:340px; box-shadow:0 2px 10px rgba(0,0,0,0.2); z-index:1000;">
-  <h3>🛒 Dein Warenkorb</h3>
-  <ul id="cart-items" class="cart-list"></ul>
-  <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
+ <!-- ============================
+       Warenkorb Popup
+       ============================ -->
+  <div id="cart" style="display:none; position:fixed; top:80px; right:20px; background:white; border:1px solid #ccc; padding:20px; max-width:340px; box-shadow:0 2px 10px rgba(0,0,0,0.2); z-index:1000;">
+    <h3>🛒 Dein Warenkorb</h3>
+    <ul id="cart-items" class="cart-list"></ul>
+    <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
 
-  <!-- 🎟️ Gutschein-Eingabe -->
-  <div class="cart-discount">
-    <label for="voucherCode">🎟️ Gutschein einlösen:</label>
-    <input type="text" id="voucherCode" placeholder="Code eingeben" />
-    <button onclick="applyVoucher()">Einlösen</button>
-    <p id="voucherMessage"></p>
+    <!-- 🎟️ Gutschein-Eingabe -->
+    <div class="cart-discount">
+      <label for="voucherCode">🎟️ Gutschein einlösen:</label><br>
+      <input type="text" id="voucherCode" placeholder="Code eingeben" />
+      <button onclick="applyVoucher()">Einlösen</button>
+      <p id="voucherMessage"></p>
+    </div>
+
+    <!-- 📧 Formular für Kunden-Mail -->
+    <div id="voucherForm" style="display:none;">
+      <h4>📩 E-Mail für Rechnung:</h4>
+      <form id="notifyForm">
+        <input type="email" id="userEmail" name="email" placeholder="deine@email.de" required />
+        <input type="hidden" id="usedVoucher" name="voucher" />
+        <button type="submit" class="btn">Absenden</button>
+      </form>
+      <p id="notifyMessage"></p>
+    </div>
+<!-- Gutschein-Mailformular -->
+<form id="notifyForm" style="display:none; margin-top:10px;">
+  <input type="hidden" id="usedVoucher" name="usedVoucher" />
+  <label for="userEmail">📧 Deine E-Mail:</label>
+  <input type="email" id="userEmail" name="userEmail" placeholder="deine@email.de" required />
+  <button type="submit">Absenden</button>
+  <p id="notifyMessage"></p>
+</form>
+
+    <!-- PayPal -->
+    <div id="paypal-button-container"></div>
+
+    <button onclick="toggleCart()" class="btn">Schließen</button>
   </div>
 
-  <!-- 📧 Formular für Gutscheinbenachrichtigung -->
-  <form id="voucherForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" style="display:none;">
-    <input type="hidden" name="Gutscheincode" id="formVoucherCode">
-    <input type="hidden" name="Warenkorb" id="formCart">
-    <input type="email" name="Email" id="formEmail" placeholder="Deine E-Mail-Adresse" required>
-    <button type="submit">Senden</button>
-  </form>
+  <footer>
+    <p>© 2025 Pfalzventure – Robert Prokasky</p>
+    <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
+  </footer>
 
-  <!-- PayPal -->
-  <div id="paypal-button-container"></div>
+  <script>
+  let cart = [];
+  let eingelösterGutschein = null;
 
-  <button onclick="toggleCart()" class="btn">Schließen</button>
-</div>
-
-<!-- ============================
-     Footer
-     ============================ -->
-<footer>
-  <p>© 2025 Pfalzventure – Robert Prokasky</p>
-  <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
-</footer>
-
-<!-- ============================
-     SCRIPTS
-     ============================ -->
-
-<!-- ZUERST die Gutscheine laden -->
-<script src="gutscheine.js"></script>
-
-<script>
-let cart = [];
-let eingelösterGutschein = null;
-
-// ==========================
-// Warenkorb Grundfunktionen
-// ==========================
-
-function saveCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
-  updateCart();
-}
-
-function loadCart() {
-  let stored = localStorage.getItem("cart");
-  if (stored) cart = JSON.parse(stored);
-  updateCart();
-}
-
-function getCartTotal() {
-  let sum = cart.reduce((total, item) => total + (item.price * item.qty), 0);
-  if (eingelösterGutschein) {
-    sum -= eingelösterGutschein.wert;
-    if (sum < 0) sum = 0;
+  function addTestItem() {
+    cart.push({ name: "Survival Kurs", price: 100, qty: 1 });
+    saveCart();
   }
-  return sum;
-}
 
-function updateCart() {
-  document.getElementById("cart-count")?.innerText = cart.reduce((sum, i) => sum + i.qty, 0);
-  const list = document.getElementById("cart-items");
-  list.innerHTML = "";
-
-  cart.forEach(item => {
-    const li = document.createElement("li");
-    li.innerText = `${item.name} – ${item.price.toFixed(2)} € x ${item.qty}`;
-    list.appendChild(li);
-  });
-
-  document.getElementById("cart-total").innerText = getCartTotal().toFixed(2);
-}
-
-function toggleCart() {
-  const cartDiv = document.getElementById("cart");
-  cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
-}
-
-// ==========================
-// Gutschein-Logik
-// ==========================
-
-function applyVoucher() {
-  const code = document.getElementById("voucherCode").value.trim().toUpperCase();
-  const msg = document.getElementById("voucherMessage");
-  const found = gutscheine.find(g => g.code === code);
-
-  if (!found) {
-    msg.innerText = "❌ Gutschein ungültig oder abgelaufen.";
-    eingelösterGutschein = null;
+  function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.setItem("voucher", JSON.stringify(eingelösterGutschein));
     updateCart();
-    return;
   }
 
-  eingelösterGutschein = found;
-  msg.innerText = `✅ Gutschein "${code}" eingelöst: ${found.wert.toFixed(2)} € Rabatt.`;
+  function loadCart() {
+    let stored = localStorage.getItem("cart");
+    if (stored) cart = JSON.parse(stored);
+    let storedVoucher = localStorage.getItem("voucher");
+    if (storedVoucher) eingelösterGutschein = JSON.parse(storedVoucher);
+    updateCart();
+  }
 
-  // Formular einblenden, damit Kunde E-Mail eintragen kann
-  document.getElementById("voucherForm").style.display = "block";
-  document.getElementById("formVoucherCode").value = code;
-  document.getElementById("formCart").value = getCartSummary();
+  function getCartTotal() {
+    let sum = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    if (eingelösterGutschein) sum -= eingelösterGutschein.wert;
+    if (sum < 0) sum = 0;
+    return sum;
+  }
 
-  updateCart();
-}
+  function updateCart() {
+    document.getElementById("cart-count").innerText = cart.reduce((sum, i) => sum + i.qty, 0);
+    let list = document.getElementById("cart-items");
+    list.innerHTML = "";
+    cart.forEach(item => {
+      let li = document.createElement("li");
+      li.innerText = `${item.name} – ${item.price.toFixed(2)} € x ${item.qty}`;
+      list.appendChild(li);
+    });
+    document.getElementById("cart-total").innerText = getCartTotal().toFixed(2);
+  }
 
-// Warenkorb-Inhalt als Text (für Formspree-Mail)
-function getCartSummary() {
-  return cart.map(item => `${item.name} (${item.qty}x ${item.price.toFixed(2)}€)`).join("; ");
-}
+  function toggleCart() {
+    const cartDiv = document.getElementById("cart");
+    cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
+  }
 
-// ==========================
-// PayPal Integration
-// ==========================
-
-if (window.paypal) {
   paypal.Buttons({
     createOrder: function(data, actions) {
       return actions.order.create({
@@ -238,15 +202,18 @@ if (window.paypal) {
       return actions.order.capture().then(function(details) {
         alert("Danke " + details.payer.name.given_name + "!");
         cart = [];
+        eingelösterGutschein = null;
         saveCart();
         toggleCart();
       });
     }
   }).render('#paypal-button-container');
-}
 
-// ==========================
-// Initialisierung
-// ==========================
-loadCart();
-</script>
+  loadCart();
+  </script>
+
+  <!-- Gutschein Logik -->
+  <script src="gutscheine.js"></script>
+
+</body>
+</html>
