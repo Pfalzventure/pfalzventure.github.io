@@ -122,6 +122,14 @@ document.addEventListener("click", function(event) {
       </form>
       <p id="notifyMessage"></p>
     </div>
+<!-- Gutschein-Mailformular -->
+<form id="notifyForm" style="display:none; margin-top:10px;">
+  <input type="hidden" id="usedVoucher" name="usedVoucher" />
+  <label for="userEmail">📧 Deine E-Mail:</label>
+  <input type="email" id="userEmail" name="userEmail" placeholder="deine@email.de" required />
+  <button type="submit">Absenden</button>
+  <p id="notifyMessage"></p>
+</form>
 
     <!-- PayPal -->
     <div id="paypal-button-container"></div>
