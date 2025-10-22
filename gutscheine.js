@@ -52,13 +52,44 @@ document.addEventListener("DOMContentLoaded", () => {
     const voucher = document.getElementById("usedVoucher").value;
     const msg = document.getElementById("notifyMessage");
 
-    // 👇 DEIN Formspree-Link hier einfügen!
+    // 💡 Hier deinen echten Formspree-Link eintragen:
     const formspreeUrl = "https://formspree.io/f/DEIN_FORM_ID";
 
+    // ============================
+    // Warenkorb als Text zusammenbauen
+    // ============================
+    let cartText = cart.map(item =>
+      `- ${item.name} – ${item.price.toFixed(2)} € x${item.qty}`
+    ).join("\n");
+
+    const sumBefore = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+    const rabatt = eingelösterGutschein ? eingelösterGutschein.wert : 0;
+    const sumAfter = Math.max(0, sumBefore - rabatt);
+
+    const bodyText = `
+Neue Gutscheineinlösung auf Pfalzventure 🏕️
+
+Email: ${email}
+Gutschein: ${voucher}
+
+Warenkorb:
+${cartText}
+
+Gesamtsumme (vor Rabatt): ${sumBefore.toFixed(2)} €
+Rabatt: ${rabatt.toFixed(2)} €
+Gesamt nach Rabatt: ${sumAfter.toFixed(2)} €
+    `.trim();
+
+    // ============================
+    // Mail senden
+    // ============================
     const response = await fetch(formspreeUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, voucher })
+      body: JSON.stringify({
+        email: email,  // Kunde
+        message: bodyText  // Wird im Mailtext angezeigt
+      })
     });
 
     if (response.ok) {
@@ -71,3 +102,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
