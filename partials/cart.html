@@ -54,16 +54,19 @@ function saveCart() {
   localStorage.setItem("voucher", JSON.stringify(eingelösterGutschein));
   updateCart();
 }
-
 function loadCart() {
+  // ✅ Gutschein beim Laden der Seite immer zurücksetzen
+  localStorage.removeItem("voucher");
+  eingelösterGutschein = null;
+
+  // 🛒 Warenkorb laden
   const stored = localStorage.getItem("cart");
   if (stored) cart = JSON.parse(stored);
 
-  const storedVoucher = localStorage.getItem("voucher");
-  if (storedVoucher) eingelösterGutschein = JSON.parse(storedVoucher);
-
+  // 🧮 Warenkorb aktualisieren
   updateCart();
 }
+
 
 function getCartTotal() {
   let sum = cart.reduce((total, item) => total + item.price * item.qty, 0);
