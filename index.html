@@ -98,32 +98,20 @@ document.addEventListener("click", function(event) {
 
 <!-- Warenkorb dynamisch laden -->
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    // Pfad relativ statt absolut -> funktioniert auch bei GitHub Pages
-<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // cart.html laden und einfügen
   fetch("partials/cart.html")
     .then(res => res.text())
     .then(html => {
       document.body.insertAdjacentHTML("beforeend", html);
-      // Jetzt erst das Warenkorb-Script nachladen
+
+      // Danach das JS für den Warenkorb nachladen
       const script = document.createElement("script");
       script.src = "cart.js";
       document.body.appendChild(script);
-    });
-        // Nachträglich die Scripts aus cart.html aktivieren
-        const scripts = document.body.querySelectorAll("script");
-        scripts.forEach(script => {
-          const newScript = document.createElement("script");
-          if (script.src) {
-            newScript.src = script.src;
-          } else {
-            newScript.textContent = script.textContent;
-          }
-          document.body.appendChild(newScript);
-        });
-      })
-      .catch(err => console.error("Fehler beim Laden des Warenkorbs:", err));
-  });
+    })
+    .catch(err => console.error("Fehler beim Laden des Warenkorbs:", err));
+});
 </script>
 
   </body>
