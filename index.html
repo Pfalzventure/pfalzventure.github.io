@@ -98,14 +98,9 @@ document.addEventListener("click", function(event) {
 
 <!-- Warenkorb laden -->
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  fetch("partials/cart.html")
-    .then(res => res.text())
-    .then(html => {
-      // ...
-    })
-    .catch(err => console.error("Fehler beim Laden des Warenkorbs:", err));
-});
+  fetch("cart.html")
+    .then(r => r.text())
+    .then(html => document.body.insertAdjacentHTML("beforeend", html));
 </script>
 
 
