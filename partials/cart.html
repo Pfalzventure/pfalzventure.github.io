@@ -1,5 +1,5 @@
 <!-- ============================
-     Warenkorb Popup
+     🛒 Warenkorb Popup
      ============================ -->
 <div id="cart" style="display:none; position:fixed; top:80px; right:20px; background:white; border:1px solid #ccc; padding:20px; max-width:340px; box-shadow:0 2px 10px rgba(0,0,0,0.2); z-index:1000;">
   <h3>🛒 Dein Warenkorb</h3>
@@ -15,13 +15,15 @@
   </div>
 
   <!-- 📧 Formular für Kunden-Mail -->
-  <form id="notifyForm" style="display:none; margin-top:10px;">
-    <input type="hidden" id="usedVoucher" name="usedVoucher" />
-    <label for="userEmail">📧 Deine E-Mail:</label>
-    <input type="email" id="userEmail" name="userEmail" placeholder="deine@email.de" required />
-    <button type="submit">Absenden</button>
+  <div id="voucherForm" style="display:none;">
+    <h4>📩 E-Mail für Rechnung:</h4>
+    <form id="notifyForm">
+      <input type="email" id="userEmail" name="email" placeholder="deine@email.de" required />
+      <input type="hidden" id="usedVoucher" name="voucher" />
+      <button type="submit" class="btn">Absenden</button>
+    </form>
     <p id="notifyMessage"></p>
-  </form>
+  </div>
 
   <!-- PayPal -->
   <div id="paypal-button-container"></div>
@@ -29,97 +31,145 @@
   <button onclick="toggleCart()" class="btn">Schließen</button>
 </div>
 
-<footer>
-  <p>© 2025 Pfalzventure – Robert Prokasky</p>
-  <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
-</footer>
-
 <!-- ============================
-     Warenkorb Logik
+     ⚙️ Script komplett integriert
      ============================ -->
 <script>
-(function() {
-  let cart = [];
-  let eingelösterGutschein = null;
+// ============================
+// 🛒 Warenkorb-Logik
+// ============================
 
-  // --- Warenkorb-Logik ---
-  function addItem(name, price, qty = 1) {
-    cart.push({ name, price, qty });
-    saveCart();
+let cart = [];
+let eingelösterGutschein = null;
+
+function addToCart(name, price, qty = 1) {
+  const existing = cart.find(item => item.name === name);
+  if (existing) existing.qty += qty;
+  else cart.push({ name, price, qty });
+  saveCart();
+}
+
+function saveCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+  localStorage.setItem("voucher", JSON.stringify(eingelösterGutschein));
+  updateCart();
+}
+
+function loadCart() {
+  const stored = localStorage.getItem("cart");
+  if (stored) cart = JSON.parse(stored);
+
+  const storedVoucher = localStorage.getItem("voucher");
+  if (storedVoucher) eingelösterGutschein = JSON.parse(storedVoucher);
+
+  updateCart();
+}
+
+function getCartTotal() {
+  let sum = cart.reduce((total, item) => total + item.price * item.qty, 0);
+  if (eingelösterGutschein) sum -= eingelösterGutschein.wert;
+  if (sum < 0) sum = 0;
+  return sum;
+}
+
+function updateCart() {
+  const countEl = document.getElementById("cart-count");
+  if (countEl) countEl.innerText = cart.reduce((sum, i) => sum + i.qty, 0);
+
+  const list = document.getElementById("cart-items");
+  if (!list) return;
+
+  list.innerHTML = "";
+  cart.forEach(item => {
+    const li = document.createElement("li");
+    li.innerText = `${item.name} – ${item.price.toFixed(2)} € x ${item.qty}`;
+    list.appendChild(li);
+  });
+
+  const totalEl = document.getElementById("cart-total");
+  if (totalEl) totalEl.innerText = getCartTotal().toFixed(2);
+}
+
+function toggleCart() {
+  const cartDiv = document.getElementById("cart");
+  if (!cartDiv) return;
+  cartDiv.style.display = (cartDiv.style.display === "none" || cartDiv.style.display === "") ? "block" : "none";
+}
+
+// ============================
+// 🎟️ Gutschein
+// ============================
+
+function applyVoucher() {
+  const code = document.getElementById("voucherCode").value.trim();
+  if (!code) return;
+
+  if (typeof checkVoucher === "function") {
+    const result = checkVoucher(code);
+    const msg = document.getElementById("voucherMessage");
+
+    if (result.valid) {
+      eingelösterGutschein = { code, wert: result.amount };
+      msg.textContent = `✅ Gutschein "${code}" eingelöst: -${result.amount} €`;
+      saveCart();
+    } else {
+      eingelösterGutschein = null;
+      msg.textContent = "❌ Ungültiger Gutschein-Code!";
+      saveCart();
+    }
+  } else {
+    console.error("⚠️ gutscheine.js nicht geladen!");
+  }
+}
+
+// ============================
+// 💳 PayPal Integration
+// ============================
+
+function initPayPal() {
+  if (typeof paypal === "undefined") {
+    console.error("❌ PayPal SDK nicht geladen!");
+    return;
   }
 
-  function saveCart() {
-    localStorage.setItem("cart", JSON.stringify(cart));
-    localStorage.setItem("voucher", JSON.stringify(eingelösterGutschein));
-    updateCart();
+  const container = document.getElementById("paypal-button-container");
+  if (!container) {
+    setTimeout(initPayPal, 200);
+    return;
   }
 
-  function loadCart() {
-    const stored = localStorage.getItem("cart");
-    if (stored) cart = JSON.parse(stored);
-    const storedVoucher = localStorage.getItem("voucher");
-    if (storedVoucher) eingelösterGutschein = JSON.parse(storedVoucher);
-    updateCart();
-  }
+  paypal.Buttons({
+    createOrder: function (data, actions) {
+      return actions.order.create({
+        purchase_units: [{
+          description: cart.map(item => `${item.name} x${item.qty}`).join("; "),
+          amount: { currency_code: "EUR", value: getCartTotal().toFixed(2) }
+        }]
+      });
+    },
+    onApprove: function (data, actions) {
+      return actions.order.capture().then(function (details) {
+        alert("Danke, " + details.payer.name.given_name + "!");
+        cart = [];
+        eingelösterGutschein = null;
+        saveCart();
+        toggleCart();
+      });
+    },
+    onError: function (err) {
+      console.error("PayPal-Fehler:", err);
+      alert("⚠️ Zahlung fehlgeschlagen. Bitte versuche es erneut.");
+    }
+  }).render('#paypal-button-container');
+}
 
-  function getCartTotal() {
-    let sum = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    if (eingelösterGutschein) sum -= eingelösterGutschein.wert;
-    if (sum < 0) sum = 0;
-    return sum;
-  }
+// ============================
+// 🚀 Start
+// ============================
 
-  function updateCart() {
-    const countEl = document.getElementById("cart-count");
-    if (countEl) countEl.innerText = cart.reduce((sum, i) => sum + i.qty, 0);
-
-    const list = document.getElementById("cart-items");
-    if (!list) return;
-    list.innerHTML = "";
-    cart.forEach(item => {
-      const li = document.createElement("li");
-      li.innerText = `${item.name} – ${item.price.toFixed(2)} € x ${item.qty}`;
-      list.appendChild(li);
-    });
-    document.getElementById("cart-total").innerText = getCartTotal().toFixed(2);
-  }
-
-  function toggleCart() {
-    const cartDiv = document.getElementById("cart");
-    if (!cartDiv) return;
-    cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
-  }
-
-  // --- PayPal ---
-  if (typeof paypal !== "undefined") {
-    paypal.Buttons({
-      createOrder: function (data, actions) {
-        return actions.order.create({
-          purchase_units: [{
-            description: cart.map(item => `${item.name} x${item.qty}`).join("; "),
-            amount: { currency_code: "EUR", value: getCartTotal().toFixed(2) }
-          }]
-        });
-      },
-      onApprove: function (data, actions) {
-        return actions.order.capture().then(function (details) {
-          alert("Danke " + details.payer.name.given_name + "!");
-          cart = [];
-          eingelösterGutschein = null;
-          saveCart();
-          toggleCart();
-        });
-      }
-    }).render('#paypal-button-container');
-  }
-
-  // --- Globale Funktionen ---
-  window.addItem = addItem;
-  window.toggleCart = toggleCart;
-
-  loadCart();
-})();
+loadCart();
+initPayPal();
 </script>
 
-<!-- Gutschein Logik separat -->
-<script src="../js/gutscheine.js"></script>
+<!-- Gutschein Logik -->
+<script src="../gutscheine.js"></script>
