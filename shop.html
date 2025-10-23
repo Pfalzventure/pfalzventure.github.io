@@ -128,33 +128,168 @@
     </div>
   </main>
 
- <!-- Warenkorb laden -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  fetch("partials/cart.html")
-    .then(res => res.text())
-    .then(html => {
-      // HTML in ein temporäres Element laden
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = html;
+  <!-- ============================
+       Warenkorb Popup
+  ============================ -->
+  <div id="cart" style="display:none; position:fixed; top:80px; right:20px; background:white; border:1px solid #ccc; padding:20px; max-width:340px; box-shadow:0 2px 10px rgba(0,0,0,0.2); z-index:1000;">
+    <h3>Dein Warenkorb</h3>
+    <br>
+    <ul id="cart-items" class="cart-list"></ul>
+    <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
 
-      // Erst HTML-Inhalt einfügen (ohne Scripts)
-      document.body.insertAdjacentHTML("beforeend", tempDiv.innerHTML.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, ""));
+    <!-- 🎟️ Gutschein-Eingabe -->
+    <div class="cart-discount">
+      <label for="voucherCode">🎟️ Gutschein einlösen:</label>
+      <input type="text" id="voucherCode" placeholder="Code eingeben" />
+      <button onclick="applyVoucher()">Einlösen</button>
+      <p id="voucherMessage"></p>
+    </div>
 
-      // Dann alle Scripts separat ausführen
-      tempDiv.querySelectorAll("script").forEach(oldScript => {
-        const newScript = document.createElement("script");
-        if (oldScript.src) {
-          newScript.src = oldScript.src;
-        } else {
-          newScript.textContent = oldScript.textContent;
-        }
-        document.body.appendChild(newScript);
+    <div id="paypal-button-container"></div>
+    <button onclick="toggleCart()" class="btn">Schließen</button>
+  </div>
+
+  <!-- ============================
+       Shop-Script (Warenkorb + PayPal)
+  ============================ -->
+  <script>
+    let cart = [];
+    const cartBtn = document.querySelector(".cart-btn");
+
+    function triggerCartBounce() {
+      if (!cartBtn) return;
+      cartBtn.classList.remove("added");
+      void cartBtn.offsetWidth;
+      cartBtn.classList.add("added");
+    }
+
+    fetch("assets/kurstermine_1_tag.json").then(r => r.json()).then(data => {
+      let s = document.getElementById("kursTermine1");
+      data.termine.forEach(t => {
+        let o = document.createElement("option");
+        o.value = t.id; o.textContent = t.text; s.appendChild(o);
       });
-    })
-    .catch(err => console.error("Fehler beim Laden des Warenkorbs:", err));
-});
-</script>
+    }).catch(()=>{});
 
+    fetch("assets/kurstermine_2_tage.json").then(r => r.json()).then(data => {
+      let s = document.getElementById("kursTermine2");
+      data.termine.forEach(t => {
+        let o = document.createElement("option");
+        o.value = t.id; o.textContent = t.text; s.appendChild(o);
+      });
+    }).catch(()=>{});
+
+    fetch("assets/kurstermine_3_tage.json").then(r => r.json()).then(data => {
+      let s = document.getElementById("kursTermine3");
+      data.termine.forEach(t => {
+        let o = document.createElement("option");
+        o.value = t.id; o.textContent = t.text; s.appendChild(o);
+      });
+    }).catch(()=>{});
+
+    function addToCart(name, price) {
+      let e = cart.find(i => i.name === name && i.price === price);
+      if (e) e.qty += 1; else cart.push({ name, price, qty: 1 });
+      saveCart(); triggerCartBounce();
+    }
+
+    function addCourseVoucher(selectId, kursName, kursPreis) {
+      let select = document.getElementById(selectId);
+      if (!select) return alert("Keine Termine verfügbar.");
+      let selected = Array.from(select.selectedOptions).map(o => o.textContent);
+      if (selected.length === 0) return alert("Bitte wähle einen Termin aus!");
+      selected.forEach(term => {
+        let name = `${kursName} – Termin: ${term}`;
+        let e = cart.find(i => i.name === name && i.price === kursPreis);
+        if (e) e.qty += 1; else cart.push({ name, price: kursPreis, qty: 1 });
+      });
+      saveCart(); triggerCartBounce();
+    }
+
+    function addVoucher() {
+      const amountRaw = document.getElementById("voucherAmount").value;
+      const amount = parseFloat(amountRaw);
+      const message = document.getElementById("voucherMessage").value || "(keine Widmung angegeben)";
+      if (!amount || isNaN(amount) || amount < 10) return alert("Bitte einen Betrag ab 10 € eingeben.");
+      cart.push({ name: "Wert-Gutschein", price: amount, qty: 1, message });
+      saveCart(); triggerCartBounce();
+    }
+
+    function increaseQty(i){ cart[i].qty++; saveCart(); }
+    function decreaseQty(i){ if(--cart[i].qty<=0)cart.splice(i,1); saveCart(); }
+    function getCartTotal(){ return cart.reduce((s,i)=>s+i.price*i.qty,0); }
+
+    function saveCart(){ localStorage.setItem("cart",JSON.stringify(cart)); updateCart(); }
+    function loadCart(){ let s=localStorage.getItem("cart"); cart=s?JSON.parse(s):[]; updateCart(); }
+
+    function updateCart(){
+      const c=document.getElementById("cart-count"); if(c)c.innerText=cart.reduce((s,i)=>s+i.qty,0);
+      const list=document.getElementById("cart-items"); list.innerHTML="";
+      cart.forEach((item,i)=>{
+        let li=document.createElement("li");
+        li.innerHTML=`${item.name} – ${item.price.toFixed(2)} €`;
+        if(item.message) li.innerHTML+=`<br>(Widmung: "${item.message}")`;
+        li.innerHTML+=`<div class='cart-controls'>
+          <button onclick='decreaseQty(${i})'>➖</button>
+          <span class='cart-qty'>${item.qty}</span>
+          <button onclick='increaseQty(${i})'>➕</button>
+        </div>`;
+        list.appendChild(li);
+      });
+      document.getElementById("cart-total").innerText=getCartTotal().toFixed(2);
+    }
+
+    function toggleCart(){
+      let c=document.getElementById("cart");
+      c.style.display=(c.style.display==="none"||c.style.display==="")?"block":"none";
+    }
+
+    function renderPayPalButtons(){
+      if(typeof paypal==="undefined")return;
+      const cont=document.getElementById('paypal-button-container');
+      cont.innerHTML='';
+      paypal.Buttons({
+        createOrder:(d,a)=>a.order.create({
+          purchase_units:[{description:cart.map(i=>`${i.name} x${i.qty}`).join("; "),amount:{currency_code:"EUR",value:getCartTotal().toFixed(2)}}]
+        }),
+        onApprove:(d,a)=>a.order.capture().then(det=>{
+          alert("Vielen Dank! "+(det.payer?.name?.given_name||"")+" Deine Bestellung wurde erfolgreich abgeschlossen.");
+          cart=[]; saveCart(); toggleCart();
+        })
+      }).render('#paypal-button-container');
+    }
+
+    loadCart(); renderPayPalButtons();
+  </script>
+
+  <!-- ============================
+       Footer
+  ============================ -->
+  <footer>
+    <p>© 2025 Pfalzventure – Robert Prokasky</p>
+    <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
+  </footer>
+
+  <div id="paypal-cookie-banner" class="paypal-banner" style="display:none;">
+    <p>
+      Für die Nutzung der PayPal-Zahlungsfunktion werden technisch notwendige Cookies von PayPal gesetzt.
+      <a href="https://www.paypal.com/de/webapps/mpp/ua/privacy-full" target="_blank" rel="noopener noreferrer">Mehr erfahren</a>
+    </p>
+    <button id="paypal-cookie-ok">Alles klar!</button>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const banner = document.getElementById("paypal-cookie-banner");
+      const okBtn = document.getElementById("paypal-cookie-ok");
+      if (typeof paypal !== "undefined" && !localStorage.getItem("paypalCookiesAccepted")) banner.style.display = "flex";
+      okBtn && okBtn.addEventListener("click", () => {
+        localStorage.setItem("paypalCookiesAccepted", "true");
+        banner.style.display = "none";
+      });
+    });
+  </script>
+
+  <script src="gutscheine.js"></script>
 </body>
 </html>
