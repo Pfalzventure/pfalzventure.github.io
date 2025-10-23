@@ -2,7 +2,7 @@
    🎟️ Pfalzventure Gutschein-System
    ============================ */
 
-// ✅ Liste gültiger Gutscheine (du kannst hier beliebig erweitern)
+// ✅ Liste gültiger Gutscheine
 const GUTSCHEINE = [
   { code: "WALD50", betrag: 50 },   // 50 € Rabatt
   { code: "NEUKUNDE10", betrag: 10 },
@@ -12,12 +12,11 @@ const GUTSCHEINE = [
 
 /**
  * Prüft, ob ein Gutschein gültig ist.
- * Wird von applyVoucher() in cart.html aufgerufen.
+ * Wird von applyVoucher() aus cart.html aufgerufen.
  * @param {string} code - Der eingegebene Gutscheincode
  * @returns {object} { valid: boolean, amount: number }
  */
 function checkVoucher(code) {
-  // Code immer in Großbuchstaben vergleichen
   const clean = code.trim().toUpperCase();
   const found = GUTSCHEINE.find(g => g.code.toUpperCase() === clean);
 
@@ -31,9 +30,57 @@ function checkVoucher(code) {
 }
 
 /**
- * Optionale Zusatzfunktion (nicht zwingend nötig):
- * Kann z. B. serverseitig oder per E-Mail genutzt werden,
- * wenn du später Gutscheincodes dynamisch prüfen willst.
+ * Visuelles Feedback für den Nutzer
+ * @param {string} msg - Nachrichtentext
+ * @param {boolean} success - true = grün, false = rot
+ */
+function showVoucherMessage(msg, success = true) {
+  const el = document.getElementById("voucherMessage");
+  if (!el) return;
+
+  el.textContent = msg;
+  el.style.color = success ? "green" : "red";
+  el.style.fontWeight = "600";
+  el.style.marginTop = "5px";
+
+  // Nachricht nach 4 Sekunden wieder ausblenden
+  clearTimeout(el._timeout);
+  el._timeout = setTimeout(() => {
+    el.textContent = "";
+  }, 4000);
+}
+
+/* ====================================
+   🔁 Erweiterung von applyVoucher()
+   ==================================== */
+
+function applyVoucher() {
+  const input = document.getElementById("voucherCode");
+  if (!input) return;
+
+  const code = input.value.trim();
+  if (!code) {
+    showVoucherMessage("Bitte einen Gutscheincode eingeben.", false);
+    return;
+  }
+
+  const result = checkVoucher(code);
+  if (result.valid) {
+    eingelösterGutschein = { code, wert: result.amount };
+    saveCart();
+    updateCart();
+    showVoucherMessage(`✅ Gutschein "${code}" eingelöst: -${result.amount} €`, true);
+  } else {
+    eingelösterGutschein = null;
+    saveCart();
+    updateCart();
+    showVoucherMessage("❌ Ungültiger Gutschein-Code!", false);
+  }
+}
+
+/**
+ * Nur zur Übersicht für dich:
+ * Zeigt alle gültigen Codes in der Konsole an.
  */
 function listAllVouchers() {
   console.table(GUTSCHEINE);
@@ -41,4 +88,3 @@ function listAllVouchers() {
 }
 
 console.log("🎟️ gutscheine.js geladen – bereit zur Verwendung");
-
