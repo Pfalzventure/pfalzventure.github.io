@@ -51,22 +51,22 @@ function addToCart(name, price, qty = 1) {
 
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
-  localStorage.setItem("voucher", JSON.stringify(eingelösterGutschein));
+  if (eingelösterGutschein)
+    localStorage.setItem("voucher", JSON.stringify(eingelösterGutschein));
   updateCart();
 }
+
 function loadCart() {
   // ✅ Gutschein beim Laden der Seite immer zurücksetzen
+  console.log("🔄 Gutschein wird beim Laden entfernt");
   localStorage.removeItem("voucher");
   eingelösterGutschein = null;
 
   // 🛒 Warenkorb laden
   const stored = localStorage.getItem("cart");
   if (stored) cart = JSON.parse(stored);
-
-  // 🧮 Warenkorb aktualisieren
   updateCart();
 }
-
 
 function getCartTotal() {
   let sum = cart.reduce((total, item) => total + item.price * item.qty, 0);
@@ -96,7 +96,10 @@ function updateCart() {
 function toggleCart() {
   const cartDiv = document.getElementById("cart");
   if (!cartDiv) return;
-  cartDiv.style.display = (cartDiv.style.display === "none" || cartDiv.style.display === "") ? "block" : "none";
+  cartDiv.style.display =
+    (cartDiv.style.display === "none" || cartDiv.style.display === "")
+      ? "block"
+      : "none";
 }
 
 // ============================
@@ -129,20 +132,21 @@ function applyVoucher() {
 // 💳 PayPal Integration
 // ============================
 
-function initPayPal() {
+function initPayPal(retry = 0) {
   if (typeof paypal === "undefined") {
-    console.error("❌ PayPal SDK nicht geladen!");
-    return;
-  }
-
-  const container = document.getElementById("paypal-button-container");
-  if (!container) {
-    setTimeout(initPayPal, 200);
-    return;
+    if (retry < 10) {
+      console.warn("⌛ PayPal SDK noch nicht bereit, versuche erneut...");
+      setTimeout(() => initPayPal(retry + 1), 500);
+      return;
+    } else {
+      console.error("❌ PayPal SDK konnte nicht geladen werden!");
+      return;
+    }
   }
 
   paypal.Buttons({
     createOrder: function (data, actions) {
+      console.log("💶 PayPal-Bestellung wird erstellt...");
       return actions.order.create({
         purchase_units: [{
           description: cart.map(item => `${item.name} x${item.qty}`).join("; "),
@@ -152,15 +156,20 @@ function initPayPal() {
     },
     onApprove: function (data, actions) {
       return actions.order.capture().then(function (details) {
-        alert("Danke, " + details.payer.name.given_name + "!");
+        console.log("✅ Zahlung erfolgreich:", details);
+        alert(`Danke, ${details.payer.name.given_name}! Deine Buchung war erfolgreich.`);
+
+        // 🧹 Nach erfolgreicher Zahlung alles leeren
         cart = [];
         eingelösterGutschein = null;
-        saveCart();
+        localStorage.removeItem("cart");
+        localStorage.removeItem("voucher");
+        updateCart();
         toggleCart();
       });
     },
     onError: function (err) {
-      console.error("PayPal-Fehler:", err);
+      console.error("❌ PayPal-Fehler:", err);
       alert("⚠️ Zahlung fehlgeschlagen. Bitte versuche es erneut.");
     }
   }).render('#paypal-button-container');
@@ -170,8 +179,10 @@ function initPayPal() {
 // 🚀 Start
 // ============================
 
-loadCart();
-initPayPal();
+document.addEventListener("DOMContentLoaded", () => {
+  loadCart();
+  initPayPal();
+});
 </script>
 
 <!-- Gutschein Logik -->
