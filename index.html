@@ -96,19 +96,13 @@ document.addEventListener("click", function(event) {
   <a href="kurse.html" class="btn">Zu den Kursen</a>
 </div>
 
-<!-- Warenkorb dynamisch laden -->
+<!-- Warenkorb laden -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  // cart.html laden und einfügen
   fetch("partials/cart.html")
     .then(res => res.text())
     .then(html => {
       document.body.insertAdjacentHTML("beforeend", html);
-
-      // Danach das JS für den Warenkorb nachladen
-      const script = document.createElement("script");
-      script.src = "cart.js";
-      document.body.appendChild(script);
     })
     .catch(err => console.error("Fehler beim Laden des Warenkorbs:", err));
 });
