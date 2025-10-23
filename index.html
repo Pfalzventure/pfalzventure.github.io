@@ -96,13 +96,15 @@ document.addEventListener("click", function(event) {
   <a href="kurse.html" class="btn">Zu den Kursen</a>
 </div>
 
+<!-- ============================
+     Warenkorb Aufruf
+     ============================ -->
+  
 <script>
   fetch("cart.html")
     .then(r => r.text())
     .then(html => document.body.insertAdjacentHTML("beforeend", html));
 </script>
-
-
 
   </body>
 </html>
