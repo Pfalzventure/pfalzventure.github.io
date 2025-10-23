@@ -96,33 +96,12 @@ document.addEventListener("click", function(event) {
   <a href="kurse.html" class="btn">Zu den Kursen</a>
 </div>
 
-<!-- Warenkorb laden -->
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  fetch("partials/cart.html")
-    .then(res => res.text())
-    .then(html => {
-      // HTML in ein temporäres Element laden
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = html;
-
-      // Erst HTML-Inhalt einfügen (ohne Scripts)
-      document.body.insertAdjacentHTML("beforeend", tempDiv.innerHTML.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, ""));
-
-      // Dann alle Scripts separat ausführen
-      tempDiv.querySelectorAll("script").forEach(oldScript => {
-        const newScript = document.createElement("script");
-        if (oldScript.src) {
-          newScript.src = oldScript.src;
-        } else {
-          newScript.textContent = oldScript.textContent;
-        }
-        document.body.appendChild(newScript);
-      });
-    })
-    .catch(err => console.error("Fehler beim Laden des Warenkorbs:", err));
-});
+  fetch("cart.html")
+    .then(r => r.text())
+    .then(html => document.body.insertAdjacentHTML("beforeend", html));
 </script>
+
 
 
   </body>
