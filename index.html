@@ -98,33 +98,37 @@ document.addEventListener("click", function(event) {
 
 <!-- Warenkorb zentral laden -->
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", () => {
   fetch("cart.html")
     .then(res => res.text())
     .then(html => {
-      // 👇 Nur den reinen Warenkorb-HTML-Teil (div#cart) extrahieren
       const match = html.match(/<div id="cart"[\\s\\S]*?<\\/div>/);
-      if (match) {
-        // Am Ende des Bodys einfügen (ändert nix am Layout)
-        document.body.insertAdjacentHTML("beforeend", match[0]);
-      }
+      if (match) document.body.insertAdjacentHTML("beforeend", match[0]);
 
-      // 👇 Danach ALLE <script>-Blöcke aus cart.html ausführen
+      // Scripts aus cart.html laden und ausführen
       const temp = document.createElement("div");
       temp.innerHTML = html;
       temp.querySelectorAll("script").forEach(oldScript => {
         const newScript = document.createElement("script");
-        if (oldScript.src) {
-          newScript.src = oldScript.src;
-        } else {
-          newScript.textContent = oldScript.textContent;
-        }
+        if (oldScript.src) newScript.src = oldScript.src;
+        else newScript.textContent = oldScript.textContent;
         document.body.appendChild(newScript);
       });
+
+      // ✅ Nach dem Laden kurz warten, bis cart.html-Logik bereit ist
+      setTimeout(() => {
+        if (typeof loadCart === "function") {
+          loadCart();
+          console.log("🛒 Warenkorb geladen und initialisiert");
+        } else {
+          console.error("⚠️ Warenkorb-Skripte nicht gefunden");
+        }
+      }, 500);
     })
     .catch(err => console.error("❌ Fehler beim Laden des Warenkorbs:", err));
 });
 </script>
+
 
 
 </body>
