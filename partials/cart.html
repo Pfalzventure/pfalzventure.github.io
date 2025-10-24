@@ -10,17 +10,24 @@
     border:1px solid #ccc;
     padding:20px;
     max-width:340px;
+    height:auto;
     max-height:80vh;
-    overflow-y:auto;
     box-shadow:0 2px 10px rgba(0,0,0,0.2);
     z-index:1000;
+    display:flex;
+    flex-direction:column;
 ">
   <h3>🛒 Dein Warenkorb</h3>
-  <ul id="cart-items" class="cart-list"></ul>
+
+  <!-- Artikelbereich mit Scrollfunktion -->
+  <div id="cart-items-container" style="overflow-y:auto; flex:1 1 auto; margin-bottom:10px;">
+    <ul id="cart-items" class="cart-list"></ul>
+  </div>
+
   <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
 
-  <!-- 🎟️ Gutscheincode & E-Mail -->
-  <div class="cart-discount">
+  <!-- 🎟️ Gutscheincode + Mailadresse -->
+  <div class="cart-discount" style="margin-bottom:10px;">
     <label for="voucherCode">🎟️ Gutscheincode:</label><br>
     <input type="text" id="voucherCode" placeholder="Code eingeben" />
 
@@ -32,25 +39,20 @@
   </div>
 
   <!-- 💳 PayPal -->
-  <div id="paypal-button-container"></div>
+  <div id="paypal-button-container" style="margin-bottom:10px;"></div>
 
   <button onclick="toggleCart()" class="btn">Schließen</button>
 </div>
 
 <!-- ============================
-     ⚙️ Warenkorb-Script
+     ⚙️ Warenkorb-Logik
      ============================ -->
 <script>
-// ============================
-// 🛒 Warenkorb-Logik
-// ============================
-
 let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
 // ============================
 // 🔄 Speicherfunktionen
 // ============================
-
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
   updateCart();
@@ -64,7 +66,6 @@ function loadCart() {
 // ============================
 // 🧾 Artikel hinzufügen
 // ============================
-
 function addToCart(name, price, qty = 1) {
   const existing = cart.find(i => i.name === name && i.price === price);
   if (existing) existing.qty += qty;
@@ -74,9 +75,8 @@ function addToCart(name, price, qty = 1) {
 }
 
 // ============================
-// 📅 Kurs mit Termin
+// 📅 Kurs mit Termin hinzufügen
 // ============================
-
 function addCourseVoucher(selectId, kursName, kursPreis) {
   const select = document.getElementById(selectId);
   if (!select) return alert("Keine Termine verfügbar.");
@@ -90,6 +90,7 @@ function addCourseVoucher(selectId, kursName, kursPreis) {
     if (existing) existing.qty++;
     else cart.push({ name, price: kursPreis, qty: 1 });
   });
+
   saveCart();
   triggerCartBounce();
 }
@@ -97,46 +98,19 @@ function addCourseVoucher(selectId, kursName, kursPreis) {
 // ============================
 // ➕➖ Mengensteuerung
 // ============================
-
 function increaseQty(i) { cart[i].qty++; saveCart(); }
 function decreaseQty(i) { if (--cart[i].qty <= 0) cart.splice(i, 1); saveCart(); }
 
 // ============================
 // 💰 Summe berechnen
 // ============================
-
 function getCartTotal() {
-  return Math.max(cart.reduce((s, i) => s + i.price * i.qty, 0), 0);
-}
-
-// ============================
-// 🎟️ Gutscheincode manuell
-// ============================
-
-function submitVoucherRequest() {
-  const code = document.getElementById("voucherCode")?.value.trim();
-  const email = document.getElementById("customerEmail")?.value.trim();
-
-  if (!code) return showVoucherMessage("Bitte Gutscheincode eingeben.", false);
-  if (!email) return showVoucherMessage("Bitte deine E-Mail-Adresse eingeben.", false);
-
-  showVoucherMessage(
-    `✅ Gutscheincode "${code}" erhalten. Wir prüfen ihn und senden dir die angepasste Rechnung an ${email}.`,
-    true
-  );
-}
-
-function showVoucherMessage(text, success) {
-  const el = document.getElementById("voucherMessage");
-  if (!el) return;
-  el.style.color = success ? "green" : "red";
-  el.textContent = text;
+  return cart.reduce((s, i) => s + i.price * i.qty, 0);
 }
 
 // ============================
 // 💬 Anzeige aktualisieren
 // ============================
-
 function updateCart() {
   const countEl = document.getElementById("cart-count");
   if (countEl) countEl.innerText = cart.reduce((s, i) => s + i.qty, 0);
@@ -164,12 +138,20 @@ function updateCart() {
 // ============================
 // 🪄 Anzeige & Animation
 // ============================
-
 function toggleCart() {
   const el = document.getElementById("cart");
   if (!el) return;
   el.style.display = (el.style.display === "none" || el.style.display === "") ? "block" : "none";
 }
+
+// Schließt Warenkorb bei Klick außerhalb
+document.addEventListener("click", (e) => {
+  const cartEl = document.getElementById("cart");
+  if (!cartEl || cartEl.style.display === "none") return;
+  if (!cartEl.contains(e.target) && !e.target.closest(".cart-btn")) {
+    cartEl.style.display = "none";
+  }
+});
 
 function triggerCartBounce() {
   const btn = document.querySelector(".cart-btn");
@@ -180,9 +162,34 @@ function triggerCartBounce() {
 }
 
 // ============================
+// 🎟️ Gutschein-Eingabe & Versandinfo
+// ============================
+function submitVoucherRequest() {
+  const code = document.getElementById("voucherCode").value.trim();
+  const email = document.getElementById("customerEmail").value.trim();
+  const msgEl = document.getElementById("voucherMessage");
+
+  if (!code) {
+    msgEl.style.color = "red";
+    msgEl.textContent = "Bitte Gutscheincode eingeben.";
+    return;
+  }
+  if (!email || !email.includes("@")) {
+    msgEl.style.color = "red";
+    msgEl.textContent = "Bitte gültige E-Mail-Adresse eingeben.";
+    return;
+  }
+
+  // Hinweistext (kein echter Code-Check)
+  msgEl.style.color = "green";
+  msgEl.textContent = "✅ Dein Gutscheincode wurde registriert. Du erhältst eine angepasste Rechnung per E-Mail.";
+  document.getElementById("voucherCode").value = "";
+  document.getElementById("customerEmail").value = "";
+}
+
+// ============================
 // 💳 PayPal Integration
 // ============================
-
 function initPayPal() {
   if (typeof paypal === "undefined") return;
   const cont = document.getElementById("paypal-button-container");
@@ -210,22 +217,8 @@ function initPayPal() {
 }
 
 // ============================
-// 🔒 Klick außerhalb schließt Warenkorb
-// ============================
-
-document.addEventListener("click", (event) => {
-  const cart = document.getElementById("cart");
-  if (!cart || cart.style.display === "none") return;
-
-  if (!cart.contains(event.target) && !event.target.classList.contains("cart-btn")) {
-    cart.style.display = "none";
-  }
-});
-
-// ============================
 // 🚀 Start
 // ============================
-
 loadCart();
 initPayPal();
 </script>
