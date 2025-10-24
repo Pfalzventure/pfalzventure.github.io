@@ -1,11 +1,12 @@
-<!-- =============================
+<!-- ============================
      🛒 Zentraler Warenkorb
-     ============================= -->
+     ============================ -->
 <div id="cart" style="display:none; position:fixed; top:80px; right:20px; background:white; border:1px solid #ccc; padding:20px; max-width:340px; box-shadow:0 2px 10px rgba(0,0,0,0.2); z-index:1000;">
   <h3>🛒 Dein Warenkorb</h3>
   <ul id="cart-items" class="cart-list"></ul>
   <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
 
+  <!-- 🎟️ Rabattcode -->
   <div class="cart-discount">
     <label for="voucherCode">🎟️ Rabattcode:</label><br>
     <input type="text" id="voucherCode" placeholder="Code eingeben" />
@@ -13,25 +14,26 @@
     <p id="voucherMessage"></p>
   </div>
 
-  <div class="cart-voucher">
-    <label>Betrag (€):</label>
-    <input type="number" id="voucherAmount" min="10" placeholder="z. B. 25" />
-    <label>Widmung:</label>
-    <input type="text" id="voucherMessage" placeholder="(optional)" />
-    <button onclick="addVoucher()">Wertgutschein hinzufügen</button>
-  </div>
-
+  <!-- 💳 PayPal -->
   <div id="paypal-button-container"></div>
+
   <button onclick="toggleCart()" class="btn">Schließen</button>
 </div>
 
+<!-- ============================
+     ⚙️ Warenkorb-Script
+     ============================ -->
 <script>
 // ============================
-// 🛒 Warenkorb-Logik
+// 🛒 Warenkorb-Logik (vereinfacht)
 // ============================
 
 let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 let eingelösterGutschein = JSON.parse(localStorage.getItem("voucher") || "null");
+
+// ============================
+// 🔄 Speicherfunktionen
+// ============================
 
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
@@ -46,6 +48,10 @@ function loadCart() {
   updateCart();
 }
 
+// ============================
+// 🧾 Artikel hinzufügen
+// ============================
+
 function addToCart(name, price, qty = 1) {
   const existing = cart.find(i => i.name === name && i.price === price);
   if (existing) existing.qty += qty;
@@ -53,6 +59,10 @@ function addToCart(name, price, qty = 1) {
   saveCart();
   triggerCartBounce();
 }
+
+// ============================
+// 📅 Kurs mit Termin
+// ============================
 
 function addCourseVoucher(selectId, kursName, kursPreis) {
   const select = document.getElementById(selectId);
@@ -71,24 +81,26 @@ function addCourseVoucher(selectId, kursName, kursPreis) {
   triggerCartBounce();
 }
 
-function addVoucher() {
-  const amountRaw = document.getElementById("voucherAmount")?.value;
-  const message = document.getElementById("voucherMessage")?.value || "(keine Widmung)";
-  const amount = parseFloat(amountRaw);
-  if (!amount || isNaN(amount) || amount < 10) return alert("Bitte Betrag ab 10 € eingeben.");
-  cart.push({ name: "Wert-Gutschein", price: amount, qty: 1, message });
-  saveCart();
-  triggerCartBounce();
-}
+// ============================
+// ➕➖ Mengensteuerung
+// ============================
 
 function increaseQty(i) { cart[i].qty++; saveCart(); }
 function decreaseQty(i) { if (--cart[i].qty <= 0) cart.splice(i, 1); saveCart(); }
+
+// ============================
+// 💰 Summe berechnen
+// ============================
 
 function getCartTotal() {
   let sum = cart.reduce((s, i) => s + i.price * i.qty, 0);
   if (eingelösterGutschein) sum -= eingelösterGutschein.wert;
   return Math.max(sum, 0);
 }
+
+// ============================
+// 🎟️ Rabattcode prüfen
+// ============================
 
 function checkVoucher(code) {
   const vouchers = [
@@ -123,6 +135,10 @@ function showVoucherMessage(text, success) {
   el.textContent = text;
 }
 
+// ============================
+// 💬 Anzeige aktualisieren
+// ============================
+
 function updateCart() {
   const countEl = document.getElementById("cart-count");
   if (countEl) countEl.innerText = cart.reduce((s, i) => s + i.qty, 0);
@@ -135,7 +151,6 @@ function updateCart() {
     const li = document.createElement("li");
     li.innerHTML = `
       ${item.name} – ${item.price.toFixed(2)} €
-      ${item.message ? `<br><small>(Widmung: "${item.message}")</small>` : ""}
       <div class="cart-controls">
         <button onclick="decreaseQty(${i})">➖</button>
         <span class="cart-qty">${item.qty}</span>
@@ -147,6 +162,10 @@ function updateCart() {
   const totalEl = document.getElementById("cart-total");
   if (totalEl) totalEl.innerText = getCartTotal().toFixed(2);
 }
+
+// ============================
+// 🪄 Anzeige & Animation
+// ============================
 
 function toggleCart() {
   const el = document.getElementById("cart");
@@ -161,6 +180,10 @@ function triggerCartBounce() {
   void btn.offsetWidth;
   btn.classList.add("added");
 }
+
+// ============================
+// 💳 PayPal Integration
+// ============================
 
 function initPayPal() {
   if (typeof paypal === "undefined") return;
@@ -188,6 +211,10 @@ function initPayPal() {
     }
   }).render('#paypal-button-container');
 }
+
+// ============================
+// 🚀 Start
+// ============================
 
 loadCart();
 initPayPal();
