@@ -1,14 +1,14 @@
 <!-- ============================
-     🛒 Zentraler Warenkorb (optimierte Optik)
+     🛒 Zentraler Warenkorb (optimiert, geschlossen bei Start)
      ============================ -->
 <div id="cart" style="
-  display:none;
+  display:none;                /* bleibt geschlossen */
   position:fixed;
   top:80px;
   right:20px;
   width:340px;
   max-width:90vw;
-  max-height:80vh;
+  max-height:80vh;             /* nie höher als 80% der Viewport-Höhe */
   background:white;
   border:1px solid #ccc;
   border-radius:12px;
@@ -16,9 +16,9 @@
   padding:16px;
   z-index:1000;
 
-  display:flex;
+  display:flex;                /* ← hier NICHT mehr doppelt */
   flex-direction:column;
-  overflow:hidden;
+  overflow:hidden;             /* äußere Hülle begrenzen */
 ">
 
   <h3 style="margin:0 0 10px 0;">🛒 Dein Warenkorb</h3>
@@ -26,7 +26,7 @@
   <!-- 🧾 Artikelbereich -->
   <div id="cart-items-container" style="
     flex:1 1 auto;
-    overflow-y:auto;
+    overflow-y:auto;           /* nur dieser Teil scrollt */
     border-top:1px solid #ddd;
     border-bottom:1px solid #ddd;
     padding:8px 0;
@@ -62,6 +62,7 @@
 
   <button onclick="toggleCart()" class="btn" style="align-self:flex-end;">Schließen</button>
 </div>
+
 
 <!-- ============================
      ⚙️ Warenkorb-Logik
