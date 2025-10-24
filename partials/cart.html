@@ -1,68 +1,51 @@
 <!-- ============================
-     🛒 Zentraler Warenkorb (optimiert, geschlossen bei Start)
+     🛒 Zentraler Warenkorb (final)
      ============================ -->
 <div id="cart" style="
-  display:none;                /* bleibt geschlossen */
+  display:none;                /* bleibt beim Start geschlossen */
   position:fixed;
   top:80px;
   right:20px;
   width:340px;
   max-width:90vw;
-  max-height:80vh;             /* nie höher als 80% der Viewport-Höhe */
+  max-height:80vh;
   background:white;
   border:1px solid #ccc;
   border-radius:12px;
-  box-shadow:0 4px 18px rgba(0,0,0,0.2);
+  box-shadow:0 4px 18px rgba(0,0,0,0.25);
   padding:16px;
   z-index:1000;
 
-  display:flex;                /* ← hier NICHT mehr doppelt */
-  flex-direction:column;
-  overflow:hidden;             /* äußere Hülle begrenzen */
+  overflow-y:auto;             /* Scrollt komplett, wenn nötig */
 ">
 
   <h3 style="margin:0 0 10px 0;">🛒 Dein Warenkorb</h3>
 
-  <!-- 🧾 Artikelbereich -->
-  <div id="cart-items-container" style="
-    flex:1 1 auto;
-    overflow-y:auto;           /* nur dieser Teil scrollt */
-    border-top:1px solid #ddd;
-    border-bottom:1px solid #ddd;
-    padding:8px 0;
-    margin-bottom:10px;
-  ">
-    <ul id="cart-items" class="cart-list" style="list-style:none; padding:0; margin:0;"></ul>
-  </div>
+  <ul id="cart-items" class="cart-list" style="
+    list-style:none;
+    padding:0;
+    margin:0 0 10px 0;
+  "></ul>
 
-  <!-- 💰 Gesamtsumme -->
   <p style="margin:6px 0;">
     <strong>Gesamt: <span id="cart-total">0.00</span> €</strong>
   </p>
 
-  <!-- 🎟️ Gutschein + Mail -->
-  <div class="cart-discount" style="
-    margin-bottom:10px;
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-  ">
-    <label for="voucherCode">🎟️ Gutscheincode:</label>
-    <input type="text" id="voucherCode" placeholder="Code eingeben" style="padding:4px;">
+  <div class="cart-discount" style="margin-bottom:10px;">
+    <label for="voucherCode">🎟️ Gutscheincode:</label><br>
+    <input type="text" id="voucherCode" placeholder="Code eingeben" style="width:100%;">
 
-    <label for="customerEmail">📧 Deine E-Mail-Adresse:</label>
-    <input type="email" id="customerEmail" placeholder="name@example.com" style="padding:4px;">
+    <label for="customerEmail">📧 Deine E-Mail-Adresse:</label><br>
+    <input type="email" id="customerEmail" placeholder="name@example.com" style="width:100%;">
 
-    <button onclick="submitVoucherRequest()" class="btn" style="margin-top:6px;">Gutschein einlösen</button>
+    <button onclick="submitVoucherRequest()" class="btn" style="margin-top:8px;">Gutschein einlösen</button>
     <p id="voucherMessage" style="margin:4px 0 0 0; font-size:0.9em;"></p>
   </div>
 
-  <!-- 💳 PayPal -->
   <div id="paypal-button-container" style="margin-bottom:10px;"></div>
 
   <button onclick="toggleCart()" class="btn" style="align-self:flex-end;">Schließen</button>
 </div>
-
 
 <!-- ============================
      ⚙️ Warenkorb-Logik
