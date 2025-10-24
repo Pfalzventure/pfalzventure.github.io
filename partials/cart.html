@@ -6,11 +6,15 @@
   <ul id="cart-items" class="cart-list"></ul>
   <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
 
-  <!-- 🎟️ Rabattcode -->
+  <!-- 🎟️ Gutscheincode & E-Mail -->
   <div class="cart-discount">
-    <label for="voucherCode">🎟️ Rabattcode:</label><br>
+    <label for="voucherCode">🎟️ Gutscheincode:</label><br>
     <input type="text" id="voucherCode" placeholder="Code eingeben" />
-    <button onclick="applyVoucher()">Einlösen</button>
+
+    <label for="customerEmail">📧 Deine E-Mail-Adresse:</label><br>
+    <input type="email" id="customerEmail" placeholder="name@example.com" />
+
+    <button onclick="submitVoucherRequest()">Gutschein einlösen</button>
     <p id="voucherMessage"></p>
   </div>
 
@@ -25,11 +29,10 @@
      ============================ -->
 <script>
 // ============================
-// 🛒 Warenkorb-Logik (vereinfacht)
+// 🛒 Warenkorb-Logik
 // ============================
 
 let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-let eingelösterGutschein = JSON.parse(localStorage.getItem("voucher") || "null");
 
 // ============================
 // 🔄 Speicherfunktionen
@@ -37,13 +40,10 @@ let eingelösterGutschein = JSON.parse(localStorage.getItem("voucher") || "null"
 
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
-  localStorage.setItem("voucher", JSON.stringify(eingelösterGutschein));
   updateCart();
 }
 
 function loadCart() {
-  localStorage.removeItem("voucher");
-  eingelösterGutschein = null;
   cart = JSON.parse(localStorage.getItem("cart") || "[]");
   updateCart();
 }
@@ -93,39 +93,25 @@ function decreaseQty(i) { if (--cart[i].qty <= 0) cart.splice(i, 1); saveCart();
 // ============================
 
 function getCartTotal() {
-  let sum = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  if (eingelösterGutschein) sum -= eingelösterGutschein.wert;
-  return Math.max(sum, 0);
+  return Math.max(cart.reduce((s, i) => s + i.price * i.qty, 0), 0);
 }
 
 // ============================
-// 🎟️ Rabattcode prüfen
+// 🎟️ Gutscheincode manuell
 // ============================
 
-function checkVoucher(code) {
-  const vouchers = [
-    { code: "TEST10", amount: 10 },
-    { code: "RABATT5", amount: 5 },
-    { code: "HERBST25", amount: 25 }
-  ];
-  const found = vouchers.find(v => v.code.toLowerCase() === code.toLowerCase());
-  return found ? { valid: true, amount: found.amount } : { valid: false };
-}
-
-function applyVoucher() {
+function submitVoucherRequest() {
   const code = document.getElementById("voucherCode")?.value.trim();
-  if (!code) return showVoucherMessage("Bitte Code eingeben.", false);
+  const email = document.getElementById("customerEmail")?.value.trim();
 
-  const result = checkVoucher(code);
-  if (result.valid) {
-    eingelösterGutschein = { code, wert: result.amount };
-    saveCart();
-    showVoucherMessage(`✅ Gutschein "${code}" eingelöst: -${result.amount} €`, true);
-  } else {
-    eingelösterGutschein = null;
-    saveCart();
-    showVoucherMessage("❌ Ungültiger Gutschein-Code!", false);
-  }
+  if (!code) return showVoucherMessage("Bitte Gutscheincode eingeben.", false);
+  if (!email) return showVoucherMessage("Bitte deine E-Mail-Adresse eingeben.", false);
+
+  // Keine automatische Rabattprüfung, alles manuell über dich
+  showVoucherMessage(
+    `✅ Gutscheincode "${code}" erhalten. Wir prüfen ihn und senden dir die angepasste Rechnung an ${email}.`,
+    true
+  );
 }
 
 function showVoucherMessage(text, success) {
@@ -201,7 +187,6 @@ function initPayPal() {
     onApprove: (d, a) => a.order.capture().then(det => {
       alert("Danke, " + (det.payer?.name?.given_name || "") + "!");
       cart = [];
-      eingelösterGutschein = null;
       saveCart();
       toggleCart();
     }),
