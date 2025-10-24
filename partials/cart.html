@@ -1,7 +1,20 @@
 <!-- ============================
      🛒 Zentraler Warenkorb
      ============================ -->
-<div id="cart" style="display:none; position:fixed; top:80px; right:20px; background:white; border:1px solid #ccc; padding:20px; max-width:340px; box-shadow:0 2px 10px rgba(0,0,0,0.2); z-index:1000;">
+<div id="cart" style="
+    display:none;
+    position:fixed;
+    top:80px;
+    right:20px;
+    background:white;
+    border:1px solid #ccc;
+    padding:20px;
+    max-width:340px;
+    max-height:80vh;
+    overflow-y:auto;
+    box-shadow:0 2px 10px rgba(0,0,0,0.2);
+    z-index:1000;
+">
   <h3>🛒 Dein Warenkorb</h3>
   <ul id="cart-items" class="cart-list"></ul>
   <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
@@ -107,7 +120,6 @@ function submitVoucherRequest() {
   if (!code) return showVoucherMessage("Bitte Gutscheincode eingeben.", false);
   if (!email) return showVoucherMessage("Bitte deine E-Mail-Adresse eingeben.", false);
 
-  // Keine automatische Rabattprüfung, alles manuell über dich
   showVoucherMessage(
     `✅ Gutscheincode "${code}" erhalten. Wir prüfen ihn und senden dir die angepasste Rechnung an ${email}.`,
     true
@@ -196,6 +208,19 @@ function initPayPal() {
     }
   }).render('#paypal-button-container');
 }
+
+// ============================
+// 🔒 Klick außerhalb schließt Warenkorb
+// ============================
+
+document.addEventListener("click", (event) => {
+  const cart = document.getElementById("cart");
+  if (!cart || cart.style.display === "none") return;
+
+  if (!cart.contains(event.target) && !event.target.classList.contains("cart-btn")) {
+    cart.style.display = "none";
+  }
+});
 
 // ============================
 // 🚀 Start
