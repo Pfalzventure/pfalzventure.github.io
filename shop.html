@@ -166,6 +166,48 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 </script>
 
+  <!-- 🔄 Kurstermine automatisch laden -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  /**
+   * Lädt Termine aus einer JSON-Datei und befüllt ein Dropdown.
+   * @param {string} selectId - ID des <select>-Elements
+   * @param {string} jsonPath - Pfad zur JSON-Datei (z.B. "assets/kurstermine_1_tag.json")
+   */
+  async function loadCourseDates(selectId, jsonPath) {
+    try {
+      const res = await fetch(jsonPath);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+
+      const select = document.getElementById(selectId);
+      if (!select) return;
+
+      // JSON kann entweder { termine: [...] } oder einfach [...] enthalten
+      const termine = data.termine || data;
+
+      // Dropdown füllen
+      termine.forEach(t => {
+        const opt = document.createElement("option");
+        opt.value = t.id || t.text || t;
+        opt.textContent = t.text || t.name || t;
+        select.appendChild(opt);
+      });
+
+      console.log(`✅ ${jsonPath} geladen (${termine.length} Termine)`);
+    } catch (err) {
+      console.warn(`⚠️ Fehler beim Laden von ${jsonPath}:`, err);
+    }
+  }
+
+  // Alle drei Kursdateien laden
+  loadCourseDates("kursTermine1", "assets/kurstermine_1_tag.json");
+  loadCourseDates("kursTermine2", "assets/kurstermine_2_tage.json");
+  loadCourseDates("kursTermine3", "assets/kurstermine_3_tage.json");
+});
+</script>
+
 
   <!-- ============================
        Footer
