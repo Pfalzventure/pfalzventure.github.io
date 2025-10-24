@@ -144,8 +144,9 @@ function updateCart() {
 function toggleCart() {
   const el = document.getElementById("cart");
   if (!el) return;
-  el.style.display = (el.style.display === "none" || el.style.display === "") ? "block" : "none";
+  el.classList.toggle("open");
 }
+
 
 // Schließt Warenkorb bei Klick außerhalb
 document.addEventListener("click", (e) => {
