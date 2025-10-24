@@ -669,3 +669,38 @@ main {
   margin-top: 0.5rem;
   font-size: 0.9rem;
 }
+
+/* ================================
+   🛒 Warenkorb Animation & Design
+   ================================ */
+#cart {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  width: 340px;
+  max-width: 90vw;
+  max-height: 80vh;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+  padding: 16px;
+  z-index: 1000;
+  overflow-y: auto;
+
+  /* Animationseinstellungen */
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+/* Sichtbarer Zustand */
+#cart.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
