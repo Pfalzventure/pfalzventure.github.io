@@ -100,7 +100,7 @@ document.addEventListener("click", function(event) {
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    const res = await fetch("cart.html");
+    const res = await fetch("partials/cart.html");
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const html = await res.text();
 
