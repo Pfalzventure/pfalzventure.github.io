@@ -13,7 +13,7 @@
 <!-- ============================
      🛍️ Warenkorb-Fenster
      ============================ -->
-<div id="cart" style="
+<div id="cart" class="closed" style="
   position: fixed;
   top: 80px;
   right: 20px;
@@ -52,6 +52,7 @@
     <p id="voucherMessage" style="margin:4px 0 0 0; font-size:0.9em;"></p>
   </div>
 
+  <!-- 💳 PayPal Buttons -->
   <div id="paypal-button-container" style="margin-bottom:10px;"></div>
 
   <button onclick="toggleCart()" class="btn" style="align-self:flex-end;">Schließen</button>
@@ -69,11 +70,13 @@ let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
   updateCart();
+  initPayPal();
 }
 
 function loadCart() {
   cart = JSON.parse(localStorage.getItem("cart") || "[]");
   updateCart();
+  initPayPal();
 }
 
 // ============================
@@ -149,15 +152,70 @@ function updateCart() {
 }
 
 // ============================
-// 🪄 Öffnen / Schließen + Klick außerhalb
+// 💳 PayPal Integration
+// ============================
+function initPayPal() {
+  if (typeof paypal === "undefined") return;
+  const cont = document.getElementById("paypal-button-container");
+  if (!cont) return;
+  cont.innerHTML = "";
+  if (cart.length === 0) return;
+
+  paypal.Buttons({
+    createOrder: (d, a) => a.order.create({
+      purchase_units: [{
+        description: cart.map(i => `${i.name} x${i.qty}`).join("; "),
+        amount: { currency_code: "EUR", value: getCartTotal().toFixed(2) }
+      }]
+    }),
+    onApprove: (d, a) => a.order.capture().then(det => {
+      alert("Danke, " + (det.payer?.name?.given_name || "") + "!");
+      cart = [];
+      saveCart();
+      document.getElementById("cart").classList.remove("open");
+    }),
+    onError: (err) => {
+      console.error("PayPal Fehler:", err);
+      alert("⚠️ Zahlung fehlgeschlagen. Bitte erneut versuchen.");
+    }
+  }).render('#paypal-button-container');
+}
+
+// ============================
+// 🎟️ Gutschein-Eingabe
+// ============================
+function submitVoucherRequest() {
+  const code = document.getElementById("voucherCode").value.trim();
+  const email = document.getElementById("customerEmail").value.trim();
+  const msgEl = document.getElementById("voucherMessage");
+
+  if (!code) {
+    msgEl.style.color = "red";
+    msgEl.textContent = "Bitte Gutscheincode eingeben.";
+    return;
+  }
+  if (!email || !email.includes("@")) {
+    msgEl.style.color = "red";
+    msgEl.textContent = "Bitte gültige E-Mail-Adresse eingeben.";
+    return;
+  }
+
+  msgEl.style.color = "green";
+  msgEl.textContent = "✅ Dein Gutscheincode wurde registriert. Du erhältst eine angepasste Rechnung per E-Mail.";
+  document.getElementById("voucherCode").value = "";
+  document.getElementById("customerEmail").value = "";
+}
+
+// ============================
+// 🪄 Öffnen / Schließen
 // ============================
 function toggleCart() {
   const el = document.getElementById("cart");
   if (!el) return;
-  if (!el.classList.contains("open")) el.classList.add("open");
-  else el.classList.remove("open");
+  el.classList.toggle("open");
 }
 
+// Klick außerhalb schließt Warenkorb
 document.addEventListener("click", function(event) {
   const cart = document.getElementById("cart");
   const toggle = document.getElementById("cart-toggle");
