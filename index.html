@@ -96,30 +96,38 @@ document.addEventListener("click", function(event) {
   <a href="kurse.html" class="btn">Zu den Kursen</a>
 </div>
 
-<!-- Warenkorb zentral laden -->
+<!-- 🛒 Zentralen Warenkorb laden -->
 <script>
-window.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", async () => {
   try {
-    const res = await fetch("/cart.html");
+    const res = await fetch("cart.html");
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const html = await res.text();
 
-    // HTML in den Body einfügen
-    const container = document.createElement("div");
-    container.innerHTML = html;
+    const temp = document.createElement("div");
+    temp.innerHTML = html.trim();
 
-    // Script-Elemente extrahieren und korrekt ausführen
-    container.querySelectorAll("script").forEach(scr => {
-      const newScr = document.createElement("script");
-      if (scr.src) newScr.src = scr.src;
-      else newScr.textContent = scr.textContent;
-      document.body.appendChild(newScr);
+    Array.from(temp.children).forEach(el => {
+      if (el.tagName.toLowerCase() === "script") {
+        const script = document.createElement("script");
+        if (el.src) script.src = el.src;
+        else script.textContent = el.textContent;
+        document.body.appendChild(script);
+      } else {
+        document.body.appendChild(el);
+      }
     });
 
-    // Nur das HTML (ohne Scripts) anhängen
-    const cartDiv = container.querySelector("#cart");
-    if (cartDiv) document.body.appendChild(cartDiv);
+    console.log("🛒 Warenkorb erfolgreich geladen und initialisiert");
 
-    console.log("🛒 Warenkorb erfolgreich geladen");
+    setTimeout(() => {
+      if (typeof loadCart === "function") {
+        loadCart();
+        console.log("✅ Warenkorb-Logik aktiv");
+      } else {
+        console.error("⚠️ Warenkorb-Skripte wurden nicht korrekt ausgeführt");
+      }
+    }, 300);
   } catch (err) {
     console.error("❌ Fehler beim Laden des Warenkorbs:", err);
   }
