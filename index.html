@@ -98,37 +98,33 @@ document.addEventListener("click", function(event) {
 
 <!-- Warenkorb zentral laden -->
 <script>
-window.addEventListener("DOMContentLoaded", () => {
-  fetch("cart.html")
-    .then(res => res.text())
-    .then(html => {
-      const match = html.match(/<div id="cart"[\\s\\S]*?<\\/div>/);
-      if (match) document.body.insertAdjacentHTML("beforeend", match[0]);
+window.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const res = await fetch("/cart.html");
+    const html = await res.text();
 
-      // Scripts aus cart.html laden und ausführen
-      const temp = document.createElement("div");
-      temp.innerHTML = html;
-      temp.querySelectorAll("script").forEach(oldScript => {
-        const newScript = document.createElement("script");
-        if (oldScript.src) newScript.src = oldScript.src;
-        else newScript.textContent = oldScript.textContent;
-        document.body.appendChild(newScript);
-      });
+    // HTML in den Body einfügen
+    const container = document.createElement("div");
+    container.innerHTML = html;
 
-      // ✅ Nach dem Laden kurz warten, bis cart.html-Logik bereit ist
-      setTimeout(() => {
-        if (typeof loadCart === "function") {
-          loadCart();
-          console.log("🛒 Warenkorb geladen und initialisiert");
-        } else {
-          console.error("⚠️ Warenkorb-Skripte nicht gefunden");
-        }
-      }, 500);
-    })
-    .catch(err => console.error("❌ Fehler beim Laden des Warenkorbs:", err));
+    // Script-Elemente extrahieren und korrekt ausführen
+    container.querySelectorAll("script").forEach(scr => {
+      const newScr = document.createElement("script");
+      if (scr.src) newScr.src = scr.src;
+      else newScr.textContent = scr.textContent;
+      document.body.appendChild(newScr);
+    });
+
+    // Nur das HTML (ohne Scripts) anhängen
+    const cartDiv = container.querySelector("#cart");
+    if (cartDiv) document.body.appendChild(cartDiv);
+
+    console.log("🛒 Warenkorb erfolgreich geladen");
+  } catch (err) {
+    console.error("❌ Fehler beim Laden des Warenkorbs:", err);
+  }
 });
 </script>
-
 
 
 </body>
