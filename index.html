@@ -96,22 +96,36 @@ document.addEventListener("click", function(event) {
   <a href="kurse.html" class="btn">Zu den Kursen</a>
 </div>
 
-<!-- Warenkorb laden -->
+<!-- Warenkorb zentral laden -->
 <script>
+document.addEventListener("DOMContentLoaded", () => {
   fetch("cart.html")
-    .then(r => r.text())
-    .then(html => document.body.insertAdjacentHTML("beforeend", html));
+    .then(res => res.text())
+    .then(html => {
+      // 👇 Nur den reinen Warenkorb-HTML-Teil (div#cart) extrahieren
+      const match = html.match(/<div id="cart"[\\s\\S]*?<\\/div>/);
+      if (match) {
+        // Am Ende des Bodys einfügen (ändert nix am Layout)
+        document.body.insertAdjacentHTML("beforeend", match[0]);
+      }
+
+      // 👇 Danach ALLE <script>-Blöcke aus cart.html ausführen
+      const temp = document.createElement("div");
+      temp.innerHTML = html;
+      temp.querySelectorAll("script").forEach(oldScript => {
+        const newScript = document.createElement("script");
+        if (oldScript.src) {
+          newScript.src = oldScript.src;
+        } else {
+          newScript.textContent = oldScript.textContent;
+        }
+        document.body.appendChild(newScript);
+      });
+    })
+    .catch(err => console.error("❌ Fehler beim Laden des Warenkorbs:", err));
+});
 </script>
 
-
-  <footer>
-    <p>© 2025 Pfalzventure – Robert Prokasky</p>
-    <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
-  </footer>
-
-
-  <!-- Gutschein Logik -->
-  <script src="gutscheine.js"></script>
 
 </body>
 </html>
