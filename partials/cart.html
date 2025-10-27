@@ -1,7 +1,7 @@
 <!-- ============================
      🛒 Warenkorb-Button
      ============================ -->
-<button id="cart-toggle" onclick="toggleCart()" class="btn" style="
+<button id="cart-toggle" class="btn" style="
   position: fixed;
   top: 20px;
   right: 20px;
@@ -13,7 +13,7 @@
 <!-- ============================
      🛍️ Warenkorb-Fenster
      ============================ -->
-<div id="cart" class="closed" style="
+<div id="cart" class="cart closed" style="
   position: fixed;
   top: 80px;
   right: 20px;
@@ -27,16 +27,10 @@
   padding: 16px;
   z-index: 1000;
   overflow-y: auto;
+  display: none;
 ">
-
   <h3 style="margin:0 0 10px 0;">🛒 Dein Warenkorb</h3>
-
-  <ul id="cart-items" class="cart-list" style="
-    list-style:none;
-    padding:0;
-    margin:0 0 10px 0;
-  "></ul>
-
+  <ul id="cart-items" class="cart-list" style="list-style:none;padding:0;margin:0 0 10px 0;"></ul>
   <p style="margin:6px 0;">
     <strong>Gesamt: <span id="cart-total">0.00</span> €</strong>
   </p>
@@ -52,178 +46,49 @@
     <p id="voucherMessage" style="margin:4px 0 0 0; font-size:0.9em;"></p>
   </div>
 
-  <!-- 💳 PayPal Buttons -->
   <div id="paypal-button-container" style="margin-bottom:10px;"></div>
-
   <button onclick="toggleCart()" class="btn" style="align-self:flex-end;">Schließen</button>
 </div>
 
-<!-- ============================
-     ⚙️ Warenkorb-Logik & Animation
-     ============================ -->
 <script>
 let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
 // ============================
-// 🔄 Speicherfunktionen
-// ============================
-function saveCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
-  updateCart();
-  initPayPal();
-}
-
-function loadCart() {
-  cart = JSON.parse(localStorage.getItem("cart") || "[]");
-  updateCart();
-  initPayPal();
-}
-
-// ============================
-// 🧾 Artikel hinzufügen
-// ============================
-function addToCart(name, price, qty = 1) {
-  const existing = cart.find(i => i.name === name && i.price === price);
-  if (existing) existing.qty += qty;
-  else cart.push({ name, price, qty });
-  saveCart();
-  triggerCartBounce();
-}
-
-// ============================
-// 📅 Kurs mit Termin hinzufügen
-// ============================
-function addCourseVoucher(selectId, kursName, kursPreis) {
-  const select = document.getElementById(selectId);
-  if (!select) return alert("Keine Termine verfügbar.");
-
-  const selected = Array.from(select.selectedOptions).map(o => o.textContent);
-  if (selected.length === 0) return alert("Bitte wähle einen Termin aus!");
-
-  selected.forEach(term => {
-    const name = `${kursName} – Termin: ${term}`;
-    const existing = cart.find(i => i.name === name && i.price === kursPreis);
-    if (existing) existing.qty++;
-    else cart.push({ name, price: kursPreis, qty: 1 });
-  });
-
-  saveCart();
-  triggerCartBounce();
-}
-
-// ============================
-// ➕➖ Mengensteuerung
-// ============================
-function increaseQty(i) { cart[i].qty++; saveCart(); }
-function decreaseQty(i) { if (--cart[i].qty <= 0) cart.splice(i, 1); saveCart(); }
-
-// ============================
-// 💰 Summe berechnen
-// ============================
-function getCartTotal() {
-  return cart.reduce((s, i) => s + i.price * i.qty, 0);
-}
-
-// ============================
-// 💬 Anzeige aktualisieren
-// ============================
-function updateCart() {
-  const countEl = document.getElementById("cart-count");
-  if (countEl) countEl.innerText = cart.reduce((s, i) => s + i.qty, 0);
-
-  const list = document.getElementById("cart-items");
-  if (!list) return;
-
-  list.innerHTML = "";
-  cart.forEach((item, i) => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      ${item.name} – ${item.price.toFixed(2)} € 
-      <div class="cart-controls">
-        <button onclick="decreaseQty(${i})">➖</button>
-        <span class="cart-qty">${item.qty}</span>
-        <button onclick="increaseQty(${i})">➕</button>
-      </div>`;
-    list.appendChild(li);
-  });
-
-  const totalEl = document.getElementById("cart-total");
-  if (totalEl) totalEl.innerText = getCartTotal().toFixed(2);
-}
-
-// ============================
-// 💳 PayPal Integration
-// ============================
-function initPayPal() {
-  if (typeof paypal === "undefined") return;
-  const cont = document.getElementById("paypal-button-container");
-  if (!cont) return;
-  cont.innerHTML = "";
-  if (cart.length === 0) return;
-
-  paypal.Buttons({
-    createOrder: (d, a) => a.order.create({
-      purchase_units: [{
-        description: cart.map(i => `${i.name} x${i.qty}`).join("; "),
-        amount: { currency_code: "EUR", value: getCartTotal().toFixed(2) }
-      }]
-    }),
-    onApprove: (d, a) => a.order.capture().then(det => {
-      alert("Danke, " + (det.payer?.name?.given_name || "") + "!");
-      cart = [];
-      saveCart();
-      document.getElementById("cart").classList.remove("open");
-    }),
-    onError: (err) => {
-      console.error("PayPal Fehler:", err);
-      alert("⚠️ Zahlung fehlgeschlagen. Bitte erneut versuchen.");
-    }
-  }).render('#paypal-button-container');
-}
-
-// ============================
-// 🎟️ Gutschein-Eingabe
-// ============================
-function submitVoucherRequest() {
-  const code = document.getElementById("voucherCode").value.trim();
-  const email = document.getElementById("customerEmail").value.trim();
-  const msgEl = document.getElementById("voucherMessage");
-
-  if (!code) {
-    msgEl.style.color = "red";
-    msgEl.textContent = "Bitte Gutscheincode eingeben.";
-    return;
-  }
-  if (!email || !email.includes("@")) {
-    msgEl.style.color = "red";
-    msgEl.textContent = "Bitte gültige E-Mail-Adresse eingeben.";
-    return;
-  }
-
-  msgEl.style.color = "green";
-  msgEl.textContent = "✅ Dein Gutscheincode wurde registriert. Du erhältst eine angepasste Rechnung per E-Mail.";
-  document.getElementById("voucherCode").value = "";
-  document.getElementById("customerEmail").value = "";
-}
-
-// ============================
 // 🪄 Öffnen / Schließen
 // ============================
-function toggleCart() {
+function toggleCart(forceState = null) {
   const el = document.getElementById("cart");
   if (!el) return;
-  el.classList.toggle("open");
+
+  const isOpen = el.classList.contains("open");
+  const shouldOpen = forceState === true || (!isOpen && forceState === null);
+  const shouldClose = forceState === false || (isOpen && forceState === null);
+
+  if (shouldOpen) {
+    el.classList.add("open");
+    el.classList.remove("closed");
+    el.style.display = "block";
+  } else if (shouldClose) {
+    el.classList.remove("open");
+    el.classList.add("closed");
+    el.style.display = "none";
+  }
 }
 
 // Klick außerhalb schließt Warenkorb
 document.addEventListener("click", function(event) {
-  const cart = document.getElementById("cart");
+  const cartEl = document.getElementById("cart");
   const toggle = document.getElementById("cart-toggle");
-  if (!cart || !toggle) return;
-  if (!cart.contains(event.target) && !toggle.contains(event.target)) {
-    cart.classList.remove("open");
+  if (!cartEl || !toggle) return;
+
+  if (!cartEl.contains(event.target) && !toggle.contains(event.target)) {
+    toggleCart(false);
   }
 });
 
-loadCart();
+// Initialzustand: geschlossen
+document.addEventListener("DOMContentLoaded", () => {
+  toggleCart(false);
+  loadCart();
+});
 </script>
