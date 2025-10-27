@@ -16,47 +16,43 @@
 </head>
 <body>
 
-<!-- ============================
-     Header
-     ============================ -->
-<header>
-  <div class="container">
-    <a href="index.html" class="logo">
-      <img src="assets/Logo2.png" alt="Pfalzventure Logo">
-    </a>
+ <!-- ============================
+       Header mit Navigation
+       ============================ -->
+  <header>
+    <div class="container">
+      <a href="index.html" class="logo">
+        <img src="assets/Logo2.png" alt="Pfalzventure Logo">
+      </a>
 
-    <!-- Burger Button -->
-    <div class="burger" onclick="toggleMenu()">☰</div>
+      <div class="burger" onclick="toggleMenu()">☰</div>
 
-    <nav>
-      <ul class="nav-links">
-        <li><a href="index.html" class="active">Start</a></li>
-        <li><a href="kurse.html">Kurse</a></li>
-        <li><a href="shop.html">Shop</a></li>
-        <li><a href="kontakt.html">Kontakt</a></li>
-      </ul>
-    </nav>
+      <nav>
+        <ul class="nav-links" id="nav-links">
+          <li><a href="index.html" class="active">Start</a></li>
+          <li><a href="kurse.html">Kurse</a></li>
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="kontakt.html">Kontakt</a></li>
+        </ul>
+      </nav>
 
-    
-<!-- 🛒 Warenkorb Button -->
-<button id="cart-toggle" onclick="toggleCart()" class="btn cart-btn">
-  🛒 Warenkorb (<span id="cart-count">0</span>)
-</button>
+      <button onclick="toggleCart()" class="btn cart-btn">🛒 Warenkorb (<span id="cart-count">0</span>)</button>
+    </div>
+  </header>
 
+  <script>
+    function toggleMenu() {
+      document.getElementById("nav-links").classList.toggle("nav-active");
+    }
 
-<!-- Burger-Menü Script -->
-<script>
-function toggleMenu() {
-  document.querySelector(".nav-links").classList.toggle("nav-active");
-}
-document.addEventListener("click", function(event) {
-  const menu = document.querySelector("nav ul");
-  const burger = document.querySelector(".burger");
-  if (!menu.contains(event.target) && !burger.contains(event.target)) {
-    menu.classList.remove("nav-active");
-  }
-});
-</script>
+    document.addEventListener("click", function(event) {
+      const menu = document.getElementById("nav-links");
+      const burger = document.querySelector(".burger");
+      if (menu && burger && !menu.contains(event.target) && !burger.contains(event.target)) {
+        menu.classList.remove("nav-active");
+      }
+    });
+  </script>
 
 <!-- ============================
      Hero
