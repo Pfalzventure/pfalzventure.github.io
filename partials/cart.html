@@ -1,59 +1,29 @@
 <!-- ============================
      🛍️ Warenkorb-Fenster
      ============================ -->
-<div id="cart" class="cart closed">
-  <h3 style="margin:0 0 10px 0;">🛒 Dein Warenkorb</h3>
+<div id="cart" class="closed">
+  <h3>🛒 Dein Warenkorb</h3>
 
-  <ul id="cart-items" class="cart-list" style="list-style:none;padding:0;margin:0 0 10px 0;"></ul>
+  <ul id="cart-items" class="cart-list"></ul>
 
-  <p style="margin:6px 0;">
-    <strong>Gesamt: <span id="cart-total">0.00</span> €</strong>
-  </p>
+  <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
 
-  <div class="cart-discount" style="margin-bottom:10px;">
+  <div class="cart-discount">
     <label for="voucherCode">🎟️ Gutscheincode:</label><br>
-    <input type="text" id="voucherCode" placeholder="Code eingeben" style="width:100%;">
+    <input type="text" id="voucherCode" placeholder="Code eingeben">
 
     <label for="customerEmail">📧 Deine E-Mail-Adresse:</label><br>
-    <input type="email" id="customerEmail" placeholder="name@example.com" style="width:100%;">
+    <input type="email" id="customerEmail" placeholder="name@example.com">
 
-    <button onclick="submitVoucherRequest()" class="btn" style="margin-top:8px;">Gutschein einlösen</button>
-    <p id="voucherMessage" style="margin:4px 0 0 0; font-size:0.9em;"></p>
+    <button onclick="submitVoucherRequest()" class="btn">Gutschein einlösen</button>
+    <p id="voucherMessage"></p>
   </div>
 
-  <div id="paypal-button-container" style="margin-bottom:10px;"></div>
-  <button onclick="toggleCart()" class="btn" style="align-self:flex-end;">Schließen</button>
-</div>
+  <!-- 💳 PayPal Buttons -->
+  <div id="paypal-button-container"></div>
 
-<!-- ============================
-     💅 Warenkorb-Style & Animation
-     ============================ -->
-<style>
-#cart {
-  position: fixed;
-  top: 80px;
-  right: 20px;
-  width: 340px;
-  max-width: 90vw;
-  max-height: 80vh;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
-  padding: 16px;
-  z-index: 1000;
-  overflow-y: auto;
-  opacity: 0;
-  transform: translateY(-10px);
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-}
-#cart.open {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-</style>
+  <button onclick="toggleCart()" class="btn close-btn">Schließen</button>
+</div>
 
 <!-- ============================
      ⚙️ Warenkorb-Logik
@@ -69,6 +39,7 @@ function saveCart() {
   updateCart();
   initPayPal();
 }
+
 function loadCart() {
   cart = JSON.parse(localStorage.getItem("cart") || "[]");
   updateCart();
@@ -92,6 +63,7 @@ function addToCart(name, price, qty = 1) {
 function addCourseVoucher(selectId, kursName, kursPreis) {
   const select = document.getElementById(selectId);
   if (!select) return alert("Keine Termine verfügbar.");
+
   const selected = Array.from(select.selectedOptions).map(o => o.textContent);
   if (selected.length === 0) return alert("Bitte wähle einen Termin aus!");
 
@@ -128,6 +100,7 @@ function updateCart() {
 
   const list = document.getElementById("cart-items");
   if (!list) return;
+
   list.innerHTML = "";
   cart.forEach((item, i) => {
     const li = document.createElement("li");
@@ -166,7 +139,7 @@ function initPayPal() {
       alert("Danke, " + (det.payer?.name?.given_name || "") + "!");
       cart = [];
       saveCart();
-      toggleCart(false);
+      closeCart();
     }),
     onError: (err) => {
       console.error("PayPal Fehler:", err);
@@ -203,32 +176,26 @@ function submitVoucherRequest() {
 // ============================
 // 🪄 Öffnen / Schließen
 // ============================
-function toggleCart(forceState = null) {
+function toggleCart() {
   const el = document.getElementById("cart");
   if (!el) return;
-  const isOpen = el.classList.contains("open");
-  if (forceState === true || (!isOpen && forceState === null)) {
-    el.classList.add("open");
-  } else if (forceState === false || (isOpen && forceState === null)) {
-    el.classList.remove("open");
-  }
+  el.classList.toggle("open");
+}
+
+function closeCart() {
+  const el = document.getElementById("cart");
+  if (el) el.classList.remove("open");
 }
 
 // Klick außerhalb schließt Warenkorb
-document.addEventListener("click", (event) => {
-  const cartEl = document.getElementById("cart");
+document.addEventListener("click", function(event) {
+  const cart = document.getElementById("cart");
   const toggle = document.getElementById("cart-toggle");
-  if (!cartEl || !toggle) return;
-  if (!cartEl.contains(event.target) && !toggle.contains(event.target)) {
-    toggleCart(false);
+  if (!cart || !toggle) return;
+  if (!cart.contains(event.target) && !toggle.contains(event.target)) {
+    closeCart();
   }
 });
 
-// ============================
-// 🚀 Initialisierung
-// ============================
-document.addEventListener("DOMContentLoaded", () => {
-  toggleCart(false);
-  loadCart();
-});
+loadCart();
 </script>
