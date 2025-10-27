@@ -2,201 +2,183 @@
      🛍️ Warenkorb-Fenster
      ============================ -->
 <div id="cart" class="closed">
-  <h3>🛒 Dein Warenkorb</h3>
+  <h2>🛒 Dein Warenkorb</h2>
 
-  <ul id="cart-items" class="cart-list"></ul>
+  <ul id="cart-items"></ul>
 
-  <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
+  <div class="cart-total">
+    <strong>Gesamtsumme:</strong> <span id="cart-total">0,00 €</span>
+  </div>
 
+  <hr>
+
+  <!-- 🎟️ Gutscheinfeld -->
   <div class="cart-discount">
-    <label for="voucherCode">🎟️ Gutscheincode:</label><br>
-    <input type="text" id="voucherCode" placeholder="Code eingeben">
+    <label for="voucherCode">Gutscheincode</label>
+    <input type="text" id="voucherCode" placeholder="z. B. PFALZ10">
 
-    <label for="customerEmail">📧 Deine E-Mail-Adresse:</label><br>
-    <input type="email" id="customerEmail" placeholder="name@example.com">
+    <label for="customerEmail">Deine E-Mail-Adresse</label>
+    <input type="email" id="customerEmail" placeholder="beispiel@mail.de">
 
-    <button onclick="submitVoucherRequest()" class="btn">Gutschein einlösen</button>
+    <button class="btn" onclick="submitVoucherRequest()">Gutschein einlösen</button>
     <p id="voucherMessage"></p>
   </div>
 
-  <!-- 💳 PayPal Buttons -->
-  <div id="paypal-button-container"></div>
+  <hr>
 
-  <button onclick="toggleCart()" class="btn close-btn">Schließen</button>
+  <button class="btn" onclick="checkout()">Zur Kasse</button>
 </div>
+
+<!-- ============================
+     💅 Lokale Styles
+     ============================ -->
+<style>
+  /* 💳 Gutscheinfeld-Layout */
+  .cart-discount {
+    margin-top: 10px;
+  }
+
+  .cart-discount label {
+    display: block;
+    margin-bottom: 2px; /* Abstand Label → Input */
+    font-weight: 500;
+  }
+
+  .cart-discount input {
+    width: 100%;
+    margin-bottom: 8px; /* Abstand Input → nächstes Element */
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  #voucherMessage {
+    font-size: 0.9em;
+    margin-top: 4px;
+  }
+</style>
 
 <!-- ============================
      ⚙️ Warenkorb-Logik
      ============================ -->
 <script>
-let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+  // ----------------------------
+  // 🛒 Warenkorb-Daten
+  // ----------------------------
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// ============================
-// 🔄 Speicherfunktionen
-// ============================
-function saveCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
-  updateCart();
-  initPayPal();
-}
+  function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }
 
-function loadCart() {
-  cart = JSON.parse(localStorage.getItem("cart") || "[]");
-  updateCart();
-  initPayPal();
-}
+  function updateCartCount() {
+    const countEl = document.getElementById("cart-count");
+    if (countEl) countEl.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+  }
 
-  
-// ============================
-// 🧾 Artikel hinzufügen
-// ============================
-function addToCart(name, price, qty = 1) {
-  const existing = cart.find(i => i.name === name && i.price === price);
-  if (existing) existing.qty += qty;
-  else cart.push({ name, price, qty });
-  saveCart();
-  triggerCartBounce();
-}
+  function updateCartTotal() {
+    const totalEl = document.getElementById("cart-total");
+    if (totalEl)
+      totalEl.textContent = cart
+        .reduce((sum, item) => sum + item.price * item.quantity, 0)
+        .toFixed(2)
+        .replace(".", ",") + " €";
+  }
 
-// ============================
-// 📅 Kurs mit Termin hinzufügen
-// ============================
-function addCourseVoucher(selectId, kursName, kursPreis) {
-  const select = document.getElementById(selectId);
-  if (!select) return alert("Keine Termine verfügbar.");
+  function renderCartItems() {
+    const list = document.getElementById("cart-items");
+    if (!list) return;
 
-  const selected = Array.from(select.selectedOptions).map(o => o.textContent);
-  if (selected.length === 0) return alert("Bitte wähle einen Termin aus!");
-
-  selected.forEach(term => {
-    const name = `${kursName} – Termin: ${term}`;
-    const existing = cart.find(i => i.name === name && i.price === kursPreis);
-    if (existing) existing.qty++;
-    else cart.push({ name, price: kursPreis, qty: 1 });
-  });
-
-  saveCart();
-  triggerCartBounce();
-}
-
-// ============================
-// ➕➖ Mengensteuerung
-// ============================
-function increaseQty(i) { cart[i].qty++; saveCart(); }
-function decreaseQty(i) { if (--cart[i].qty <= 0) cart.splice(i, 1); saveCart(); }
-
-// ============================
-// 💰 Summe berechnen
-// ============================
-function getCartTotal() {
-  return cart.reduce((s, i) => s + i.price * i.qty, 0);
-}
-
-// ============================
-// 💬 Anzeige aktualisieren
-// ============================
-function updateCart() {
-  const countEl = document.getElementById("cart-count");
-  if (countEl) countEl.innerText = cart.reduce((s, i) => s + i.qty, 0);
-
-  const list = document.getElementById("cart-items");
-  if (!list) return;
-
-  list.innerHTML = "";
-  cart.forEach((item, i) => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      ${item.name} – ${item.price.toFixed(2)} € 
-      <div class="cart-controls">
-        <button onclick="decreaseQty(${i})">➖</button>
-        <span class="cart-qty">${item.qty}</span>
-        <button onclick="increaseQty(${i})">➕</button>
-      </div>`;
-    list.appendChild(li);
-  });
-
-  const totalEl = document.getElementById("cart-total");
-  if (totalEl) totalEl.innerText = getCartTotal().toFixed(2);
-}
-
-// ============================
-// 💳 PayPal Integration
-// ============================
-function initPayPal() {
-  if (typeof paypal === "undefined") return;
-  const cont = document.getElementById("paypal-button-container");
-  if (!cont) return;
-  cont.innerHTML = "";
-  if (cart.length === 0) return;
-
-  paypal.Buttons({
-    createOrder: (d, a) => a.order.create({
-      purchase_units: [{
-        description: cart.map(i => `${i.name} x${i.qty}`).join("; "),
-        amount: { currency_code: "EUR", value: getCartTotal().toFixed(2) }
-      }]
-    }),
-    onApprove: (d, a) => a.order.capture().then(det => {
-      alert("Danke, " + (det.payer?.name?.given_name || "") + "!");
-      cart = [];
-      saveCart();
-      closeCart();
-    }),
-    onError: (err) => {
-      console.error("PayPal Fehler:", err);
-      alert("⚠️ Zahlung fehlgeschlagen. Bitte erneut versuchen.");
+    list.innerHTML = "";
+    if (cart.length === 0) {
+      list.innerHTML = "<li>Dein Warenkorb ist leer.</li>";
+      return;
     }
-  }).render('#paypal-button-container');
-}
 
-// ============================
-// 🎟️ Gutschein-Eingabe
-// ============================
-function submitVoucherRequest() {
-  const code = document.getElementById("voucherCode").value.trim();
-  const email = document.getElementById("customerEmail").value.trim();
-  const msgEl = document.getElementById("voucherMessage");
-
-  if (!code) {
-    msgEl.style.color = "red";
-    msgEl.textContent = "Bitte Gutscheincode eingeben.";
-    return;
-  }
-  if (!email || !email.includes("@")) {
-    msgEl.style.color = "red";
-    msgEl.textContent = "Bitte gültige E-Mail-Adresse eingeben.";
-    return;
+    cart.forEach((item, i) => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        ${item.name} – ${item.price.toFixed(2)} € × ${item.quantity}
+        <button class="remove-btn" onclick="removeFromCart(${i})">✖</button>
+      `;
+      list.appendChild(li);
+    });
   }
 
-  msgEl.style.color = "green";
-  msgEl.textContent = "✅ Dein Gutscheincode wurde registriert. Du erhältst eine angepasste Rechnung per E-Mail.";
-  document.getElementById("voucherCode").value = "";
-  document.getElementById("customerEmail").value = "";
-}
-     
-// ============================
-// 🪄 Öffnen / Schließen
-// ============================
-function toggleCart() {
-  const el = document.getElementById("cart");
-  if (!el) return;
-  el.classList.toggle("open");
-}
-
-function closeCart() {
-  const el = document.getElementById("cart");
-  if (el) el.classList.remove("open");
-}
-
-// Klick außerhalb schließt Warenkorb
-document.addEventListener("click", function(event) {
-  const cart = document.getElementById("cart");
-  const toggle = document.getElementById("cart-toggle");
-  if (!cart || !toggle) return;
-  if (!cart.contains(event.target) && !toggle.contains(event.target)) {
-    closeCart();
+  function loadCart() {
+    renderCartItems();
+    updateCartCount();
+    updateCartTotal();
   }
-});
 
-loadCart();
+  function removeFromCart(index) {
+    cart.splice(index, 1);
+    saveCart();
+    loadCart();
+  }
+
+  // ----------------------------
+  // 🧭 Öffnen / Schließen
+  // ----------------------------
+  function toggleCart() {
+    document.getElementById("cart").classList.toggle("open");
+  }
+
+  function closeCart() {
+    document.getElementById("cart").classList.remove("open");
+  }
+
+  // ----------------------------
+  // 🎟️ Gutschein-Einlösung
+  // ----------------------------
+  function submitVoucherRequest() {
+    const code = document.getElementById("voucherCode").value.trim();
+    const email = document.getElementById("customerEmail").value.trim();
+    const msgEl = document.getElementById("voucherMessage");
+
+    if (!code) {
+      msgEl.style.color = "red";
+      msgEl.textContent = "Bitte Gutscheincode eingeben.";
+      return;
+    }
+    if (!email || !email.includes("@")) {
+      msgEl.style.color = "red";
+      msgEl.textContent = "Bitte gültige E-Mail-Adresse eingeben.";
+      return;
+    }
+
+    msgEl.style.color = "green";
+    msgEl.textContent =
+      "✅ Dein Gutscheincode wurde registriert. Du erhältst eine angepasste Rechnung per E-Mail.";
+    document.getElementById("voucherCode").value = "";
+    document.getElementById("customerEmail").value = "";
+  }
+
+  // ----------------------------
+  // 💳 Checkout
+  // ----------------------------
+  function checkout() {
+    alert("Zur Kasse geht’s demnächst!");
+  }
+
+  // ----------------------------
+  // 🪟 Klick außerhalb schließt Warenkorb
+  // ----------------------------
+  setTimeout(() => {
+    document.addEventListener("click", function (event) {
+      const cartEl = document.getElementById("cart");
+      const toggleBtn = document.querySelector(".cart-btn"); // dein Header-Button
+      if (!cartEl || !toggleBtn) return;
+
+      const clickedInside =
+        cartEl.contains(event.target) || toggleBtn.contains(event.target);
+      if (!clickedInside) closeCart();
+    });
+  }, 500);
+
+  // ----------------------------
+  // 📦 Initialisierung
+  // ----------------------------
+  document.addEventListener("DOMContentLoaded", loadCart);
 </script>
+
