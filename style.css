@@ -671,7 +671,7 @@ main {
 }
 
 /* ================================
-   🛒 Warenkorb Animation & Design
+   🛒 Warenkorb Design & Animation
    ================================ */
 #cart {
   position: fixed;
@@ -698,3 +698,20 @@ main {
   transform: translateY(0);
   pointer-events: auto;
 }
+
+#cart h3 {
+  margin: 0 0 10px 0;
+}
+
+#cart ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+}
+
+#cart .close-btn {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+}
+
