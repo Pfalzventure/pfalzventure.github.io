@@ -92,7 +92,9 @@
   <a href="kurse.html" class="btn">Zu den Kursen</a>
 </div>
 
-  document.addEventListener("DOMContentLoaded", async () => {
+<!-- 🛒 Zentralen Warenkorb laden -->
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
   try {
     const res = await fetch("partials/cart.html");
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -118,28 +120,15 @@
       if (typeof loadCart === "function") {
         loadCart();
         console.log("✅ Warenkorb-Logik aktiv");
-
-        // ⬇️ Klick außerhalb schließt Warenkorb
-        document.addEventListener("click", (event) => {
-          const cart = document.getElementById("cart");
-          const toggle = document.querySelector(".cart-btn");
-          if (!cart || !toggle) return;
-
-          const clickedInside = cart.contains(event.target) || toggle.contains(event.target);
-          if (!clickedInside) {
-            cart.classList.remove("open");
-          }
-        });
-
       } else {
         console.error("⚠️ Warenkorb-Skripte wurden nicht korrekt ausgeführt");
       }
-    }, 400);
+    }, 300);
   } catch (err) {
     console.error("❌ Fehler beim Laden des Warenkorbs:", err);
   }
 });
-
+</script>
 
 
 </body>
