@@ -191,9 +191,13 @@ function closeCart() {
 // Klick außerhalb schließt Warenkorb
 document.addEventListener("click", function(event) {
   const cart = document.getElementById("cart");
-  const toggle = document.getElementById("cart-toggle");
-  if (!cart || !toggle) return;
-  if (!cart.contains(event.target) && !toggle.contains(event.target)) {
+  const toggle = document.getElementById("cart-toggle"); // Dein Button, der den Warenkorb öffnet
+  if (!cart) return; // <- toggle darf fehlen, sonst blockierst du unnötig alles
+
+  const isClickInsideCart = cart.contains(event.target);
+  const isClickOnToggle = toggle && toggle.contains(event.target);
+
+  if (!isClickInsideCart && !isClickOnToggle && cart.classList.contains("open")) {
     closeCart();
   }
 });
