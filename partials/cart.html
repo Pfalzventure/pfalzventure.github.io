@@ -5,7 +5,7 @@
   <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
 
   <div class="cart-discount">
-    <label for="voucherCode">🎟️ Gutscheincode:</label><br>
+    <label for="voucherCode">🎟️ Gutscheincode:</label>
     <input type="text" id="voucherCode" placeholder="Code eingeben">
 
     <label for="customerEmail">📧 Deine E-Mail-Adresse:</label><br>
@@ -176,7 +176,7 @@ async function submitVoucherRequest() {
   // ✅ Sofortige visuelle Bestätigung (bleibt sichtbar)
   msgEl.style.color = "green";
   msgEl.textContent =
-    "✅ Dein Gutscheincode wurde registriert. Du erhältst eine angepasste Rechnung per E-Mail.";
+    "✅ Dein Gutscheincode wird geprüft. Du erhältst in kürze eine angepasste Rechnung per E-Mail.";
 
   // Felder erst nach kurzer Zeit leeren, damit Text stehen bleibt
   setTimeout(() => {
