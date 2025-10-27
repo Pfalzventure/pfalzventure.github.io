@@ -100,6 +100,12 @@ document.addEventListener("click", function(event) {
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   try {
+    // Wenn der Warenkorb bereits existiert, abbrechen
+    if (document.getElementById("cart-toggle") || document.getElementById("cart")) {
+      console.log("ℹ️ Warenkorb bereits vorhanden – wird nicht erneut geladen.");
+      return;
+    }
+
     const res = await fetch("partials/cart.html");
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const html = await res.text();
@@ -107,7 +113,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const temp = document.createElement("div");
     temp.innerHTML = html.trim();
 
-    Array.from(temp.children).forEach(el => {
+    // Skripte und DOM sauber einfügen
+    for (const el of Array.from(temp.children)) {
       if (el.tagName.toLowerCase() === "script") {
         const script = document.createElement("script");
         if (el.src) script.src = el.src;
@@ -116,10 +123,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       } else {
         document.body.appendChild(el);
       }
-    });
+    }
 
     console.log("🛒 Warenkorb erfolgreich geladen und initialisiert");
 
+    // Warten, bis JS aus cart.html aktiv ist
     setTimeout(() => {
       if (typeof loadCart === "function") {
         loadCart();
@@ -128,6 +136,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error("⚠️ Warenkorb-Skripte wurden nicht korrekt ausgeführt");
       }
     }, 300);
+
   } catch (err) {
     console.error("❌ Fehler beim Laden des Warenkorbs:", err);
   }
