@@ -687,20 +687,14 @@ main {
   padding: 16px;
   z-index: 1000;
   overflow-y: auto;
-
-/* ============================
-   🪄 Warenkorb Animation
-   ============================ */
-#cart {
   opacity: 0;
   transform: translateY(-10px);
   pointer-events: none;
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
+
 #cart.open {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
 }
-
-
