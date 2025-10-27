@@ -188,101 +188,44 @@
     <p><a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
   </footer>
 
-  <!-- ============================
-       Warenkorb + PayPal Script
-       ============================ -->
-  <script>
-    let cart = [];
 
-    function increaseQty(index) {
-      cart[index].qty += 1;
-      saveCart();
-    }
-    function decreaseQty(index) {
-      cart[index].qty -= 1;
-      if (cart[index].qty <= 0) cart.splice(index, 1);
-      saveCart();
-    }
+<!-- 🛒 Zentralen Warenkorb laden -->
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const res = await fetch("partials/cart.html");
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const html = await res.text();
 
-    function getCartTotal() {
-      return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    }
+    const temp = document.createElement("div");
+    temp.innerHTML = html.trim();
 
-    function saveCart() {
-      localStorage.setItem("cart", JSON.stringify(cart));
-      updateCart();
-    }
-    function loadCart() {
-      let stored = localStorage.getItem("cart");
-      if (stored) cart = JSON.parse(stored);
-      updateCart();
-    }
-
-    function updateCart() {
-      document.getElementById("cart-count").innerText = cart.reduce((sum, item) => sum + item.qty, 0);
-      let itemsList = document.getElementById("cart-items");
-      itemsList.innerHTML = "";
-      cart.forEach((item, i) => {
-        let li = document.createElement("li");
-        li.classList.add("cart-item");
-
-        let span = document.createElement("span");
-        span.innerText = `${item.name} – ${item.price.toFixed(2)} €`;
-
-        let controls = document.createElement("div");
-        controls.classList.add("cart-controls");
-
-        let minusBtn = document.createElement("button");
-        minusBtn.innerText = "➖";
-        minusBtn.onclick = () => decreaseQty(i);
-
-        let qtySpan = document.createElement("span");
-        qtySpan.innerText = item.qty;
-        qtySpan.classList.add("cart-qty");
-
-        let plusBtn = document.createElement("button");
-        plusBtn.innerText = "➕";
-        plusBtn.onclick = () => increaseQty(i);
-
-        controls.appendChild(minusBtn);
-        controls.appendChild(qtySpan);
-        controls.appendChild(plusBtn);
-
-        li.appendChild(span);
-        li.appendChild(controls);
-        itemsList.appendChild(li);
-      });
-      document.getElementById("cart-total").innerText = getCartTotal().toFixed(2);
-    }
-
-    function toggleCart() {
-      let cartDiv = document.getElementById("cart");
-      cartDiv.style.display = (cartDiv.style.display === "none") ? "block" : "none";
-    }
-
-    paypal.Buttons({
-      createOrder: function(data, actions) {
-        return actions.order.create({
-          purchase_units: [{
-            description: cart.map(item => `${item.name} x${item.qty}`).join("; "),
-            amount: { currency_code: "EUR", value: getCartTotal().toFixed(2) }
-          }]
-        });
-      },
-      onApprove: function(data, actions) {
-        return actions.order.capture().then(function(details) {
-          alert("Vielen Dank! " + details.payer.name.given_name + " – deine Buchung war erfolgreich.");
-          cart = [];
-          saveCart();
-          toggleCart();
-        });
+    Array.from(temp.children).forEach(el => {
+      if (el.tagName.toLowerCase() === "script") {
+        const script = document.createElement("script");
+        if (el.src) script.src = el.src;
+        else script.textContent = el.textContent;
+        document.body.appendChild(script);
+      } else {
+        document.body.appendChild(el);
       }
-    }).render('#paypal-button-container');
+    });
 
-    loadCart();
-  </script>
+    console.log("🛒 Warenkorb erfolgreich geladen und initialisiert");
 
-  <script src="gutscheine.js"></script>
+    setTimeout(() => {
+      if (typeof loadCart === "function") {
+        loadCart();
+        console.log("✅ Warenkorb-Logik aktiv");
+      } else {
+        console.error("⚠️ Warenkorb-Skripte wurden nicht korrekt ausgeführt");
+      }
+    }, 300);
+  } catch (err) {
+    console.error("❌ Fehler beim Laden des Warenkorbs:", err);
+  }
+});
+</script>
   
 </body>
 </html>
