@@ -344,11 +344,6 @@ main {
 }
 
 /* ============================
-   Produktbilder
-   ============================ */
-
-  <img src="assets/Lagerfeuer1.jpg" alt="Angebot Pfalzventure" class="image-dimentions">
-/* ============================
    Kontakt-Seite
    ============================ */
 .kontakt-section {
@@ -479,7 +474,12 @@ main {
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-
+.product-figure figcaption {
+  font-size: 0.95rem;
+  color: #555;
+  margin-top: 0.5rem;
+  font-style: italic;
+   
 .product h2 {
   margin-bottom: 1rem;
   color: var(--dark-green);
