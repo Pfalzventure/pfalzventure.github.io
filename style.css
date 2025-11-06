@@ -475,9 +475,9 @@ main {
 }
 
 .product-figure figcaption {
-  font-size: 0.95rem;
+  font-size: 0.7rem;
   color: #555;
-  margin-top: 0.5rem;
+  margin-top: 0.1rem;
   font-style: italic;
 }
 .product h2 {
