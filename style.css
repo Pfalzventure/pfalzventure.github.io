@@ -212,8 +212,8 @@ Hero Section (Startseite)
 } 
 .hero-logo { 
    max-width: 300px; 
-   margin-top: 7rem; /* schiebt das Logo nach unten */ 
-   margin-bottom: 1rem; /* falls du Abstand nach unten brauchst */ 
+   margin-top: 5rem; /* schiebt das Logo nach unten */ 
+   margin-bottom: 2rem; /* falls du Abstand nach unten brauchst */ 
    filter: drop-shadow(0 0 10px rgba(0,0,0,0.7)
                       ); 
 }
