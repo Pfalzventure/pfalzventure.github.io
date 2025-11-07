@@ -50,6 +50,14 @@
     triggerCartBounce();
   }
 
+  function triggerCartBounce() {
+  const cartIcon = document.getElementById("cart-toggle");
+  if (!cartIcon) return;
+  cartIcon.classList.add("bounce");
+  setTimeout(() => cartIcon.classList.remove("bounce"), 600);
+}
+
+
   // ============================
   // 📅 Kurs mit Termin hinzufügen
   // ============================
