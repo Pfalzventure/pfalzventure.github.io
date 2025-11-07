@@ -637,6 +637,10 @@ main {
   100% { transform: scale(1); }
 }
 
+   #cart-toggle.bounce {
+  animation: cart-bounce 0.6s ease;
+}
+
 .cart-btn.added {
   animation: cart-bounce 0.4s ease;
 }
