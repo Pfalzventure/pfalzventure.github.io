@@ -246,7 +246,15 @@ async function submitVoucherRequest() {
     if (el) el.classList.remove("open");
   }
 
-  // Klick außerhalb schließt Warenkorb
+// ============================
+// 🖱️ Klick außerhalb schließt Warenkorb (robuste Variante)
+// ============================
+
+// Erst den Warenkorb laden
+loadCart();
+
+// Dann nach kurzer Zeit den Click-Listener aktivieren
+setTimeout(() => {
   document.addEventListener("click", function (event) {
     const cart = document.getElementById("cart");
     const toggle = document.getElementById("cart-toggle");
@@ -255,6 +263,6 @@ async function submitVoucherRequest() {
       closeCart();
     }
   });
+}, 300);
 
-  loadCart();
 </script>
