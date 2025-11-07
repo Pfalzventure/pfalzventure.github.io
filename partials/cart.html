@@ -231,21 +231,23 @@ async function submitVoucherRequest() {
   }, 8000);
 }
 
+// ============================
+// 🪄 Öffnen / Schließen
+// ============================
+function toggleCart() {
+  const el = document.getElementById("cart");
+  if (!el) return;
+  el.classList.toggle("open");
+}
 
-  // ============================
-  // 🪄 Öffnen / Schließen
-  // ============================
-  function toggleCart() {
-    const el = document.getElementById("cart");
-    if (!el) return;
-    el.classList.toggle("open");
-  }
+function closeCart() {
+  const el = document.getElementById("cart");
+  if (el) el.classList.remove("open");
+}
 
-  function closeCart() {
-    const el = document.getElementById("cart");
-    if (el) el.classList.remove("open");
-  }
-
+// ============================
+// 🛒 Zentralen Warenkorb laden
+// ============================
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const res = await fetch("partials/cart.html");
@@ -268,6 +270,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     console.log("🛒 Warenkorb erfolgreich geladen und initialisiert");
 
+    // etwas warten, bis Skripte aktiv sind
     setTimeout(() => {
       if (typeof loadCart === "function") {
         loadCart();
@@ -275,34 +278,23 @@ document.addEventListener("DOMContentLoaded", async () => {
       } else {
         console.error("⚠️ Warenkorb-Skripte wurden nicht korrekt ausgeführt");
       }
-      
 
-  // ============================
-  // 🪄 Öffnen / Schließen
-  // ============================
-  function toggleCart() {
-    const el = document.getElementById("cart");
-    if (!el) return;
-    el.classList.toggle("open");
+      // ============================
+      // 🖱️ Klick außerhalb schließt Warenkorb
+      // ============================
+      document.addEventListener("click", function (event) {
+        const cart = document.getElementById("cart");
+        const toggle = document.getElementById("cart-toggle");
+        if (!cart || !toggle) return;
+        if (!cart.contains(event.target) && !toggle.contains(event.target)) {
+          closeCart();
+        }
+      });
+
+    }, 500);
+
+  } catch (err) {
+    console.error("❌ Fehler beim Laden des Warenkorbs:", err);
   }
+});
 
-  function closeCart() {
-    const el = document.getElementById("cart");
-    if (el) el.classList.remove("open");
-  }
-
-  // Klick außerhalb schließt Warenkorb
-  document.addEventListener("click", function (event) {
-    const cart = document.getElementById("cart");
-    const toggle = document.getElementById("cart-toggle");
-    if (!cart || !toggle) return;
-    if (!cart.contains(event.target) && !toggle.contains(event.target)) {
-      closeCart();
-    }
-  });
-
-  loadCart();
-
-
-
-</script>
