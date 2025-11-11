@@ -239,17 +239,48 @@ document.addEventListener("DOMContentLoaded", () => {
     <button id="paypal-cookie-ok">Alles klar!</button>
   </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const banner = document.getElementById("paypal-cookie-banner");
-      const okBtn = document.getElementById("paypal-cookie-ok");
-      if (typeof paypal !== "undefined" && !localStorage.getItem("paypalCookiesAccepted")) banner.style.display = "flex";
-      okBtn && okBtn.addEventListener("click", () => {
-        localStorage.setItem("paypalCookiesAccepted", "true");
-        banner.style.display = "none";
-      });
+<!-- 🛒 Zentralen Warenkorb einbinden -->
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  // Wenn der Warenkorb schon geladen wurde (z. B. durch SPA-Navigation), abbrechen
+  if (document.querySelector("#cart")) return;
+
+  try {
+    const res = await fetch("partials/cart.html");
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const html = await res.text();
+
+    const temp = document.createElement("div");
+    temp.innerHTML = html.trim();
+
+    // Füge alle Elemente (HTML & Scripts) in den Body ein
+    Array.from(temp.children).forEach(el => {
+      if (el.tagName.toLowerCase() === "script") {
+        const script = document.createElement("script");
+        if (el.src) script.src = el.src;
+        else script.textContent = el.textContent;
+        document.body.appendChild(script);
+      } else {
+        document.body.appendChild(el);
+      }
     });
-  </script>
+
+    console.log("🛒 Warenkorb geladen und initialisiert");
+
+    // Starte Logik nach kurzer Verzögerung
+    setTimeout(() => {
+      if (typeof loadCart === "function") {
+        loadCart();
+      } else {
+        console.warn("⚠️ loadCart() nicht gefunden – prüfe cart.html");
+      }
+    }, 300);
+  } catch (err) {
+    console.error("❌ Fehler beim Laden des Warenkorbs:", err);
+  }
+});
+</script>
+
   
 </body>
 </html>
