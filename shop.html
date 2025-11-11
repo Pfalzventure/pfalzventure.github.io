@@ -146,10 +146,10 @@
     <button id="paypal-cookie-ok">Alles klar!</button>
   </div>
 
-<!-- 🛒 Zentralen Warenkorb einbinden -->
+<!-- 🛒 Zentralen Warenkorb einbinden (robuste Version) -->
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
-  // Wenn der Warenkorb schon geladen wurde (z. B. durch SPA-Navigation), abbrechen
+  // Falls schon eingebunden, nichts tun
   if (document.querySelector("#cart")) return;
 
   try {
@@ -157,36 +157,56 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const html = await res.text();
 
+    // Temporäres Element anlegen
     const temp = document.createElement("div");
     temp.innerHTML = html.trim();
 
-    // Füge alle Elemente (HTML & Scripts) in den Body ein
-    Array.from(temp.children).forEach(el => {
+    // Alle Elemente einzeln anhängen
+    for (const el of Array.from(temp.children)) {
       if (el.tagName.toLowerCase() === "script") {
         const script = document.createElement("script");
-        if (el.src) script.src = el.src;
-        else script.textContent = el.textContent;
+
+        // src-Attribut beibehalten (externe JS-Dateien)
+        if (el.src) {
+          script.src = el.src;
+          script.defer = true;
+        } else {
+          // Inline-Skripte ausführen
+          try {
+            script.text = el.textContent;
+          } catch (err) {
+            console.error("⚠️ Inline-Skript konnte nicht kopiert werden:", err);
+          }
+        }
+
         document.body.appendChild(script);
       } else {
         document.body.appendChild(el);
       }
-    });
+    }
 
-    console.log("🛒 Warenkorb geladen und initialisiert");
+    console.log("🛒 Warenkorb erfolgreich eingebunden");
 
-    // Starte Logik nach kurzer Verzögerung
-    setTimeout(() => {
+    // Logik initialisieren, sobald sie verfügbar ist
+    let tries = 0;
+    const initInterval = setInterval(() => {
       if (typeof loadCart === "function") {
         loadCart();
-      } else {
-        console.warn("⚠️ loadCart() nicht gefunden – prüfe cart.html");
+        clearInterval(initInterval);
+        console.log("✅ Warenkorb-Logik aktiv");
+      } else if (tries++ > 10) {
+        clearInterval(initInterval);
+        console.warn("⚠️ Warenkorb-Skripte wurden nicht gefunden.");
       }
     }, 300);
+
   } catch (err) {
     console.error("❌ Fehler beim Laden des Warenkorbs:", err);
   }
 });
 </script>
+
+  
  <!-- 🔄 Kurstermine automatisch laden -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
