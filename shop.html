@@ -203,44 +203,12 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 <!-- Warenkorbaufruf -->
-<script>
-document.addEventListener("DOMContentLoaded", async () => {
-  // Verhindern, dass mehrfach geladen wird
-  if (document.querySelector("#cart")) return;
+<!-- 1️⃣ Warenkorb-Loader -->
+<script src="js/cart-loader.js"></script>
 
-  try {
-    const res = await fetch("partials/cart.html");
-    if (!res.ok) throw new Error("cart.html nicht gefunden: " + res.status);
-    const html = await res.text();
+<!-- 2️⃣ Haupt-Warenkorb-Logik -->
+<script src="partials/cart.js"></script>
 
-    const temp = document.createElement("div");
-    temp.innerHTML = html;
-    // zunächst DOM-Elemente anhängen
-    Array.from(temp.children).forEach(el => {
-      if (el.tagName.toLowerCase() !== "script") document.body.appendChild(el);
-    });
-
-    // dann das zentrale JS nachladen und warten, bis es geladen ist
-    await new Promise((resolve, reject) => {
-      const s = document.createElement("script");
-      s.src = "partials/cart.js";
-      s.onload = resolve;
-      s.onerror = () => { console.error("cart.js konnte nicht geladen werden"); resolve(); };
-      document.body.appendChild(s);
-    });
-
-    // danach initialisieren
-    if (typeof loadCart === "function") {
-      try { loadCart(); console.log("✅ loadCart aufgerufen"); } catch(e) { console.error(e); }
-    } else {
-      console.warn("⚠️ loadCart() nicht verfügbar");
-    }
-
-  } catch (err) {
-    console.error("Fehler beim Laden des Warenkorbs:", err);
-  }
-});
-</script>
 
   
 </body>
