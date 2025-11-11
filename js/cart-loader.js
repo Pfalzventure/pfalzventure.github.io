@@ -1,49 +1,48 @@
 // ============================
-// cart-loader.js
+// 🛒 Zentraler Warenkorb-Loader
 // ============================
-// Lädt das zentrale Warenkorb-HTML (partials/cart.html)
-// und sorgt dafür, dass cart.js erst nach dem Einfügen aktiv ist.
 
-(async function loadCartHTML() {
-  const CART_PARTIAL_PATH = "partials/cart.html"; // falls nötig, Pfad anpassen!
-  const TARGET_ID = "cart-container"; // Ziel-DIV, in das der Warenkorb eingefügt wird
-
-  // Prüfe, ob das Ziel-Element existiert (zur Sicherheit)
-  let target = document.getElementById(TARGET_ID);
-  if (!target) {
-    // Wenn nicht vorhanden, wird es dynamisch am Body-Ende eingefügt
-    target = document.createElement("div");
-    target.id = TARGET_ID;
-    document.body.appendChild(target);
+document.addEventListener("DOMContentLoaded", async () => {
+  // Prüfen, ob Warenkorb bereits existiert (z. B. bei SPA)
+  if (document.querySelector("#cart")) {
+    console.log("ℹ️ Warenkorb bereits vorhanden");
+    return;
   }
 
   try {
-    // Lade das Warenkorb-HTML asynchron
-    const response = await fetch(CART_PARTIAL_PATH);
-    if (!response.ok) throw new Error(`Fehler beim Laden von ${CART_PARTIAL_PATH}: ${response.status}`);
-    const html = await response.text();
+    // cart.html laden
+    const res = await fetch("partials/cart.html");
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const html = await res.text();
 
-    // Füge den HTML-Inhalt in die Seite ein
-    target.innerHTML = html;
+    // temporär einfügen
+    const temp = document.createElement("div");
+    temp.innerHTML = html.trim();
 
-    console.log("✅ Warenkorb-HTML erfolgreich geladen.");
+    // alle Elemente in Body einfügen (inkl. Styles)
+    Array.from(temp.children).forEach(el => document.body.appendChild(el));
 
-    // Falls cart.js noch nicht geladen wurde → nachladen
-    if (!window.addToCart || !window.updateCart) {
-      const script = document.createElement("script");
-      script.src = "partials/cart.js"; // Pfad ggf. anpassen
-      script.onload = () => {
-        console.log("✅ cart.js wurde nachgeladen.");
-        if (typeof loadCart === "function") loadCart(); // initiales Laden
-      };
-      document.body.appendChild(script);
-    } else {
-      // cart.js ist bereits da → einfach initialisieren
-      if (typeof loadCart === "function") loadCart();
-    }
+    console.log("✅ Warenkorb-HTML geladen");
+
+    // Warten, bis cart.js wirklich im DOM aktiv ist
+    const waitForCartJS = (maxTries = 30) => {
+      if (typeof loadCart === "function" && typeof updateCart === "function") {
+        try {
+          loadCart();
+          console.log("✅ Warenkorb-Skripte aktiv");
+        } catch (err) {
+          console.warn("⚠️ loadCart() konnte nicht ausgeführt werden:", err);
+        }
+      } else if (maxTries > 0) {
+        setTimeout(() => waitForCartJS(maxTries - 1), 200);
+      } else {
+        console.error("❌ cart.js wurde nicht gefunden oder noch nicht geladen");
+      }
+    };
+
+    waitForCartJS();
 
   } catch (err) {
-    console.error("❌ Fehler beim Laden des Warenkorb-HTML:", err);
-    target.innerHTML = `<p style="color:red;text-align:center;">⚠️ Warenkorb konnte nicht geladen werden.</p>`;
+    console.error("❌ Fehler beim Laden des Warenkorbs:", err);
   }
-})();
+});
