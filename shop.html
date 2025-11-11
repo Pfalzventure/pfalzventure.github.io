@@ -202,56 +202,44 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<!-- ============================
-     Zentraler Warenkorb
-     ============================ -->
+<!-- Warenkorbaufruf -->
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
+  // Verhindern, dass mehrfach geladen wird
+  if (document.querySelector("#cart")) return;
+
   try {
-    // 💾 Warenkorb-Part einfügen
     const res = await fetch("partials/cart.html");
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    if (!res.ok) throw new Error("cart.html nicht gefunden: " + res.status);
     const html = await res.text();
 
     const temp = document.createElement("div");
     temp.innerHTML = html;
-    Array.from(temp.children).forEach(el => document.body.appendChild(el));
+    // zunächst DOM-Elemente anhängen
+    Array.from(temp.children).forEach(el => {
+      if (el.tagName.toLowerCase() !== "script") document.body.appendChild(el);
+    });
 
-    console.log("🛒 Warenkorb geladen");
-    if (typeof loadCart === "function") loadCart();
+    // dann das zentrale JS nachladen und warten, bis es geladen ist
+    await new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = "partials/cart.js";
+      s.onload = resolve;
+      s.onerror = () => { console.error("cart.js konnte nicht geladen werden"); resolve(); };
+      document.body.appendChild(s);
+    });
+
+    // danach initialisieren
+    if (typeof loadCart === "function") {
+      try { loadCart(); console.log("✅ loadCart aufgerufen"); } catch(e) { console.error(e); }
+    } else {
+      console.warn("⚠️ loadCart() nicht verfügbar");
+    }
+
   } catch (err) {
-    console.error("❌ Fehler beim Laden des Warenkorbs:", err);
+    console.error("Fehler beim Laden des Warenkorbs:", err);
   }
 });
-
-/* ============================
-   Globale Warenkorb-Steuerung
-   ============================ */
-function toggleCart() {
-  const cart = document.getElementById("cart");
-  if (cart) cart.classList.toggle("open");
-}
-
-function closeCart() {
-  const cart = document.getElementById("cart");
-  if (cart) cart.classList.remove("open");
-}
-
-// 🖱️ Klick außerhalb schließt Warenkorb
-document.addEventListener("click", (e) => {
-  const cart = document.getElementById("cart");
-  const toggle = document.getElementById("cart-toggle");
-  if (!cart || !toggle) return;
-  if (!cart.contains(e.target) && !toggle.contains(e.target)) closeCart();
-});
-
-// 🪩 Bounce-Effekt global (wartet falls cart-toggle noch nicht da ist)
-function triggerCartBounce() {
-  const cartIcon = document.getElementById("cart-toggle");
-  if (!cartIcon) return setTimeout(triggerCartBounce, 200);
-  cartIcon.classList.add("bounce");
-  setTimeout(() => cartIcon.classList.remove("bounce"), 600);
-}
 </script>
 
   
