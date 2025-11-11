@@ -1,19 +1,221 @@
-<!-- partials/cart.html -->
 <div id="cart" class="closed">
-  <h3>🛒 Dein Warenkorb</h3>
-  <ul id="cart-items" class="cart-list"></ul>
-  <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
-
-  <div class="cart-discount">
-    <label for="voucherCode">🎟️ Gutscheincode:</label>
-    <input type="text" id="voucherCode" placeholder="Code eingeben">
-    <p><br></p>
-    <label for="customerEmail">📧 Deine E-Mail-Adresse:</label>
-    <input type="email" id="customerEmail" placeholder="name@example.com">
-    <button id="voucherSubmitBtn" class="btn">Gutschein einlösen</button>
-    <p id="voucherMessage"></p>
+  <div id="cart-header">
+    <h2>🛒 Warenkorb</h2>
+    <button id="close-cart">✖</button>
   </div>
 
-  <div id="paypal-button-container"></div>
-  <button id="cart-close-btn" class="btn close-btn">Schließen</button>
+  <div id="cart-items"></div>
+
+  <div id="cart-summary">
+    <p>Zwischensumme: <span id="cart-total">0,00 €</span></p>
+    <button id="checkout">Zur Kasse</button>
+  </div>
 </div>
+
+<script>
+// =======================
+//  Hilfsfunktionen
+// =======================
+
+// Wartet, bis der Warenkorb-Button wirklich im DOM ist
+function waitForCartButton(callback) {
+  const btn = document.getElementById("cart-toggle");
+  if (btn) {
+    callback(btn);
+  } else {
+    setTimeout(() => waitForCartButton(callback), 100);
+  }
+}
+
+// Warenkorb im Speicher laden oder initialisieren
+function loadCart() {
+  return JSON.parse(localStorage.getItem("cart") || "[]");
+}
+
+function saveCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+// Preise formatiert anzeigen
+function formatPrice(value) {
+  return value.toFixed(2).replace('.', ',') + ' €';
+}
+
+// =======================
+//  DOM-Operationen
+// =======================
+function renderCart() {
+  const cart = loadCart();
+  const cartItemsContainer = document.getElementById("cart-items");
+  const cartTotal = document.getElementById("cart-total");
+  const cartCount = document.getElementById("cart-count");
+
+  if (!cartItemsContainer || !cartTotal || !cartCount) return;
+
+  cartItemsContainer.innerHTML = "";
+
+  let total = 0;
+  let count = 0;
+
+  cart.forEach((item, index) => {
+    const itemDiv = document.createElement("div");
+    itemDiv.classList.add("cart-item");
+    itemDiv.innerHTML = `
+      <div class="cart-item-info">
+        <strong>${item.name}</strong><br>
+        ${item.price.toFixed(2).replace('.', ',')} € × ${item.quantity}
+      </div>
+      <button class="remove-item" data-index="${index}">✖</button>
+    `;
+    cartItemsContainer.appendChild(itemDiv);
+
+    total += item.price * item.quantity;
+    count += item.quantity;
+  });
+
+  cartTotal.textContent = formatPrice(total);
+  cartCount.textContent = count.toString();
+
+  document.querySelectorAll(".remove-item").forEach(btn => {
+    btn.addEventListener("click", e => {
+      const idx = e.target.dataset.index;
+      removeFromCart(idx);
+    });
+  });
+}
+
+// =======================
+//  Aktionen
+// =======================
+function addToCart(name, price) {
+  const cart = loadCart();
+  const existing = cart.find(i => i.name === name);
+
+  if (existing) {
+    existing.quantity++;
+  } else {
+    cart.push({ name, price, quantity: 1 });
+  }
+
+  saveCart(cart);
+  renderCart();
+  triggerCartBounce();
+}
+
+function removeFromCart(index) {
+  const cart = loadCart();
+  cart.splice(index, 1);
+  saveCart(cart);
+  renderCart();
+}
+
+function clearCart() {
+  localStorage.removeItem("cart");
+  renderCart();
+}
+
+// =======================
+//  Öffnen/Schließen
+// =======================
+function openCart() {
+  document.getElementById("cart")?.classList.remove("closed");
+}
+
+function closeCart() {
+  document.getElementById("cart")?.classList.add("closed");
+}
+
+function toggleCart() {
+  document.getElementById("cart")?.classList.toggle("closed");
+}
+
+// =======================
+//  Animation & Klicks
+// =======================
+function triggerCartBounce() {
+  waitForCartButton(cartIcon => {
+    cartIcon.classList.add("bounce");
+    setTimeout(() => cartIcon.classList.remove("bounce"), 600);
+  });
+}
+
+// =======================
+//  Initialisierung
+// =======================
+document.addEventListener("DOMContentLoaded", () => {
+  renderCart();
+
+  // Schließen-Button
+  const closeBtn = document.getElementById("close-cart");
+  if (closeBtn) closeBtn.addEventListener("click", closeCart);
+
+  // Klick außerhalb schließt Warenkorb
+  waitForCartButton(() => {
+    document.addEventListener("click", event => {
+      const cart = document.getElementById("cart");
+      const toggle = document.getElementById("cart-toggle");
+      if (!cart || !toggle) return;
+      if (!cart.contains(event.target) && !toggle.contains(event.target)) {
+        closeCart();
+      }
+    });
+  });
+});
+
+// =======================
+//  Debug / Test
+// =======================
+// Beispiel zum Testen:
+// addToCart("Testprodukt", 9.99);
+</script>
+
+<style>
+#cart {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 320px;
+  height: 100%;
+  background: white;
+  box-shadow: -4px 0 12px rgba(0,0,0,0.1);
+  transform: translateX(100%);
+  transition: transform 0.4s ease;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+#cart:not(.closed) {
+  transform: translateX(0);
+}
+#cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em;
+  background: #f2f2f2;
+  border-bottom: 1px solid #ddd;
+}
+#cart-items {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1em;
+}
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .5em 0;
+  border-bottom: 1px solid #eee;
+}
+#cart-summary {
+  padding: 1em;
+  border-top: 1px solid #ddd;
+}
+.bounce {
+  animation: bounce 0.6s ease;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+</style>
