@@ -202,45 +202,44 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<!-- Warenkorbaufruf -->
+ <!-- 🛒 Zentralen Warenkorb laden -->
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
-  // Verhindern, dass mehrfach geladen wird
-  if (document.querySelector("#cart")) return;
-
   try {
     const res = await fetch("partials/cart.html");
-    if (!res.ok) throw new Error("cart.html nicht gefunden: " + res.status);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const html = await res.text();
 
     const temp = document.createElement("div");
-    temp.innerHTML = html;
-    // zunächst DOM-Elemente anhängen
+    temp.innerHTML = html.trim();
+
     Array.from(temp.children).forEach(el => {
-      if (el.tagName.toLowerCase() !== "script") document.body.appendChild(el);
+      if (el.tagName.toLowerCase() === "script") {
+        const script = document.createElement("script");
+        if (el.src) script.src = el.src;
+        else script.textContent = el.textContent;
+        document.body.appendChild(script);
+      } else {
+        document.body.appendChild(el);
+      }
     });
 
-    // dann das zentrale JS nachladen und warten, bis es geladen ist
-    await new Promise((resolve, reject) => {
-      const s = document.createElement("script");
-      s.src = "partials/cart.js";
-      s.onload = resolve;
-      s.onerror = () => { console.error("cart.js konnte nicht geladen werden"); resolve(); };
-      document.body.appendChild(s);
-    });
+    console.log("🛒 Warenkorb erfolgreich geladen und initialisiert");
 
-    // danach initialisieren
-    if (typeof loadCart === "function") {
-      try { loadCart(); console.log("✅ loadCart aufgerufen"); } catch(e) { console.error(e); }
-    } else {
-      console.warn("⚠️ loadCart() nicht verfügbar");
-    }
-
+    setTimeout(() => {
+      if (typeof loadCart === "function") {
+        loadCart();
+        console.log("✅ Warenkorb-Logik aktiv");
+      } else {
+        console.error("⚠️ Warenkorb-Skripte wurden nicht korrekt ausgeführt");
+      }
+    }, 300);
   } catch (err) {
-    console.error("Fehler beim Laden des Warenkorbs:", err);
+    console.error("❌ Fehler beim Laden des Warenkorbs:", err);
   }
 });
 </script>
+
 
   
 </body>
