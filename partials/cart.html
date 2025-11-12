@@ -253,13 +253,14 @@ document.addEventListener("click", function (event) {
   const toggle = document.getElementById("cart-toggle");
   if (!cart || !toggle) return;
 
-  // Wenn der Klick im Warenkorb oder auf den Toggle-Button passiert → nichts tun
-  if (cart.contains(event.target) || toggle.contains(event.target)) return;
+  // Falls Klick innerhalb des Warenkorbs oder auf den Toggle-Button -> NICHT schließen
+  if (event.target.closest("#cart") || event.target.closest("#cart-toggle")) return;
 
-  // Wenn der Klick innerhalb eines PayPal-Buttons ist → auch nichts tun
+  // Falls Klick auf PayPal-Elemente -> NICHT schließen
   if (event.target.closest("#paypal-button-container")) return;
 
-  // Ansonsten Warenkorb schließen
+  // Alles andere schließt den Warenkorb
   closeCart();
-});
+}, true); // <--- ACHTUNG: useCapture = true
+
 
