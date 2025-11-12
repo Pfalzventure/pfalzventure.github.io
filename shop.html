@@ -424,35 +424,42 @@ async function submitVoucherRequest() {
   setTimeout(() => { msgEl.textContent = ""; }, 8000);
 }
 
-// ============================
-// 🪄 Öffnen / Schließen
-// ============================
-function toggleCart() {
-  const el = document.getElementById("cart");
-  if (!el) return;
-  el.classList.toggle("open");
-}
+<script>
+  // ... dein bisheriger Warenkorb-Code bleibt unverändert ...
 
-function closeCart() {
-  const el = document.getElementById("cart");
-  if (el) el.classList.remove("open");
-}
-
-// ============================
-// 🖱️ Klick außerhalb schließt Warenkorb
-// ============================
-document.addEventListener("click", function (event) {
-  const cart = document.getElementById("cart");
-  const toggle = document.getElementById("cart-toggle");
-  if (!cart || !toggle) return;
-  if (!cart.contains(event.target) && !toggle.contains(event.target)) {
-    closeCart();
+  // ============================
+  // 🪄 Öffnen / Schließen
+  // ============================
+  function toggleCart() {
+    const el = document.getElementById("cart");
+    if (!el) return;
+    el.classList.toggle("open");
   }
-});
 
-// Initialisierung bei Seitenstart
-document.addEventListener("DOMContentLoaded", loadCart);
+  function closeCart() {
+    const el = document.getElementById("cart");
+    if (el) el.classList.remove("open");
+  }
+
+  // ============================
+  // Initialisierung nach DOM-Load
+  // ============================
+  document.addEventListener("DOMContentLoaded", () => {
+    // Warenkorb laden
+    loadCart();
+
+    // Klick außerhalb schließt Warenkorb
+    document.addEventListener("click", function (event) {
+      const cart = document.getElementById("cart");
+      const toggle = document.getElementById("cart-toggle");
+      if (!cart || !toggle) return;
+      if (!cart.contains(event.target) && !toggle.contains(event.target)) {
+        closeCart();
+      }
+    });
+  });
 </script>
+
 
   
 </body>
