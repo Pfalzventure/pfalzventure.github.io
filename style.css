@@ -8,6 +8,7 @@
   --beige: #f5f5dc;
   --white: #fff;
   --hellgrün: #28a745;
+/*  --übelstes hellgrün: #eaf2e0*/
 }
 
 /* ============================
@@ -454,7 +455,7 @@ main {
 
 .product {
   margin-top: 3rem;
-  background: #eaf2e0;
+  background: #8b5a2b;
   padding: 2rem;
   border-radius: 12px;
   text-align: left;
