@@ -64,7 +64,35 @@
 }
 
 
+function addVoucher() {
+  const amountEl = document.getElementById("voucherAmount");
+  const textEl   = document.getElementById("voucherMessage");
 
+  if (!amountEl) return alert("Fehler: Betrag-Feld nicht gefunden.");
+  const amount = parseFloat(amountEl.value);
+
+  if (isNaN(amount) || amount < 10) {
+    alert("Bitte einen gültigen Betrag ab 10 € eingeben.");
+    return;
+  }
+
+  const message = textEl ? textEl.value.trim() : "";
+
+  const name = message
+    ? `Wert-Gutschein (${amount.toFixed(2)} €) – Hinweis: ${message}`
+    : `Wert-Gutschein (${amount.toFixed(2)} €)`;
+
+  const existing = cart.find(i => i.name === name && i.price === amount);
+  if (existing) existing.qty++;
+  else cart.push({ name, price: amount, qty: 1 });
+
+  saveCart();
+  triggerCartBounce();
+
+  // Optional: Felder leeren
+  if (textEl) textEl.value = "";
+}
+  
   // ============================
   // 📅 Kurs mit Termin hinzufügen
   // ============================
