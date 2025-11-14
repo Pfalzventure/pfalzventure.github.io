@@ -463,6 +463,8 @@ main {
   padding: 8px;
   border-radius: 6px;
   color: #333;
+  width:100%; 
+  max-width:320px;
 }
 
 
