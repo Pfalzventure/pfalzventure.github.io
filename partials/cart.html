@@ -39,71 +39,39 @@
     initPayPal();
   }
 
-  // ============================
-  // 🧾 Artikel hinzufügen
-  // ============================
-  function addToCart(name, price, qty = 1) {
-    const existing = cart.find(i => i.name === name && i.price === price);
-    if (existing) existing.qty += qty;
-    else cart.push({ name, price, qty });
-    saveCart();
-    triggerCartBounce();
-  }
-
-  function triggerCartBounce() {
-  const tryBounce = () => {
-    const cartIcon = document.getElementById("cart-toggle");
-    if (!cartIcon) {
-      setTimeout(tryBounce, 100);
-      return;
-    }
-    cartIcon.classList.add("bounce");
-    setTimeout(() => cartIcon.classList.remove("bounce"), 600);
-  };
-  tryBounce();
-}
-
-function addToCart(name, price, qty = 1) 
-{ const existing = cart.find(i => i.name === name && i.price === price); 
-if (existing) existing.qty += qty; 
-else cart.push({ name, price, qty }); 
- saveCart(); triggerCartBounce(); 
-} 
-function triggerCartBounce() 
-{ const tryBounce = () => { const cartIcon = document.getElementById("cart-toggle"); 
-if (!cartIcon) { setTimeout(tryBounce, 100); 
-return; 
-} 
-cartIcon.classList.add("bounce"); 
-setTimeout(() => cartIcon.classList.remove("bounce"), 600); 
-}; 
-tryBounce(); }
-  
-<!-- ============================ 🧾 Gutschein-Hinzufügen ============================ -->
-<script>
-function addVoucher() {
-  const amountEl = document.getElementById("voucherAmount");
-  const textEl   = document.getElementById("voucherMessage");
-
-  if (!amountEl) return alert("Fehler: Betrag-Feld nicht gefunden.");
-  const amount = parseFloat(amountEl.value);
-
-  if (isNaN(amount) || amount < 10) {
-    alert("Bitte einen gültigen Betrag ab 10 € eingeben.");
-    return;
-  }
-
-  const message = textEl ? textEl.value.trim() : "";
-
-  const name = message
-    ? `Wert-Gutschein (${amount.toFixed(2)} €) – Hinweis: ${message}`
-    : `Wert-Gutschein (${amount.toFixed(2)} €)`;
-
-  addToCart(name, amount, 1);
-
-  if (textEl) textEl.value = "";
-}
-</script>
+ // ============================ // 🧾 Artikel hinzufügen // ============================ 
+  function addToCart(name, price, qty = 1) { 
+  const existing = cart.find(i => i.name === name && i.price === price); 
+    if (existing) existing.qty += qty; 
+    else cart.push({ name, price, qty }); 
+    saveCart(); triggerCartBounce(); 
+  } 
+  function triggerCartBounce() { 
+    const tryBounce = () => { 
+      const cartIcon = document.getElementById("cart-toggle"); 
+      if (!cartIcon) { setTimeout(tryBounce, 100); 
+                      return; 
+                     } 
+      cartIcon.classList.add("bounce"); 
+      setTimeout(() => cartIcon.classList.remove("bounce"), 600); 
+    }; 
+    tryBounce(); 
+  } 
+  <script> 
+    function addVoucher() { 
+      const amountEl = document.getElementById("voucherAmount"); 
+      const textEl = document.getElementById("voucherMessage"); 
+      if (!amountEl) return alert("Fehler: Betrag-Feld nicht gefunden."); 
+      const amount = parseFloat(amountEl.value); 
+      if (isNaN(amount) || amount < 10) { alert("Bitte einen gültigen Betrag ab 10 € eingeben."); 
+                                         return; 
+                                        } 
+      const message = textEl ? textEl.value.trim() : ""; 
+      const name = message ? Wert-Gutschein (${amount.toFixed(2)} €) – Hinweis: ${message} : Wert-Gutschein (${amount.toFixed(2)} €); 
+      // Wichtig: hier wird der Gutschein offiziell in den Warenkorb gelegt addToCart(name, amount, 1); 
+      // Optional: Felder leeren if (textEl) textEl.value = ""; } 
+    </script> 
+// Optional: Felder leeren if (textEl) textEl.value = ""; }
   
   // ============================
   // 📅 Kurs mit Termin hinzufügen
