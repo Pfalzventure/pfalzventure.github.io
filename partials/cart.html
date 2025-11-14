@@ -63,6 +63,7 @@
   tryBounce();
 }
 
+<!-- ============================ 🧾 Gutschein-Hinzufügen ============================ -->
 <script>
 function addVoucher() {
   const amountEl = document.getElementById("voucherAmount");
@@ -82,14 +83,12 @@ function addVoucher() {
     ? `Wert-Gutschein (${amount.toFixed(2)} €) – Hinweis: ${message}`
     : `Wert-Gutschein (${amount.toFixed(2)} €)`;
 
-  // Wichtig: hier wird der Gutschein offiziell in den Warenkorb gelegt
   addToCart(name, amount, 1);
 
-  // Optional: Felder leeren
   if (textEl) textEl.value = "";
 }
 </script>
- } 
+  
   // ============================
   // 📅 Kurs mit Termin hinzufügen
   // ============================
