@@ -15,7 +15,7 @@
    -- sandbeige: #E3D5C3
    -- ockerbeige: #D2C1AE
    -- kaki: #BDB76B
-   -- 
+   -- grau: #D6D6D6
    */
 }
 
@@ -494,7 +494,7 @@ main {
 
 .product {
   margin-top: 3rem;
-  background: #BDB76B;
+  background: #D6D6D6;
   padding: 2rem;
   border-radius: 12px;
   text-align: left;
