@@ -476,6 +476,17 @@ main {
   color: #000;
 }
 
+/* Farbe der aktuell ausgewählten Option */
+.terminfenster option:checked {
+  background-color: #C1D7C4 !important;  /* sanftes Grün */
+  color: #000;
+}
+
+/* Entfernt die Standard-Markierung in Firefox */
+.terminfenster {
+  color: #000;
+  appearance: none;
+}
 
 /* ============================
    Inhaltsboxen
