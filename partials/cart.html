@@ -7,7 +7,9 @@
   <div class="cart-discount">
     <label for="voucherCode">🎟️ Gutscheincode:</label>
     <input type="text" id="voucherCode" placeholder="Code eingeben">
-<p><br>
+
+    <p><br>
+
     <label for="customerEmail">📧 Deine E-Mail-Adresse:</label>
     <input type="email" id="customerEmail" placeholder="name@example.com">
 
@@ -39,40 +41,30 @@
     initPayPal();
   }
 
- // ============================ // 🧾 Artikel hinzufügen // ============================ 
-  function addToCart(name, price, qty = 1) { 
-  const existing = cart.find(i => i.name === name && i.price === price); 
-    if (existing) existing.qty += qty; 
-    else cart.push({ name, price, qty }); 
-    saveCart(); triggerCartBounce(); 
-  } 
-  function triggerCartBounce() { 
-    const tryBounce = () => { 
-      const cartIcon = document.getElementById("cart-toggle"); 
-      if (!cartIcon) { setTimeout(tryBounce, 100); 
-                      return; 
-                     } 
-      cartIcon.classList.add("bounce"); 
-      setTimeout(() => cartIcon.classList.remove("bounce"), 600); 
-    }; 
-    tryBounce(); 
-  } 
-  <script> 
-    function addVoucher() { 
-      const amountEl = document.getElementById("voucherAmount"); 
-      const textEl = document.getElementById("voucherMessage"); 
-      if (!amountEl) return alert("Fehler: Betrag-Feld nicht gefunden."); 
-      const amount = parseFloat(amountEl.value); 
-      if (isNaN(amount) || amount < 10) { alert("Bitte einen gültigen Betrag ab 10 € eingeben."); 
-                                         return; 
-                                        } 
-      const message = textEl ? textEl.value.trim() : ""; 
-      const name = message ? Wert-Gutschein (${amount.toFixed(2)} €) – Hinweis: ${message} : Wert-Gutschein (${amount.toFixed(2)} €); 
-      // Wichtig: hier wird der Gutschein offiziell in den Warenkorb gelegt addToCart(name, amount, 1); 
-      // Optional: Felder leeren if (textEl) textEl.value = ""; } 
-    </script> 
-// Optional: Felder leeren if (textEl) textEl.value = ""; }
-  
+  // ============================
+  // 🧾 Artikel hinzufügen
+  // ============================
+  function addToCart(name, price, qty = 1) {
+    const existing = cart.find(i => i.name === name && i.price === price);
+    if (existing) existing.qty += qty;
+    else cart.push({ name, price, qty });
+    saveCart();
+    triggerCartBounce();
+  }
+
+  function triggerCartBounce() {
+    const tryBounce = () => {
+      const cartIcon = document.getElementById("cart-toggle");
+      if (!cartIcon) {
+        setTimeout(tryBounce, 100);
+        return;
+      }
+      cartIcon.classList.add("bounce");
+      setTimeout(() => cartIcon.classList.remove("bounce"), 600);
+    };
+    tryBounce();
+  }
+
   // ============================
   // 📅 Kurs mit Termin hinzufügen
   // ============================
@@ -175,100 +167,87 @@
     }).render('#paypal-button-container');
   }
 
-// ============================
-// 🎟️ Gutschein-Eingabe + E-Mail via Formspree (stabil + Feedback)
-// ============================
-async function submitVoucherRequest() {
-  const code = document.getElementById("voucherCode").value.trim();
-  const email = document.getElementById("customerEmail").value.trim();
-  const msgEl = document.getElementById("voucherMessage");
+  // ============================
+  // 🎟️ Gutschein-Eingabe + E-Mail via Formspree
+  // ============================
+  async function submitVoucherRequest() {
+    const code = document.getElementById("voucherCode").value.trim();
+    const email = document.getElementById("customerEmail").value.trim();
+    const msgEl = document.getElementById("voucherMessage");
 
-  // Eingaben prüfen
-  if (!code) {
-    msgEl.style.color = "red";
-    msgEl.textContent = "Bitte Gutscheincode eingeben.";
-    return;
-  }
-
-  if (!email || !email.includes("@")) {
-    msgEl.style.color = "red";
-    msgEl.textContent = "Bitte gültige E-Mail-Adresse eingeben.";
-    return;
-  }
-
-  // ✅ Sofortige visuelle Bestätigung (bleibt sichtbar)
-  msgEl.style.color = "green";
-  msgEl.textContent =
-    "✅ Dein Gutscheincode wird geprüft. Du erhältst in kürze eine angepasste Rechnung per E-Mail.";
-
-  // Felder erst nach kurzer Zeit leeren, damit Text stehen bleibt
-  setTimeout(() => {
-    document.getElementById("voucherCode").value = "";
-    document.getElementById("customerEmail").value = "";
-  }, 1000);
-
-  // 📧 E-Mail an dich via Formspree senden
-  try {
-    const response = await fetch("https://formspree.io/f/mldlyqdz", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        _subject: "🪙 Neuer Gutschein eingelöst",
-        code: code,
-        kunden_email: email,
-        warenkorb_summe: getCartTotal().toFixed(2),
-        warenkorb_inhalt: cart.map(i => `${i.name} x${i.qty}`).join("; ")
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Fehler beim Senden (${response.status})`);
+    if (!code) {
+      msgEl.style.color = "red";
+      msgEl.textContent = "Bitte Gutscheincode eingeben.";
+      return;
     }
 
-    console.log("✅ Gutschein-Mail erfolgreich an Formspree gesendet.");
-  } catch (err) {
-    console.error("⚠️ Fehler beim Senden an Formspree:", err);
-    msgEl.style.color = "red";
+    if (!email || !email.includes("@")) {
+      msgEl.style.color = "red";
+      msgEl.textContent = "Bitte gültige E-Mail-Adresse eingeben.";
+      return;
+    }
+
+    msgEl.style.color = "green";
     msgEl.textContent =
-      "⚠️ Gutschein konnte nicht gesendet werden. Bitte später erneut versuchen.";
+      "✅ Dein Gutscheincode wird geprüft. Du erhältst in kürze eine angepasste Rechnung per E-Mail.";
+
+    setTimeout(() => {
+      document.getElementById("voucherCode").value = "";
+      document.getElementById("customerEmail").value = "";
+    }, 1000);
+
+    try {
+      const response = await fetch("https://formspree.io/f/mldlyqdz", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          _subject: "🪙 Neuer Gutschein eingelöst",
+          code: code,
+          kunden_email: email,
+          warenkorb_summe: getCartTotal().toFixed(2),
+          warenkorb_inhalt: cart.map(i => `${i.name} x${i.qty}`).join("; ")
+        }),
+      });
+
+      if (!response.ok) throw new Error(`Fehler beim Senden (${response.status})`);
+
+    } catch (err) {
+      console.error("⚠️ Fehler beim Senden an Formspree:", err);
+      msgEl.style.color = "red";
+      msgEl.textContent =
+        "⚠️ Gutschein konnte nicht gesendet werden. Bitte später erneut versuchen.";
+    }
+
+    setTimeout(() => {
+      msgEl.textContent = "";
+    }, 8000);
   }
 
-  // Info nach 8 Sekunden wieder ausblenden (optional)
-  setTimeout(() => {
-    msgEl.textContent = "";
-  }, 8000);
-}
+  // ============================
+  // 🪄 Öffnen / Schließen
+  // ============================
+  function toggleCart() {
+    const el = document.getElementById("cart");
+    if (!el) return;
+    el.classList.toggle("open");
+  }
 
-// ============================
-// 🪄 Öffnen / Schließen
-// ============================
-function toggleCart() {
-  const el = document.getElementById("cart");
-  if (!el) return;
-  el.classList.toggle("open");
-}
+  function closeCart() {
+    const el = document.getElementById("cart");
+    if (el) el.classList.remove("open");
+  }
 
-function closeCart() {
-  const el = document.getElementById("cart");
-  if (el) el.classList.remove("open");
-}
+  // ============================
+  // 🖱️ Klick außerhalb schließt Warenkorb
+  // ============================
+  document.addEventListener("click", function (event) {
+    const cart = document.getElementById("cart");
+    const toggle = document.getElementById("cart-toggle");
+    if (!cart || !toggle) return;
 
-// ============================
-// 🖱️ Klick außerhalb schließt Warenkorb
-// ============================
-document.addEventListener("click", function (event) {
-  const cart = document.getElementById("cart");
-  const toggle = document.getElementById("cart-toggle");
-  if (!cart || !toggle) return;
+    if (event.target.closest("#cart") || event.target.closest("#cart-toggle")) return;
+    if (event.target.closest("#paypal-button-container")) return;
 
-  // Falls Klick innerhalb des Warenkorbs oder auf den Toggle-Button -> NICHT schließen
-  if (event.target.closest("#cart") || event.target.closest("#cart-toggle")) return;
-
-  // Falls Klick auf PayPal-Elemente -> NICHT schließen
-  if (event.target.closest("#paypal-button-container")) return;
-
-  // Alles andere schließt den Warenkorb
-  closeCart();
-}, true); // <--- ACHTUNG: useCapture = true
-
-
+    closeCart();
+  }, true);
+</script>
