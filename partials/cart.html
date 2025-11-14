@@ -280,4 +280,24 @@ function addVoucher() {
 
     closeCart();
   }, true);
+
+  /* ============================
+   ✏️ Live-Zeichenzähler für Gutschein-Freitext
+   ============================ */
+
+setTimeout(() => {
+  const txt = document.getElementById("voucherMessage");
+  const cnt = document.getElementById("voucherCounter");
+
+  if (!txt || !cnt) return;
+
+  // Aktualisierung bei jeder Eingabe
+  txt.oninput = () => {
+    cnt.textContent = `${txt.value.length} / ${txt.maxLength} Zeichen`;
+  };
+
+  // Initial anzeigen
+  cnt.textContent = `${txt.value.length} / ${txt.maxLength} Zeichen`;
+}, 300);
+
 </script>
