@@ -63,6 +63,22 @@
   tryBounce();
 }
 
+function addToCart(name, price, qty = 1) 
+{ const existing = cart.find(i => i.name === name && i.price === price); 
+if (existing) existing.qty += qty; 
+else cart.push({ name, price, qty }); 
+ saveCart(); triggerCartBounce(); 
+} 
+function triggerCartBounce() 
+{ const tryBounce = () => { const cartIcon = document.getElementById("cart-toggle"); 
+if (!cartIcon) { setTimeout(tryBounce, 100); 
+return; 
+} 
+cartIcon.classList.add("bounce"); 
+setTimeout(() => cartIcon.classList.remove("bounce"), 600); 
+}; 
+tryBounce(); }
+  
 <!-- ============================ 🧾 Gutschein-Hinzufügen ============================ -->
 <script>
 function addVoucher() {
