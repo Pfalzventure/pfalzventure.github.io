@@ -467,7 +467,14 @@ main {
   max-width:320px;
 }
 
+.terminfenster option:hover {
+  background-color: #D5E8D4;
+}
 
+.terminfenster option:checked {
+  background-color: #C1D7C4;
+  color: #000;
+}
 
 
 /* ============================
