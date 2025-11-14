@@ -457,6 +457,17 @@ main {
   color: var(--forest-green);
 }
 
+.terminfenster {
+  background-color: #E9F5E1;
+  border: 1px solid #A8C4AE;
+  padding: 8px;
+  border-radius: 6px;
+  color: #333;
+}
+
+
+
+
 /* ============================
    Inhaltsboxen
    ============================ */
