@@ -63,7 +63,7 @@
   tryBounce();
 }
 
-
+<script>
 function addVoucher() {
   const amountEl = document.getElementById("voucherAmount");
   const textEl   = document.getElementById("voucherMessage");
@@ -82,12 +82,13 @@ function addVoucher() {
     ? `Wert-Gutschein (${amount.toFixed(2)} €) – Hinweis: ${message}`
     : `Wert-Gutschein (${amount.toFixed(2)} €)`;
 
-  const existing = cart.find(i => i.name === name && i.price === amount);
-  if (existing) existing.qty++;
-  else cart.push({ name, price: amount, qty: 1 });
+  // Wichtig: hier wird der Gutschein offiziell in den Warenkorb gelegt
+  addToCart(name, amount, 1);
 
-  saveCart();
-  triggerCartBounce();
+  // Optional: Felder leeren
+  if (textEl) textEl.value = "";
+}
+</script>
 
   // Optional: Felder leeren
   if (textEl) textEl.value = "";
