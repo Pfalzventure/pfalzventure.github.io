@@ -223,9 +223,15 @@ Hero Section (Startseite)
    max-width: 300px; 
    margin-top: 5rem; /* schiebt das Logo nach unten */ 
    margin-bottom: 0rem; /* falls du Abstand nach unten brauchst */ 
-   filter: drop-shadow(0 0 10px rgba(0,0,0,0.7)
-                      ); 
+   filter: drop-shadow(0 0 10px rgba(0,0,0,0.7)); 
 }
+
+.seo-h1 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+}
+
 
 /* ============================
    Anpassung für Handy-Querformat
