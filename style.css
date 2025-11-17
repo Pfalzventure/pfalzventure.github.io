@@ -226,12 +226,24 @@ Hero Section (Startseite)
    filter: drop-shadow(0 0 10px rgba(0,0,0,0.7)); 
 }
 
-.seo-h1 {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0 0 10px 0;
+.hero-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;          /* Optional, falls du es zentriert willst */
+  text-align: center;
+  margin: 0;
+  padding: 0;
 }
 
+.hero-big {
+  font-size: 2.5rem;            /* große H1-Schrift */
+  font-weight: 700;
+}
+
+.hero-small {
+  font-size: 1rem;              /* kleinere Schrift */
+  font-weight: 400;
+}
 
 /* ============================
    Anpassung für Handy-Querformat
