@@ -267,7 +267,15 @@ Hero Section (Startseite)
   }
 }
 
+.saubere-liste {
+  list-style-position: outside;    /* Bullet bleibt außerhalb des Textblocks */
+  margin-left: 1.2em;              /* Abstand links */
+  padding-left: 0;                 /* Verhindert doppelte Einrückung */
+}
 
+.saubere-liste li {
+  margin-bottom: 0.5em;            /* Optional: Abstand zwischen den Punkten */
+}
 
 /* ============================
    Allgemeine Buttons
