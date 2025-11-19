@@ -217,9 +217,10 @@ function addVoucher() {
       return;
     }
 
-    msgEl.style.color = "green";
-    msgEl.textContent =
-      "✅ Dein Gutscheincode wird geprüft. Du erhältst in kürze eine angepasste Rechnung per E-Mail.";
+   msgEl.className = "success";
+   msgEl.textContent =
+   "Vielen Dank! Dein Gutscheincode wird nun geprüft. Du bekommst in Kürze eine Mail mit deiner angepassten Rechnung.";
+
 
     setTimeout(() => {
       document.getElementById("voucherCode").value = "";
