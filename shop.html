@@ -156,6 +156,7 @@
     </div>
   </main>
 
+   <!-- cookie Banner -->
   
   <div id="paypal-cookie-banner" class="paypal-banner" style="display:none;">
     <p>
@@ -164,6 +165,21 @@
     </p>
     <button id="paypal-cookie-ok">Alles klar!</button>
   </div>
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const banner = document.getElementById("paypal-cookie-banner");
+  const okBtn = document.getElementById("paypal-cookie-ok");
+
+  if (!banner || !okBtn) return;
+
+  // Bestätigung speichern
+  okBtn.addEventListener("click", () => {
+    localStorage.setItem("paypal_cookie_ok", "1");
+    banner.style.display = "none";
+  });
+});
+</script>
 
  
  <!-- 🔄 Kurstermine automatisch laden -->
