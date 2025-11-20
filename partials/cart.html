@@ -257,11 +257,21 @@ function addVoucher() {
   // ============================
   // 🪄 Öffnen / Schließen
   // ============================
-  function toggleCart() {
-    const el = document.getElementById("cart");
-    if (!el) return;
-    el.classList.toggle("open");
+function toggleCart() {
+  const el = document.getElementById("cart");
+  if (!el) return;
+
+  el.classList.toggle("open");
+
+  // ⬇️ PayPal-Cookie-Banner anzeigen, wenn noch nicht bestätigt
+  if (el.classList.contains("open")) {
+    if (!localStorage.getItem("paypal_cookie_ok")) {
+      const banner = document.getElementById("paypal-cookie-banner");
+      if (banner) banner.style.display = "flex";
+    }
   }
+}
+
 
   function closeCart() {
     const el = document.getElementById("cart");
@@ -300,5 +310,18 @@ setTimeout(() => {
   // Initial anzeigen
   cnt.textContent = `${txt.value.length} / ${txt.maxLength} Zeichen`;
 }, 300);
+
+  // PayPal Cookie Banner Bestätigung
+document.addEventListener("DOMContentLoaded", () => {
+  const banner = document.getElementById("paypal-cookie-banner");
+  const okBtn = document.getElementById("paypal-cookie-ok");
+
+  if (!banner || !okBtn) return;
+
+  okBtn.addEventListener("click", () => {
+    localStorage.setItem("paypal_cookie_ok", "1");
+    banner.style.display = "none";
+  });
+});
 
 </script>
