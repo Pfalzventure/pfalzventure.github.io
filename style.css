@@ -185,7 +185,7 @@ nav ul li a:hover {
 Hero Section (Startseite) 
 ============================ */ 
 
-.hero { background: url("assets/wald.png") 
+.hero { background: url("assets/wald.jpg") 
    no-repeat center center/cover; 
        color: var(--white); 
        text-align: center; 
