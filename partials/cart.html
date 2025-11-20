@@ -222,10 +222,10 @@ function addVoucher() {
    "Vielen Dank! Dein Gutscheincode wird nun geprüft. Du bekommst in Kürze eine Mail mit deiner angepassten Rechnung.";
 
 
-  /*  setTimeout(() => {
+    setTimeout(() => {
       document.getElementById("voucherCode").value = "";
       document.getElementById("customerEmail").value = "";
-    }, 1000); */
+    }, 1000); 
 
     try {
       const response = await fetch("https://formspree.io/f/mldlyqdz", {
@@ -251,7 +251,7 @@ function addVoucher() {
 
     setTimeout(() => {
       msgEl.textContent = "";
-    }, 80000);
+    }, 8000);
   }
 
   // ============================
