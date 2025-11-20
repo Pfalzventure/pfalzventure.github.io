@@ -438,6 +438,14 @@ main {
   background: #28a745;
 }
 
+.kontakt-title {
+  text-align: center;
+  color: var(--dark-green);
+  margin-top: 4rem;
+  margin-bottom: -2rem;
+  font-size: 2.5rem; /* optional, damit es wie eine H1 wirkt */
+}
+
 /* ============================
    Zusatzinfos auf Kurse-Seite
    ============================ */
