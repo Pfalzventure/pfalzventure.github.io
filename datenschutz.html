@@ -192,6 +192,44 @@
 
   </main>
 
+   <!-- 🛒 Zentralen Warenkorb laden -->
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const res = await fetch("partials/cart.html");
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const html = await res.text();
+
+    const temp = document.createElement("div");
+    temp.innerHTML = html.trim();
+
+    Array.from(temp.children).forEach(el => {
+      if (el.tagName.toLowerCase() === "script") {
+        const script = document.createElement("script");
+        if (el.src) script.src = el.src;
+        else script.textContent = el.textContent;
+        document.body.appendChild(script);
+      } else {
+        document.body.appendChild(el);
+      }
+    });
+
+    console.log("🛒 Warenkorb erfolgreich geladen und initialisiert");
+
+    setTimeout(() => {
+      if (typeof loadCart === "function") {
+        loadCart();
+        console.log("✅ Warenkorb-Logik aktiv");
+      } else {
+        console.error("⚠️ Warenkorb-Skripte wurden nicht korrekt ausgeführt");
+      }
+    }, 300);
+  } catch (err) {
+    console.error("❌ Fehler beim Laden des Warenkorbs:", err);
+  }
+});
+</script>
+  
   <!-- Footer -->
   <footer>
     <p>© 2025 Pfalzventure – Robert Prokasky</p>
