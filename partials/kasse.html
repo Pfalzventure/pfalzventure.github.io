@@ -1,0 +1,82 @@
+<!-- Survival Kurs Anmeldeformular (Formspree-kompatibel) -->
+
+
+<!-- --- Teilnehmerdaten --- -->
+<h2 style="color:var(--dark-green); margin-top:1rem;">Teilnehmerdaten</h2>
+
+
+<input type="text" name="vorname" placeholder="Vorname" required>
+<input type="text" name="nachname" placeholder="Nachname" required>
+
+
+<input type="text" name="strasse" placeholder="Straße & Hausnummer" required>
+<input type="text" name="plz_ort" placeholder="PLZ & Ort" required>
+
+
+<input type="email" name="email" placeholder="E-Mail-Adresse" required>
+
+
+<input type="tel" name="telefon" placeholder="Telefonnummer (optional)">
+
+
+<label style="font-weight:bold; margin-top:1rem;">Geburtsdatum *</label>
+<input type="date" name="geburtsdatum" required>
+
+
+<!-- --- Minderjähriger Teilnehmer --- -->
+<label style="font-weight:bold; margin-top:2rem;">Minderjähriger Teilnehmer?</label>
+<select id="minderjaehrig-toggle" name="minderjaehrig" class="terminfenster">
+<option value="nein">Nein</option>
+<option value="ja">Ja</option>
+</select>
+
+
+<div id="minderjaehrig-felder" style="display:none; margin-top:1rem;">
+<input type="text" name="kind_name" placeholder="Name des Kindes">
+<input type="number" name="kind_alter" placeholder="Alter des Kindes" min="1" max="17">
+</div>
+
+
+<!-- --- Bestätigungen --- -->
+<h2 style="color:var(--dark-green); margin-top:2rem;">Bestätigungen</h2>
+
+
+<label>
+<input type="checkbox" name="agb" required>
+Ich habe die AGB gelesen und akzeptiere sie.
+</label>
+
+
+<label>
+<input type="checkbox" name="fitness" required>
+Ich bestätige, dass ich körperlich und mental für die Kursinhalte geeignet bin.
+</label>
+
+
+<label>
+<input type="checkbox" name="haftung" required>
+Ich bestätige den Haftungsausschluss.
+</label>
+
+
+<p style="font-size:0.9rem; color:#333; margin-top:1rem;">
+Hinweis: Der Vertrag kommt erst mit Zahlungseingang zustande.
+</p>
+
+
+<!-- --- Absenden --- -->
+<button type="submit" class="btn" style="margin-top:1.5rem;">Jetzt anmelden</button>
+</form>
+</section>
+
+
+<script>
+// Minderjährigen-Felder ein-/ausblenden
+const toggle = document.getElementById('minderjaehrig-toggle');
+const felder = document.getElementById('minderjaehrig-felder');
+
+
+toggle.addEventListener('change', () => {
+felder.style.display = toggle.value === 'ja' ? 'block' : 'none';
+});
+</script>
