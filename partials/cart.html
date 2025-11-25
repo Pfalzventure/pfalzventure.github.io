@@ -4,41 +4,28 @@
   <ul id="cart-items" class="cart-list"></ul>
   <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
 
-  <div class="cart-discount">
-    <label for="voucherCode">🎟️ Gutscheincode:</label>
-    <input type="text" id="voucherCode" placeholder="Code eingeben">
+  <!-- 🟢 Neuer Bezahl-Button -->
+  <button onclick="goToPayment()" class="btn pay-btn">Jetzt bezahlen</button>
 
-    <p><br>
-
-    <label for="customerEmail">📧 Deine E-Mail-Adresse:</label>
-    <input type="email" id="customerEmail" placeholder="name@example.com">
-
-    <button onclick="submitVoucherRequest()" class="btn">Gutschein einlösen</button>
-    <p id="voucherMessage"></p>
-  </div>
-
-  <!-- 💳 PayPal Buttons -->
-  <div id="paypal-button-container"></div>
   <button onclick="toggleCart()" class="btn close-btn">Schließen</button>
 </div>
 
-<!-- ============================ ⚙️ Warenkorb-Logik ============================ -->
+<!-- ============================ 🛍️ Warenkorb-Logik ============================ -->
+
 <script>
   let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
   // ============================
-  // 🔄 Speicherfunktionen
+  // 🔄 Speicher
   // ============================
   function saveCart() {
     localStorage.setItem("cart", JSON.stringify(cart));
     updateCart();
-    initPayPal();
   }
 
   function loadCart() {
     cart = JSON.parse(localStorage.getItem("cart") || "[]");
     updateCart();
-    initPayPal();
   }
 
   // ============================
@@ -65,38 +52,8 @@
     tryBounce();
   }
 
-function addVoucher() {
-  const amountEl = document.getElementById("voucherAmount");
-  const messageEl = document.getElementById("vouchertext");
-
-  if (!amountEl) {
-    alert("Fehler: Betragsfeld nicht gefunden.");
-    return;
-  }
-
-  const amount = parseFloat(amountEl.value);
-
-  if (isNaN(amount) || amount < 10) {
-    alert("Bitte einen gültigen Betrag ab 10 € eingeben.");
-    return;
-  }
-
-  const note = messageEl ? messageEl.value.trim() : "";
-  const name = note
-    ? `Wert-Gutschein (${amount.toFixed(2)} €) – Hinweis: ${note}`
-    : `Wert-Gutschein (${amount.toFixed(2)} €)`;
-
-  // 🛒 Gutschein in den Warenkorb legen
-  addToCart(name, amount, 1);
-
-  // Felder leeren (optional)
-  amountEl.value = "50"; // Standardwert
-  if (messageEl) messageEl.value = "";
-}
-
-  
   // ============================
-  // 📅 Kurs mit Termin hinzufügen
+  // 📅 Kurs mit Termin
   // ============================
   function addCourseVoucher(selectId, kursName, kursPreis) {
     const select = document.getElementById(selectId);
@@ -130,7 +87,7 @@ function addVoucher() {
   }
 
   // ============================
-  // 💰 Summe berechnen
+  // 💰 Summe
   // ============================
   function getCartTotal() {
     return cart.reduce((s, i) => s + i.price * i.qty, 0);
@@ -164,164 +121,40 @@ function addVoucher() {
   }
 
   // ============================
-  // 💳 PayPal Integration
+  // 🟢 Weiter zur Kasse
   // ============================
-  function initPayPal() {
-    if (typeof paypal === "undefined") return;
-
-    const cont = document.getElementById("paypal-button-container");
-    if (!cont) return;
-    cont.innerHTML = "";
-    if (cart.length === 0) return;
-
-    paypal.Buttons({
-      createOrder: (d, a) => a.order.create({
-        purchase_units: [{
-          description: cart.map(i => `${i.name} x${i.qty}`).join("; "),
-          amount: {
-            currency_code: "EUR",
-            value: getCartTotal().toFixed(2)
-          }
-        }]
-      }),
-      onApprove: (d, a) => a.order.capture().then(det => {
-        alert("Danke, " + (det.payer?.name?.given_name || "") + "!");
-        cart = [];
-        saveCart();
-        closeCart();
-      }),
-      onError: (err) => {
-        console.error("PayPal Fehler:", err);
-        alert("⚠️ Zahlung fehlgeschlagen. Bitte erneut versuchen.");
-      }
-    }).render('#paypal-button-container');
-  }
-
-  // ============================
-  // 🎟️ Gutschein-Eingabe + E-Mail via Formspree
-  // ============================
-  async function submitVoucherRequest() {
-    const code = document.getElementById("voucherCode").value.trim();
-    const email = document.getElementById("customerEmail").value.trim();
-    const msgEl = document.getElementById("voucherMessage");
-
-    if (!code) {
-      msgEl.style.color = "red";
-      msgEl.textContent = "Bitte Gutscheincode eingeben.";
+  function goToPayment() {
+    if (cart.length === 0) {
+      alert("Dein Warenkorb ist leer.");
       return;
     }
-
-    if (!email || !email.includes("@")) {
-      msgEl.style.color = "red";
-      msgEl.textContent = "Bitte gültige E-Mail-Adresse eingeben.";
-      return;
-    }
-
-   msgEl.className = "success";
-   msgEl.textContent =
-   "Vielen Dank! Dein Gutscheincode wird nun geprüft. Du bekommst in Kürze eine Mail mit deiner angepassten Rechnung.";
-
-
-    setTimeout(() => {
-      document.getElementById("voucherCode").value = "";
-      document.getElementById("customerEmail").value = "";
-    }, 1000); 
-
-    try {
-      const response = await fetch("https://formspree.io/f/mldlyqdz", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          _subject: "🪙 Neuer Gutschein eingelöst",
-          code: code,
-          kunden_email: email,
-          warenkorb_summe: getCartTotal().toFixed(2),
-          warenkorb_inhalt: cart.map(i => `${i.name} x${i.qty}`).join("; ")
-        }),
-      });
-
-      if (!response.ok) throw new Error(`Fehler beim Senden (${response.status})`);
-
-    } catch (err) {
-      console.error("⚠️ Fehler beim Senden an Formspree:", err);
-      msgEl.style.color = "red";
-      msgEl.textContent =
-        "⚠️ Gutschein konnte nicht gesendet werden. Bitte später erneut versuchen.";
-    }
-
-    setTimeout(() => {
-      msgEl.textContent = "";
-    }, 8000);
+    window.location.href = "partials/kasse.html";
   }
 
   // ============================
   // 🪄 Öffnen / Schließen
   // ============================
-function toggleCart() {
-  const el = document.getElementById("cart");
-  if (!el) return;
-
-  el.classList.toggle("open");
-
-  // ⬇️ PayPal-Cookie-Banner anzeigen, wenn noch nicht bestätigt
-  if (el.classList.contains("open")) {
-    if (!localStorage.getItem("paypal_cookie_ok")) {
-      const banner = document.getElementById("paypal-cookie-banner");
-      if (banner) banner.style.display = "flex";
-    }
+  function toggleCart() {
+    const el = document.getElementById("cart");
+    if (!el) return;
+    el.classList.toggle("open");
   }
-}
-
 
   function closeCart() {
     const el = document.getElementById("cart");
     if (el) el.classList.remove("open");
   }
 
-  // ============================
-  // 🖱️ Klick außerhalb schließt Warenkorb
-  // ============================
+  // Klick außerhalb → schließen
   document.addEventListener("click", function (event) {
     const cart = document.getElementById("cart");
     const toggle = document.getElementById("cart-toggle");
     if (!cart || !toggle) return;
 
     if (event.target.closest("#cart") || event.target.closest("#cart-toggle")) return;
-    if (event.target.closest("#paypal-button-container")) return;
 
     closeCart();
   }, true);
 
-  /* ============================
-   ✏️ Live-Zeichenzähler für Gutschein-Freitext
-   ============================ */
-
-setTimeout(() => {
-  const txt = document.getElementById("vouchertext");
-  const cnt = document.getElementById("voucherCounter");
-
-  if (!txt || !cnt) return;
-
-  // Aktualisierung bei jeder Eingabe
-  txt.oninput = () => {
-    cnt.textContent = `${txt.value.length} / ${txt.maxLength} Zeichen`;
-  };
-
-  // Initial anzeigen
-  cnt.textContent = `${txt.value.length} / ${txt.maxLength} Zeichen`;
-}, 300);
-
-  // PayPal Cookie Banner Bestätigung
-document.addEventListener("DOMContentLoaded", () => {
-  const banner = document.getElementById("paypal-cookie-banner");
-  const okBtn = document.getElementById("paypal-cookie-ok");
-
-  if (!banner || !okBtn) return;
-
-  okBtn.addEventListener("click", () => {
-    localStorage.setItem("paypal_cookie_ok", "1");
-    banner.style.display = "none";
-  });
-});
-
 </script>
+
