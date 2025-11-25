@@ -197,7 +197,7 @@ Hero Section (Startseite)
        position: relative; 
        margin-top: -40px; /* Höhe des Headers */ 
       }
-} 
+
 .hero::after { 
    content: ""; 
    position: absolute; 
