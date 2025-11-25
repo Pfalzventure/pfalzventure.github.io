@@ -834,3 +834,10 @@ main {
   padding: 0 16px;
   box-sizing: border-box;
 }
+
+.agb-container .agb-title {
+  font-size: clamp(1.2rem, 5vw, 2rem);
+  line-height: 1.25;
+  overflow-wrap: anywhere; /* verhindert Textüberlauf */
+  word-break: break-word;
+}
