@@ -3,17 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kasse — Survival Kurse & Kits</title>
+  <title>Kasse</title>
 
-  <!-- Füge hier dein CSS ein oder verlinke deine Stylesheets -->
+  <!-- Minimal styles für Übersicht — passe an dein Theme an -->
   <style>
-    /* Minimal styles für Übersicht — passe an dein Theme an */
-    body { font-family: system-ui, sans-serif; padding: 1rem; color:#222; }
+    body { font-family: system-ui, sans-serif; padding: 1rem; color:#222; background:#f7f7f7; }
     .container { max-width:900px; margin:0 auto; display:grid; grid-template-columns: 1fr 360px; gap:1.5rem; }
-    h1 { color: var(--dark-green, #0f5132); }
+    h1 { color: var(--dark-green, #0f5132); margin:0 0 .5rem 0; }
     .card { background:#fff; border:1px solid #eee; padding:1rem; border-radius:8px; box-shadow:0 1px 4px rgba(0,0,0,0.03); }
     .muted { color:#666; font-size:0.95rem; }
-    .btn { display:inline-block; padding:0.6rem 1rem; border-radius:6px; border:none; background:#0f5132; color:#fff; cursor:pointer; }
+    .btn { display:inline-block; padding:0.6rem 1rem; border-radius:6px; border:none; background:#0f5132; color:#fff; cursor:pointer; text-decoration:none; }
     .btn:disabled { opacity:0.5; cursor:not-allowed; }
     .cart-list { list-style:none; padding:0; margin:0 0 1rem 0; }
     .cart-list li { padding:0.4rem 0; border-bottom:1px dashed #eee; display:flex; justify-content:space-between; align-items:center; }
@@ -21,14 +20,15 @@
     .success { color:green; }
     .error { color:red; }
     label { display:block; margin-top:0.75rem; font-weight:600; }
-    input[type="text"], input[type="email"], input[type="tel"], input[type="date"], select { width:100%; padding:0.5rem; margin-top:0.25rem; border:1px solid #ddd; border-radius:6px; }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="date"], input[type="number"], select { width:100%; padding:0.5rem; margin-top:0.25rem; border:1px solid #ddd; border-radius:6px; box-sizing:border-box; }
     .form-actions { margin-top:1rem; display:flex; gap:.5rem; align-items:center; }
     .hidden { display:none !important; }
     .center { text-align:center; }
+    .right-aux { margin-top:1rem; }
     @media (max-width:900px) { .container { grid-template-columns: 1fr; } }
   </style>
 
-  <!-- WICHTIG: PayPal SDK einbinden (ersetze CLIENT-ID durch deine): -->
+  <!-- Hinweis: PayPal SDK (falls genutzt) -->
   <!-- <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=EUR"></script> -->
 </head>
 <body>
@@ -36,26 +36,9 @@
     <!-- =============== LINKS: Formular & Checkout-Status =============== -->
     <section class="card" id="checkout-left">
       <h1>Kasse</h1>
-      <p class="muted">Bitte überprüfe deine Bestellung, fülle das Formular (wenn erforderlich) aus und fahre mit der Zahlung fort.</p>
+      <p class="muted">Bitte überprüfe deine Bestellung, fülle das Formular aus und fahre mit der Zahlung fort.</p>
 
-      <!-- === Gutscheincode (in Kasse verfügbar) === -->
-      <div id="voucher-section" style="margin-top:1rem;">
-        <h3>🎟️ Gutscheincode einlösen</h3>
-        <label for="voucherCode">Gutscheincode</label>
-        <input type="text" id="voucherCode" placeholder="Code eingeben">
-
-        <label for="customerEmail">Deine E-Mail-Adresse</label>
-        <input type="email" id="customerEmail" placeholder="name@example.com">
-
-        <div class="form-actions">
-          <button onclick="submitVoucherRequest()" class="btn">Einlösen</button>
-          <span id="voucherMessage" class="small"></span>
-        </div>
-      </div>
-
-      <hr style="margin:1rem 0;">
-
-      <!-- === Anmeldeformular (dein vorhandenes Formular, exakt übernommen) === -->
+      <!-- === Anmeldeformular === -->
       <form id="registrationForm" class="hidden" onsubmit="event.preventDefault(); handleFormSubmit();">
         <h2 style="color:var(--dark-green); margin-top:1rem;">Teilnehmerdaten</h2>
 
@@ -68,18 +51,23 @@
         <input type="email" name="email" id="teilnehmer_email" placeholder="E-Mail-Adresse" required>
         <input type="tel" name="telefon" id="telefon" placeholder="Telefonnummer (optional)">
 
-        <label style="font-weight:bold; margin-top:1rem;">Geburtsdatum *</label>
+        <label style="font-weight:bold; margin-top:1rem;">Geburtsdatum Teilnehmer *</label>
         <input type="date" name="geburtsdatum" id="geburtsdatum" required>
 
-        <label style="font-weight:bold; margin-top:2rem;">Minderjähriger Teilnehmer?</label>
+        <label style="font-weight:bold; margin-top:1rem;">Minderjähriger Teilnehmer?</label>
         <select id="minderjaehrig-toggle" name="minderjaehrig" class="terminfenster">
           <option value="nein">Nein</option>
           <option value="ja">Ja</option>
         </select>
 
         <div id="minderjaehrig-felder" style="display:none; margin-top:1rem;">
+          <label style="font-weight:600; margin-top:0;">Name des Kindes</label>
           <input type="text" name="kind_name" id="kind_name" placeholder="Name des Kindes">
-          <input type="number" name="kind_alter" id="kind_alter" placeholder="Alter des Kindes" min="1" max="17">
+
+          <label style="font-weight:600; margin-top:0.75rem;">Geburtsdatum des Kindes</label>
+          <input type="date" name="kind_geburtsdatum" id="kind_geburtsdatum" placeholder="TT.MM.JJJJ">
+
+          <label style="margin-top:0.75rem;"><input type="checkbox" id="kind_confirm_maturity"> Ich bestätige, dass der minderjährige Teilnehmer nach meiner Einschätzung reif, körperlich und geistig fit genug für den ausgewählten Kurs ist.</label>
         </div>
 
         <h2 style="color:var(--dark-green); margin-top:2rem;">Bestätigungen</h2>
@@ -101,11 +89,32 @@
       </form>
     </section>
 
-    <!-- =============== RECHTS: Warenkorb & PayPal =============== -->
+    <!-- =============== RECHTS: Warenkorb, Gutschein (nun unter Warenkorb) & PayPal =============== -->
     <aside class="card" id="checkout-right">
       <h2>Dein Warenkorb</h2>
+
       <ul id="cart-items" class="cart-list"></ul>
       <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
+
+      <!-- Button zurück zur Startseite -->
+      <div class="right-aux">
+        <button class="btn" onclick="window.location.href='index.html'">Zur Startseite</button>
+      </div>
+
+      <!-- === Gutscheincode: jetzt UNTER Warenkorb === -->
+      <div id="voucher-section" style="margin-top:1rem;">
+        <h3>🎟️ Gutscheincode einlösen</h3>
+        <label for="voucherCode">Gutscheincode</label>
+        <input type="text" id="voucherCode" placeholder="Code eingeben">
+
+        <label for="customerEmail">Deine E-Mail-Adresse</label>
+        <input type="email" id="customerEmail" placeholder="name@example.com">
+
+        <div class="form-actions">
+          <button onclick="submitVoucherRequest()" class="btn">Einlösen</button>
+          <span id="voucherMessage" class="small" style="margin-left:.5rem;"></span>
+        </div>
+      </div>
 
       <div id="pay-area" style="margin-top:1rem;">
         <!-- Hier werden PayPal-Buttons gerendert (oder "Jetzt bezahlen" für Kits) -->
@@ -116,8 +125,6 @@
           PayPal-Script wird benötigt. Bitte binde das PayPal SDK ein (siehe Kommentar in Quelle).
         </div>
       </div>
-
-      <p class="muted small" style="margin-top:1rem;</p>
     </aside>
   </main>
 
@@ -131,8 +138,11 @@
   const REDIRECT_AFTER_PAYMENT = "danke.html";
 
   // --- Zustand ---
+  // Warenkorb aus localStorage (wie vorher)
   let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-  let voucherApplied = JSON.parse(localStorage.getItem("voucher_applied") || "null"); // { code, email } oder null
+
+  // Wichtig: Gutscheine NICHT persistent speichern. session-variabel (nur solange Seite geöffnet)
+  let voucherApplied = null; // { code, email } während der Sitzung — wird nicht in localStorage geschrieben
 
   // --- Utilities ---
   function getCartTotal() {
@@ -140,7 +150,6 @@
   }
 
   function cartContainsCourse() {
-    // Annahme: Kurse haben Namen wie "Kursname – Termin: ..." aus deiner cart-Logik.
     return cart.some(i => (i.name || "").indexOf("Termin:") > -1);
   }
 
@@ -161,30 +170,32 @@
     });
 
     document.getElementById("cart-total").innerText = getCartTotal().toFixed(2);
+
+    // Falls Warenkorb leer, ggf. Hinweis im PayPal-Container
+    if (!cart || cart.length === 0) {
+      const cont = document.getElementById("paypal-button-container");
+      if (cont) cont.innerHTML = "<div class='small muted'>Dein Warenkorb ist leer.</div>";
+    }
   }
 
-  // --- Initial UI-Setup basierend auf Warenkorb & Gutscheinstatus ---
+  // --- UI-Setup basierend auf Warenkorb & Gutscheinstatus ---
   function initCheckoutUI() {
-    updateCartDisplay();
+    // Reset: Gutscheinstatus beim Öffnen/Laden der Seite zurücksetzen
+    voucherApplied = null;
+    const voucherMsg = document.getElementById("voucherMessage");
+    if (voucherMsg) { voucherMsg.textContent = ""; voucherMsg.className = "small"; }
 
-    // Voucher UI (wenn bereits eingelöst, zeigen wir den Text und blockieren Zahlung)
-    if (voucherApplied && voucherApplied.code) {
-      showVoucherAppliedMessage(`Vielen Dank! Dein Gutscheincode wurde eingelöst und wird nun geprüft. Du bekommst in Kürze eine Mail mit deiner angepassten Rechnung.`);
-      blockPaymentsBecauseVoucher();
-    }
+    updateCartDisplay();
 
     const hasCourse = cartContainsCourse();
     const registrationForm = document.getElementById("registrationForm");
 
     if (hasCourse) {
-      // Form anzeigen (Pflicht)
       registrationForm.classList.remove("hidden");
-      // PayPal buttons nicht sofort rendern — erst nach Formularvalidierung / Klick "Weiter zur Zahlung"
-      hidePaypalContainer();
+      hidePaypalContainer(); // PayPal erst nach Formularvalidierung
     } else {
-      // Keine Kurse -> Formular ausblenden und sofort PayPal zeigen (sofern kein Gutschein)
       registrationForm.classList.add("hidden");
-      if (!isVoucherActive()) initPayPal(); // render PayPal sofort, falls SDK vorhanden
+      if (!isVoucherActive()) initPayPal();
     }
 
     // Minderjährigen Toggle (Form)
@@ -192,7 +203,8 @@
     const felder = document.getElementById('minderjaehrig-felder');
     if (toggle) {
       toggle.addEventListener('change', () => {
-        felder.style.display = toggle.value === 'ja' ? 'block' : 'none';
+        const show = toggle.value === 'ja';
+        felder.style.display = show ? 'block' : 'none';
       });
     }
 
@@ -224,7 +236,6 @@
   }
 
   function unblockPayments() {
-    // Entfernt Voucher-Block, zeigt PayPal bzw. ermöglicht Weiter zur Zahlung (abhängig von Kartentyp)
     const hasCourse = cartContainsCourse();
     if (hasCourse) {
       document.getElementById("proceedToPayBtn").classList.remove("hidden");
@@ -235,7 +246,7 @@
     }
   }
 
-  // --- Formspree Gutschein-Funktion (kopiert / angepasst aus cart.html) ---
+  // --- Formspree Gutschein-Funktion (keine Persistenz) ---
   async function submitVoucherRequest() {
     const code = document.getElementById("voucherCode").value.trim();
     const email = document.getElementById("customerEmail").value.trim();
@@ -254,13 +265,13 @@
     }
 
     msgEl.className = "success";
-    msgEl.textContent = "Vielen Dank! Dein Gutscheincode wurde eingelöst und wird nun geprüft. Du bekommst in Kürze eine Mail mit deiner angepassten Rechnung.";
+    msgEl.textContent = "Vielen Dank! Dein Gutscheincode wurde eingereicht und wird geprüft.";
 
-    // Felder zurücksetzen wie im cart.html (UX)
+    // Felder zurücksetzen (UX)
     setTimeout(() => {
       document.getElementById("voucherCode").value = "";
       document.getElementById("customerEmail").value = "";
-    }, 1000);
+    }, 800);
 
     try {
       const response = await fetch(FORMSPREE_ENDPOINT, {
@@ -277,33 +288,29 @@
 
       if (!response.ok) throw new Error(`Fehler beim Senden (${response.status})`);
 
-      // Falls erfolgreich: merke Gutschein lokal und blockiere Zahlungen (wie gewünscht)
+      // Gutschein wirkt nur temporär während dieser Session (nicht persistent)
       voucherApplied = { code, email };
-      localStorage.setItem("voucher_applied", JSON.stringify(voucherApplied));
-      showVoucherAppliedMessage("Vielen Dank! Dein Gutscheincode wurde eingelöst und wird nun geprüft. Du bekommst in Kürze eine Mail mit deiner angepassten Rechnung.");
+      showVoucherAppliedMessage("Vielen Dank! Dein Gutscheincode wurde eingereicht und wird nun geprüft. Du bekommst eine angepasste Rechnung per Mail.");
       blockPaymentsBecauseVoucher();
 
     } catch (err) {
       console.error("⚠️ Fehler beim Senden an Formspree:", err);
       msgEl.className = "error";
-      msgEl.textContent = "⚠️ Gutschein konnte aus technischen Gründen nicht gesendet werden. Bitte schicke den Code per Kontaktformular oder Mail, wir werden uns umgehend bei dir melden.";
+      msgEl.textContent = "⚠️ Gutschein konnte aus technischen Gründen nicht gesendet werden. Bitte kontaktiere uns per Mail oder Kontaktformular.";
     }
 
+    // Hinweis nach einiger Zeit entfernen, wenn Gutschein nicht aktiv
     setTimeout(() => {
-      // kurze Aufräumaktion: entferne den Hinweis nach 8s (wie vorher)
       const msg = document.getElementById("voucherMessage");
       if (msg && !isVoucherActive()) msg.textContent = "";
     }, 8000);
   }
 
-  // --- Registration form handling ---
+  // --- Registration form handling & Validation ---
   function validateRegistrationForm() {
-    // Einfache Validierung: required Felder, Checkboxen, E-Mail-Format
-    const requiredIds = ["vorname", "nachname", "strasse", "plz_ort", "teilnehmer_email", "geburtsdatum", "agb", "fitness", "haftung"];
     const msgEl = document.getElementById("form-message");
     msgEl.textContent = "";
 
-    // Check simple inputs
     const vorname = document.getElementById("vorname").value.trim();
     const nachname = document.getElementById("nachname").value.trim();
     const strasse = document.getElementById("strasse").value.trim();
@@ -332,6 +339,25 @@
       return false;
     }
 
+    // Wenn minderjährig, zusätzliche Felder prüfen
+    const isMinor = document.getElementById("minderjaehrig-toggle").value === "ja";
+    if (isMinor) {
+      const kidName = document.getElementById("kind_name").value.trim();
+      const kidGeb = document.getElementById("kind_geburtsdatum").value;
+      const kidConfirm = document.getElementById("kind_confirm_maturity").checked;
+
+      if (!kidName || !kidGeb) {
+        msgEl.className = "error";
+        msgEl.textContent = "Für minderjährige Teilnehmer bitte Name und Geburtsdatum angeben.";
+        return false;
+      }
+      if (!kidConfirm) {
+        msgEl.className = "error";
+        msgEl.textContent = "Bitte bestätigen Sie, dass der minderjährige Teilnehmer reif/fit für den Kurs ist.";
+        return false;
+      }
+    }
+
     // alles gut
     msgEl.className = "success";
     msgEl.textContent = "Formular ist vollständig. Klicke auf 'Weiter zur Zahlung'.";
@@ -339,7 +365,6 @@
   }
 
   function handleFormSubmit() {
-    // Wir wollen nicht direkt versenden — stattdessen aktivieren wir den "Weiter zur Zahlung" Button
     const ok = validateRegistrationForm();
     if (ok) {
       document.getElementById("proceedToPayBtn").classList.remove("hidden");
@@ -363,7 +388,6 @@
       return;
     }
 
-    // PayPal SDK vorhanden?
     if (typeof paypal === "undefined") {
       showPaypalMissing();
       return;
@@ -377,7 +401,6 @@
       return;
     }
 
-    // Erstelle Bestellung bei PayPal
     paypal.Buttons({
       createOrder: (data, actions) => {
         return actions.order.create({
@@ -392,17 +415,16 @@
       },
       onApprove: (data, actions) => {
         return actions.order.capture().then(function(details) {
-          // Nach erfolgreicher Zahlung: Warenkorb leeren, Voucher entfernen, redirect
+          // Nach erfolgreicher Zahlung: Warenkorb leeren, redirect
           localStorage.removeItem("cart");
-          localStorage.removeItem("voucher_applied");
-          // kleine Bestätigungs-Alert (optional)
+          // Gutschein wird nicht persistiert — nur session-variabel, also kein localStorage-Eintrag notwendig
           try { alert("Danke, " + (details.payer?.name?.given_name || "") + "! Zahlung erhalten."); } catch(e){}
           window.location.href = REDIRECT_AFTER_PAYMENT;
         });
       },
       onError: (err) => {
         console.error("PayPal Fehler:", err);
-        alert("⚠️ Zahlung fehlgeschlagen. Bitte erneut versuchen.");
+        alert("⚠️ Zahlung aus technischen Gründen fehlgeschlagen. Bitte kontaktiere uns per Kontaktformular oder Mail");
       }
     }).render('#paypal-button-container');
   }
@@ -411,7 +433,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     initCheckoutUI();
 
-    // Wenn kein Kurs im Warenkorb, PayPal wird direkt initialisiert (sofern kein Gutschein)
+    // Wenn kein Kurs im Warenkorb, PayPal wird direkt initialisiert (sofern kein Gutschein aktiv)
     if (!cartContainsCourse() && !isVoucherActive()) initPayPal();
   });
 
@@ -419,7 +441,7 @@
   window.submitVoucherRequest = submitVoucherRequest;
 
   // --- Debug helpers (optional in dev) ---
-  // window._debug = { cart, getCartTotal, cartContainsCourse };
+  // window._debug = { cart, getCartTotal, cartContainsCourse, voucherApplied };
 
   </script>
 </body>
