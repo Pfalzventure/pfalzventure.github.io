@@ -40,7 +40,7 @@
       <p class="muted">Bitte überprüfe deine Bestellung, fülle das Formular aus und fahre mit der Zahlung fort.</p>
 
       <!-- === Anmeldeformular === -->
-      <form id="registrationForm" class="hidden" onsubmit="event.preventDefault(); handleFormSubmit();">
+      <form id="registrationForm" class="hidden"> <!-- onsubmit="event.preventDefault(); handleFormSubmit();"> -->
         <h2 style="color:var(--dark-green); margin-top:1rem;">Teilnehmerdaten</h2>
 
         <input type="text" name="vorname" id="vorname" placeholder="Vorname" required>
@@ -211,12 +211,13 @@
     }
 
     // Proceed button handler (nach Formularvalidierung)
-    document.getElementById("proceedToPayBtn").addEventListener("click", () => {
-      // Nach erfolgreicher Validierung PayPal initialisieren
-      initPayPal();
-      // Optional: Scroll to PayPal area
-      document.getElementById("paypal-button-container").scrollIntoView({ behavior: "smooth" });
-    });
+document.getElementById("proceedToPayBtn").addEventListener("click", () => {
+  if (validateRegistrationForm()) {
+    initPayPal();
+    document.getElementById("paypal-button-container")
+      .scrollIntoView({ behavior: "smooth" });
+  }
+});
   }
 
   // --- Voucher Helpers ---
