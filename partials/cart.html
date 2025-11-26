@@ -156,4 +156,36 @@
     closeCart();
   }, true);
 
+   /* ============================
+   ✏️ Live-Zeichenzähler für Gutschein-Freitext
+   ============================ */
+
+setTimeout(() => {
+  const txt = document.getElementById("vouchertext");
+  const cnt = document.getElementById("voucherCounter");
+
+  if (!txt || !cnt) return;
+
+  // Aktualisierung bei jeder Eingabe
+  txt.oninput = () => {
+    cnt.textContent = `${txt.value.length} / ${txt.maxLength} Zeichen`;
+  };
+
+  // Initial anzeigen
+  cnt.textContent = `${txt.value.length} / ${txt.maxLength} Zeichen`;
+}, 300);
+
+  // PayPal Cookie Banner Bestätigung
+document.addEventListener("DOMContentLoaded", () => {
+  const banner = document.getElementById("paypal-cookie-banner");
+  const okBtn = document.getElementById("paypal-cookie-ok");
+
+  if (!banner || !okBtn) return;
+
+  okBtn.addEventListener("click", () => {
+    localStorage.setItem("paypal_cookie_ok", "1");
+    banner.style.display = "none";
+  });
+});
+
 </script>
