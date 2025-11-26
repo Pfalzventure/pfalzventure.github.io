@@ -374,6 +374,48 @@ document.getElementById("proceedToPayBtn").addEventListener("click", () => {
     }
   }
 
+    // --- Formspree-Anmeldung senden ---
+async function sendRegistrationToFormspree() {
+  const data = {
+    _subject: "📩 Neue Kursanmeldung",
+    vorname: document.getElementById("vorname").value.trim(),
+    nachname: document.getElementById("nachname").value.trim(),
+    strasse: document.getElementById("strasse").value.trim(),
+    plz_ort: document.getElementById("plz_ort").value.trim(),
+    email: document.getElementById("teilnehmer_email").value.trim(),
+    telefon: document.getElementById("telefon").value.trim(),
+    geburtsdatum: document.getElementById("geburtsdatum").value,
+    minderjaehrig: document.getElementById("minderjaehrig-toggle").value,
+
+    warenkorb_summe: getCartTotal().toFixed(2),
+    warenkorb_inhalt: cart.map(i =>
+      `${i.name} × ${i.qty} = ${(i.price * i.qty).toFixed(2)} €`
+    ).join("; "),
+  };
+
+  if (data.minderjaehrig === "ja") {
+    data.kind_name = document.getElementById("kind_name").value.trim();
+    data.kind_geburtsdatum = document.getElementById("kind_geburtsdatum").value;
+    data.kind_confirm_maturity =
+      document.getElementById("kind_confirm_maturity").checked ? "ja" : "nein";
+  }
+
+  if (voucherApplied) {
+    data.gutschein_code = voucherApplied.code;
+    data.gutschein_email = voucherApplied.email;
+  }
+
+  try {
+    await fetch(FORMSPREE_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+  } catch (err) {
+    console.error("❌ Fehler beim Senden der Formspree-Anmeldung:", err);
+  }
+}
+
   // --- PayPal: init & render ---
   function showPaypalMissing() {
     document.getElementById("paypal-missing").classList.remove("hidden");
