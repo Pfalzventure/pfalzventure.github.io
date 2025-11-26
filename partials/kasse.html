@@ -548,26 +548,20 @@ async function sendRegistrationToFormspree() {
   updateProceedVisibility();
 
   // Klick-Handler: finale Validierung, PayPal initialisieren
-  proceedBtn.addEventListener("click", () => {
-    // final validieren
-    if (!validateRegistrationForm()) {
-      // validateRegistrationForm zeigt bereits Fehlermeldung in #form-message
-      return;
-    }
+proceedBtn.addEventListener("click", async () => {
+  if (!validateRegistrationForm()) return;
 
-    // Sicherheits-Check: PayPal-Container vorhanden?
-    if (!ensurePaypalContainer()) {
-      console.error("PayPal-Container fehlt: Bitte <div id='paypal-button-container'></div> in der Seite anlegen.");
-      return;
-    }
+  // 1) Formspree senden
+  await sendRegistrationToFormspree();
 
-    // initialisiere PayPal (deine vorhandene Funktion)
-    initPayPal();
+  // 2) PayPal initialisieren
+  initPayPal();
 
-    // Scroll zur PayPal-Box (UX)
-    const cont = document.getElementById("paypal-button-container");
-    if (cont) cont.scrollIntoView({ behavior: "smooth" });
-  });
+  // 3) Scroll zur Zahlung
+  const cont = document.getElementById("paypal-button-container");
+  if (cont) cont.scrollIntoView({ behavior: "smooth" });
+});
+
 
   // Optional: bei initCheckoutUI-Aufruf (wenn Formular erst später eingeblendet wird) erneut prüfen:
   // Beispiel: rufe updateProceedVisibility() nochmal auf, nachdem du registrationForm.classList.remove("hidden") setzt.
