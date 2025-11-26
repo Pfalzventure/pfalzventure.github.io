@@ -117,7 +117,7 @@
         </div>
       </div>
 
-      <p class="muted small" style="margin-top:1rem;">Nach erfolgreicher Zahlung wirst du zu <code>danke.html</code> weitergeleitet.</p>
+      <p class="muted small" style="margin-top:1rem;</p>
     </aside>
   </main>
 
@@ -169,7 +169,7 @@
 
     // Voucher UI (wenn bereits eingelöst, zeigen wir den Text und blockieren Zahlung)
     if (voucherApplied && voucherApplied.code) {
-      showVoucherAppliedMessage(`Gutschein "${voucherApplied.code}" eingelöst. Wir bearbeiten deine Anfrage per E-Mail.`);
+      showVoucherAppliedMessage(`Vielen Dank! Dein Gutscheincode wurde eingelöst und wird nun geprüft. Du bekommst in Kürze eine Mail mit deiner angepassten Rechnung.`);
       blockPaymentsBecauseVoucher();
     }
 
@@ -254,7 +254,7 @@
     }
 
     msgEl.className = "success";
-    msgEl.textContent = "Vielen Dank! Dein Gutscheincode wird nun geprüft. Du bekommst in Kürze eine Mail mit deiner angepassten Rechnung.";
+    msgEl.textContent = "Vielen Dank! Dein Gutscheincode wurde eingelöst und wird nun geprüft. Du bekommst in Kürze eine Mail mit deiner angepassten Rechnung.";
 
     // Felder zurücksetzen wie im cart.html (UX)
     setTimeout(() => {
@@ -280,13 +280,13 @@
       // Falls erfolgreich: merke Gutschein lokal und blockiere Zahlungen (wie gewünscht)
       voucherApplied = { code, email };
       localStorage.setItem("voucher_applied", JSON.stringify(voucherApplied));
-      showVoucherAppliedMessage("Vielen Dank! Gutschein eingereicht — wir prüfen und melden uns per E-Mail.");
+      showVoucherAppliedMessage("Vielen Dank! Dein Gutscheincode wurde eingelöst und wird nun geprüft. Du bekommst in Kürze eine Mail mit deiner angepassten Rechnung.");
       blockPaymentsBecauseVoucher();
 
     } catch (err) {
       console.error("⚠️ Fehler beim Senden an Formspree:", err);
       msgEl.className = "error";
-      msgEl.textContent = "⚠️ Gutschein konnte nicht gesendet werden. Bitte später erneut versuchen.";
+      msgEl.textContent = "⚠️ Gutschein konnte aus technischen Gründen nicht gesendet werden. Bitte schicke den Code per Kontaktformular oder Mail, wir werden uns umgehend bei dir melden.";
     }
 
     setTimeout(() => {
