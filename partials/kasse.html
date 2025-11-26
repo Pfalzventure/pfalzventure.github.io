@@ -446,6 +446,91 @@ document.getElementById("proceedToPayBtn").addEventListener("click", () => {
   // --- Debug helpers (optional in dev) ---
   // window._debug = { cart, getCartTotal, cartContainsCourse, voucherApplied };
 
+      // --- Sicherstellen, dass ein "Weiter zur Zahlung"-Button vorhanden ist ---
+(function ensureProceedButtonAndWireUp() {
+  let proceedBtn = document.getElementById("proceedToPayBtn");
+
+  // Falls Button nicht existiert: erstellen und an die .form-actions anhängen
+  if (!proceedBtn) {
+    const form = document.getElementById("registrationForm");
+    if (!form) {
+      console.error("registrationForm nicht gefunden.");
+      return;
+    }
+    const actions = form.querySelector(".form-actions") || form;
+    proceedBtn = document.createElement("button");
+    proceedBtn.id = "proceedToPayBtn";
+    proceedBtn.type = "button";
+    proceedBtn.className = "btn hidden";
+    proceedBtn.textContent = "Weiter zur Zahlung";
+    actions.appendChild(proceedBtn);
+  }
+
+  // Hilfsfunktion: prüfen, ob PayPal-Container vorhanden ist
+  function ensurePaypalContainer() {
+    const cont = document.getElementById("paypal-button-container");
+    if (!cont) console.warn("paypal-button-container nicht gefunden — PayPal wird nicht angezeigt.");
+    return !!cont;
+  }
+
+  // Funktion: wird auf Änderungen ausgeführt, zeigt/versteckt den Button abhängig von der Validierung
+  function updateProceedVisibility() {
+    // validateRegistrationForm manipuliert #form-message, daher nicht zweimal unnötig aufrufen.
+    // Wir wollen aber nur wissen, ob Form gültig wäre — also nutzen wir dieselbe Funktion, die true/false zurückgibt.
+    const ok = validateRegistrationForm();
+    if (ok) {
+      proceedBtn.classList.remove("hidden");
+      // Wenn kein Kurs im Warenkorb ist, verstecken wir trotzdem den Button (sicherheitshalber)
+      if (!cartContainsCourse()) proceedBtn.classList.add("hidden");
+    } else {
+      proceedBtn.classList.add("hidden");
+    }
+  }
+
+  // Event-Listener auf alle relevanten Felder
+  const watchSelectors = [
+    "#vorname", "#nachname", "#strasse", "#plz_ort",
+    "#teilnehmer_email", "#geburtsdatum",
+    "#agb", "#fitness", "#haftung",
+    "#minderjaehrig-toggle", "#kind_name", "#kind_geburtsdatum", "#kind_confirm_maturity"
+  ];
+
+  watchSelectors.forEach(sel => {
+    const el = document.querySelector(sel);
+    if (!el) return;
+    const ev = (el.tagName === "SELECT" || el.type === "checkbox" || el.type === "radio" || el.type === "date") ? "change" : "input";
+    el.addEventListener(ev, updateProceedVisibility);
+  });
+
+  // Falls das Formular initial sichtbar gemacht wird, einmal prüfen
+  updateProceedVisibility();
+
+  // Klick-Handler: finale Validierung, PayPal initialisieren
+  proceedBtn.addEventListener("click", () => {
+    // final validieren
+    if (!validateRegistrationForm()) {
+      // validateRegistrationForm zeigt bereits Fehlermeldung in #form-message
+      return;
+    }
+
+    // Sicherheits-Check: PayPal-Container vorhanden?
+    if (!ensurePaypalContainer()) {
+      console.error("PayPal-Container fehlt: Bitte <div id='paypal-button-container'></div> in der Seite anlegen.");
+      return;
+    }
+
+    // initialisiere PayPal (deine vorhandene Funktion)
+    initPayPal();
+
+    // Scroll zur PayPal-Box (UX)
+    const cont = document.getElementById("paypal-button-container");
+    if (cont) cont.scrollIntoView({ behavior: "smooth" });
+  });
+
+  // Optional: bei initCheckoutUI-Aufruf (wenn Formular erst später eingeblendet wird) erneut prüfen:
+  // Beispiel: rufe updateProceedVisibility() nochmal auf, nachdem du registrationForm.classList.remove("hidden") setzt.
+})();
   </script>
+
 </body>
 </html>
