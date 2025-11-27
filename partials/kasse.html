@@ -3,16 +3,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kasse</title>
+  <title>Kasse — Survival Kurse & Kits</title>
 
-  <!-- Minimal styles für Übersicht — passe an dein Theme an -->
+  <!-- Füge hier dein CSS ein oder verlinke deine Stylesheets -->
   <style>
-    body { font-family: system-ui, sans-serif; padding: 1rem; color:#222; background:#f5f5dc; }
+    /* Minimal styles für Übersicht — passe an dein Theme an */
+    body { font-family: system-ui, sans-serif; padding: 1rem; color:#222; }
     .container { max-width:900px; margin:0 auto; display:grid; grid-template-columns: 1fr 360px; gap:1.5rem; }
-    h1 { color: var(--dark-green, #0f5132); margin:0 0 .5rem 0; }
+    h1 { color: var(--dark-green, #0f5132); }
     .card { background:#fff; border:1px solid #eee; padding:1rem; border-radius:8px; box-shadow:0 1px 4px rgba(0,0,0,0.03); }
     .muted { color:#666; font-size:0.95rem; }
-    .btn { display:inline-block; padding:0.6rem 1rem; border-radius:6px; border:none; background:#0f5132; color:#fff; cursor:pointer; text-decoration:none; }
+    .btn { display:inline-block; padding:0.6rem 1rem; border-radius:6px; border:none; background:#0f5132; color:#fff; cursor:pointer; }
     .btn:disabled { opacity:0.5; cursor:not-allowed; }
     .cart-list { list-style:none; padding:0; margin:0 0 1rem 0; }
     .cart-list li { padding:0.4rem 0; border-bottom:1px dashed #eee; display:flex; justify-content:space-between; align-items:center; }
@@ -20,124 +21,24 @@
     .success { color:green; }
     .error { color:red; }
     label { display:block; margin-top:0.75rem; font-weight:600; }
-    input[type="text"], input[type="email"], input[type="tel"], input[type="date"], input[type="number"], select { width:100%; padding:0.5rem; margin-top:0.25rem; border:1px solid #ddd; border-radius:6px; box-sizing:border-box; }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="date"], select { width:100%; padding:0.5rem; margin-top:0.25rem; border:1px solid #ddd; border-radius:6px; }
     .form-actions { margin-top:1rem; display:flex; gap:.5rem; align-items:center; }
     .hidden { display:none !important; }
     .center { text-align:center; }
-    .right-aux { margin-top:1rem; }
     @media (max-width:900px) { .container { grid-template-columns: 1fr; } }
   </style>
 
- <!-- PayPal SDK -->
-  <script src="https://www.paypal.com/sdk/js?client-id=Abafm4k5xNnVRQ7UnZmQFYWYJ2_dtwU9u1ubHTo9cC2KUjoD8no3TZgZBHI_hiLqvRQHkLxFAjpU6fEJ&currency=EUR"></script>
-  
+  <!-- WICHTIG: PayPal SDK einbinden (ersetze CLIENT-ID durch deine): -->
+  <!-- <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=EUR"></script> -->
 </head>
 <body>
   <main class="container">
     <!-- =============== LINKS: Formular & Checkout-Status =============== -->
     <section class="card" id="checkout-left">
       <h1>Kasse</h1>
-      <p class="muted">Bitte überprüfe deine Bestellung, fülle das Formular aus (nur notwendig bei Teilnahme an einem der Kurse) und fahre mit der Zahlung fort.</p>
+      <p class="muted">Bitte überprüfe deine Bestellung, fülle das Formular (wenn erforderlich) aus und fahre mit der Zahlung fort.</p>
 
-     <!-- === Anmeldeformular (komplett überarbeitet) === -->
-<form id="registrationForm" class="hidden">
-  <h2 style="color:var(--dark-green); margin-top:1rem;">Teilnehmerdaten</h2>
-
-  <!-- Teilnehmer 1 (Vertragspartner) -->
-  <div id="participant1" class="participant-block">
-    <h3>Teilnehmer 1 (Vertragspartner)</h3>
-
-    <input type="text" name="vorname" id="vorname" placeholder="Vorname" required>
-    <input type="text" name="nachname" id="nachname" placeholder="Nachname" required>
-
-    <input type="text" name="strasse" id="strasse" placeholder="Straße & Hausnummer" required>
-    <input type="text" name="plz_ort" id="plz_ort" placeholder="PLZ & Ort" required>
-
-    <input type="email" name="email" id="teilnehmer_email" placeholder="E-Mail-Adresse" required>
-    <input type="tel" name="telefon" id="telefon" placeholder="Telefonnummer (optional)">
-
-    <label style="font-weight:bold; margin-top:1rem;">Geburtsdatum</label>
-    <input type="date" name="geburtsdatum" id="geburtsdatum" required>
-
-    <label style="font-weight:bold; margin-top:1rem;">Minderjährig?</label>
-    <select id="minderjaehrig-toggle-1" name="minderjaehrig_1" class="terminfenster">
-      <option value="nein">Nein</option>
-      <option value="ja">Ja</option>
-    </select>
-
-    <div id="minderjaehrig-felder-1" style="display:none; margin-top:1rem;">
-      <label style="margin-top:0.75rem;">
-        <input type="checkbox" id="kind_confirm_maturity_1">
-        Ich bestätige, dass der minderjährige Teilnehmer nach meiner Einschätzung reif, körperlich und geistig fit genug für den ausgewählten Kurs ist.
-      </label>
-    </div>
-  </div>
-
-  <!-- Dropdown Anzahl Teilnehmer (unterhalb des Anmeldeformulars von Teilnehmer 1 wie gewünscht) -->
-  <div style="margin-top:1rem;">
-    <label for="participantCount" style="font-weight:600;">Anzahl Teilnehmer (inkl. Teilnehmer 1)</label>
-    <select id="participantCount" style="margin-left:.5rem;">
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-    </select>
-  </div>
-
-  <!-- Container für zusätzliche Teilnehmerformulare -->
-  <div id="additional-participants" style="margin-top:1rem;"></div>
-
-  <h2 style="color:var(--dark-green); margin-top:2rem;">Bestätigungen</h2>
-
-  <label>
-    <input type="checkbox" id="agb" required>
-    Ich habe die AGB gelesen und akzeptiere sie. Ich bestätige, dass die Teilnahmebedingungen und der Haftungsausschluss für alle angegebenen Teilnehmer gelten.
-  </label>
-
-  <label>
-    <input type="checkbox" id="fitness" required>
-    Ich bestätige, dass ich körperlich und mental für die Kursinhalte geeignet bin (gilt für alle Teilnehmer).
-  </label>
-
-  <label>
-    <input type="checkbox" id="haftung" required>
-    Ich bestätige den Haftungsausschluss (gilt für alle Teilnehmer).
-  </label>
-
-  <!-- Aufsichtspflicht-Checkbox: explizit sichtbar, sobald irgendein Teilnehmer minderjährig ist -->
-  <div id="aufsichtspflicht-wrapper" style="display:none; margin-top:0.75rem;">
-    <label>
-      <input type="checkbox" id="aufsichtspflicht" >
-      Ich bestätige, dass ich als erwachsene Begleitperson die Aufsichtspflicht für alle minderjährigen Teilnehmer während des gesamten Kurses vollständig übernehme. Ich entbinde den Kursleiter ausdrücklich von jeder Aufsichtspflicht.
-    </label>
-  </div>
-
-  <p style="font-size:0.9rem; color:#333; margin-top:1rem;">
-    Hinweis: Der Vertrag kommt erst mit Zahlungseingang zustande.
-  </p>
-
-  <div id="form-message" class="small" style="margin-top:.5rem;"></div>
-
-  <div class="form-actions">
-    <button id="proceedToPayBtn" type="button" class="btn hidden">Weiter zur Zahlung</button>
-  </div>
-</form>
-
-  <!-- =============== RECHTS: Warenkorb, Gutschein (nun unter Warenkorb) & PayPal =============== -->
-    <aside class="card" id="checkout-right">
-      <h2>Dein Warenkorb</h2>
-
-      <ul id="cart-items" class="cart-list"></ul>
-      <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
-
-      <!-- Button zurück zur Startseite -->
-      <button class="btn" onclick="window.location.href='../index.html'">
-      Zur Startseite
-      </button>
-
-
-      <!-- === Gutscheincode: jetzt UNTER Warenkorb === -->
+      <!-- === Gutscheincode (in Kasse verfügbar) === -->
       <div id="voucher-section" style="margin-top:1rem;">
         <h3>🎟️ Gutscheincode einlösen</h3>
         <label for="voucherCode">Gutscheincode</label>
@@ -148,9 +49,63 @@
 
         <div class="form-actions">
           <button onclick="submitVoucherRequest()" class="btn">Einlösen</button>
-          <span id="voucherMessage" class="small" style="margin-left:.5rem;"></span>
+          <span id="voucherMessage" class="small"></span>
         </div>
       </div>
+
+      <hr style="margin:1rem 0;">
+
+      <!-- === Anmeldeformular (dein vorhandenes Formular, exakt übernommen) === -->
+      <form id="registrationForm" class="hidden" onsubmit="event.preventDefault(); handleFormSubmit();">
+        <h2 style="color:var(--dark-green); margin-top:1rem;">Teilnehmerdaten</h2>
+
+        <input type="text" name="vorname" id="vorname" placeholder="Vorname" required>
+        <input type="text" name="nachname" id="nachname" placeholder="Nachname" required>
+
+        <input type="text" name="strasse" id="strasse" placeholder="Straße & Hausnummer" required>
+        <input type="text" name="plz_ort" id="plz_ort" placeholder="PLZ & Ort" required>
+
+        <input type="email" name="email" id="teilnehmer_email" placeholder="E-Mail-Adresse" required>
+        <input type="tel" name="telefon" id="telefon" placeholder="Telefonnummer (optional)">
+
+        <label style="font-weight:bold; margin-top:1rem;">Geburtsdatum *</label>
+        <input type="date" name="geburtsdatum" id="geburtsdatum" required>
+
+        <label style="font-weight:bold; margin-top:2rem;">Minderjähriger Teilnehmer?</label>
+        <select id="minderjaehrig-toggle" name="minderjaehrig" class="terminfenster">
+          <option value="nein">Nein</option>
+          <option value="ja">Ja</option>
+        </select>
+
+        <div id="minderjaehrig-felder" style="display:none; margin-top:1rem;">
+          <input type="text" name="kind_name" id="kind_name" placeholder="Name des Kindes">
+          <input type="number" name="kind_alter" id="kind_alter" placeholder="Alter des Kindes" min="1" max="17">
+        </div>
+
+        <h2 style="color:var(--dark-green); margin-top:2rem;">Bestätigungen</h2>
+
+        <label><input type="checkbox" id="agb" required> Ich habe die AGB gelesen und akzeptiere sie.</label>
+        <label><input type="checkbox" id="fitness" required> Ich bestätige, dass ich körperlich und mental für die Kursinhalte geeignet bin.</label>
+        <label><input type="checkbox" id="haftung" required> Ich bestätige den Haftungsausschluss.</label>
+
+        <p style="font-size:0.9rem; color:#333; margin-top:1rem;">
+          Hinweis: Der Vertrag kommt erst mit Zahlungseingang zustande.
+        </p>
+
+        <div id="form-message" class="small" style="margin-top:.5rem;"></div>
+
+        <div class="form-actions">
+          <!-- "Weiter zur Zahlung" erscheint nach Validierung -->
+          <button id="proceedToPayBtn" type="button" class="btn hidden">Weiter zur Zahlung</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- =============== RECHTS: Warenkorb & PayPal =============== -->
+    <aside class="card" id="checkout-right">
+      <h2>Dein Warenkorb</h2>
+      <ul id="cart-items" class="cart-list"></ul>
+      <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
 
       <div id="pay-area" style="margin-top:1rem;">
         <!-- Hier werden PayPal-Buttons gerendert (oder "Jetzt bezahlen" für Kits) -->
@@ -161,512 +116,311 @@
           PayPal-Script wird benötigt. Bitte binde das PayPal SDK ein (siehe Kommentar in Quelle).
         </div>
       </div>
+
+      <p class="muted small" style="margin-top:1rem;</p>
     </aside>
   </main>
 
+  <script>
+  /*******************************
+   * kasse.html — Checkout-Logik *
+   *******************************/
 
-<script>
-/*******************************
- * kasse.html — Checkout-Logik *
- *******************************/
+  // --- Konfiguration ---
+  const FORMSPREE_ENDPOINT = "https://formspree.io/f/mldlyqdz"; // wie im cart.html
+  const REDIRECT_AFTER_PAYMENT = "danke.html";
 
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/mldlyqdz";
-const REDIRECT_AFTER_PAYMENT = "danke.html";
+  // --- Zustand ---
+  let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+  let voucherApplied = JSON.parse(localStorage.getItem("voucher_applied") || "null"); // { code, email } oder null
 
-let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-let voucherApplied = null;
-
-// Utilities
-function getCartTotal() {
-  return cart.reduce((s, i) => s + i.price * i.qty, 0);
-}
-function cartContainsCourse() {
-  return cart.some(i => (i.name || "").indexOf("Termin:") > -1);
-}
-
-// --- Update Cart UI (wie vorher) ---
-function updateCartDisplay() {
-  const list = document.getElementById("cart-items");
-  if (!list) return;
-  list.innerHTML = "";
-  cart.forEach((item) => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <div style="flex:1">
-        <div>${item.name}</div>
-        <div class="small muted">${item.qty} × ${item.price.toFixed(2)} €</div>
-      </div>
-      <div style="text-align:right">${(item.price * item.qty).toFixed(2)} €</div>
-    `;
-    list.appendChild(li);
-  });
-  const totalEl = document.getElementById("cart-total");
-  if (totalEl) totalEl.innerText = getCartTotal().toFixed(2);
-  if (!cart || cart.length === 0) {
-    const cont = document.getElementById("paypal-button-container");
-    if (cont) cont.innerHTML = "<div class='small muted'>Dein Warenkorb ist leer.</div>";
-  }
-}
-
-// --- Init UI ---
-function initCheckoutUI() {
-  voucherApplied = null;
-  const voucherMsg = document.getElementById("voucherMessage");
-  if (voucherMsg) { voucherMsg.textContent = ""; voucherMsg.className = "small"; }
-
-  updateCartDisplay();
-
-  const registrationForm = document.getElementById("registrationForm");
-  const hasCourse = cartContainsCourse();
-
-  if (hasCourse) {
-    registrationForm.classList.remove("hidden");
-    hidePaypalContainer(); // PayPal erst nach Formularvalidierung
-  } else {
-    registrationForm.classList.add("hidden");
-    if (!isVoucherActive()) initPayPal();
+  // --- Utilities ---
+  function getCartTotal() {
+    return cart.reduce((s, i) => s + i.price * i.qty, 0);
   }
 
-  // Minderjährig (Teilnehmer 1)
-  const toggle1 = document.getElementById('minderjaehrig-toggle-1');
-  const felder1 = document.getElementById('minderjaehrig-felder-1');
-  if (toggle1) {
-    toggle1.addEventListener('change', () => {
-      const show = toggle1.value === 'ja';
-      felder1.style.display = show ? 'block' : 'none';
-      updateAufsichtspflichtVisibility();
-      updateProceedVisibility();
+  function cartContainsCourse() {
+    // Annahme: Kurse haben Namen wie "Kursname – Termin: ..." aus deiner cart-Logik.
+    return cart.some(i => (i.name || "").indexOf("Termin:") > -1);
+  }
+
+  // --- Anzeige Warenkorb ---
+  function updateCartDisplay() {
+    const list = document.getElementById("cart-items");
+    list.innerHTML = "";
+    cart.forEach((item, i) => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <div style="flex:1">
+          <div>${item.name}</div>
+          <div class="small muted">${item.qty} × ${item.price.toFixed(2)} €</div>
+        </div>
+        <div style="text-align:right">${(item.price * item.qty).toFixed(2)} €</div>
+      `;
+      list.appendChild(li);
+    });
+
+    document.getElementById("cart-total").innerText = getCartTotal().toFixed(2);
+  }
+
+  // --- Initial UI-Setup basierend auf Warenkorb & Gutscheinstatus ---
+  function initCheckoutUI() {
+    updateCartDisplay();
+
+    // Voucher UI (wenn bereits eingelöst, zeigen wir den Text und blockieren Zahlung)
+    if (voucherApplied && voucherApplied.code) {
+      showVoucherAppliedMessage(`Vielen Dank! Dein Gutscheincode wurde eingelöst und wird nun geprüft. Du bekommst in Kürze eine Mail mit deiner angepassten Rechnung.`);
+      blockPaymentsBecauseVoucher();
+    }
+
+    const hasCourse = cartContainsCourse();
+    const registrationForm = document.getElementById("registrationForm");
+
+    if (hasCourse) {
+      // Form anzeigen (Pflicht)
+      registrationForm.classList.remove("hidden");
+      // PayPal buttons nicht sofort rendern — erst nach Formularvalidierung / Klick "Weiter zur Zahlung"
+      hidePaypalContainer();
+    } else {
+      // Keine Kurse -> Formular ausblenden und sofort PayPal zeigen (sofern kein Gutschein)
+      registrationForm.classList.add("hidden");
+      if (!isVoucherActive()) initPayPal(); // render PayPal sofort, falls SDK vorhanden
+    }
+
+    // Minderjährigen Toggle (Form)
+    const toggle = document.getElementById('minderjaehrig-toggle');
+    const felder = document.getElementById('minderjaehrig-felder');
+    if (toggle) {
+      toggle.addEventListener('change', () => {
+        felder.style.display = toggle.value === 'ja' ? 'block' : 'none';
+      });
+    }
+
+    // Proceed button handler (nach Formularvalidierung)
+    document.getElementById("proceedToPayBtn").addEventListener("click", () => {
+      // Nach erfolgreicher Validierung PayPal initialisieren
+      initPayPal();
+      // Optional: Scroll to PayPal area
+      document.getElementById("paypal-button-container").scrollIntoView({ behavior: "smooth" });
     });
   }
 
-  // Teilnehmeranzahl
-  const countSelect = document.getElementById('participantCount');
-  if (countSelect) {
-    countSelect.addEventListener('change', renderAdditionalParticipants);
+  // --- Voucher Helpers ---
+  function isVoucherActive() {
+    return voucherApplied && voucherApplied.code;
   }
 
-  // initial render (1)
-  renderAdditionalParticipants();
+  function showVoucherAppliedMessage(text) {
+    const msg = document.getElementById("voucherMessage");
+    if (!msg) return;
+    msg.className = "success";
+    msg.textContent = text;
+  }
 
-  // Wire up proceed button
-  document.getElementById("proceedToPayBtn").addEventListener("click", async () => {
-    if (!validateRegistrationForm()) return;
-    // Erst Formular an Formspree senden, dann PayPal initialisieren
-    await sendRegistrationToFormspree();
-    initPayPal();
-    const cont = document.getElementById("paypal-button-container");
-    if (cont) cont.scrollIntoView({ behavior: "smooth" });
-  });
-
-  // Watch basic fields for showing proceed button
-  const watchSelectors = [
-    "#vorname", "#nachname", "#strasse", "#plz_ort",
-    "#teilnehmer_email", "#geburtsdatum",
-    "#agb", "#fitness", "#haftung",
-    "#minderjaehrig-toggle-1", "#kind_confirm_maturity_1"
-  ];
-  watchSelectors.forEach(sel => {
-    const el = document.querySelector(sel);
-    if (!el) return;
-    const ev = (el.tagName === "SELECT" || el.type === "checkbox" || el.type === "radio" || el.type === "date") ? "change" : "input";
-    el.addEventListener(ev, updateProceedVisibility);
-  });
-
-  updateProceedVisibility();
-}
-
-// --- Voucher helpers & Anpassung: prüfe Formular wenn Kurs im Warenkorb ---
-function isVoucherActive() {
-  return voucherApplied && voucherApplied.code;
-}
-function showVoucherAppliedMessage(text) {
-  const msg = document.getElementById("voucherMessage");
-  if (!msg) return;
-  msg.className = "success";
-  msg.textContent = text;
-}
-function blockPaymentsBecauseVoucher() {
-  hidePaypalContainer();
-  document.getElementById("proceedToPayBtn").classList.add("hidden");
-}
-function unblockPayments() {
-  const hasCourse = cartContainsCourse();
-  if (hasCourse) {
-    document.getElementById("proceedToPayBtn").classList.remove("hidden");
+  function blockPaymentsBecauseVoucher() {
+    // Versteckt PayPal / Weiter zur Zahlung und zeigt Info
     hidePaypalContainer();
-  } else {
     document.getElementById("proceedToPayBtn").classList.add("hidden");
-    initPayPal();
-  }
-}
-
-async function submitVoucherRequest() {
-  const code = document.getElementById("voucherCode").value.trim();
-  const email = document.getElementById("customerEmail").value.trim();
-  const msgEl = document.getElementById("voucherMessage");
-
-  if (!code) {
-    if (msgEl) { msgEl.className = "error"; msgEl.textContent = "Bitte Gutscheincode eingeben."; }
-    return;
-  }
-  if (!email || !email.includes("@")) {
-    if (msgEl) { msgEl.className = "error"; msgEl.textContent = "Bitte gültige E-Mail-Adresse eingeben."; }
-    return;
   }
 
-  // Wenn Kurs im Warenkorb liegt -> Formularsichtbar sein & validiert sein müssen
-  if (cartContainsCourse()) {
-    const regForm = document.getElementById("registrationForm");
-    const formVisible = regForm && !regForm.classList.contains("hidden");
-    if (formVisible && !validateRegistrationForm()) {
-      if (msgEl) { msgEl.className = "error"; msgEl.textContent = "Bitte fülle zuerst das Anmeldeformular vollständig aus."; }
-      return;
+  function unblockPayments() {
+    // Entfernt Voucher-Block, zeigt PayPal bzw. ermöglicht Weiter zur Zahlung (abhängig von Kartentyp)
+    const hasCourse = cartContainsCourse();
+    if (hasCourse) {
+      document.getElementById("proceedToPayBtn").classList.remove("hidden");
+      hidePaypalContainer();
+    } else {
+      document.getElementById("proceedToPayBtn").classList.add("hidden");
+      initPayPal();
     }
   }
 
-  if (msgEl) { msgEl.className = "success"; msgEl.textContent = "Vielen Dank! Dein Gutscheincode wurde eingereicht und wird geprüft."; }
+  // --- Formspree Gutschein-Funktion (kopiert / angepasst aus cart.html) ---
+  async function submitVoucherRequest() {
+    const code = document.getElementById("voucherCode").value.trim();
+    const email = document.getElementById("customerEmail").value.trim();
+    const msgEl = document.getElementById("voucherMessage");
 
-  setTimeout(() => {
-    const el = document.getElementById("voucherCode"); if (el) el.value = "";
-    const em = document.getElementById("customerEmail"); if (em) em.value = "";
-  }, 800);
+    if (!code) {
+      msgEl.className = "error";
+      msgEl.textContent = "Bitte Gutscheincode eingeben.";
+      return;
+    }
 
-  try {
-    const response = await fetch(FORMSPREE_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        _subject: "🪙 Neuer Gutschein eingelöst",
-        code: code,
-        kunden_email: email,
-        warenkorb_summe: getCartTotal().toFixed(2),
-        warenkorb_inhalt: cart.map(i => `${i.name} x${i.qty}`).join("; ")
-      }),
-    });
+    if (!email || !email.includes("@")) {
+      msgEl.className = "error";
+      msgEl.textContent = "Bitte gültige E-Mail-Adresse eingeben.";
+      return;
+    }
 
-    if (!response.ok) throw new Error(`Fehler beim Senden (${response.status})`);
+    msgEl.className = "success";
+    msgEl.textContent = "Vielen Dank! Dein Gutscheincode wurde eingelöst und wird nun geprüft. Du bekommst in Kürze eine Mail mit deiner angepassten Rechnung.";
 
-    voucherApplied = { code, email };
-    showVoucherAppliedMessage("Vielen Dank! Dein Gutscheincode wurde eingereicht und wird nun geprüft. Du bekommst eine angepasste Rechnung per Mail.");
-    blockPaymentsBecauseVoucher();
+    // Felder zurücksetzen wie im cart.html (UX)
+    setTimeout(() => {
+      document.getElementById("voucherCode").value = "";
+      document.getElementById("customerEmail").value = "";
+    }, 1000);
 
-  } catch (err) {
-    console.error("⚠️ Fehler beim Senden an Formspree:", err);
-    if (msgEl) { msgEl.className = "error"; msgEl.textContent = "⚠️ Gutschein konnte nicht gesendet werden. Bitte kontaktiere uns per Mail."; }
+    try {
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          _subject: "🪙 Neuer Gutschein eingelöst",
+          code: code,
+          kunden_email: email,
+          warenkorb_summe: getCartTotal().toFixed(2),
+          warenkorb_inhalt: cart.map(i => `${i.name} x${i.qty}`).join("; ")
+        }),
+      });
+
+      if (!response.ok) throw new Error(`Fehler beim Senden (${response.status})`);
+
+      // Falls erfolgreich: merke Gutschein lokal und blockiere Zahlungen (wie gewünscht)
+      voucherApplied = { code, email };
+      localStorage.setItem("voucher_applied", JSON.stringify(voucherApplied));
+      showVoucherAppliedMessage("Vielen Dank! Dein Gutscheincode wurde eingelöst und wird nun geprüft. Du bekommst in Kürze eine Mail mit deiner angepassten Rechnung.");
+      blockPaymentsBecauseVoucher();
+
+    } catch (err) {
+      console.error("⚠️ Fehler beim Senden an Formspree:", err);
+      msgEl.className = "error";
+      msgEl.textContent = "⚠️ Gutschein konnte aus technischen Gründen nicht gesendet werden. Bitte schicke den Code per Kontaktformular oder Mail, wir werden uns umgehend bei dir melden.";
+    }
+
+    setTimeout(() => {
+      // kurze Aufräumaktion: entferne den Hinweis nach 8s (wie vorher)
+      const msg = document.getElementById("voucherMessage");
+      if (msg && !isVoucherActive()) msg.textContent = "";
+    }, 8000);
   }
 
-  setTimeout(() => {
-    const msg = document.getElementById("voucherMessage");
-    if (msg && !isVoucherActive()) msg.textContent = "";
-  }, 8000);
-}
-window.submitVoucherRequest = submitVoucherRequest;
+  // --- Registration form handling ---
+  function validateRegistrationForm() {
+    // Einfache Validierung: required Felder, Checkboxen, E-Mail-Format
+    const requiredIds = ["vorname", "nachname", "strasse", "plz_ort", "teilnehmer_email", "geburtsdatum", "agb", "fitness", "haftung"];
+    const msgEl = document.getElementById("form-message");
+    msgEl.textContent = "";
 
-// --- Dynamisches Erzeugen zusätzlicher Teilnehmer ---
-function renderAdditionalParticipants() {
-  const container = document.getElementById('additional-participants');
-  const count = parseInt(document.getElementById('participantCount').value, 10) || 1;
-  container.innerHTML = "";
+    // Check simple inputs
+    const vorname = document.getElementById("vorname").value.trim();
+    const nachname = document.getElementById("nachname").value.trim();
+    const strasse = document.getElementById("strasse").value.trim();
+    const plzOrt = document.getElementById("plz_ort").value.trim();
+    const email = document.getElementById("teilnehmer_email").value.trim();
+    const geb = document.getElementById("geburtsdatum").value;
+    const agb = document.getElementById("agb").checked;
+    const fitness = document.getElementById("fitness").checked;
+    const haftung = document.getElementById("haftung").checked;
 
-  // Wir beginnen bei 2, da Teilnehmer 1 bereits im DOM ist
-  for (let i = 2; i <= count; i++) {
-    const block = document.createElement('div');
-    block.className = 'participant-block';
-    block.style.marginTop = '1rem';
-    block.id = `participant_block_${i}`;
+    if (!vorname || !nachname || !strasse || !plzOrt || !email || !geb) {
+      msgEl.className = "error";
+      msgEl.textContent = "Bitte fülle alle Pflichtfelder aus.";
+      return false;
+    }
 
-    block.innerHTML = `
-      <h4>Teilnehmer ${i}</h4>
-      <input type="text" id="vorname_${i}" placeholder="Vorname" required>
-      <input type="text" id="nachname_${i}" placeholder="Nachname" required>
-      <label style="font-weight:bold; margin-top:.5rem;">Geburtsdatum</label>
-      <input type="date" id="geburtsdatum_${i}" required>
-      <label style="font-weight:bold; margin-top:.5rem;">Minderjährig?</label>
-      <select id="minderjaehrig_${i}">
-        <option value="nein">Nein</option>
-        <option value="ja">Ja</option>
-      </select>
-      <div id="minderjaehrig_felder_${i}" style="display:none; margin-top:.5rem;">
-        <small>Hinweis: Minderjährige Teilnehmer dürfen nur in Begleitung eines Erwachsenen teilnehmen. Teilnehmer 1 muss die Aufsichtspflicht bestätigen.</small>
-      </div>
-      <div style="margin-top:.5rem;">
-        <button type="button" class="btn small" id="copyFrom1_${i}">Daten von Teilnehmer 1 übernehmen (außer Vorname)</button>
-        <button type="button" class="btn small" id="remove_${i}">Entfernen</button>
-      </div>
-    `;
-    container.appendChild(block);
+    if (!email.includes("@")) {
+      msgEl.className = "error";
+      msgEl.textContent = "Bitte gib eine gültige E-Mail-Adresse an.";
+      return false;
+    }
 
-    // Eventlisteners
-    document.getElementById(`minderjaehrig_${i}`).addEventListener('change', () => {
-      const show = document.getElementById(`minderjaehrig_${i}`).value === 'ja';
-      document.getElementById(`minderjaehrig_felder_${i}`).style.display = show ? 'block' : 'none';
-      updateAufsichtspflichtVisibility();
-      updateProceedVisibility();
-    });
+    if (!agb || !fitness || !haftung) {
+      msgEl.className = "error";
+      msgEl.textContent = "Bitte bestätige alle Pflichtbestätigungen.";
+      return false;
+    }
 
-    document.getElementById(`copyFrom1_${i}`).addEventListener('click', () => {
-      copyDataFromParticipant1To(i);
-      updateProceedVisibility();
-    });
-
-    document.getElementById(`remove_${i}`).addEventListener('click', () => {
-      // set participantCount to current -1 and re-render
-      const sel = document.getElementById('participantCount');
-      const newCount = Math.max(1, parseInt(sel.value, 10) - 1);
-      sel.value = newCount;
-      renderAdditionalParticipants();
-      updateProceedVisibility();
-    });
-
-    // Watch fields for validation trigger
-    ['vorname','nachname','geburtsdatum'].forEach(f => {
-      const el = document.getElementById(`${f}_${i}`);
-      if (!el) return;
-      el.addEventListener('input', updateProceedVisibility);
-    });
-  }
-
-  // After rendering, update aufsichtspflicht visibility
-  updateAufsichtspflichtVisibility();
-}
-
-// Kopieren von Teilnehmer 1 (außer Vorname)
-function copyDataFromParticipant1To(index) {
-  // Wir kopieren Nachname, Geburtsdatum, Minderjährig-Flag (falls sinnvoll)
-  const nach1 = document.getElementById('nachname').value.trim();
-  const geb1 = document.getElementById('geburtsdatum').value;
-  const minder1 = document.getElementById('minderjaehrig-toggle-1').value;
-
-  const nachEl = document.getElementById(`nachname_${index}`);
-  const gebEl = document.getElementById(`geburtsdatum_${index}`);
-  const minderEl = document.getElementById(`minderjaehrig_${index}`);
-
-  if (nachEl) nachEl.value = nach1 || "";
-  if (gebEl) gebEl.value = geb1 || "";
-  if (minderEl) minderEl.value = minder1 || "nein";
-
-  // Trigger change events for visibility
-  const ev = new Event('change');
-  if (minderEl) minderEl.dispatchEvent(ev);
-}
-
-// Zeige/Verstecke die Aufsichtspflicht-Checkbox wenn mind. ein Teilnehmer minderjährig ist
-function updateAufsichtspflichtVisibility() {
-  let anyMinor = false;
-  // Teilnehmer 1
-  if (document.getElementById('minderjaehrig-toggle-1')?.value === 'ja') anyMinor = true;
-  // zusätzliche Teilnehmer
-  const count = parseInt(document.getElementById('participantCount')?.value || "1", 10);
-  for (let i = 2; i <= count; i++) {
-    const el = document.getElementById(`minderjaehrig_${i}`);
-    if (el && el.value === 'ja') { anyMinor = true; break; }
-  }
-  document.getElementById('aufsichtspflicht-wrapper').style.display = anyMinor ? 'block' : 'none';
-}
-
-// --- Validation ---
-function validateRegistrationForm() {
-  const msgEl = document.getElementById("form-message");
-  msgEl.textContent = "";
-
-  // Wenn kein Kurs im Warenkorb liegt, Formular muss nicht zwingend ausgefüllt sein (aber proceed bleibt hidden)
-  if (!cartContainsCourse()) {
-    // still return true to allow voucher flow etc when form hidden? We return true if hidden or no course.
+    // alles gut
+    msgEl.className = "success";
+    msgEl.textContent = "Formular ist vollständig. Klicke auf 'Weiter zur Zahlung'.";
     return true;
   }
 
-  // Teilnehmer 1 checks (contract partner)
-  const vorname = document.getElementById("vorname").value.trim();
-  const nachname = document.getElementById("nachname").value.trim();
-  const strasse = document.getElementById("strasse").value.trim();
-  const plzOrt = document.getElementById("plz_ort").value.trim();
-  const email = document.getElementById("teilnehmer_email").value.trim();
-  const geb = document.getElementById("geburtsdatum").value;
-  const agb = document.getElementById("agb").checked;
-  const fitness = document.getElementById("fitness").checked;
-  const haftung = document.getElementById("haftung").checked;
-
-  if (!vorname || !nachname || !strasse || !plzOrt || !email || !geb) {
-    msgEl.className = "error";
-    msgEl.textContent = "Bitte fülle alle Pflichtfelder des Vertragspartners (Teilnehmer 1) aus.";
-    return false;
-  }
-  if (!email.includes("@")) {
-    msgEl.className = "error";
-    msgEl.textContent = "Bitte gib eine gültige E-Mail-Adresse an.";
-    return false;
-  }
-  if (!agb || !fitness || !haftung) {
-    msgEl.className = "error";
-    msgEl.textContent = "Bitte bestätige AGB, Fitness und Haftung (gilt für alle Teilnehmer).";
-    return false;
-  }
-
-  // Wenn Teilnehmer 1 minderjährig ist: zusätzliche Bestätigungen
-  const isMinor1 = document.getElementById("minderjaehrig-toggle-1").value === "ja";
-  if (isMinor1) {
-    const kidConfirm = document.getElementById("kind_confirm_maturity_1").checked;
-    if (!kidConfirm) {
-      msgEl.className = "error";
-      msgEl.textContent = "Bitte bestätigen Sie die Reife/Fitness des minderjährigen Teilnehmers (Teilnehmer 1).";
-      return false;
-    }
-    // auch: Aufsichtspflicht muss gesetzt, weil minderjährig
-    const aufsicht = document.getElementById("aufsichtspflicht").checked;
-    if (!aufsicht) {
-      msgEl.className = "error";
-      msgEl.textContent = "Bitte bestätigen Sie als Vertragspartner die Übernahme der Aufsichtspflicht für minderjährige Teilnehmer.";
-      return false;
-    }
-  }
-
-  // Zusätzliche Teilnehmer prüfen
-  const count = parseInt(document.getElementById('participantCount').value || "1", 10);
-  for (let i = 2; i <= count; i++) {
-    const v = document.getElementById(`vorname_${i}`)?.value?.trim();
-    const n = document.getElementById(`nachname_${i}`)?.value?.trim();
-    const g = document.getElementById(`geburtsdatum_${i}`)?.value;
-    const minder = document.getElementById(`minderjaehrig_${i}`)?.value === 'ja';
-
-    if (!v || !n || !g) {
-      msgEl.className = "error";
-      msgEl.textContent = `Bitte fülle alle Pflichtfelder für Teilnehmer ${i} (Vorname, Nachname, Geburtsdatum).`;
-      return false;
-    }
-    if (minder) {
-      // Aufsichtspflicht muss durch Teilnehmer 1 bestätigt sein
-      const aufsicht = document.getElementById("aufsichtspflicht").checked;
-      if (!aufsicht) {
-        msgEl.className = "error";
-        msgEl.textContent = `Teilnehmer ${i} ist minderjährig — bitte bestätigen Sie als Vertragspartner die Aufsichtspflicht.`;
-        return false;
-      }
-    }
-  }
-
-  msgEl.className = "success";
-  msgEl.textContent = "Formular ist vollständig. Klicke auf 'Weiter zur Zahlung'.";
-  return true;
-}
-
-// Update Proceed Button visibility based on validation
-function updateProceedVisibility() {
-  const proceedBtn = document.getElementById("proceedToPayBtn");
-  if (!proceedBtn) return;
-  // Only show proceed if cart contains course and validation passes
-  if (cartContainsCourse()) {
+  function handleFormSubmit() {
+    // Wir wollen nicht direkt versenden — stattdessen aktivieren wir den "Weiter zur Zahlung" Button
     const ok = validateRegistrationForm();
-    if (ok) proceedBtn.classList.remove("hidden");
-    else proceedBtn.classList.add("hidden");
-  } else {
-    proceedBtn.classList.add("hidden");
-  }
-}
-
-// --- Send registration to Formspree ---
-async function sendRegistrationToFormspree() {
-  const participant1 = {
-    vorname: document.getElementById("vorname").value.trim(),
-    nachname: document.getElementById("nachname").value.trim(),
-    strasse: document.getElementById("strasse").value.trim(),
-    plz_ort: document.getElementById("plz_ort").value.trim(),
-    email: document.getElementById("teilnehmer_email").value.trim(),
-    telefon: document.getElementById("telefon").value.trim(),
-    geburtsdatum: document.getElementById("geburtsdatum").value,
-    minderjaehrig: document.getElementById("minderjaehrig-toggle-1").value,
-    kind_confirm_maturity: document.getElementById("kind_confirm_maturity_1")?.checked ? "ja" : "nein",
-    agb: document.getElementById("agb").checked ? "ja" : "nein",
-    fitness: document.getElementById("fitness").checked ? "ja" : "nein",
-    haftung: document.getElementById("haftung").checked ? "ja" : "nein",
-    aufsichtspflicht: document.getElementById("aufsichtspflicht")?.checked ? "ja" : "nein"
-  };
-
-  const participants_additional = [];
-  const count = parseInt(document.getElementById('participantCount').value || "1", 10);
-  for (let i = 2; i <= count; i++) {
-    participants_additional.push({
-      vorname: document.getElementById(`vorname_${i}`).value.trim(),
-      nachname: document.getElementById(`nachname_${i}`).value.trim(),
-      geburtsdatum: document.getElementById(`geburtsdatum_${i}`).value,
-      minderjaehrig: document.getElementById(`minderjaehrig_${i}`).value === 'ja' ? 'ja' : 'nein'
-    });
-  }
-
-  const data = {
-    _subject: "📩 Neue Kursanmeldung",
-    participant1,
-    participants_additional,
-    warenkorb_summe: getCartTotal().toFixed(2),
-    warenkorb_inhalt: cart.map(i => `${i.name} × ${i.qty} = ${(i.price * i.qty).toFixed(2)} €`).join("; ")
-  };
-
-  if (voucherApplied) {
-    data.gutschein_code = voucherApplied.code;
-    data.gutschein_email = voucherApplied.email;
-  }
-
-  try {
-    await fetch(FORMSPREE_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    });
-  } catch (err) {
-    console.error("❌ Fehler beim Senden der Formspree-Anmeldung:", err);
-  }
-}
-
-// --- PayPal: init & render (unverändert, leicht angepasst) ---
-function showPaypalMissing() {
-  document.getElementById("paypal-missing").classList.remove("hidden");
-}
-function hidePaypalContainer() {
-  const cont = document.getElementById("paypal-button-container");
-  if (cont) cont.innerHTML = "";
-  const pm = document.getElementById("paypal-missing");
-  if (pm) pm.classList.add("hidden");
-}
-function initPayPal() {
-  if (isVoucherActive()) {
-    hidePaypalContainer();
-    return;
-  }
-  if (typeof paypal === "undefined") {
-    showPaypalMissing();
-    return;
-  }
-  const cont = document.getElementById("paypal-button-container");
-  cont.innerHTML = "";
-  if (!cart || cart.length === 0) {
-    cont.innerHTML = "<div class='small muted'>Dein Warenkorb ist leer.</div>";
-    return;
-  }
-  paypal.Buttons({
-    createOrder: (data, actions) => {
-      return actions.order.create({
-        purchase_units: [{
-          description: cart.map(i => `${i.name} x${i.qty}`).join("; "),
-          amount: { currency_code: "EUR", value: getCartTotal().toFixed(2) }
-        }]
-      });
-    },
-    onApprove: (data, actions) => {
-      return actions.order.capture().then(function(details) {
-        localStorage.removeItem("cart");
-        try { alert("Danke, " + (details.payer?.name?.given_name || "") + "! Zahlung erhalten."); } catch(e){}
-        window.location.href = REDIRECT_AFTER_PAYMENT;
-      });
-    },
-    onError: (err) => {
-      console.error("PayPal Fehler:", err);
-      alert("⚠️ Zahlung aus technischen Gründen fehlgeschlagen. Bitte kontaktiere uns per Kontaktformular oder Mail");
+    if (ok) {
+      document.getElementById("proceedToPayBtn").classList.remove("hidden");
     }
-  }).render('#paypal-button-container');
-}
+  }
 
-// --- Page lifecycle ---
-document.addEventListener("DOMContentLoaded", () => {
-  initCheckoutUI();
-  if (!cartContainsCourse() && !isVoucherActive()) initPayPal();
-});
-</script>
+  // --- PayPal: init & render ---
+  function showPaypalMissing() {
+    document.getElementById("paypal-missing").classList.remove("hidden");
+  }
+
+  function hidePaypalContainer() {
+    document.getElementById("paypal-button-container").innerHTML = "";
+    document.getElementById("paypal-missing").classList.add("hidden");
+  }
+
+  function initPayPal() {
+    // Falls Gutschein aktiv -> kein PayPal
+    if (isVoucherActive()) {
+      hidePaypalContainer();
+      return;
+    }
+
+    // PayPal SDK vorhanden?
+    if (typeof paypal === "undefined") {
+      showPaypalMissing();
+      return;
+    }
+
+    const cont = document.getElementById("paypal-button-container");
+    cont.innerHTML = ""; // sauber starten
+
+    if (!cart || cart.length === 0) {
+      cont.innerHTML = "<div class='small muted'>Dein Warenkorb ist leer.</div>";
+      return;
+    }
+
+    // Erstelle Bestellung bei PayPal
+    paypal.Buttons({
+      createOrder: (data, actions) => {
+        return actions.order.create({
+          purchase_units: [{
+            description: cart.map(i => `${i.name} x${i.qty}`).join("; "),
+            amount: {
+              currency_code: "EUR",
+              value: getCartTotal().toFixed(2)
+            }
+          }]
+        });
+      },
+      onApprove: (data, actions) => {
+        return actions.order.capture().then(function(details) {
+          // Nach erfolgreicher Zahlung: Warenkorb leeren, Voucher entfernen, redirect
+          localStorage.removeItem("cart");
+          localStorage.removeItem("voucher_applied");
+          // kleine Bestätigungs-Alert (optional)
+          try { alert("Danke, " + (details.payer?.name?.given_name || "") + "! Zahlung erhalten."); } catch(e){}
+          window.location.href = REDIRECT_AFTER_PAYMENT;
+        });
+      },
+      onError: (err) => {
+        console.error("PayPal Fehler:", err);
+        alert("⚠️ Zahlung fehlgeschlagen. Bitte erneut versuchen.");
+      }
+    }).render('#paypal-button-container');
+  }
+
+  // --- Page lifecycle ---
+  document.addEventListener("DOMContentLoaded", () => {
+    initCheckoutUI();
+
+    // Wenn kein Kurs im Warenkorb, PayPal wird direkt initialisiert (sofern kein Gutschein)
+    if (!cartContainsCourse() && !isVoucherActive()) initPayPal();
+  });
+
+  // --- Expose voucher function for button onclick ---
+  window.submitVoucherRequest = submitVoucherRequest;
+
+  // --- Debug helpers (optional in dev) ---
+  // window._debug = { cart, getCartTotal, cartContainsCourse };
+
+  </script>
+</body>
+</html>
