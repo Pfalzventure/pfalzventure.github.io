@@ -124,7 +124,46 @@
   </div>
 </form>
 
-<!-- ... (Rest deines Seiteninhalts; z.B. Warenkorb / Gutschein / PayPal bleibt wie gehabt) ... -->
+  <!-- =============== RECHTS: Warenkorb, Gutschein (nun unter Warenkorb) & PayPal =============== -->
+    <aside class="card" id="checkout-right">
+      <h2>Dein Warenkorb</h2>
+
+      <ul id="cart-items" class="cart-list"></ul>
+      <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
+
+      <!-- Button zurück zur Startseite -->
+      <button class="btn" onclick="window.location.href='../index.html'">
+      Zur Startseite
+      </button>
+
+
+      <!-- === Gutscheincode: jetzt UNTER Warenkorb === -->
+      <div id="voucher-section" style="margin-top:1rem;">
+        <h3>🎟️ Gutscheincode einlösen</h3>
+        <label for="voucherCode">Gutscheincode</label>
+        <input type="text" id="voucherCode" placeholder="Code eingeben">
+
+        <label for="customerEmail">Deine E-Mail-Adresse</label>
+        <input type="email" id="customerEmail" placeholder="name@example.com">
+
+        <div class="form-actions">
+          <button onclick="submitVoucherRequest()" class="btn">Einlösen</button>
+          <span id="voucherMessage" class="small" style="margin-left:.5rem;"></span>
+        </div>
+      </div>
+
+      <div id="pay-area" style="margin-top:1rem;">
+        <!-- Hier werden PayPal-Buttons gerendert (oder "Jetzt bezahlen" für Kits) -->
+        <div id="paypal-button-container"></div>
+
+        <!-- Fallback / Info, falls PayPal SDK fehlt -->
+        <div id="paypal-missing" class="hidden small error" style="margin-top:.5rem;">
+          PayPal-Script wird benötigt. Bitte binde das PayPal SDK ein (siehe Kommentar in Quelle).
+        </div>
+      </div>
+    </aside>
+  </main>
+
 
 <script>
 /*******************************
