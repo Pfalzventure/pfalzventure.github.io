@@ -551,10 +551,16 @@ main {
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-.product-voucherpic{
+.product-voucherpic {
   text-align: left;
-    display: block;
 }
+
+.product-voucherpic img {
+  display: block;
+  width: 50%;    /* falls du die Größe lieber im CSS haben willst */
+  height: auto;
+}
+
 
 .product-figure figcaption {
   font-size: 0.7rem;
