@@ -298,6 +298,14 @@ Hero Section (Startseite)
   background: #28a745;
 }
 
+.pay-btn {
+  width: 100%;
+  display: block;
+  padding: 14px;
+  font-size: 18px;
+  border-radius: 8px;
+}
+
 /* 🟠 Warenkorb Button */
 .cart-btn {
   background-color: orange;
