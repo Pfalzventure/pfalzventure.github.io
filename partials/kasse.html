@@ -26,13 +26,23 @@
     .center { text-align:center; }
     .right-aux { margin-top:1rem; }
 
+    /* Infobox */
+    .info-box {
+      margin-top: 1rem;
+      background: #e7f7ee;
+      border-left: 4px solid #0f5132;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      color: #0b3b2a;
+    }
+
     /* Sidebar sticky (Option 1) */
     #checkout-right { position:sticky; top:1rem; align-self:start; }
 
     @media (max-width:900px) { .container { grid-template-columns: 1fr; } #checkout-right { position: static; } }
   </style>
 
- <!-- PayPal SDK -->
+ <!-- PayPal SDK (ersetze client-id durch deine Live/Sandbox-ID) -->
   <script src="https://www.paypal.com/sdk/js?client-id=Abafm4k5xNnVRQ7UnZmQFYWYJ2_dtwU9u1ubHTo9cC2KUjoD8no3TZgZBHI_hiLqvRQHkLxFAjpU6fEJ&currency=EUR"></script>
   
 </head>
@@ -92,13 +102,15 @@
     Ich bestätige, dass ich körperlich und mental für die Kursinhalte geeignet bin (gilt für alle Teilnehmer).
   </label>
 
-  <p style="font-size:0.9rem; color:#333; margin-top:1rem;">
-    Hinweis: Minderjährige dürfen nur in Begleitung eines Erwachsenen teilnehmen, der die Aufsichtspflicht übernimmt.
-  </p>
-
-  <p style="font-size:0.9rem; color:#333; margin-top:0.25rem;">
-    Hinweis: Der Vertrag kommt erst mit Zahlungseingang zustande.
-  </p>
+  <!-- Hervorgehobene Infobox unter den Bestätigungen -->
+  <div class="info-box" role="note" aria-live="polite">
+    <strong>Wichtige Hinweise:</strong>
+    <ul style="margin:0.5rem 0 0 1.1rem; padding:0;">
+      <li>Minderjährige dürfen nur in Begleitung eines Erwachsenen teilnehmen, der die Aufsichtspflicht übernimmt.</li>
+      <li>Der Vertrag kommt erst mit Zahlungseingang zustande.</li>
+      <li>Bitte überprüfe deine Daten sorgfältig — Änderungen nach Zahlung sind nur eingeschränkt möglich.</li>
+    </ul>
+  </div>
 
   <div id="form-message" class="small" style="margin-top:.5rem;"></div>
 
@@ -107,7 +119,7 @@
   </div>
 </form>
       
-     <!-- === Anmeldeformular (bereinigt: keine Minderjährig-Option, keine Copy-Buttons) === -->
+     <!-- === Anmeldeformular (bereinigt) === -->
 </section>
 
 <!-- =============== RECHTS: Warenkorb, Gutschein (oben Warenkorb, darunter Gutschein) & PayPal =============== -->
@@ -152,7 +164,7 @@
 
 <script>
 /*******************************
- * kasse.html — Checkout-Logik *
+ * kasse.html — Checkout-Logik (korrigiert)
  *******************************/
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mldlyqdz";
@@ -169,7 +181,7 @@ function cartContainsCourse() {
   return cart.some(i => (i.name || "").indexOf("Termin:") > -1);
 }
 
-// --- Update Cart UI (wie vorher) ---
+// --- Update Cart UI ---
 function updateCartDisplay() {
   const list = document.getElementById("cart-items");
   if (!list) return;
@@ -221,21 +233,24 @@ function initCheckoutUI() {
   // initial render (1)
   renderAdditionalParticipants();
 
-  // Wire up proceed button
-  document.getElementById("proceedToPayBtn").addEventListener("click", async () => {
-    if (!validateRegistrationForm()) return;
-    // Erst Formular an Formspree senden, dann PayPal initialisieren
-    await sendRegistrationToFormspree();
-    initPayPal();
-    const cont = document.getElementById("paypal-button-container");
-    if (cont) cont.scrollIntoView({ behavior: "smooth" });
-  });
+  // Wire up proceed button (prüfe Element vorhanden)
+  const proceedBtn = document.getElementById("proceedToPayBtn");
+  if (proceedBtn) {
+    proceedBtn.addEventListener("click", async () => {
+      if (!validateRegistrationForm()) return;
+      // Erst Formular an Formspree senden, dann PayPal initialisieren
+      await sendRegistrationToFormspree();
+      initPayPal();
+      const cont = document.getElementById("paypal-button-container");
+      if (cont) cont.scrollIntoView({ behavior: "smooth" });
+    });
+  }
 
   // Watch basic fields for showing proceed button
   const watchSelectors = [
     "#vorname", "#nachname", "#strasse", "#plz_ort",
     "#teilnehmer_email", "#geburtsdatum",
-    "#agb", "#fitness", "#haftung"
+    "#agb", "#fitness"
   ];
   watchSelectors.forEach(sel => {
     const el = document.querySelector(sel);
@@ -396,7 +411,6 @@ function validateRegistrationForm() {
   const geb = document.getElementById("geburtsdatum").value;
   const agb = document.getElementById("agb").checked;
   const fitness = document.getElementById("fitness").checked;
-  const haftung = document.getElementById("haftung").checked;
 
   if (!vorname || !nachname || !strasse || !plzOrt || !email || !geb) {
     msgEl.className = "error";
@@ -408,9 +422,9 @@ function validateRegistrationForm() {
     msgEl.textContent = "Bitte gib eine gültige E-Mail-Adresse an.";
     return false;
   }
-  if (!agb || !fitness || !haftung) {
+  if (!agb || !fitness) {
     msgEl.className = "error";
-    msgEl.textContent = "Bitte bestätige AGB, Fitness und Haftung (gilt für alle Teilnehmer).";
+    msgEl.textContent = "Bitte bestätige AGB und Fitness (gilt für alle Teilnehmer).";
     return false;
   }
 
@@ -458,8 +472,7 @@ async function sendRegistrationToFormspree() {
     telefon: document.getElementById("telefon").value.trim(),
     geburtsdatum: document.getElementById("geburtsdatum").value,
     agb: document.getElementById("agb").checked ? "ja" : "nein",
-    fitness: document.getElementById("fitness").checked ? "ja" : "nein",
-    haftung: document.getElementById("haftung").checked ? "ja" : "nein"
+    fitness: document.getElementById("fitness").checked ? "ja" : "nein"
   };
 
   const participants_additional = [];
@@ -496,7 +509,7 @@ async function sendRegistrationToFormspree() {
   }
 }
 
-// --- PayPal: init & render (unverändert, leicht angepasst) ---
+// --- PayPal: init & render ---
 function showPaypalMissing() {
   document.getElementById("paypal-missing").classList.remove("hidden");
 }
