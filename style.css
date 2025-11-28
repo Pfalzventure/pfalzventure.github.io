@@ -552,14 +552,16 @@ main {
 }
 
 .product-voucherpic {
-  text-align: left;
+  text-align: left;   /* richtet Inhalt im figure aus */
+  margin: 0;          /* optional: entfernt Seitenabstand */
 }
 
 .product-voucherpic img {
-  display: block;
-  width: 50%;    /* falls du die Größe lieber im CSS haben willst */
+  display: block;     /* verhindert automatische Zentrierung */
+  width: 50%;         /* gleiche Skalierung wie im HTML */
   height: auto;
 }
+
 
 
 .product-figure figcaption {
