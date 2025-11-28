@@ -553,6 +553,7 @@ main {
 
 .product-voucherpic{
   text-align: left;
+    display: block;
 }
 
 .product-figure figcaption {
