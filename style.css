@@ -551,16 +551,16 @@ main {
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-.product-voucherpic {
-  text-align: left;   /* richtet Inhalt im figure aus */
-  margin: 0;          /* optional: entfernt Seitenabstand */
+.product-voucherpic img {
+  display: block;
+  width: 50%;
+  max-width: 100%;
+  height: auto;
+  margin: 0 !important;       /* überschreibt .product img */
+  margin-left: 0 !important;  /* sicherstellen */
+  margin-right: auto !important;
 }
 
-.product-voucherpic img {
-  display: block;     /* verhindert automatische Zentrierung */
-  width: 50%;         /* gleiche Skalierung wie im HTML */
-  height: auto;
-}
 
 
 
