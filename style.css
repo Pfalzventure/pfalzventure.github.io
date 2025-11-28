@@ -301,8 +301,8 @@ Hero Section (Startseite)
 
 .pay-btn {
   width: 100%;
-   background-color: #FF8C00;
-   color: white;
+  background-color: #FF8C00 !important;
+  color: white !important;
   display: block;
   padding: 14px;
   font-size: 18px;
