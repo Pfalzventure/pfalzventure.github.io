@@ -318,6 +318,25 @@ Hero Section (Startseite)
 .pay-btn:hover {
   background-color: #FF7000; /* gleiches dunkles Orange beim Hover */
 }
+.pay-btn {
+  width: 100%;
+  background-color: #E65C00 !important; /* dunkleres Orange */
+  color: white !important;
+  display: block;
+  padding: 14px;
+  font-size: 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 
+    0 8px 16px rgba(0,0,0,0.45),
+    inset 0 3px 6px rgba(255,255,255,0.6);
+  transition: background 0.3s;
+}
+
+.pay-btn:hover {
+  background-color: #FF7000 !important; /* gleiches dunkles Orange beim Hover */
+}
 
 
 /* 🟠 Warenkorb Button */
