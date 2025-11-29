@@ -122,52 +122,10 @@
       <button class="btn add-btn" onclick="addCourseVoucher('kursTermine3','3 Tages Bushcraft Kurs',299.90)">In den Warenkorb (299,90 €)</button>
     </div>
  
-    <!-- 
-    <div class="product" id="gutschein">
-  <h2>Wert-Gutschein</h2>
-  <p>Auf der Suche nach einem außergewöhnlichen Geschenk? Wähle deinen Wunschbetrag und erhalte einen schön gestalteten Gutschein.</p>
-
-  <label for="voucherAmount">Betrag in €:</label><br>
-  <input type="number" id="voucherAmount" value="50" min="10" step="5"><br><br>
-
-  <label for="vouchertext">Widmung / Freitext:</label><br>
-  <textarea id="vouchertext" rows="3" maxlength="80" style="width:100%; max-width:320px;"></textarea>
-
-  <div id="voucherCounter" style="font-size:0.85rem; color:#555; text-align:right;">0 / 80 Zeichen</div><br>
-
-  <button class="btn add-btn" onclick="addVoucher()">In den Warenkorb</button>
-</div>
-
-<script>
-// Zeichenzähler aktualisieren
-const voucherField = document.getElementById("vouchertext");
-const voucherCounter = document.getElementById("voucherCounter");
-
-voucherField.addEventListener("input", () => {
-  voucherCounter.textContent = `${voucherField.value.length} / 80 Zeichen`;
-});
-
-// Funktion zum Hinzufügen des Gutscheins in den Warenkorb
-function addVoucher() {
-  const amount = document.getElementById("voucherAmount").value;
-  const text = document.getElementById("vouchertext").value;
-
-  if (!amount || amount < 10) {
-    alert("Bitte einen gültigen Gutscheinbetrag wählen.");
-    return;
-  }
-
-  // Übergabe an Warenkorb-Logik (falls vorhanden)
-  console.log("Gutschein hinzugefügt:", amount, text);
-  alert(`Wertgutschein über ${amount}€ wurde dem Warenkorb hinzugefügt.`);
-}
-</script>
-    -->
-
-    <!-- Produkt 5--> 
+      <!-- Produkt 5--> 
     <div class="product" id="gutschein">
       <h2>Wert-Gutschein</h2>
-      <p>Auf der Suche nach einem außergewöhnlichem Geschenk? Wähle deinen Wunschbetrag und erhalte einen schön gestalteten Gutschein zum selbstausdrucken per Mail.</p>
+      <p>Auf der Suche nach einem außergewöhnlichem Geschenk? Wähle deinen Wunschbetrag und erhalte einen schön gestalteten Gutschein zum Selbstausdrucken per Mail.</p>
  <figure class="product-voucherpic">
   <img src="assets/Gutschein.png" alt="Gutschein Pfalzventure">
 </figure>
