@@ -419,9 +419,9 @@ Hero Section (Startseite)
 
 .back-home-btn {
     position: absolute;
-    top: 20px;        /* Abstand nach oben – anpassen nach Wunsch */
-    left: 20px;       /* Abstand nach links – anpassen nach Wunsch */
-    z-index: 2000;    /* Damit er über allem liegt */
+    top: 20px;       /* Abstand vom oberen Rand */
+    left: 20px;      /* Abstand vom linken Rand */
+    z-index: 9999;   /* damit er über allem liegt */
 }
 
 /* ============================
