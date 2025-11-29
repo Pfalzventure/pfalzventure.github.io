@@ -73,7 +73,6 @@
     </div>
 
     <form id="contact-form" action="https://formspree.io/f/mldlyqdz" method="POST" class="kontakt-form">
-     <input type="hidden" name="_redirect" value="https://pfalzventure.de/danke-kontakt.html">
       <input type="text" name="_gotcha" style="display:none">
 
       <label for="name">Dein Name:</label>
@@ -134,6 +133,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     }, 300);
   } catch (err) {
     console.error("❌ Fehler beim Laden des Warenkorbs:", err);
+  }
+});
+</script>
+
+   <script>
+document.getElementById("contact-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const form = e.target;
+  const data = new FormData(form);
+
+  const res = await fetch(form.action, {
+    method: "POST",
+    headers: { "Accept": "application/json" },
+    body: data
+  });
+
+  if (res.ok) {
+    window.location.href = "danke-kontakt.html";
+  } else {
+    alert("Fehler beim Senden des Formulars. Bitte später erneut versuchen.");
   }
 });
 </script>
