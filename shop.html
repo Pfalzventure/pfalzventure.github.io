@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Banner anzeigen, wenn noch keine Zustimmung gespeichert ist
   if (!localStorage.getItem("paypal_cookie_ok")) {
-    banner.style.display = "block";
+    banner.style.display = "flex"; // WICHTIG: flex, nicht block
   }
 
   okBtn.addEventListener("click", () => {
@@ -218,6 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
 
 
  
