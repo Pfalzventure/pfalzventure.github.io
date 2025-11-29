@@ -8,22 +8,46 @@
 </head>
 <body>
 
-<header>
-  <div class="container">
-    <a href="index.html" class="logo">
-      <img src="assets/logo.png" alt="Pfalzventure Logo">
-    </a>
-    <nav>
-      <ul class="nav-links">
-        <li><a href="index.html">Start</a></li>
-        <li><a href="kurse.html">Kurse</a></li>
-        <li><a href="shop.html">Shop</a></li>
-        <li><a href="kontakt.html">Kontakt</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
+  <!-- ============================
+       Header mit Navigation
+       ============================ -->
+  <header>
+    <div class="container">
+      <a href="index.html" class="logo">
+        <img src="assets/Logo2.png" alt="Pfalzventure Logo">
+      </a>
 
+      <div class="burger" onclick="toggleMenu()">☰</div>
+
+      <nav>
+        <ul class="nav-links" id="nav-links">
+          <li><a href="index.html" class="active">Start</a></li>
+          <li><a href="kurse.html">Kurse</a></li>
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="kontakt.html">Kontakt</a></li>
+        </ul>
+      </nav>
+
+      <button id="cart-toggle" onclick="toggleCart()" class="btn cart-btn">
+  🛒 Warenkorb (<span id="cart-count">0</span>)
+</button>
+
+    </div>
+  </header>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById("nav-links").classList.toggle("nav-active");
+    }
+
+    document.addEventListener("click", function(event) {
+      const menu = document.getElementById("nav-links");
+      const burger = document.querySelector(".burger");
+      if (menu && burger && !menu.contains(event.target) && !burger.contains(event.target)) {
+        menu.classList.remove("nav-active");
+      }
+    });
+  </script>
 <main class="danke-section">
   <h1>Vielen Dank für deine Bestellung!</h1>
   <p>Die Zahlung wurde erfolgreich abgeschlossen.</p>
