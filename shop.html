@@ -200,20 +200,25 @@ function addVoucher() {
     <button id="paypal-cookie-ok">Alles klar!</button>
   </div>
 
-  <script>
+<script>
 document.addEventListener("DOMContentLoaded", () => {
   const banner = document.getElementById("paypal-cookie-banner");
   const okBtn = document.getElementById("paypal-cookie-ok");
 
   if (!banner || !okBtn) return;
 
-  // Bestätigung speichern
+  // Banner anzeigen, wenn noch keine Zustimmung gespeichert ist
+  if (!localStorage.getItem("paypal_cookie_ok")) {
+    banner.style.display = "block";
+  }
+
   okBtn.addEventListener("click", () => {
     localStorage.setItem("paypal_cookie_ok", "1");
     banner.style.display = "none";
   });
 });
 </script>
+
 
  
  <!-- 🔄 Kurstermine automatisch laden -->
