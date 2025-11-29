@@ -753,7 +753,7 @@ main {
   border-top: 2px solid var(--forest-green);
   box-shadow: 0 -2px 10px rgba(0,0,0,0.15);
   font-family: inherit;
-  z-index: 9999;
+  z-index: 999999;
 }
 
 .paypal-banner p {
