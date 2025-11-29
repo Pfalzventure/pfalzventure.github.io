@@ -549,19 +549,25 @@ function initPayPal() {
   onApprove: async (data, actions) => {
     const details = await actions.order.capture();
 
-    // Formspree-Daten vorbereiten
-    const formData = new FormData();
-    formData.append("order_id", data.orderID);
-    formData.append("payer_name", details.payer?.name?.given_name || "");
-    formData.append("cart", cart.map(i => `${i.name} x${i.qty}`).join("; "));
-    formData.append("total", getCartTotal().toFixed(2));
+   // Formspree-Daten vorbereiten
+const payload = {
+  order_id: data.orderID,
+  payer_name: details.payer?.name?.given_name || "",
+  cart: cart.map(i => `${i.name} x${i.qty}`).join("; "),
+  total: getCartTotal().toFixed(2)
+};
 
-    // An Formspree schicken
-    try {
-      await fetch(FORMSPREE_ENDPOINT, { method: "POST", body: formData });
-    } catch (e) {
-      console.error("Formspree Fehler:", e);
-    }
+// An Formspree schicken
+try {
+  await fetch(FORMSPREE_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+} catch (e) {
+  console.error("Formspree Fehler:", e);
+}
+
 
     // Warenkorb löschen
     localStorage.removeItem("cart");
