@@ -608,6 +608,15 @@ main {
   appearance: none;
 }
 
+.product-kitpic img {
+  display: block;
+  width: 80%;
+  max-width: 100%;
+  height: auto;
+  margin: 0 !important;       /* überschreibt .product img */
+  margin-left: 0 !important;  /* sicherstellen */
+  margin-right: auto !important;
+}
 /* ============================
    Inhaltsboxen
    ============================ */
@@ -643,9 +652,6 @@ main {
   margin-left: 0 !important;  /* sicherstellen */
   margin-right: auto !important;
 }
-
-
-
 
 .product-figure figcaption {
   font-size: 0.7rem;
