@@ -587,8 +587,8 @@ async function sendRegistrationToFormspree() {
     warenkorb_inhalt: cart
       .map(i => `${i.name} × ${i.qty} = ${(i.price * i.qty).toFixed(2)} €`)
       .join("; "),
-    link_agb: "https://DEINE-AGB-URL",
-    link_kontakt: "https://DEINE-KONTAKT-URL",
+    link_agb: "https://pfalzventure.de/AGB.html",
+    link_kontakt: "https://pfalzventure.de/kontakt.html",
     storno_tage: 14
   };
 
