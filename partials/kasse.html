@@ -464,6 +464,98 @@ function updateProceedVisibility() {
   }
 }
 
+  // --- Generate email message for Formspree ---
+function generateFormspreeMessage(data) {
+  const p1 = data.participant1;
+  const additional = data.participants_additional || [];
+
+  // Format participants
+  let additionalText = "";
+  if (additional.length > 0) {
+    additionalText += "Weitere Teilnehmer:\n";
+    additional.forEach((p, idx) => {
+      additionalText += `- Teilnehmer ${idx + 2}: ${p.vorname} ${p.nachname}, Geburtsdatum: ${p.geburtsdatum}\n`;
+    });
+    additionalText += "\n";
+  }
+
+  // Format cart items (monospaced table-like)
+  let cartText = "";
+  cartText += "Produkt                     Menge   Preis\n";
+  cartText += "--------------------------------------------\n";
+
+  data.warenkorb_inhalt.split("; ").forEach(item => {
+    const parts = item.split(" = ");
+    const left = parts[0].split(" × ");
+    const name = left[0].padEnd(25, " ");
+    const qty = left[1].toString().padEnd(7, " ");
+    const price = parts[1];
+    cartText += `${name}${qty}${price}\n`;
+  });
+
+  // Voucher text
+  let voucherPart = "";
+  if (data.gutschein_code) {
+    voucherPart = `\nEs wurde ein Gutschein eingelöst:\nCode: ${data.gutschein_code}\n\n`;
+  }
+
+  // Final message
+  return `
+Hallo ${p1.vorname},
+
+vielen Dank für deine Buchung bei Pfalzventure!
+Wir bestätigen dir hiermit den erfolgreichen Zahlungseingang und deine Teilnahme am Kurs.
+
+--------------------------------------------
+BUCHUNG & TEILNEHMERDATEN
+--------------------------------------------
+
+Vertragspartner / Teilnehmer 1:
+- ${p1.vorname} ${p1.nachname}
+  Geburtsdatum: ${p1.geburtsdatum}
+  E-Mail: ${p1.email}
+  Telefon: ${p1.telefon}
+  Adresse: ${p1.strasse}, ${p1.plz_ort}
+
+${additionalText}--------------------------------------------
+BESTELLÜBERSICHT
+--------------------------------------------
+
+${cartText}
+Gesamtsumme: ${data.warenkorb_summe} €
+
+${voucherPart}--------------------------------------------
+MITBRINGEN
+--------------------------------------------
+
+Für den Kurs empfehlen wir dir folgende Grundausstattung:
+
+- wetterfeste Kleidung
+- feste Schuhe
+- Schlafsack oder Decke
+- Isomatte (falls vorhanden)
+
+Wenn du noch Fragen hast oder bei etwas unsicher bist, melde dich gerne bei uns.
+Auf unserer Kontaktseite findest du verschiedene Möglichkeiten, wie du uns erreichen kannst:
+${data.link_kontakt}
+
+--------------------------------------------
+STORNIERUNG
+--------------------------------------------
+
+Eine Stornierung ist bis zu ${data.storno_tage} Tagen vor Kursbeginn möglich.
+Die vollständigen AGB findest du hier:
+${data.link_agb}
+
+--------------------------------------------
+
+Viele Grüße,
+Robert Prokasky
+Pfalzventure
+  `.trim();
+}
+
+
 // --- Send registration to Formspree ---
 async function sendRegistrationToFormspree() {
   const participant1 = {
@@ -489,23 +581,33 @@ async function sendRegistrationToFormspree() {
   }
 
   const data = {
-    _subject: "📩 Neue Kursanmeldung",
     participant1,
     participants_additional,
     warenkorb_summe: getCartTotal().toFixed(2),
-    warenkorb_inhalt: cart.map(i => `${i.name} × ${i.qty} = ${(i.price * i.qty).toFixed(2)} €`).join("; ")
+    warenkorb_inhalt: cart
+      .map(i => `${i.name} × ${i.qty} = ${(i.price * i.qty).toFixed(2)} €`)
+      .join("; "),
+    link_agb: "https://DEINE-AGB-URL",
+    link_kontakt: "https://DEINE-KONTAKT-URL",
+    storno_tage: 14
   };
 
   if (voucherApplied) {
     data.gutschein_code = voucherApplied.code;
-    data.gutschein_email = voucherApplied.email;
   }
+
+  // Build email text
+  const message = generateFormspreeMessage(data);
 
   try {
     await fetch(FORMSPREE_ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
+      body: JSON.stringify({
+        _subject: "📩 Neue Kursanmeldung",
+        message, // ← Die komplette Buchungsbestätigung
+        ...data
+      })
     });
   } catch (err) {
     console.error("❌ Fehler beim Senden der Formspree-Anmeldung:", err);
