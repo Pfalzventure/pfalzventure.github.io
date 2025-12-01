@@ -640,8 +640,7 @@ async function sendRegistrationToFormspree() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         _subject: "📩 Neue Kursanmeldung",
-        message, // ← Die komplette Buchungsbestätigung
-        ...data
+        message,
       })
     });
   } catch (err) {
