@@ -463,41 +463,6 @@ function updateProceedVisibility() {
     proceedBtn.classList.add("hidden");
   }
 }
-
-async function testFormspree() {
-  const data = {
-    participant1: {
-      vorname: "Test",
-      nachname: "Person",
-      strasse: "Teststr. 1",
-      plz_ort: "12345 Teststadt",
-      email: "test@example.com",
-      telefon: "0123456789",
-      geburtsdatum: "1990-01-01"
-    },
-    participants_additional: [],
-    warenkorb_summe: "99.00",
-    warenkorb_inhalt: "Survival Grundkurs × 1 = 99.00 €",
-    link_agb: "https://DEINE-AGB-URL",
-    link_kontakt: "https://DEINE-KONTAKT-URL",
-    storno_tage: 14
-  };
-
-  const message = generateFormspreeMessage(data);
-
-  const response = await fetch(FORMSPREE_ENDPOINT, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      _subject: "📩 Test – Formspree Nachricht",
-      message,
-      ...data
-    })
-  });
-
-  console.log("Formspree Status:", response.status);
-}
-
   
   // --- Generate email message for Formspree ---
 function generateFormspreeMessage(data) {
@@ -588,6 +553,41 @@ Viele Grüße,
 Robert Prokasky
 Pfalzventure
   `.trim();
+}
+
+  
+async function testFormspree() {
+  const data = {
+    participant1: {
+      vorname: "Test",
+      nachname: "Person",
+      strasse: "Teststr. 1",
+      plz_ort: "12345 Teststadt",
+      email: "test@example.com",
+      telefon: "0123456789",
+      geburtsdatum: "1990-01-01"
+    },
+    participants_additional: [],
+    warenkorb_summe: "99.00",
+    warenkorb_inhalt: "Survival Grundkurs × 1 = 99.00 €",
+    link_agb: "https://DEINE-AGB-URL",
+    link_kontakt: "https://DEINE-KONTAKT-URL",
+    storno_tage: 14
+  };
+
+  const message = generateFormspreeMessage(data);
+
+  const response = await fetch(FORMSPREE_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      _subject: "📩 Test – Formspree Nachricht",
+      message,
+      ...data
+    })
+  });
+
+  console.log("Formspree Status:", response.status);
 }
 
 
