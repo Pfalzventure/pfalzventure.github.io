@@ -583,8 +583,7 @@ async function testFormspree() {
     body: JSON.stringify({
       _subject: "📩 Test – Formspree Nachricht",
       message,
-      ...data
-    })
+      })
   });
 
   console.log("Formspree Status:", response.status);
