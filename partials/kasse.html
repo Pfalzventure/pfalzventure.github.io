@@ -580,10 +580,11 @@ async function testFormspree() {
   const response = await fetch(FORMSPREE_ENDPOINT, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      _subject: "📩 Test – Formspree Nachricht",
-      message,
-      })
+ body: JSON.stringify({
+  _subject: "📩 Test – Formspree Nachricht",
+  reply_to: "test@example.com",
+  message: message
+})
   });
 
   console.log("Formspree Status:", response.status);
@@ -637,10 +638,11 @@ async function sendRegistrationToFormspree() {
     await fetch(FORMSPREE_ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        _subject: "📩 Neue Kursanmeldung",
-        message,
-      })
+ body: JSON.stringify({
+  _subject: "📩 Neue Kursanmeldung",
+  reply_to: participant1.email, 
+  message: message
+})
     });
   } catch (err) {
     console.error("❌ Fehler beim Senden der Formspree-Anmeldung:", err);
