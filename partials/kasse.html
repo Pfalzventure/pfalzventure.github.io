@@ -555,10 +555,10 @@ Pfalzventure
   `.trim();
 }
 
-  
 // --- Send registration to Formspree ---
 async function sendRegistrationToFormspree() {
-  const participant1 = {
+
+  const p1 = {
     vorname: document.getElementById("vorname").value.trim(),
     nachname: document.getElementById("nachname").value.trim(),
     strasse: document.getElementById("strasse").value.trim(),
@@ -571,7 +571,8 @@ async function sendRegistrationToFormspree() {
   };
 
   const participants_additional = [];
-  const count = parseInt(document.getElementById('participantCount').value || "1", 10);
+  const count = parseInt(document.getElementById("participantCount").value || "1", 10);
+
   for (let i = 2; i <= count; i++) {
     participants_additional.push({
       vorname: document.getElementById(`vorname_${i}`).value.trim(),
@@ -581,7 +582,7 @@ async function sendRegistrationToFormspree() {
   }
 
   const data = {
-    participant1,
+    participant1: p1,
     participants_additional,
     warenkorb_summe: getCartTotal().toFixed(2),
     warenkorb_inhalt: cart
@@ -596,18 +597,37 @@ async function sendRegistrationToFormspree() {
     data.gutschein_code = voucherApplied.code;
   }
 
-  // Build email text
-  const message = generateFormspreeMessage(data);
+  // E-Mail Nachricht erzeugen
+  const confirmation_message = generateFormspreeMessage(data);
+
+  // --- Spam-resistenter Payload für Formspree ---
+  const payload = {
+    subject: "Neue Kursanmeldung",       // ohne Emoji für weniger Spam
+    email: p1.email,                      // vom Kunden → im Formspree Dashboard als reply-to setzen!
+    confirmation_message: confirmation_message,
+
+    // --- strukturierte Zusatzfelder (reduziert Spam deutlich) ---
+    vorname: p1.vorname,
+    nachname: p1.nachname,
+    telefon: p1.telefon,
+    adresse: `${p1.strasse}, ${p1.plz_ort}`,
+    geburtsdatum: p1.geburtsdatum,
+
+    warenkorb_summe: data.warenkorb_summe,
+    warenkorb_inhalt: data.warenkorb_inhalt,
+    gutschein_code: data.gutschein_code || "",
+
+    // --- zusätzliche Metadaten (Spam-Score sinkt!)
+    meta_timestamp: new Date().toISOString(),
+    meta_source: "pfalzventure_webshop",
+    meta_version: "v2_formspree_payload"
+  };
 
   try {
     await fetch(FORMSPREE_ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
- body: JSON.stringify({
-  _subject: "📩 Neue Kursanmeldung",
-  reply_to: participant1.email, 
-  message: message
-})
+      body: JSON.stringify(payload)
     });
   } catch (err) {
     console.error("❌ Fehler beim Senden der Formspree-Anmeldung:", err);
