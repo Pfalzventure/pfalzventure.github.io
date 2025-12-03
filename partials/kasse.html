@@ -635,9 +635,52 @@ async function sendRegistrationToFormspree() {
 }
 
 // --- PayPal: init & render ---
-function showPaypalMissing() {
-  document.getElementById("paypal-missing").classList.remove("hidden");
+// --- ersetzt die alte showPaypalMissing() ---
+async function showPaypalMissing() {
+  const el = document.getElementById("paypal-missing");
+  if (el) el.classList.remove("hidden");
+
+  // Wenn kein Warenkorb oder leer: nichts senden
+  if (!cart || cart.length === 0) return;
+
+  // Verhindere doppelte Mails beim Reload: sende nur einmal pro Session für denselben Warenkorb
+  try {
+    const cartSignature = btoa(unescape(encodeURIComponent(JSON.stringify(cart))));
+    const last = sessionStorage.getItem("paypal_missing_sent");
+    if (last === cartSignature) return; // bereits gesendet
+    sessionStorage.setItem("paypal_missing_sent", cartSignature);
+  } catch (e) {
+    // Falls Encoding scheitert: trotzdem weitermachen
+    console.warn("Cart signature error", e);
+  }
+
+  // Formspree-Payload
+  const payload = {
+    paypal_unavailable: true,
+    timestamp: new Date().toISOString(),
+    cart: cart.map(i => `${i.name} x${i.qty}`).join("; "),
+    total: getCartTotal().toFixed(2),
+    info: "Kunde hat versucht zu bezahlen — PayPal derzeit nicht verfügbar."
+  };
+
+  // FORMSPREE_ENDPOINT muss als Konstante irgendwo in deinem Script definiert sein
+  if (typeof FORMSPREE_ENDPOINT === "undefined" || !FORMSPREE_ENDPOINT) {
+    console.error("FORMSPREE_ENDPOINT nicht definiert — Nachricht nicht gesendet.");
+    return;
+  }
+
+  try {
+    await fetch(FORMSPREE_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    console.log("Formspree: paypal_unavailable gesendet.");
+  } catch (e) {
+    console.error("Formspree Fehler:", e);
+  }
 }
+
 function hidePaypalContainer() {
   const cont = document.getElementById("paypal-button-container");
   if (cont) cont.innerHTML = "";
