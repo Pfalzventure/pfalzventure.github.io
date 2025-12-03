@@ -660,7 +660,7 @@ function initPayPal() {
     return;
   }
 
-  paypal.Buttons({
+paypal.Buttons({
   createOrder: (data, actions) => {
     return actions.order.create({
       purchase_units: [{
@@ -673,25 +673,24 @@ function initPayPal() {
   onApprove: async (data, actions) => {
     const details = await actions.order.capture();
 
-   // Formspree-Daten vorbereiten
-const payload = {
-  order_id: data.orderID,
-  payer_name: details.payer?.name?.given_name || "",
-  cart: cart.map(i => `${i.name} x${i.qty}`).join("; "),
-  total: getCartTotal().toFixed(2)
-};
+    // Formspree-Daten vorbereiten
+    const payload = {
+      order_id: data.orderID,
+      payer_name: details.payer?.name?.given_name || "",
+      cart: cart.map(i => `${i.name} x${i.qty}`).join("; "),
+      total: getCartTotal().toFixed(2)
+    };
 
-// An Formspree schicken
-try {
-  await fetch(FORMSPREE_ENDPOINT, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
-} catch (e) {
-  console.error("Formspree Fehler:", e);
-}
-
+    // An Formspree schicken
+    try {
+      await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      console.error("Formspree Fehler:", e);
+    }
 
     // Warenkorb löschen
     localStorage.removeItem("cart");
@@ -700,12 +699,38 @@ try {
     window.location.href = REDIRECT_AFTER_PAYMENT;
   },
 
-  onError: (err) => {
+  onError: async (err) => {
     console.error("PayPal Fehler:", err);
-    alert("⚠️ Zahlung aus technischen Gründen fehlgeschlagen. Bitte kontaktiere uns per Kontaktformular oder Mail");
+
+    // 1️⃣ Formspree Nachricht senden, dass Kunde auf PayPal geklickt hat
+    const email = document.getElementById("teilnehmer_email")?.value || "keine-email";
+    const payload = {
+      subject: "⚠️ PayPal-Click (temporär nicht verfügbar)",
+      email: email,
+      message: `Der Kunde wollte bezahlen, PayPal ist aktuell nicht verfügbar.\n\nWarenkorb:\n${cart.map(i => `${i.name} x${i.qty} = ${(i.price*i.qty).toFixed(2)} €`).join("\n")}\n\nGesamt: ${getCartTotal().toFixed(2)} €`
+    };
+    try {
+      await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      console.error("Formspree Fehler beim PayPal-Fallback:", e);
+    }
+
+    // 2️⃣ Infobox oder Alert für Kunden anzeigen
+    const payArea = document.getElementById("pay-area");
+    if (payArea) {
+      payArea.innerHTML = `
+        <div class="info-box">
+          ⚠️ PayPal ist aktuell aus technischen Gründen nicht nutzbar. Du erhältst in Kürze eine Rechnung per E-Mail mit den Zahlungsinformationen.
+        </div>
+      `;
+    }
   }
 }).render('#paypal-button-container');
-}
+
 // --- Page lifecycle ---
 document.addEventListener("DOMContentLoaded", () => {
   initCheckoutUI();
