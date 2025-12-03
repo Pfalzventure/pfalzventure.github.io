@@ -659,8 +659,7 @@ function initPayPal() {
     cont.innerHTML = "<div class='small muted'>Dein Warenkorb ist leer.</div>";
     return;
   }
-
-// --- PayPal deaktiviert: Eigenen Trigger anzeigen ---
+// PayPal deaktiviert – Ersatzbutton anzeigen
 const container = document.getElementById("paypal-button-container");
 container.innerHTML = `
   <div class="paypal-disabled-box">
@@ -672,7 +671,6 @@ container.innerHTML = `
   </div>
 `;
 
-// Klick -> Formspree Nachricht senden
 document.getElementById("paypalDisabledTrigger").addEventListener("click", async () => {
   const payload = {
     _subject: "🔔 PayPal-Trigger – Kunde wartet auf Zahlungsangebot",
@@ -687,6 +685,7 @@ document.getElementById("paypalDisabledTrigger").addEventListener("click", async
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
+
     alert("Vielen Dank! Du erhältst gleich ein Angebot per E-Mail.");
   } catch (err) {
     console.error("Formspree Fehler:", err);
@@ -694,8 +693,8 @@ document.getElementById("paypalDisabledTrigger").addEventListener("click", async
   }
 });
 
-// ❌ NICHT MEHR: return;  (würde den Checkout abbrechen)
-// ❌ NICHTS zurückgeben, damit die restliche Seite normal läuft
+// ⚠️ WICHTIG: KEIN return;
+// sonst brichst du alle weiteren UI-Prozesse ab!
 
 
    // Formspree-Daten vorbereiten
