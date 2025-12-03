@@ -670,13 +670,22 @@ function initPayPal() {
     return;
   }
 
+  // PayPal nicht verfügbar → Hinweis + Formspree
   if (typeof paypal === "undefined") {
     showPaypalMissing();
     return;
   }
 
-  // … dein PayPal-Code bleibt unverändert …
+  // Wenn PayPal wieder geht, würde hier dein normaler PayPal-Code stehen.
+  // (aktuell irrelevant)
 }
+
+// --- Page lifecycle ---
+document.addEventListener("DOMContentLoaded", () => {
+  initCheckoutUI();
+  if (!cartContainsCourse() && !isVoucherActive()) initPayPal();
+});
+
 
    // Formspree-Daten vorbereiten
 const payload = {
