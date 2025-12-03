@@ -660,18 +660,44 @@ function initPayPal() {
     return;
   }
 
-  paypal.Buttons({
-  createOrder: (data, actions) => {
-    return actions.order.create({
-      purchase_units: [{
-        description: cart.map(i => `${i.name} x${i.qty}`).join("; "),
-        amount: { currency_code: "EUR", value: getCartTotal().toFixed(2) }
-      }]
-    });
-  },
+  // --- PayPal deaktiviert: Eigenen Trigger anzeigen ---
+  const container = document.getElementById("paypal-button-container");
+  container.innerHTML = `
+    <div class="paypal-disabled-box">
+      <p><strong>PayPal steht aktuell aufgrund technischer Gründe nicht zur Verfügung.</strong></p>
+      <p>Du erhältst in Kürze ein Angebot per E-Mail mit allen Zahlungsdetails.</p>
+      <button id="paypalDisabledTrigger" class="btn primary">
+        Angebot anfordern
+      </button>
+    </div>
+  `;
 
-  onApprove: async (data, actions) => {
-    const details = await actions.order.capture();
+  // Klick -> Formspree Nachricht senden
+  document.getElementById("paypalDisabledTrigger").addEventListener("click", async () => {
+
+    // Formspree Payload
+    const payload = {
+      _subject: "🔔 PayPal-Trigger – Kunde wartet auf Zahlungsangebot",
+      warenkorb_summe: getCartTotal().toFixed(2),
+      warenkorb_inhalt: cart.map(i => `${i.name} x${i.qty}`).join("; "),
+      hinweis: "PayPal war deaktiviert. Kunde benötigt Angebots-E-Mail."
+    };
+
+    try {
+      await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      alert("Vielen Dank! Du erhältst gleich ein Angebot per E-Mail.");
+    } catch (err) {
+      console.error("Formspree Fehler:", err);
+      alert("Fehler beim Senden. Bitte kontaktiere uns manuell.");
+    }
+  });
+
+  return; // verhindert dass PayPal Buttons geladen werden
+}
 
    // Formspree-Daten vorbereiten
 const payload = {
