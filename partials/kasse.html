@@ -660,6 +660,29 @@ function initPayPal() {
     return;
   }
 
+  async function showPaypalMissing() {
+  const el = document.getElementById("paypal-missing");
+  el.classList.remove("hidden");
+
+  // ✦ Formspree-Nachricht senden ✦
+  const payload = {
+    paypal_unavailable: true,
+    cart: cart.map(i => `${i.name} x${i.qty}`).join("; "),
+    total: getCartTotal().toFixed(2),
+    info: "Kunde wollte bezahlen – PayPal aktuell nicht verfügbar."
+  };
+
+  try {
+    await fetch(FORMSPREE_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+  } catch (e) {
+    console.error("Formspree Fehler:", e);
+  }
+}
+
   paypal.Buttons({
   createOrder: (data, actions) => {
     return actions.order.create({
