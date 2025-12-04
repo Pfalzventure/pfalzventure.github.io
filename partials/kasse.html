@@ -1,3 +1,4 @@
+<!-- gesamte kasse.html (angepasst für Mollie, PayPal entfernt) -->
 <!doctype html>
 <html lang="de">
 <head>
@@ -43,12 +44,7 @@
   </style>
 
 <link rel="stylesheet" href="../style.css">
-  
- <!-- PayPal SDK (ersetze client-id durch deine Live/Sandbox-ID) -->
-  <script src="https://www.paypal.com/sdk/js?client-id=AQbF-v1VWk6QCLKdNODfXJb-fUAcoTsnE1ux9JvHUWNYuJQE1xskgSu7ff_qniWdL168KWEw_oX7iCHB&currency=EUR"></script>
 
-  
-  
 </head>
 <body>
 
@@ -153,12 +149,12 @@
       </div>
 
       <div id="pay-area" style="margin-top:1rem;">
-        <!-- Hier werden PayPal-Buttons gerendert (oder "Jetzt bezahlen" für Kits) -->
+        <!-- Hier wird jetzt der Mollie-Checkout-Button gerendert -->
         <div id="paypal-button-container"></div>
 
-        <!-- Fallback / Info, falls PayPal SDK fehlt -->
+        <!-- Fallback / Info, falls Backend/Payment nicht erreichbar -->
         <div id="paypal-missing" class="hidden small error" style="margin-top:.5rem;">
-          PayPal-Script wird benötigt. Bitte binde das PayPal SDK ein (siehe Kommentar in Quelle).
+          Zahlungsdienst zurzeit nicht erreichbar. Bitte versuche es später oder kontaktiere uns.
         </div>
       </div>
     </aside>
@@ -167,7 +163,7 @@
 
 <script>
 /*******************************
- * kasse.html — Checkout-Logik (korrigiert)
+ * kasse.html — Checkout-Logik (angepasst für Mollie)
  *******************************/
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mldlyqdz";
@@ -221,10 +217,10 @@ function initCheckoutUI() {
 
   if (hasCourse) {
     registrationForm.classList.remove("hidden");
-    hidePaypalContainer(); // PayPal erst nach Formularvalidierung
+    hidePayContainer(); // Zahl-UI erst nach Formularvalidierung verbergen
   } else {
     registrationForm.classList.add("hidden");
-    if (!isVoucherActive()) initPayPal();
+    if (!isVoucherActive()) initMollie();
   }
 
   // Teilnehmeranzahl
@@ -241,9 +237,9 @@ function initCheckoutUI() {
   if (proceedBtn) {
     proceedBtn.addEventListener("click", async () => {
       if (!validateRegistrationForm()) return;
-      // Erst Formular an Formspree senden, dann PayPal initialisieren
+      // Erst Formular an Formspree senden, dann Mollie initialisieren
       await sendRegistrationToFormspree();
-      initPayPal();
+      initMollie();
       const cont = document.getElementById("paypal-button-container");
       if (cont) cont.scrollIntoView({ behavior: "smooth" });
     });
@@ -276,17 +272,17 @@ function showVoucherAppliedMessage(text) {
   msg.textContent = text;
 }
 function blockPaymentsBecauseVoucher() {
-  hidePaypalContainer();
+  hidePayContainer();
   document.getElementById("proceedToPayBtn").classList.add("hidden");
 }
 function unblockPayments() {
   const hasCourse = cartContainsCourse();
   if (hasCourse) {
     document.getElementById("proceedToPayBtn").classList.remove("hidden");
-    hidePaypalContainer();
+    hidePayContainer();
   } else {
     document.getElementById("proceedToPayBtn").classList.add("hidden");
-    initPayPal();
+    initMollie();
   }
 }
 
@@ -634,82 +630,113 @@ async function sendRegistrationToFormspree() {
   }
 }
 
-// --- PayPal: init & render ---
-function showPaypalMissing() {
-  document.getElementById("paypal-missing").classList.remove("hidden");
+/* -----------------------------
+   Payment (Mollie) Integration
+   ----------------------------- */
+
+/* Utility: show/hide payment UI */
+function showPaymentMissing() {
+  const pm = document.getElementById("paypal-missing");
+  if (pm) {
+    pm.textContent = "Zahlungsdienst zurzeit nicht erreichbar. Bitte versuche es später oder kontaktiere uns.";
+    pm.classList.remove("hidden");
+  }
 }
-function hidePaypalContainer() {
+function hidePayContainer() {
   const cont = document.getElementById("paypal-button-container");
   if (cont) cont.innerHTML = "";
   const pm = document.getElementById("paypal-missing");
   if (pm) pm.classList.add("hidden");
 }
-function initPayPal() {
+
+/* Init Mollie UI: rendert einfachen Button in der vorhandenen Container-DOM */
+function initMollie() {
   if (isVoucherActive()) {
-    hidePaypalContainer();
-    return;
-  }
-  if (typeof paypal === "undefined") {
-    showPaypalMissing();
+    hidePayContainer();
     return;
   }
   const cont = document.getElementById("paypal-button-container");
+  if (!cont) return;
   cont.innerHTML = "";
+
   if (!cart || cart.length === 0) {
     cont.innerHTML = "<div class='small muted'>Dein Warenkorb ist leer.</div>";
     return;
   }
 
-  paypal.Buttons({
-  createOrder: (data, actions) => {
-    return actions.order.create({
-      purchase_units: [{
-        description: cart.map(i => `${i.name} x${i.qty}`).join("; "),
-        amount: { currency_code: "EUR", value: getCartTotal().toFixed(2) }
-      }]
-    });
-  },
-
-  onApprove: async (data, actions) => {
-    const details = await actions.order.capture();
-
-   // Formspree-Daten vorbereiten
-const payload = {
-  order_id: data.orderID,
-  payer_name: details.payer?.name?.given_name || "",
-  cart: cart.map(i => `${i.name} x${i.qty}`).join("; "),
-  total: getCartTotal().toFixed(2)
-};
-
-// An Formspree schicken
-try {
-  await fetch(FORMSPREE_ENDPOINT, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
-} catch (e) {
-  console.error("Formspree Fehler:", e);
+  // Button erstellen (visuell möglichst passend zum vorherigen)
+  const btn = document.createElement("button");
+  btn.id = "payButton";
+  btn.className = "btn";
+  btn.textContent = "Jetzt bezahlen";
+  btn.addEventListener("click", createMolliePayment);
+  cont.appendChild(btn);
 }
 
+/* createMolliePayment: ruft dein Vercel-Backend auf, bekommt checkoutUrl und leitet weiter */
+async function createMolliePayment() {
+  const btn = document.getElementById("payButton");
+  if (btn) btn.disabled = true;
 
-    // Warenkorb löschen
-    localStorage.removeItem("cart");
-
-    // Weiterleiten
-    window.location.href = REDIRECT_AFTER_PAYMENT;
-  },
-
-  onError: (err) => {
-    console.error("PayPal Fehler:", err);
-    alert("⚠️ Zahlung aus technischen Gründen fehlgeschlagen. Bitte kontaktiere uns per Kontaktformular oder Mail");
+  // letzte clientseitige Prüfung
+  if (!cart || cart.length === 0) {
+    alert("Dein Warenkorb ist leer.");
+    if (btn) btn.disabled = false;
+    return;
   }
-}).render('#paypal-button-container');
+  if (getCartTotal() <= 0) {
+    alert("Gesamtbetrag ungültig.");
+    if (btn) btn.disabled = false;
+    return;
+  }
+
+  try {
+    const res = await fetch("https://DEIN-BACKEND-DOMAIN/api/create-payment", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ cart })
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => null);
+      throw new Error(err?.error || `Fehler beim Erstellen der Zahlung (${res.status})`);
+    }
+
+    const data = await res.json();
+
+    if (data.checkoutUrl) {
+      // Hinweis: wir löschen den lokalen Warenkorb hier NICHT, da die Zahlung noch nicht bestätigt wurde.
+      // Das Löschen sollte nach erfolgreicher Zahlung (z.B. via Webhook / Danke-Seite) erfolgen.
+      window.location.href = data.checkoutUrl;
+      return;
+    } else {
+      throw new Error(data.error || "Keine Checkout-URL erhalten");
+    }
+  } catch (err) {
+    console.error("Zahlungsfehler:", err);
+    alert("Fehler beim Erstellen der Zahlung. Bitte versuche es später oder kontaktiere uns.");
+    if (btn) btn.disabled = false;
+    // Sichtbare Fehlernachricht optional
+    const pm = document.getElementById("paypal-missing");
+    if (pm) {
+      pm.className = "small error";
+      pm.textContent = "Zahlung konnte nicht gestartet werden. Bitte kontaktiere uns.";
+      pm.classList.remove("hidden");
+    }
+  }
 }
-// --- Page lifecycle ---
+
+/* -----------------------------
+   Ende Mollie-Integration
+   ----------------------------- */
+
+/* Note: die alte PayPal-Logik (initPayPal + onApprove) wurde entfernt.
+   Die restliche Formspree- & Registrierungs-Logik bleibt unverändert. */
+
+/* --- Page lifecycle --- */
 document.addEventListener("DOMContentLoaded", () => {
   initCheckoutUI();
-  if (!cartContainsCourse() && !isVoucherActive()) initPayPal();
+  if (!cartContainsCourse() && !isVoucherActive()) initMollie();
 });
 </script>
 </body>
