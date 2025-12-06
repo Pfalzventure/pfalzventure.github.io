@@ -413,7 +413,7 @@ function validateRegistrationForm() {
 
   if (!vorname || !nachname || !strasse || !plzOrt || !email || !geb) {
     msgEl.className = "error";
-    msgEl.textContent = "Bitte fülle alle Pflichtfelder des Vertragspartners (Teilnehmer 1) aus.";
+    msgEl.textContent = "Bitte fülle vor der Zahlung zunächst alle Pflichtfelder aus.";
     return false;
   }
   if (!email.includes("@")) {
@@ -423,7 +423,7 @@ function validateRegistrationForm() {
   }
   if (!agb || !fitness) {
     msgEl.className = "error";
-    msgEl.textContent = "Bitte bestätige AGB und Fitness (gilt für alle Teilnehmer).";
+    msgEl.textContent = "Bitte bestätige noch die Checkboxen (AGB und Fitness) -> diese gelten für alle Teilnehmer!";
     return false;
   }
 
@@ -436,13 +436,13 @@ function validateRegistrationForm() {
 
     if (!v || !n || !g) {
       msgEl.className = "error";
-      msgEl.textContent = `Bitte fülle alle Pflichtfelder für Teilnehmer ${i} (Vorname, Nachname, Geburtsdatum).`;
+      msgEl.textContent = `Bitte fülle alle Pflichtfelder für die Teilnehmer aus ${i} (Vorname, Nachname, Geburtsdatum).`;
       return false;
     }
   }
 
   msgEl.className = "success";
-  msgEl.textContent = "Formular ist vollständig. Klicke auf 'Weiter zur Zahlung'.";
+  msgEl.textContent = "Formular ist vollständig. Bitte klicke jetzt auf 'Weiter zur Zahlung'.";
   return true;
 }
 
@@ -521,7 +521,7 @@ ${cartText}
 Gesamtsumme: ${data.warenkorb_summe} €
 
 ${voucherPart}--------------------------------------------
-MITBRINGEN
+Was solltest du Mitbringen?
 --------------------------------------------
 
 Für den Kurs empfehlen wir dir folgende Grundausstattung:
@@ -668,7 +668,7 @@ function initMollie() {
   const btn = document.createElement("button");
   btn.id = "payButton";
   btn.className = "btn";
-  btn.textContent = "Jetzt bezahlen";
+  btn.textContent = "Jetzt Zahlungspflichtig bestellen";
   btn.addEventListener("click", createMolliePayment);
   cont.appendChild(btn);
 }
