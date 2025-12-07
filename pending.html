@@ -28,28 +28,33 @@
 <body>
 
   <h1>Vielen Dank!</h1>
-  <p>Wir prüfen gerade deine Zahlung…</p>
+  <p>Wir prüfen gerade Deine Zahlung…</p>
   <div class="loader"></div>
   <p>Bitte schließe dieses Fenster nicht.</p>
 
   <script>
-    // alle 3s API abfragen
+    const paymentId = new URLSearchParams(window.location.search).get("id");
+
     const poll = async () => {
       try {
         const res = await fetch("https://mollie-backend-one.vercel.app/api/pending-payment", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({})
+          body: JSON.stringify({ id: paymentId })
         });
-        const data = await res.json();
 
+        const data = await res.json();
         console.log("Status:", data.status);
 
         if (data.status === "paid") {
           window.location.href = "https://pfalzventure.github.io/success.html";
         }
 
-        if (data.status === "failed" || data.status === "canceled") {
+        if (
+          data.status === "failed" ||
+          data.status === "canceled" ||
+          data.status === "expired"
+        ) {
           window.location.href = "https://pfalzventure.github.io/failed.html";
         }
 
