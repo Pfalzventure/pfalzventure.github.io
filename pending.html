@@ -35,7 +35,7 @@
   <script>
     const paymentId = new URLSearchParams(window.location.search).get("id");
     let tries = 0;
-    const maxTries = 20; // 20 × 3s = 60 Sekunden
+    const maxTries = 10; // 10 × 3s = 30 Sekunden
 
     const poll = async () => {
       tries++;
