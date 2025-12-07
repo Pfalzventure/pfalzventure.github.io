@@ -323,14 +323,14 @@ async function submitVoucherRequest() {
   }
 
   // Wenn Kurs im Warenkorb liegt -> Formularsichtbar sein & validiert sein müssen
-  if (cartContainsCourse()) {
-    const regForm = document.getElementById("registrationForm");
-    const formVisible = regForm && !regForm.classList.contains("hidden");
-    if (formVisible && !validateRegistrationForm()) {
-      if (msgEl) { msgEl.className = "error"; msgEl.textContent = "Bitte fülle zuerst das Anmeldeformular vollständig aus."; }
-      return;
-    }
+ if (cartNeedsForm()) {
+  const regForm = document.getElementById("registrationForm");
+  const formVisible = regForm && !regForm.classList.contains("hidden");
+  if (formVisible && !validateRegistrationForm()) {
+    if (msgEl) { msgEl.className = "error"; msgEl.textContent = "Bitte fülle zuerst das Anmeldeformular vollständig aus."; }
+    return;
   }
+}
 
   if (msgEl) { msgEl.className = "success"; msgEl.textContent = "Vielen Dank! Dein Gutscheincode wurde eingereicht und wird geprüft."; }
 
@@ -473,11 +473,11 @@ function updateProceedVisibility() {
   const proceedBtn = document.getElementById("proceedToPayBtn");
   if (!proceedBtn) return;
 
-  if (cartContainsCourse() && validateRegistrationForm()) {
-    proceedBtn.classList.remove("hidden");
-  } else {
-    proceedBtn.classList.add("hidden");
-  }
+ if (cartNeedsForm() && validateRegistrationForm()) {
+  proceedBtn.classList.remove("hidden");
+} else {
+  proceedBtn.classList.add("hidden");
+}
 
   // Mollie-Button nicht mehr hier aktivieren
   // Wird erst beim Klick auf "Weiter zur Zahlung" aktiviert
@@ -755,9 +755,9 @@ async function createMolliePayment() {
 document.addEventListener("DOMContentLoaded", () => {
   initCheckoutUI();
   const payBtn = document.getElementById("payButton");
-  if (payBtn && !cartContainsCourse()) {
-    payBtn.disabled = false; // sofort aktiv
-  }
+ if (payBtn && !cartNeedsForm()) {
+  payBtn.disabled = false; // sofort aktiv
+}
 });
 
 </script>
