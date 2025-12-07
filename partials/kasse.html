@@ -233,16 +233,26 @@ function initCheckoutUI() {
   renderAdditionalParticipants();
 
   // Wire up proceed button
-  const proceedBtn = document.getElementById("proceedToPayBtn");
-  if (proceedBtn) {
-    proceedBtn.addEventListener("click", async () => {
-      if (!validateRegistrationForm()) return;
-      await sendRegistrationToFormspree();
-      initMollie();
-      const cont = document.getElementById("paypal-button-container");
-      if (cont) cont.scrollIntoView({ behavior: "smooth" });
-    });
-  }
+ const proceedBtn = document.getElementById("proceedToPayBtn");
+if (proceedBtn) {
+  proceedBtn.addEventListener("click", async () => {
+    if (!validateRegistrationForm()) return;
+
+    // Formular an Formspree senden
+    await sendRegistrationToFormspree();
+
+    // Mollie-Button initialisieren und aktivieren
+    const payBtn = document.getElementById("payButton");
+    if (payBtn) payBtn.disabled = false;
+
+    initMollie();  // optional, falls Button neu erstellt werden soll
+
+    // Scroll zum Button
+    const cont = document.getElementById("paypal-button-container");
+    if (cont) cont.scrollIntoView({ behavior: "smooth" });
+  });
+}
+
 
   // Watch basic fields for showing proceed button
   const watchSelectors = [
