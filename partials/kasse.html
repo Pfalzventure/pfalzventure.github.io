@@ -176,8 +176,11 @@ let voucherApplied = null;
 function getCartTotal() {
   return cart.reduce((s, i) => s + i.price * i.qty, 0);
 }
-function cartContainsCourse() {
-  return cart.some(i => (i.name || "").indexOf("Termin:") > -1);
+function cartNeedsForm() {
+  return cart.some(i =>
+    (i.name || "").includes("Termin:") ||
+    (i.name || "").includes("Survival Kit")
+  );
 }
 
 // --- Update Cart UI ---
