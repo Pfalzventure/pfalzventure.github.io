@@ -35,18 +35,45 @@
   <script>
     const paymentId = new URLSearchParams(window.location.search).get("id");
 
+    if (!paymentId) {
+      alert("Keine Zahlungs-ID gefunden.");
+      window.location.href = "https://pfalzventure.github.io/";
+    }
+
     let tries = 0;
     const maxTries = 10; // 10 × 3s = 30 Sekunden
+    const intervalMs = 3000;
+    const singleFetchTimeoutMs = 8000; // Timeout pro Fetch (8s)
+
+    const doFetchWithTimeout = (url, options = {}, timeout = singleFetchTimeoutMs) => {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), timeout);
+      return fetch(url, { ...options, signal: controller.signal })
+        .finally(() => clearTimeout(id));
+    };
 
     const interval = setInterval(async () => {
       tries++;
 
+      // Prüfe VOR dem fetch, damit ein hängender fetch das Abbruch-Verhalten nicht verhindert
+      if (tries > maxTries) {
+        clearInterval(interval);
+        alert("Keine Bestätigung erhalten. Die Zahlung wurde vermutlich nicht abgeschlossen.");
+        window.location.href = "https://pfalzventure.github.io/";
+        return;
+      }
+
       try {
-        const res = await fetch("https://mollie-backend-one.vercel.app/api/pending-payment", {
+        const res = await doFetchWithTimeout("https://mollie-backend-one.vercel.app/api/pending-payment", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id: paymentId })
         });
+
+        if (!res.ok) {
+          console.warn("Status endpoint returned non-OK:", res.status);
+          return; // next try
+        }
 
         const data = await res.json();
         console.log("Status:", data.status);
@@ -63,21 +90,18 @@
           return;
         }
 
-        if (tries >= maxTries) {
-          clearInterval(interval);
-          alert("Keine Bestätigung erhalten. Die Zahlung wurde vermutlich nicht abgeschlossen.");
-          window.location.href = "https://pfalzventure.github.io/";
-        }
-
+        // status open/pending => weiter poll
       } catch (err) {
-        console.error("Polling error", err);
+        // entweder Netzwerkfehler oder Abort (Timeout)
+        console.error("Polling error (or timeout):", err);
+        // Falls wir beim letzten Versuch sind, abbrechen und informieren
         if (tries >= maxTries) {
           clearInterval(interval);
-          alert("Fehler bei der Zahlungsprüfung.");
+          alert("Fehler bei der Zahlungsprüfung oder Zeitüberschreitung.");
           window.location.href = "https://pfalzventure.github.io/";
         }
       }
-    }, 3000);
+    }, intervalMs);
   </script>
 
 </body>
