@@ -672,14 +672,14 @@ function initMollie() {
   btn.className = "btn";
   btn.textContent = "Jetzt Zahlungspflichtig bestellen";
 
-  // **immer disabled, bis Formular valide**
-  btn.disabled = !validateRegistrationForm();
+  // Immer disabled beim Laden
+  btn.disabled = true;
 
+  // Klick-Event
   btn.addEventListener("click", createMolliePayment);
+
   cont.appendChild(btn);
 }
-
-
 
 /* createMolliePayment: ruft dein Vercel-Backend auf, bekommt checkoutUrl und leitet weiter */
 async function createMolliePayment() {
