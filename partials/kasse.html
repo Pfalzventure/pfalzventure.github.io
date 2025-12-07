@@ -177,7 +177,8 @@ function getCartTotal() {
   return cart.reduce((s, i) => s + i.price * i.qty, 0);
 }
 function cartContainsCourse() {
-  return cart.some(i => (i.name || "").indexOf("Termin:") > -1);
+  // Option B: Formular nötig für Kurse ("Termin:") OR für Survival Kits
+  return cart.some(i => (i.name || "").indexOf("Termin:") > -1 || (i.name || "").toLowerCase().includes("survival kit"));
 }
 
 // --- Update Cart UI ---
@@ -488,17 +489,22 @@ function generateFormspreeMessage(data) {
   // Format participants
   let additionalText = "";
   if (additional.length > 0) {
-    additionalText += "Weitere Teilnehmer:\n";
+    additionalText += "Weitere Teilnehmer:
+";
     additional.forEach((p, idx) => {
-      additionalText += `- Teilnehmer ${idx + 2}: ${p.vorname} ${p.nachname}, Geburtsdatum: ${p.geburtsdatum}\n`;
+      additionalText += `- Teilnehmer ${idx + 2}: ${p.vorname} ${p.nachname}, Geburtsdatum: ${p.geburtsdatum}
+`;
     });
-    additionalText += "\n";
+    additionalText += "
+";
   }
 
   // Format cart items (monospaced table-like)
   let cartText = "";
-  cartText += "Produkt                     Menge   Preis\n";
-  cartText += "--------------------------------------------\n";
+  cartText += "Produkt                     Menge   Preis
+";
+  cartText += "--------------------------------------------
+";
 
   data.warenkorb_inhalt.split("; ").forEach(item => {
     const parts = item.split(" = ");
@@ -506,13 +512,18 @@ function generateFormspreeMessage(data) {
     const name = left[0].padEnd(25, " ");
     const qty = left[1].toString().padEnd(7, " ");
     const price = parts[1];
-    cartText += `${name}${qty}${price}\n`;
+    cartText += `${name}${qty}${price}
+`;
   });
 
   // Voucher text
   let voucherPart = "";
   if (data.gutschein_code) {
-    voucherPart = `\nEs wurde ein Gutschein eingelöst:\nCode: ${data.gutschein_code}\n\n`;
+    voucherPart = `
+Es wurde ein Gutschein eingelöst:
+Code: ${data.gutschein_code}
+
+`;
   }
 
   // Final message
