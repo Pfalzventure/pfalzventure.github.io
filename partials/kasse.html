@@ -657,20 +657,12 @@ function hidePayContainer() {
 
 /* Init Mollie UI: rendert einfachen Button in der vorhandenen Container-DOM */
 function initMollie() {
-  if (isVoucherActive()) {
-    hidePayContainer();
-    return;
-  }
   const cont = document.getElementById("paypal-button-container");
   if (!cont) return;
+
   cont.innerHTML = "";
 
-  if (!cart || cart.length === 0) {
-    cont.innerHTML = "<div class='small muted'>Dein Warenkorb ist leer.</div>";
-    return;
-  }
-
-  // Button erstellen – immer sichtbar
+  // Button erstellen, immer sichtbar
   const btn = document.createElement("button");
   btn.id = "payButton";
   btn.className = "btn";
@@ -679,7 +671,7 @@ function initMollie() {
   // initial disabled, bis Formular valide ist
   btn.disabled = !validateRegistrationForm();
 
-  // Eventlistener
+  // Klick-Event
   btn.addEventListener("click", createMolliePayment);
 
   cont.appendChild(btn);
