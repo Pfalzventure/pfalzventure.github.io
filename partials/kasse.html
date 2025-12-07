@@ -261,6 +261,10 @@ function initCheckoutUI() {
   updateProceedVisibility();
 }
 
+  // Mollie-Button direkt erstellen (immer sichtbar, aber ggf. disabled)
+initMollie();
+
+
 // --- Voucher helpers & Anpassung: prüfe Formular wenn Kurs im Warenkorb ---
 function isVoucherActive() {
   return voucherApplied && voucherApplied.code;
