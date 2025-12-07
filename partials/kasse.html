@@ -450,15 +450,21 @@ function validateRegistrationForm() {
 function updateProceedVisibility() {
   const proceedBtn = document.getElementById("proceedToPayBtn");
   if (!proceedBtn) return;
-  // Only show proceed if cart contains course and validation passes
-  if (cartContainsCourse()) {
-    const ok = validateRegistrationForm();
-    if (ok) proceedBtn.classList.remove("hidden");
-    else proceedBtn.classList.add("hidden");
+
+  // Weiter-zur-Zahlung-Button wie bisher
+  if (cartContainsCourse() && validateRegistrationForm()) {
+    proceedBtn.classList.remove("hidden");
   } else {
     proceedBtn.classList.add("hidden");
   }
+
+  // Mollie-Button aktivieren/deaktivieren
+  const payBtn = document.getElementById("payButton");
+  if (payBtn) {
+    payBtn.disabled = !validateRegistrationForm();
+  }
 }
+
   
   // --- Generate email message for Formspree ---
 function generateFormspreeMessage(data) {
