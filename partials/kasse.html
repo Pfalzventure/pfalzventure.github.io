@@ -751,8 +751,12 @@ async function createMolliePayment() {
 /* --- Page lifecycle --- */
 document.addEventListener("DOMContentLoaded", () => {
   initCheckoutUI();
-  if (!cartContainsCourse() && !isVoucherActive()) initMollie();
+  const payBtn = document.getElementById("payButton");
+  if (payBtn && !cartContainsCourse()) {
+    payBtn.disabled = false; // sofort aktiv
+  }
 });
+
 </script>
 </body>
 </html>
