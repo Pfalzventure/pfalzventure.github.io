@@ -216,7 +216,7 @@ function initCheckoutUI() {
   updateCartDisplay();
 
   const registrationForm = document.getElementById("registrationForm");
-  const hasCourse = cartContainsCourse();
+  const hasCourse = cartNeedsForm();
 
   if (hasCourse) {
     registrationForm.classList.remove("hidden");
@@ -298,7 +298,7 @@ function blockPaymentsBecauseVoucher() {
   document.getElementById("proceedToPayBtn").classList.add("hidden");
 }
 function unblockPayments() {
-  const hasCourse = cartContainsCourse();
+  const hasCourse = cartNeedsForm();
   if (hasCourse) {
     document.getElementById("proceedToPayBtn").classList.remove("hidden");
     hidePayContainer();
