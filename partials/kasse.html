@@ -217,11 +217,12 @@ function initCheckoutUI() {
 
   if (hasCourse) {
     registrationForm.classList.remove("hidden");
-    hidePayContainer(); // Zahl-UI erst nach Formularvalidierung verbergen
   } else {
     registrationForm.classList.add("hidden");
-    if (!isVoucherActive()) initMollie();
   }
+
+  // **Mollie-Button immer erzeugen**
+  initMollie();  // <= hier statt nur in else-Zweig
 
   // Teilnehmeranzahl
   const countSelect = document.getElementById('participantCount');
@@ -229,15 +230,13 @@ function initCheckoutUI() {
     countSelect.addEventListener('change', renderAdditionalParticipants);
   }
 
-  // initial render (1)
   renderAdditionalParticipants();
 
-  // Wire up proceed button (prüfe Element vorhanden)
+  // Wire up proceed button
   const proceedBtn = document.getElementById("proceedToPayBtn");
   if (proceedBtn) {
     proceedBtn.addEventListener("click", async () => {
       if (!validateRegistrationForm()) return;
-      // Erst Formular an Formspree senden, dann Mollie initialisieren
       await sendRegistrationToFormspree();
       initMollie();
       const cont = document.getElementById("paypal-button-container");
@@ -258,8 +257,10 @@ function initCheckoutUI() {
     el.addEventListener(ev, updateProceedVisibility);
   });
 
+  // initial prüfen
   updateProceedVisibility();
 }
+
 
   // Mollie-Button direkt erstellen (immer sichtbar, aber ggf. disabled)
 initMollie();
