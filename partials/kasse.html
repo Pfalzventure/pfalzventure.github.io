@@ -466,20 +466,14 @@ function updateProceedVisibility() {
   const proceedBtn = document.getElementById("proceedToPayBtn");
   if (!proceedBtn) return;
 
-  // Weiter-zur-Zahlung-Button wie bisher
   if (cartContainsCourse() && validateRegistrationForm()) {
     proceedBtn.classList.remove("hidden");
   } else {
     proceedBtn.classList.add("hidden");
   }
 
-  // Mollie-Button aktivieren/deaktivieren
-  const payBtn = document.getElementById("payButton");
-  if (payBtn) {
-    payBtn.disabled = !validateRegistrationForm();
-  }
+  // **Nicht mehr den Mollie-Button aktivieren**
 }
-
   
   // --- Generate email message for Formspree ---
 function generateFormspreeMessage(data) {
