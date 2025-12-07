@@ -419,9 +419,9 @@ function validateRegistrationForm() {
   msgEl.textContent = "";
 
   // Wenn kein Kurs im Warenkorb liegt, Formular muss nicht zwingend ausgefüllt sein (aber proceed bleibt hidden)
-  if (!cartContainsCourse()) {
+if (!cartNeedsForm()) {
     return true;
-  }
+}
 
   // Teilnehmer 1 checks (contract partner)
   const vorname = document.getElementById("vorname").value.trim();
