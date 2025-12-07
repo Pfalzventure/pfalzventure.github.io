@@ -655,6 +655,7 @@ function initMollie() {
     hidePayContainer();
     return;
   }
+
   const cont = document.getElementById("paypal-button-container");
   if (!cont) return;
   cont.innerHTML = "";
@@ -664,12 +665,17 @@ function initMollie() {
     return;
   }
 
-  // Button erstellen (visuell möglichst passend zum vorherigen)
   const btn = document.createElement("button");
   btn.id = "payButton";
   btn.className = "btn";
-  btn.textContent = "Jetzt Zahlungspflichtig bestellen";
+  btn.textContent = "Jetzt zahlungspflichtig bestellen";
+
+  // Button direkt deaktivieren, solange Bedingungen nicht erfüllt
+  btn.disabled = !validateRegistrationForm();
+
+  // Klick-Event bleibt unverändert
   btn.addEventListener("click", createMolliePayment);
+
   cont.appendChild(btn);
 }
 
