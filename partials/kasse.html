@@ -664,14 +664,21 @@ function initMollie() {
     return;
   }
 
-  // Button erstellen (visuell möglichst passend zum vorherigen)
+  // Button erstellen – immer sichtbar
   const btn = document.createElement("button");
   btn.id = "payButton";
   btn.className = "btn";
   btn.textContent = "Jetzt Zahlungspflichtig bestellen";
+
+  // initial disabled, bis Formular valide ist
+  btn.disabled = !validateRegistrationForm();
+
+  // Eventlistener
   btn.addEventListener("click", createMolliePayment);
+
   cont.appendChild(btn);
 }
+
 
 /* createMolliePayment: ruft dein Vercel-Backend auf, bekommt checkoutUrl und leitet weiter */
 async function createMolliePayment() {
