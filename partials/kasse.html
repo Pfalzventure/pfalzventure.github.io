@@ -446,19 +446,14 @@ function validateRegistrationForm() {
   return true;
 }
 
-// Update Proceed Button visibility based on validation
+// Update Mollie-Button based on form validation
 function updateProceedVisibility() {
-  const proceedBtn = document.getElementById("proceedToPayBtn");
-  if (!proceedBtn) return;
-  // Only show proceed if cart contains course and validation passes
-  if (cartContainsCourse()) {
-    const ok = validateRegistrationForm();
-    if (ok) proceedBtn.classList.remove("hidden");
-    else proceedBtn.classList.add("hidden");
-  } else {
-    proceedBtn.classList.add("hidden");
-  }
+  const btn = document.getElementById("payButton");
+  if (!btn) return;
+  // Button deaktivieren, solange Formular nicht gültig ist
+  btn.disabled = !validateRegistrationForm();
 }
+
   
   // --- Generate email message for Formspree ---
 function generateFormspreeMessage(data) {
