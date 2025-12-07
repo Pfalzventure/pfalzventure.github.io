@@ -241,9 +241,15 @@ if (proceedBtn) {
     // Formular senden
     await sendRegistrationToFormspree();
 
-    // Mollie-Button aktivieren
+    // Mollie-Button aktivieren nur, wenn ein Kurs im Warenkorb liegt
     const payBtn = document.getElementById("payButton");
-    if (payBtn) payBtn.disabled = false;
+    if (payBtn) {
+      if (cartContainsCourse()) {
+        payBtn.disabled = false; // Aktivierung erst nach Klick
+      } else {
+        payBtn.disabled = false; // Kein Kurs: sofort aktiv
+      }
+    }
 
     // Scroll zum Button
     const cont = document.getElementById("paypal-button-container");
