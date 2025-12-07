@@ -446,14 +446,19 @@ function validateRegistrationForm() {
   return true;
 }
 
-// Update Mollie-Button based on form validation
+// Update Proceed Button visibility based on validation
 function updateProceedVisibility() {
-  const btn = document.getElementById("payButton");
-  if (!btn) return;
-  // Button deaktivieren, solange Formular nicht gültig ist
-  btn.disabled = !validateRegistrationForm();
+  const proceedBtn = document.getElementById("proceedToPayBtn");
+  if (!proceedBtn) return;
+  // Only show proceed if cart contains course and validation passes
+  if (cartContainsCourse()) {
+    const ok = validateRegistrationForm();
+    if (ok) proceedBtn.classList.remove("hidden");
+    else proceedBtn.classList.add("hidden");
+  } else {
+    proceedBtn.classList.add("hidden");
+  }
 }
-
   
   // --- Generate email message for Formspree ---
 function generateFormspreeMessage(data) {
@@ -650,7 +655,6 @@ function initMollie() {
     hidePayContainer();
     return;
   }
-
   const cont = document.getElementById("paypal-button-container");
   if (!cont) return;
   cont.innerHTML = "";
@@ -660,17 +664,12 @@ function initMollie() {
     return;
   }
 
+  // Button erstellen (visuell möglichst passend zum vorherigen)
   const btn = document.createElement("button");
   btn.id = "payButton";
   btn.className = "btn";
-  btn.textContent = "Jetzt zahlungspflichtig bestellen";
-
-  // Button direkt deaktivieren, solange Bedingungen nicht erfüllt
-  btn.disabled = !validateRegistrationForm();
-
-  // Klick-Event bleibt unverändert
+  btn.textContent = "Jetzt Zahlungspflichtig bestellen";
   btn.addEventListener("click", createMolliePayment);
-
   cont.appendChild(btn);
 }
 
