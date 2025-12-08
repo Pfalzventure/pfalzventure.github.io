@@ -102,11 +102,6 @@
     Ich habe die <a href="../AGB.html">AGB</a> gelesen und akzeptiere sie. Ich bestätige, dass die Teilnahmebedingungen für alle angegebenen Teilnehmer gelten.
   </label>
 
-  <label>
-    <input type="checkbox" id="fitness" required>
-    Ich bestätige, dass ich körperlich und mental für die Kursinhalte geeignet bin (gilt auch für alle anderen angegebenen Teilnehmer).
-  </label>
-
   <!-- Hervorgehobene Infobox unter den Bestätigungen -->
   <div class="info-box" role="note" aria-live="polite">
     <strong>Wichtige Hinweise:</strong>
@@ -265,7 +260,7 @@ if (proceedBtn) {
   const watchSelectors = [
     "#vorname", "#nachname", "#strasse", "#plz_ort",
     "#teilnehmer_email", "#geburtsdatum",
-    "#agb", "#fitness"
+    "#agb"
   ];
   watchSelectors.forEach(sel => {
     const el = document.querySelector(sel);
@@ -431,7 +426,7 @@ if (!cartNeedsForm()) {
   const email = document.getElementById("teilnehmer_email").value.trim();
   const geb = document.getElementById("geburtsdatum").value;
   const agb = document.getElementById("agb").checked;
-  const fitness = document.getElementById("fitness").checked;
+ 
 
   if (!vorname || !nachname || !strasse || !plzOrt || !email || !geb) {
     msgEl.className = "error";
@@ -443,9 +438,9 @@ if (!cartNeedsForm()) {
     msgEl.textContent = "Bitte gib eine gültige E-Mail-Adresse an.";
     return false;
   }
-  if (!agb || !fitness) {
+  if (!agb) {
     msgEl.className = "error";
-    msgEl.textContent = "Bitte bestätige noch die Checkboxen (AGB und Fitness) -> diese gelten für alle Teilnehmer!";
+    msgEl.textContent = "Bitte bestätige noch die AGB Checkbox -> diese gilt für alle Teilnehmer!";
     return false;
   }
 
@@ -586,7 +581,6 @@ async function sendRegistrationToFormspree() {
     telefon: document.getElementById("telefon").value.trim(),
     geburtsdatum: document.getElementById("geburtsdatum").value,
     agb: document.getElementById("agb").checked ? "ja" : "nein",
-    fitness: document.getElementById("fitness").checked ? "ja" : "nein"
   };
 
   const participants_additional = [];
