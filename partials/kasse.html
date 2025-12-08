@@ -282,7 +282,32 @@ if (proceedBtn) {
   // Mollie-Button direkt erstellen (immer sichtbar, aber ggf. disabled)
 initMollie();
 
+ // ----------------------------------------
+  // Survival-Kit Logik: Felder ausblenden
+  // ----------------------------------------
+  if (cartContainsKit()) {
 
+    // Geburtsdatum
+    const geb = document.getElementById("geburtsdatum");
+    if (geb) geb.parentElement.style.display = "none";
+
+    // Teilnehmeranzahl
+    const teilnehmer = document.getElementById("teilnehmer");
+    if (teilnehmer) teilnehmer.parentElement.style.display = "none";
+
+    // Checkboxen
+    const agb = document.getElementById("agb");
+    if (agb) agb.parentElement.style.display = "none";
+
+    const fitness = document.getElementById("fitness");
+    if (fitness) fitness.parentElement.style.display = "none";
+
+    // Infobox
+    const info = document.querySelector(".info-box");
+    if (info) info.style.display = "none";
+  }
+}
+  
 // --- Voucher helpers & Anpassung: prüfe Formular wenn Kurs im Warenkorb ---
 function isVoucherActive() {
   return voucherApplied && voucherApplied.code;
