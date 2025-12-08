@@ -65,11 +65,11 @@ const hasOnlyVoucher =
       <h1>Kasse</h1>
       <p class="muted">Bitte überprüfe deine Bestellung, fülle das Formular aus (nicht notwendig bei Kauf von Geschenkgutscheinen) und fahre mit der Zahlung fort.</p>
 
-  <form id="registrationForm" class="hidden">
+<form id="registrationForm" class="hidden">
   <h2 style="color:var(--dark-green); margin-top:1rem;">Teilnehmerdaten / Lieferadresse</h2>
 
   <!-- Teilnehmer 1 (Vertragspartner) -->
-  <div id="participant1" class="participant-block">
+  <div id="participant1" class="participant-block courseField">
     <h3>Teilnehmer 1</h3>
 
     <input type="text" name="vorname" id="vorname" placeholder="Vorname" required>
@@ -83,12 +83,10 @@ const hasOnlyVoucher =
 
     <label style="font-weight:bold; margin-top:1rem;">Geburtsdatum</label>
     <input type="date" name="geburtsdatum" id="geburtsdatum" required>
-
-    <!-- Hinweis zu Minderjährigen wird extern geregelt -->
   </div>
 
-  <!-- Dropdown Anzahl Teilnehmer (unterhalb des Anmeldeformulars von Teilnehmer 1 wie gewünscht) -->
-  <div style="margin-top:1rem;">
+  <!-- Dropdown Anzahl Teilnehmer -->
+  <div class="courseField" style="margin-top:1rem;">
     <label for="participantCount" style="font-weight:600;">Anzahl Teilnehmer (inkl. Teilnehmer 1)</label>
     <select id="participantCount" style="margin-left:.5rem;">
       <option value="1">1</option>
@@ -99,23 +97,23 @@ const hasOnlyVoucher =
     </select>
   </div>
 
-  <!-- Container für zusätzliche Teilnehmerformulare -->
-  <div id="additional-participants" style="margin-top:1rem;"></div>
+  <!-- Zusätzliche Teilnehmer -->
+  <div id="additional-participants" class="courseField" style="margin-top:1rem;"></div>
 
-  <h2 style="color:var(--dark-green); margin-top:2rem;">Bestätigungen</h2>
+  <h2 style="color:var(--dark-green); margin-top:2rem;" class="courseField">Bestätigungen</h2>
 
-  <label>
+  <label class="courseField">
     <input type="checkbox" id="agb" required>
     Ich habe die <a href="../AGB.html">AGB</a> gelesen und akzeptiere sie. Ich bestätige, dass die Teilnahmebedingungen für alle angegebenen Teilnehmer gelten.
   </label>
 
-  <label>
+  <label class="courseField">
     <input type="checkbox" id="fitness" required>
     Ich bestätige, dass ich körperlich und mental für die Kursinhalte geeignet bin (gilt auch für alle anderen angegebenen Teilnehmer).
   </label>
 
-  <!-- Hervorgehobene Infobox unter den Bestätigungen -->
-  <div class="info-box" role="note" aria-live="polite">
+  <!-- Infobox -->
+  <div class="info-box courseField" role="note" aria-live="polite">
     <strong>Wichtige Hinweise:</strong>
     <ul style="margin:0.5rem 0 0 1.1rem; padding:0;">
       <li>Minderjährige dürfen nur in Begleitung eines Erwachsenen teilnehmen, der die Aufsichtspflicht für sie übernimmt.</li>
@@ -123,12 +121,13 @@ const hasOnlyVoucher =
     </ul>
   </div>
 
-  <div id="form-message" class="small" style="margin-top:.5rem;"></div>
+  <div id="form-message" class="small courseField" style="margin-top:.5rem;"></div>
 
-  <div class="form-actions">
+  <div class="form-actions courseField">
     <button id="proceedToPayBtn" type="button" class="btn hidden">Weiter zur Zahlung</button>
   </div>
 </form>
+
       
      <!-- === Anmeldeformular (bereinigt) === -->
 </section>
