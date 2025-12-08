@@ -27,6 +27,13 @@
     .center { text-align:center; }
     .right-aux { margin-top:1rem; }
 
+const hasCourse = cart.some(i => (i.name || "").includes("Termin:"));
+const hasSurvivalKit = cart.some(i => (i.name || "").includes("Survival Kit"));
+const hasOnlyVoucher =
+  cart.length > 0 &&
+  cart.every(i => (i.name || "").includes("Gutschein"));
+
+    
     /* Infobox */
     .info-box {
       margin-top: 1rem;
