@@ -207,128 +207,58 @@ function updateCartDisplay() {
   }
 }
 
+// --- Init UI ---
 function initCheckoutUI() {
   voucherApplied = null;
+  const voucherMsg = document.getElementById("voucherMessage");
+  if (voucherMsg) { voucherMsg.textContent = ""; voucherMsg.className = "small"; }
 
   updateCartDisplay();
 
+  const registrationForm = document.getElementById("registrationForm");
   const hasCourse = cartNeedsForm();
 
-  // Elemente definieren
-  const registrationForm = document.getElementById("registrationForm");
-
-  const birthdateLabel = document.querySelector('#participant1 label[for="geburtsdatum"]');
-  const birthdateInput = document.getElementById('geburtsdatum');
-
-  const participantCount = document.getElementById('participantCount');
-  const additionalParticipants = document.getElementById('additional-participants');
-
-  const agb = document.getElementById('agb');
-  const fitness = document.getElementById('fitness');
-
-  const agbBox = agb ? agb.closest('label') : null;
-  const fitnessBox = fitness ? fitness.closest('label') : null;
-
-  const infoBox = document.querySelector('.info-box');
-
-  // Helper zum Sichtbarkeitswechsel
-  function show(el) { if (el) el.classList.remove('hidden'); }
-  function hide(el) { if (el) el.classList.add('hidden'); }
-
-  // --- Sichtbarkeit steuern ---
   if (hasCourse) {
-    // Formular sichtbar
-    show(registrationForm);
-
-    show(birthdateLabel);
-    show(birthdateInput);
-    show(participantCount);
-    show(additionalParticipants);
-    show(agbBox);
-    show(fitnessBox);
-    show(infoBox);
-
+    registrationForm.classList.remove("hidden");
   } else {
-    // Formular verstecken
-    hide(registrationForm);
-
-    hide(birthdateLabel);
-    hide(birthdateInput);
-    hide(participantCount);
-    hide(additionalParticipants);
-    hide(agbBox);
-    hide(fitnessBox);
-    hide(infoBox);
+    registrationForm.classList.add("hidden");
   }
 
-  // Gutschein-Meldung resetten
-  const voucherMsg = document.getElementById("voucherMessage");
-  if (voucherMsg) {
-    voucherMsg.textContent = "";
-    voucherMsg.className = "small";
-  }
-}
+  // **Mollie-Button immer erzeugen**
+  initMollie();  // <= hier statt nur in else-Zweig
 
-
-  // Mollie-Button (wie in deinem Originalcode empfohlen immer initialisieren)
-  initMollie();
-
-  // Teilnehmeranzahl Listener
+  // Teilnehmeranzahl
   const countSelect = document.getElementById('participantCount');
   if (countSelect) {
-    countSelect.removeEventListener('change', renderAdditionalParticipants); // sicherstellen, kein Doppelbind
     countSelect.addEventListener('change', renderAdditionalParticipants);
   }
 
-  // Render ggf. zusätzliche Teilnehmerfelder
   renderAdditionalParticipants();
 
-  // Proceed button hook
-  const proceedBtn = document.getElementById("proceedToPayBtn");
-  if (proceedBtn) {
-    proceedBtn.removeEventListener('click', proceedClickHandler);
-    proceedBtn.addEventListener('click', proceedClickHandler);
-  }
+  // Wire up proceed button
+const proceedBtn = document.getElementById("proceedToPayBtn");
+if (proceedBtn) {
+  proceedBtn.addEventListener("click", async () => {
+    if (!validateRegistrationForm()) return;
 
-  // Watch basic fields for showing proceed button
-  const watchSelectors = [
-    "#vorname", "#nachname", "#strasse", "#plz_ort",
-    "#teilnehmer_email", "#geburtsdatum",
-    "#agb", "#fitness"
-  ];
-  watchSelectors.forEach(sel => {
-    const el = document.querySelector(sel);
-    if (!el) return;
-    const ev = (el.tagName === "SELECT" || el.type === "checkbox" || el.type === "radio" || el.type === "date") ? "change" : "input";
-    // einfache deduplizierung der Listener
-    el.removeEventListener(ev, updateProceedVisibility);
-    el.addEventListener(ev, updateProceedVisibility);
-  });
+    // Formular senden
+    await sendRegistrationToFormspree();
 
-  // initial prüfen
-  updateProceedVisibility();
-}
-
-// gemeinsamer Klick-Handler (aus deinem Code übernommen)
-async function proceedClickHandler() {
-  if (!validateRegistrationForm()) return;
-
-  await sendRegistrationToFormspree();
-
-  // Mollie-Button aktivieren/logik
-  const payBtn = document.getElementById("payButton");
-  if (payBtn) {
-    if (cartContainsCourse()) {
-      payBtn.disabled = false;
-    } else {
-      payBtn.disabled = false;
+    // Mollie-Button aktivieren nur, wenn ein Kurs im Warenkorb liegt
+    const payBtn = document.getElementById("payButton");
+    if (payBtn) {
+      if (cartContainsCourse()) {
+        payBtn.disabled = false; // Aktivierung erst nach Klick
+      } else {
+        payBtn.disabled = false; // Kein Kurs: sofort aktiv
+      }
     }
-  }
 
-  const cont = document.getElementById("paypal-button-container");
-  if (cont) cont.scrollIntoView({ behavior: "smooth" });
+    // Scroll zum Button
+    const cont = document.getElementById("paypal-button-container");
+    if (cont) cont.scrollIntoView({ behavior: "smooth" });
+  });
 }
-
 
 
   // Watch basic fields for showing proceed button
