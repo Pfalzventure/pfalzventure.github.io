@@ -209,6 +209,43 @@ function updateCartDisplay() {
 
 // --- Init UI ---
 function initCheckoutUI() {
+ function initCheckoutUI() {
+  voucherApplied = null;
+
+  updateCartDisplay();
+
+  const hasCourse = cartNeedsForm();
+
+  // Teilnehmerfelder holen
+  const birthdateField = document.querySelector('#participant1 label[for="geburtsdatum"], #participant1 input#geburtsdatum');
+  const participantCount = document.getElementById('participantCount');
+  const additionalParticipants = document.getElementById('additional-participants');
+  const agbBox = document.getElementById('agb').closest('label');
+  const fitnessBox = document.getElementById('fitness').closest('label');
+  const infoBox = document.querySelector('.info-box');
+
+  if (!hasCourse) {
+    // Nur verstecken -> nicht löschen!
+    document.getElementById("registrationForm").classList.add("hidden");
+
+    birthdateField?.classList?.add("hidden");
+    participantCount?.classList?.add("hidden");
+    additionalParticipants?.classList?.add("hidden");
+    agbBox?.classList?.add("hidden");
+    fitnessBox?.classList?.add("hidden");
+    infoBox?.classList?.add("hidden");
+  } else {
+    // wieder sichtbar machen
+    document.getElementById("registrationForm").classList.remove("hidden");
+
+    birthdateField?.classList?.remove("hidden");
+    participantCount?.classList?.remove("hidden");
+    additionalParticipants?.classList?.remove("hidden");
+    agbBox?.classList?.remove("hidden");
+    fitnessBox?.classList?.remove("hidden");
+    infoBox?.classList?.remove("hidden");
+  }
+
   voucherApplied = null;
   const voucherMsg = document.getElementById("voucherMessage");
   if (voucherMsg) { voucherMsg.textContent = ""; voucherMsg.className = "small"; }
