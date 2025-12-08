@@ -183,6 +183,11 @@ function cartNeedsForm() {
   );
 }
 
+// --- NEU: Prüft, ob ein Survival Kit im Warenkorb ist ---
+function cartHasSurvivalKit() {
+  return cart.some(i => (i.name || "").includes("Survival Kit"));
+}
+  
 // --- Update Cart UI ---
 function updateCartDisplay() {
   const list = document.getElementById("cart-items");
@@ -207,22 +212,49 @@ function updateCartDisplay() {
   }
 }
 
-// --- Init UI ---
 function initCheckoutUI() {
   voucherApplied = null;
   const voucherMsg = document.getElementById("voucherMessage");
-  if (voucherMsg) { voucherMsg.textContent = ""; voucherMsg.className = "small"; }
+  if (voucherMsg) { 
+    voucherMsg.textContent = ""; 
+    voucherMsg.className = "small"; 
+  }
 
   updateCartDisplay();
 
   const registrationForm = document.getElementById("registrationForm");
   const hasCourse = cartNeedsForm();
+  const hasSurvivalKit = cartHasSurvivalKit();
 
-  if (hasCourse) {
+  if (hasCourse && !hasSurvivalKit) {
+    // Kurs im Warenkorb: alles anzeigen
     registrationForm.classList.remove("hidden");
+    showFormFields(["geburtsdatum","teilnehmerAnzahl","agb","fitness","infoFeld"]);
+  } else if (hasSurvivalKit && !hasCourse) {
+    // Nur Survival Kit: bestimmte Felder ausblenden
+    registrationForm.classList.remove("hidden");
+    hideFormFields(["geburtsdatum","teilnehmerAnzahl","agb","fitness","infoFeld"]);
   } else {
+    // Kein Kurs, kein Survival Kit → Formular komplett ausblenden
     registrationForm.classList.add("hidden");
   }
+}
+
+// Hilfsfunktionen zum Aus-/Einblenden
+function hideFormFields(ids) {
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add("hidden");
+  });
+}
+
+function showFormFields(ids) {
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove("hidden");
+  });
+}
+
 
   // **Mollie-Button immer erzeugen**
   initMollie();  // <= hier statt nur in else-Zweig
