@@ -99,7 +99,12 @@
 
   <label>
     <input type="checkbox" id="agb" required>
-    Ich habe die <a href="../AGB.html">AGB</a> gelesen und akzeptiere sie. Bei Buchung eines Kurses bestätige ich, dass die Teilnahmebedingungen für alle angegebenen Teilnehmer gelten.
+    Ich habe die <a href="../AGB.html">AGB</a> gelesen und akzeptiere sie. Ich bestätige, dass die Teilnahmebedingungen für alle angegebenen Teilnehmer gelten.
+  </label>
+
+  <label>
+    <input type="checkbox" id="fitness" required>
+    Ich bestätige, dass ich körperlich und mental für die Kursinhalte geeignet bin (gilt auch für alle anderen angegebenen Teilnehmer).
   </label>
 
   <!-- Hervorgehobene Infobox unter den Bestätigungen -->
@@ -236,14 +241,6 @@ if (proceedBtn) {
   proceedBtn.addEventListener("click", async () => {
     if (!validateRegistrationForm()) return;
 
- // Pay-Button freischalten
-  const payBtn = document.getElementById("payButton");
-  if (payBtn) payBtn.disabled = false;
-
-  // Optional: Fokus auf den Button setzen
-  payBtn.scrollIntoView({ behavior: "smooth" });
-});
-    
     // Formular senden
     await sendRegistrationToFormspree();
 
@@ -268,7 +265,7 @@ if (proceedBtn) {
   const watchSelectors = [
     "#vorname", "#nachname", "#strasse", "#plz_ort",
     "#teilnehmer_email", "#geburtsdatum",
-    "#agb"
+    "#agb", "#fitness"
   ];
   watchSelectors.forEach(sel => {
     const el = document.querySelector(sel);
@@ -434,7 +431,7 @@ if (!cartNeedsForm()) {
   const email = document.getElementById("teilnehmer_email").value.trim();
   const geb = document.getElementById("geburtsdatum").value;
   const agb = document.getElementById("agb").checked;
-
+  const fitness = document.getElementById("fitness").checked;
 
   if (!vorname || !nachname || !strasse || !plzOrt || !email || !geb) {
     msgEl.className = "error";
@@ -446,9 +443,9 @@ if (!cartNeedsForm()) {
     msgEl.textContent = "Bitte gib eine gültige E-Mail-Adresse an.";
     return false;
   }
-  if (!agb) {
+  if (!agb || !fitness) {
     msgEl.className = "error";
-    msgEl.textContent = "Bitte bestätige noch die AGB Checkbox";
+    msgEl.textContent = "Bitte bestätige noch die Checkboxen (AGB und Fitness) -> diese gelten für alle Teilnehmer!";
     return false;
   }
 
@@ -589,6 +586,7 @@ async function sendRegistrationToFormspree() {
     telefon: document.getElementById("telefon").value.trim(),
     geburtsdatum: document.getElementById("geburtsdatum").value,
     agb: document.getElementById("agb").checked ? "ja" : "nein",
+    fitness: document.getElementById("fitness").checked ? "ja" : "nein"
   };
 
   const participants_additional = [];
@@ -684,11 +682,10 @@ function initMollie() {
 
   const btn = document.createElement("button");
   btn.id = "payButton";
-  btn.className = "pay-btn";
+  btn.className = "btn";
   btn.textContent = "Jetzt Zahlungspflichtig bestellen";
   btn.disabled = true; // immer initial disabled
 
- 
   btn.addEventListener("click", createMolliePayment);
 
   cont.appendChild(btn);
