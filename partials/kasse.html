@@ -466,18 +466,18 @@ if (!cartNeedsForm()) {
 // Update Proceed Button visibility based on validation
 function updateProceedVisibility() {
   const proceedBtn = document.getElementById("proceedToPayBtn");
-  if (!proceedBtn) return;
+  const proceedText = document.getElementById("proceedText");
+  if (!proceedBtn || !proceedText) return;
 
- if (cartNeedsForm() && validateRegistrationForm()) {
-  proceedBtn.classList.remove("hidden");
-} else {
-  proceedBtn.classList.add("hidden");
+  if (cartNeedsForm() && validateRegistrationForm()) {
+    proceedBtn.classList.remove("hidden");
+    proceedText.classList.remove("hidden"); // Text einblenden
+  } else {
+    proceedBtn.classList.add("hidden");
+    proceedText.classList.add("hidden"); // Text ausblenden
+  }
 }
-
-  // Mollie-Button nicht mehr hier aktivieren
-  // Wird erst beim Klick auf "Weiter zur Zahlung" aktiviert
-}
-
+  
   // --- Generate email message for Formspree ---
 function generateFormspreeMessage(data) {
   const p1 = data.participant1;
