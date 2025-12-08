@@ -242,7 +242,7 @@ if (proceedBtn) {
     // Mollie-Button aktivieren nur, wenn ein Kurs im Warenkorb liegt
     const payBtn = document.getElementById("payButton");
     if (payBtn) {
-      if (cartContainsCourse()) {
+      if (cartNeedsForm()) {
         payBtn.disabled = false; // Aktivierung erst nach Klick
       } else {
         payBtn.disabled = false; // Kein Kurs: sofort aktiv
