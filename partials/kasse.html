@@ -438,9 +438,9 @@ if (!cartNeedsForm()) {
     msgEl.textContent = "Bitte gib eine gültige E-Mail-Adresse an.";
     return false;
   }
-  if (!agb || !fitness) {
+  if (!agb) {
     msgEl.className = "error";
-    msgEl.textContent = "Bitte bestätige noch die Checkboxen (AGB und Fitness) -> diese gelten für alle Teilnehmer!";
+    msgEl.textContent = "Bitte bestätige noch die AGB Checkbox";
     return false;
   }
 
