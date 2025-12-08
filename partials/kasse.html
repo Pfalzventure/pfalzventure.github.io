@@ -208,94 +208,119 @@ function updateCartDisplay() {
 }
 
 // --- Init UI ---
-
- function initCheckoutUI() {
+function initCheckoutUI() {
   voucherApplied = null;
 
+  // Cart/UI initialisieren
   updateCartDisplay();
 
   const hasCourse = cartNeedsForm();
 
-  // Teilnehmerfelder holen
-  const birthdateField = document.querySelector('#participant1 label[for="geburtsdatum"], #participant1 input#geburtsdatum');
+  // DOM-Elemente, die wir nur verstecken/zeigen wollen
+  const registrationForm = document.getElementById("registrationForm");
+  const birthdateLabel = document.querySelector('#participant1 label[for="geburtsdatum"]');
+  const birthdateInput = document.getElementById('geburtsdatum');
   const participantCount = document.getElementById('participantCount');
   const additionalParticipants = document.getElementById('additional-participants');
-  const agbBox = document.getElementById('agb').closest('label');
-  const fitnessBox = document.getElementById('fitness').closest('label');
+  const agbInput = document.getElementById('agb');
+  const fitnessInput = document.getElementById('fitness');
+  const agbBox = agbInput ? agbInput.closest('label') : null;
+  const fitnessBox = fitnessInput ? fitnessInput.closest('label') : null;
   const infoBox = document.querySelector('.info-box');
 
-  if (!hasCourse) {
-    // Nur verstecken -> nicht löschen!
-    document.getElementById("registrationForm").classList.add("hidden");
-
-    birthdateField?.classList?.add("hidden");
-    participantCount?.classList?.add("hidden");
-    additionalParticipants?.classList?.add("hidden");
-    agbBox?.classList?.add("hidden");
-    fitnessBox?.classList?.add("hidden");
-    infoBox?.classList?.add("hidden");
-  } else {
-    // wieder sichtbar machen
-    document.getElementById("registrationForm").classList.remove("hidden");
-
-    birthdateField?.classList?.remove("hidden");
-    participantCount?.classList?.remove("hidden");
-    additionalParticipants?.classList?.remove("hidden");
-    agbBox?.classList?.remove("hidden");
-    fitnessBox?.classList?.remove("hidden");
-    infoBox?.classList?.remove("hidden");
+  // Helper: toggle .hidden auf mehreren Elementen
+  function toggleHidden(el, show) {
+    if (!el) return;
+    if (show) el.classList.remove('hidden');
+    else el.classList.add('hidden');
   }
 
-  voucherApplied = null;
+  // Wenn ein Kurs im Warenkorb ist -> Formular sichtbar und Felder zeigen,
+  // sonst Formular sichtbar lassen? Du wolltest das Formular nur anzeigen wenn Kurs da ist.
+  if (hasCourse) {
+    if (registrationForm) registrationForm.classList.remove('hidden');
+    toggleHidden(birthdateLabel, true);
+    toggleHidden(birthdateInput, true);
+    toggleHidden(participantCount, true);
+    toggleHidden(additionalParticipants, true);
+    toggleHidden(agbBox, true);
+    toggleHidden(fitnessBox, true);
+    toggleHidden(infoBox, true);
+  } else {
+    // Formular bleibt vorhanden, wird aber ausgeblendet und relevante Felder ebenfalls
+    if (registrationForm) registrationForm.classList.add('hidden');
+    toggleHidden(birthdateLabel, false);
+    toggleHidden(birthdateInput, false);
+    toggleHidden(participantCount, false);
+    toggleHidden(additionalParticipants, false);
+    toggleHidden(agbBox, false);
+    toggleHidden(fitnessBox, false);
+    toggleHidden(infoBox, false);
+  }
+
+  // Reset Voucher UI
   const voucherMsg = document.getElementById("voucherMessage");
   if (voucherMsg) { voucherMsg.textContent = ""; voucherMsg.className = "small"; }
 
-  updateCartDisplay();
+  // Mollie-Button (wie in deinem Originalcode empfohlen immer initialisieren)
+  initMollie();
 
-  const registrationForm = document.getElementById("registrationForm");
-  const hasCourse = cartNeedsForm();
-
-  if (hasCourse) {
-    registrationForm.classList.remove("hidden");
-  } else {
-    registrationForm.classList.add("hidden");
-  }
-
-  // **Mollie-Button immer erzeugen**
-  initMollie();  // <= hier statt nur in else-Zweig
-
-  // Teilnehmeranzahl
+  // Teilnehmeranzahl Listener
   const countSelect = document.getElementById('participantCount');
   if (countSelect) {
+    countSelect.removeEventListener('change', renderAdditionalParticipants); // sicherstellen, kein Doppelbind
     countSelect.addEventListener('change', renderAdditionalParticipants);
   }
 
+  // Render ggf. zusätzliche Teilnehmerfelder
   renderAdditionalParticipants();
 
-  // Wire up proceed button
-const proceedBtn = document.getElementById("proceedToPayBtn");
-if (proceedBtn) {
-  proceedBtn.addEventListener("click", async () => {
-    if (!validateRegistrationForm()) return;
+  // Proceed button hook
+  const proceedBtn = document.getElementById("proceedToPayBtn");
+  if (proceedBtn) {
+    proceedBtn.removeEventListener('click', proceedClickHandler);
+    proceedBtn.addEventListener('click', proceedClickHandler);
+  }
 
-    // Formular senden
-    await sendRegistrationToFormspree();
-
-    // Mollie-Button aktivieren nur, wenn ein Kurs im Warenkorb liegt
-    const payBtn = document.getElementById("payButton");
-    if (payBtn) {
-      if (cartContainsCourse()) {
-        payBtn.disabled = false; // Aktivierung erst nach Klick
-      } else {
-        payBtn.disabled = false; // Kein Kurs: sofort aktiv
-      }
-    }
-
-    // Scroll zum Button
-    const cont = document.getElementById("paypal-button-container");
-    if (cont) cont.scrollIntoView({ behavior: "smooth" });
+  // Watch basic fields for showing proceed button
+  const watchSelectors = [
+    "#vorname", "#nachname", "#strasse", "#plz_ort",
+    "#teilnehmer_email", "#geburtsdatum",
+    "#agb", "#fitness"
+  ];
+  watchSelectors.forEach(sel => {
+    const el = document.querySelector(sel);
+    if (!el) return;
+    const ev = (el.tagName === "SELECT" || el.type === "checkbox" || el.type === "radio" || el.type === "date") ? "change" : "input";
+    // einfache deduplizierung der Listener
+    el.removeEventListener(ev, updateProceedVisibility);
+    el.addEventListener(ev, updateProceedVisibility);
   });
+
+  // initial prüfen
+  updateProceedVisibility();
 }
+
+// gemeinsamer Klick-Handler (aus deinem Code übernommen)
+async function proceedClickHandler() {
+  if (!validateRegistrationForm()) return;
+
+  await sendRegistrationToFormspree();
+
+  // Mollie-Button aktivieren/logik
+  const payBtn = document.getElementById("payButton");
+  if (payBtn) {
+    if (cartContainsCourse()) {
+      payBtn.disabled = false;
+    } else {
+      payBtn.disabled = false;
+    }
+  }
+
+  const cont = document.getElementById("paypal-button-container");
+  if (cont) cont.scrollIntoView({ behavior: "smooth" });
+}
+
 
 
   // Watch basic fields for showing proceed button
