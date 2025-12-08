@@ -766,6 +766,27 @@ document.addEventListener("DOMContentLoaded", () => {
 }
 });
 
+ <script>
+document.addEventListener("DOMContentLoaded", () => {
+    
+    // Formular komplett ausblenden – dein Fall 3 (bereits vorhanden, bleibt so):
+    if (hasOnlyVoucher) {
+        document.getElementById("full-form").style.display = "none";
+        return;
+    }
+
+    // Survival Kit ohne Kurs → bestimmte Felder ausblenden
+    if (hasSurvivalKit && !hasCourse) {
+        document.querySelectorAll(".courseField").forEach(el => {
+            el.style.display = "none";
+        });
+    }
+
+    // Kurs vorhanden → alles bleibt sichtbar (Fall 1)
+});
+</script>
+ 
+  
 </script>
 </body>
 </html>
