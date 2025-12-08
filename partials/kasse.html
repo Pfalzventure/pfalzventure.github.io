@@ -255,22 +255,6 @@ function initCheckoutUI() {
   }
 }
 
-// Hilfsfunktionen zum Aus-/Einblenden
-function hideFormFields(ids) {
-  ids.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.classList.add("hidden");
-  });
-}
-
-function showFormFields(ids) {
-  ids.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove("hidden");
-  });
-}
-
-
   // **Mollie-Button immer erzeugen**
   initMollie();  // <= hier statt nur in else-Zweig
 
