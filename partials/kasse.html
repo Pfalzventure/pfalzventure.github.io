@@ -183,7 +183,7 @@ function cartNeedsForm() {
   );
 }
 
-// --- NEU: Prüft, ob ein Survival Kit im Warenkorb ist ---
+  // --- NEU: Prüft, ob ein Survival Kit im Warenkorb ist ---
 function cartHasSurvivalKit() {
   return cart.some(i => (i.name || "").includes("Survival Kit"));
 }
