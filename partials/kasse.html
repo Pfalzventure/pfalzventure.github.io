@@ -236,6 +236,14 @@ if (proceedBtn) {
   proceedBtn.addEventListener("click", async () => {
     if (!validateRegistrationForm()) return;
 
+ // Pay-Button freischalten
+  const payBtn = document.getElementById("payButton");
+  if (payBtn) payBtn.disabled = false;
+
+  // Optional: Fokus auf den Button setzen
+  payBtn.scrollIntoView({ behavior: "smooth" });
+});
+    
     // Formular senden
     await sendRegistrationToFormspree();
 
