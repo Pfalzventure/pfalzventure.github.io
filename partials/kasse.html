@@ -165,6 +165,12 @@
 /*******************************
  * kasse.html — Checkout-Logik (angepasst für Mollie)
  *******************************/
+  
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mldlyqdz";
+const REDIRECT_AFTER_PAYMENT = "/danke-bestellung.html";
+
+let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+let voucherApplied = null;
 
 const hasCourse = cart.some(i => (i.name || "").includes("Termin:"));
 const hasSurvivalKit = cart.some(i => (i.name || "").includes("Survival Kit"));
@@ -173,12 +179,6 @@ const hasOnlyVoucher =
   cart.every(i => (i.name || "").includes("Gutschein"));
 
   
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/mldlyqdz";
-const REDIRECT_AFTER_PAYMENT = "/danke-bestellung.html";
-
-let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-let voucherApplied = null;
-
 // Utilities
 function getCartTotal() {
   return cart.reduce((s, i) => s + i.price * i.qty, 0);
