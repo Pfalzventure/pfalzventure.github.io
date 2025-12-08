@@ -329,8 +329,10 @@ function blockPaymentsBecauseVoucher() {
   document.getElementById("proceedToPayBtn").classList.add("hidden");
 }
 function unblockPayments() {
-  const hasCourse = cartNeedsForm();
-  if (hasCourse) {
+  // Vorher: nur Kurs prüfen
+  // const hasCourse = cartNeedsForm();
+
+  if (cart.length > 0) {   // <-- NEU: alles anzeigen, wenn etwas im Warenkorb ist
     document.getElementById("proceedToPayBtn").classList.remove("hidden");
     hidePayContainer();
   } else {
@@ -338,6 +340,7 @@ function unblockPayments() {
     initMollie();
   }
 }
+
 
 async function submitVoucherRequest() {
   const code = document.getElementById("voucherCode").value.trim();
