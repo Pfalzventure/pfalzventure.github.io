@@ -74,8 +74,19 @@
     <input type="email" name="email" id="teilnehmer_email" placeholder="E-Mail-Adresse" required>
     <input type="tel" name="telefon" id="telefon" placeholder="Telefonnummer (optional)">
 
-    <label style="font-weight:bold; margin-top:1rem;">Geburtsdatum</label>
-    <input type="date" name="geburtsdatum" id="geburtsdatum" required>
+   <script>
+const showBirthdate =
+    cart.some(i => i.type === "kurs"); // nur bei Kurs anzeigen
+</script>
+
+<label style="font-weight:bold; margin-top:1rem;"
+       style="display: <script>document.write(showBirthdate ? 'block' : 'none')</script>">
+    Geburtsdatum
+</label>
+
+<input type="date" name="geburtsdatum" id="geburtsdatum" required
+       style="display: <script>document.write(showBirthdate ? 'block' : 'none')</script>">
+
 
     <!-- Hinweis zu Minderjährigen wird extern geregelt -->
   </div>
