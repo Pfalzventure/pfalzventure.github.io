@@ -187,7 +187,9 @@ function cartNeedsForm() {
 function updateCartDisplay() {
   const list = document.getElementById("cart-items");
   if (!list) return;
+
   list.innerHTML = "";
+
   cart.forEach((item) => {
     const li = document.createElement("li");
     li.innerHTML = `
@@ -199,20 +201,80 @@ function updateCartDisplay() {
     `;
     list.appendChild(li);
   });
+
   const totalEl = document.getElementById("cart-total");
   if (totalEl) totalEl.innerText = getCartTotal().toFixed(2);
+
   if (!cart || cart.length === 0) {
     const cont = document.getElementById("paypal-button-container");
     if (cont) cont.innerHTML = "<div class='small muted'>Dein Warenkorb ist leer.</div>";
   }
 }
 
+
+// --- Helper: Checks ---
+function cartContainsCourse() {
+  return cart.some(i => (i.name || "").includes("Termin:"));
+}
+
+function cartContainsSurvivalKit() {
+  return cart.some(i => (i.name || "").includes("Survival Kit"));
+}
+
+
 // --- Init UI ---
 function initCheckoutUI() {
+
   voucherApplied = null;
   const voucherMsg = document.getElementById("voucherMessage");
-  if (voucherMsg) { voucherMsg.textContent = ""; voucherMsg.className = "small"; }
+  if (voucherMsg) {
+    voucherMsg.textContent = "";
+    voucherMsg.className = "small";
+  }
 
+  applySurvivalKitVisibilityRules();
+
+}
+
+
+// --- Survival Kit Regeln ---
+function applySurvivalKitVisibilityRules() {
+
+  const hasCourse = cartContainsCourse();
+  const hasSurvivalKit = cartContainsSurvivalKit();
+
+  // Regel: Survival Kit **ohne** Kurs → bestimmte Felder verstecken
+  if (hasSurvivalKit && !hasCourse) {
+
+    // --- Geburtsdatum ---
+    const geb = document.getElementById("geburtsdatum");
+    if (geb) geb.classList.add("hidden");
+
+    // passendes Label davor (falls vorhanden)
+    if (geb && geb.previousElementSibling && geb.previousElementSibling.tagName === "LABEL") {
+      geb.previousElementSibling.classList.add("hidden");
+    }
+
+    // --- Teilnehmeranzahl ---
+    const partCount = document.getElementById("participantCount");
+    if (partCount) partCount.classList.add("hidden");
+
+    // --- Zusatzteilnehmer Block ---
+    const addParts = document.getElementById("additional-participants");
+    if (addParts) addParts.classList.add("hidden");
+
+    // --- AGB + Fitness ---
+    const agb = document.getElementById("agb")?.closest("div");
+    const fit = document.getElementById("fitness")?.closest("div");
+    if (agb) agb.classList.add("hidden");
+    if (fit) fit.classList.add("hidden");
+
+    // --- Infofeld ---
+    const info = document.getElementById("form-message");
+    if (info) info.classList.add("hidden");
+  }
+}
+  
   updateCartDisplay();
 
   const registrationForm = document.getElementById("registrationForm");
