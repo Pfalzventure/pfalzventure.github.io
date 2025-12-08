@@ -943,3 +943,7 @@ main {
   overflow-wrap: anywhere; /* verhindert Textüberlauf */
   word-break: break-word;
 }
+
+.hidden {
+  display: none !important;
+}
