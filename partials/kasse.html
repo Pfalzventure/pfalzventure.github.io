@@ -172,12 +172,6 @@ const REDIRECT_AFTER_PAYMENT = "/danke-bestellung.html";
 let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 let voucherApplied = null;
 
-const hasCourse = cart.some(i => (i.name || "").includes("Termin:"));
-const hasSurvivalKit = cart.some(i => (i.name || "").includes("Survival Kit"));
-const hasOnlyVoucher =
-  cart.length > 0 &&
-  cart.every(i => (i.name || "").includes("Gutschein"));
-
   
 // Utilities
 function getCartTotal() {
@@ -223,6 +217,13 @@ function initCheckoutUI() {
   updateCartDisplay();
 
   const registrationForm = document.getElementById("registrationForm");
+
+  const hasCourse = cart.some(i => (i.name || "").includes("Termin:"));
+const hasSurvivalKit = cart.some(i => (i.name || "").includes("Survival Kit"));
+const hasOnlyVoucher =
+  cart.length > 0 &&
+  cart.every(i => (i.name || "").includes("Gutschein"));
+  
   const hasCourse = cartNeedsForm();
 
   if (hasCourse) {
