@@ -187,6 +187,21 @@ function cartNeedsForm() {
 function cartHasSurvivalKit() {
   return cart.some(i => (i.name || "").includes("Survival Kit"));
 }
+
+function hideFormFields(ids) {
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add("hidden");
+  });
+}
+
+function showFormFields(ids) {
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove("hidden");
+  });
+}
+
   
 // --- Update Cart UI ---
 function updateCartDisplay() {
