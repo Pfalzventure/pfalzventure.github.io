@@ -210,36 +210,30 @@ function updateCartDisplay() {
 
 // --- Init UI ---
 function initCheckoutUI() {
-  voucherApplied = null;
-  const voucherMsg = document.getElementById("voucherMessage");
-  if (voucherMsg) { voucherMsg.textContent = ""; voucherMsg.className = "small"; }
-
+  cart = JSON.parse(localStorage.getItem("cart") || "[]"); // immer frisch laden
   updateCartDisplay();
 
   const registrationForm = document.getElementById("registrationForm");
 
+  // Flags erst **jetzt** setzen
   const hasCourse = cart.some(i => (i.name || "").includes("Termin:"));
-const hasSurvivalKit = cart.some(i => (i.name || "").includes("Survival Kit"));
-const hasOnlyVoucher =
-  cart.length > 0 &&
-  cart.every(i => (i.name || "").includes("Gutschein"));
-  
-  const hasCourse = cartNeedsForm();
+  const hasSurvivalKit = cart.some(i => (i.name || "").includes("Survival Kit"));
+  const hasOnlyVoucher = cart.length > 0 && cart.every(i => (i.name || "").includes("Gutschein"));
 
-  if (hasCourse) {
-    registrationForm.classList.remove("hidden");
+  // Schritt 3: Sichtbarkeit
+  if (hasOnlyVoucher) {
+    registrationForm.style.display = "none"; // nur Gutschein → Formular versteckt
   } else {
-    registrationForm.classList.add("hidden");
+    registrationForm.style.display = "block"; // Kurs oder Survival Kit → Formular sichtbar
+    if (hasSurvivalKit && !hasCourse) {
+      document.querySelectorAll(".courseField").forEach(el => el.style.display = "none");
+    }
   }
 
-  // **Mollie-Button immer erzeugen**
-  initMollie();  // <= hier statt nur in else-Zweig
+  initMollie();
+}
+document.addEventListener("DOMContentLoaded", initCheckoutUI);
 
-  // Teilnehmeranzahl
-  const countSelect = document.getElementById('participantCount');
-  if (countSelect) {
-    countSelect.addEventListener('change', renderAdditionalParticipants);
-  }
 
   renderAdditionalParticipants();
 
