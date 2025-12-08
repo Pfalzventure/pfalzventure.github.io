@@ -221,7 +221,6 @@ function cartContainsSurvivalKit() {
   return cart.some(i => (i.name || "").includes("Survival Kit"));
 }
 
-
 // --- Init UI ---
 function initCheckoutUI() {
 
@@ -232,51 +231,13 @@ function initCheckoutUI() {
     voucherMsg.className = "small";
   }
 
+  // Sichtbarkeitsregeln anwenden (vor Formular-Entscheidung)
   applySurvivalKitVisibilityRules();
 
-}
-
-
-// --- Survival Kit Regeln ---
-function applySurvivalKitVisibilityRules() {
-
-  const hasCourse = cartContainsCourse();
-  const hasSurvivalKit = cartContainsSurvivalKit();
-
-  // Regel: Survival Kit **ohne** Kurs → bestimmte Felder verstecken
-  if (hasSurvivalKit && !hasCourse) {
-
-    // --- Geburtsdatum ---
-    const geb = document.getElementById("geburtsdatum");
-    if (geb) geb.classList.add("hidden");
-
-    // passendes Label davor (falls vorhanden)
-    if (geb && geb.previousElementSibling && geb.previousElementSibling.tagName === "LABEL") {
-      geb.previousElementSibling.classList.add("hidden");
-    }
-
-    // --- Teilnehmeranzahl ---
-    const partCount = document.getElementById("participantCount");
-    if (partCount) partCount.classList.add("hidden");
-
-    // --- Zusatzteilnehmer Block ---
-    const addParts = document.getElementById("additional-participants");
-    if (addParts) addParts.classList.add("hidden");
-
-    // --- AGB + Fitness ---
-    const agb = document.getElementById("agb")?.closest("div");
-    const fit = document.getElementById("fitness")?.closest("div");
-    if (agb) agb.classList.add("hidden");
-    if (fit) fit.classList.add("hidden");
-
-    // --- Infofeld ---
-    const info = document.getElementById("form-message");
-    if (info) info.classList.add("hidden");
-  }
-}
-  
+  // Warenkorb aktualisieren
   updateCartDisplay();
 
+  // Formular ein-/ausblenden
   const registrationForm = document.getElementById("registrationForm");
   const hasCourse = cartNeedsForm();
 
@@ -286,44 +247,35 @@ function applySurvivalKitVisibilityRules() {
     registrationForm.classList.add("hidden");
   }
 
-  // **Mollie-Button immer erzeugen**
-  initMollie();  // <= hier statt nur in else-Zweig
+  // Mollie-Button immer erzeugen
+  initMollie();
 
   // Teilnehmeranzahl
   const countSelect = document.getElementById('participantCount');
   if (countSelect) {
     countSelect.addEventListener('change', renderAdditionalParticipants);
   }
-
   renderAdditionalParticipants();
 
-  // Wire up proceed button
-const proceedBtn = document.getElementById("proceedToPayBtn");
-if (proceedBtn) {
-  proceedBtn.addEventListener("click", async () => {
-    if (!validateRegistrationForm()) return;
+  // Proceed Button Logik
+  const proceedBtn = document.getElementById("proceedToPayBtn");
+  if (proceedBtn) {
+    proceedBtn.addEventListener("click", async () => {
 
-    // Formular senden
-    await sendRegistrationToFormspree();
+      if (!validateRegistrationForm()) return;
 
-    // Mollie-Button aktivieren nur, wenn ein Kurs im Warenkorb liegt
-    const payBtn = document.getElementById("payButton");
-    if (payBtn) {
-      if (cartContainsCourse()) {
-        payBtn.disabled = false; // Aktivierung erst nach Klick
-      } else {
-        payBtn.disabled = false; // Kein Kurs: sofort aktiv
-      }
-    }
+      // Formulardaten senden
+      await sendRegistrationToFormspree();
 
-    // Scroll zum Button
-    const cont = document.getElementById("paypal-button-container");
-    if (cont) cont.scrollIntoView({ behavior: "smooth" });
-  });
-}
+      const payBtn = document.getElementById("payButton");
+      if (payBtn) payBtn.disabled = false;
 
+      const cont = document.getElementById("paypal-button-container");
+      if (cont) cont.scrollIntoView({ behavior: "smooth" });
+    });
+  }
 
-  // Watch basic fields for showing proceed button
+  // Live-Validierung
   const watchSelectors = [
     "#vorname", "#nachname", "#strasse", "#plz_ort",
     "#teilnehmer_email", "#geburtsdatum",
@@ -332,11 +284,16 @@ if (proceedBtn) {
   watchSelectors.forEach(sel => {
     const el = document.querySelector(sel);
     if (!el) return;
-    const ev = (el.tagName === "SELECT" || el.type === "checkbox" || el.type === "radio" || el.type === "date") ? "change" : "input";
+    const ev =
+      (el.tagName === "SELECT" ||
+       el.type === "checkbox" ||
+       el.type === "radio" ||
+       el.type === "date")
+        ? "change"
+        : "input";
     el.addEventListener(ev, updateProceedVisibility);
   });
 
-  // initial prüfen
   updateProceedVisibility();
 }
 
