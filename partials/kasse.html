@@ -27,12 +27,6 @@
     .center { text-align:center; }
     .right-aux { margin-top:1rem; }
 
-const hasCourse = cart.some(i => (i.name || "").includes("Termin:"));
-const hasSurvivalKit = cart.some(i => (i.name || "").includes("Survival Kit"));
-const hasOnlyVoucher =
-  cart.length > 0 &&
-  cart.every(i => (i.name || "").includes("Gutschein"));
-
     
     /* Infobox */
     .info-box {
@@ -172,6 +166,13 @@ const hasOnlyVoucher =
  * kasse.html — Checkout-Logik (angepasst für Mollie)
  *******************************/
 
+const hasCourse = cart.some(i => (i.name || "").includes("Termin:"));
+const hasSurvivalKit = cart.some(i => (i.name || "").includes("Survival Kit"));
+const hasOnlyVoucher =
+  cart.length > 0 &&
+  cart.every(i => (i.name || "").includes("Gutschein"));
+
+  
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mldlyqdz";
 const REDIRECT_AFTER_PAYMENT = "/danke-bestellung.html";
 
