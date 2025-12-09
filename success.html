@@ -4,20 +4,15 @@
   <meta charset="UTF-8">
   <title>Zahlung abgeschlossen</title>
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const paymentId = urlParams.get("id");
-
-    // Kein Payment-ID → Abbruch → zurück zur Startseite
-    if (!paymentId) {
+    // Wenn die URL keinen ?id= enthält → Abbruch → Startseite
+    if (!window.location.search.includes("id=")) {
       window.location.href = "https://pfalzventure.github.io/index.html";
     }
-    // Optional: hier könntest du eine Danke-Nachricht anzeigen
-   document.getElementById("message").textContent = "Danke für deine Zahlung!";
+    // Ansonsten einfach auf der Seite bleiben
   </script>
 </head>
 <body>
-  <h1>Vielen Dank!</h1>
-  <p>Deine Zahlung wurde erfolgreich initiiert.</p>
+  <h1>Vielen Dank für deine Bestellung!</h1>
+  <p>Deine Zahlung wird geprüft. Du kannst jetzt zurück zur Startseite oder andere Seiten besuchen.</p>
 </body>
 </html>
-
