@@ -168,22 +168,28 @@
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mldlyqdz";
 const REDIRECT_AFTER_PAYMENT = "/danke-bestellung.html";
 
+// ============================
+// 1️⃣ Warenkorb laden
+// ============================
 let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 let voucherApplied = null;
 
-// Utilities
 function getCartTotal() {
-  return cart.reduce((s, i) => s + i.price * i.qty, 0);
+  return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 }
 
-  // --- Prüfen, ob ein Kurs (nur echte Kurse) im Warenkorb liegt ---
+// ============================
+// 2️⃣ Prüfen, ob ein Kurs im Warenkorb liegt
+// ============================
 function cartHasCourseOnly() {
   return cart.some(i => (i.name || "").includes("Termin:"));
 }
 
-// --- Bedingte Felder ein-/ausblenden ---
+// ============================
+// 3️⃣ Bedingte Felder ein-/ausblenden
+// ============================
 function updateConditionalFields() {
-  const showFields = cartHasCourseOnly(); // nur echte Kurse
+  const showFields = cartHasCourseOnly();
 
   // Geburtsdatum
   const gebDatumLabel = document.getElementById('labelGeburtsdatum');
@@ -200,11 +206,86 @@ function updateConditionalFields() {
     participantCountWrapper.style.display = showFields ? 'block' : 'none';
   }
 
-  // Zusatzteilnehmer nur anzeigen, wenn Kurs da ist
+  // Zusatzteilnehmer nur rendern, wenn Kurs da ist
   renderAdditionalParticipants();
 }
 
-// --- Initialisierung des Checkouts ---
+// ============================
+// 4️⃣ Formular-Validierung für Infotext
+// ============================
+function validateRegistrationFormForInfo() {
+  const msgEl = document.getElementById("form-message");
+  if (!msgEl) return false;
+  msgEl.textContent = "";
+
+  const hasCourse = cartHasCourseOnly();
+  if (!hasCourse) {
+    msgEl.style.display = 'none';
+    return true;
+  }
+
+  let errors = [];
+
+  // Teilnehmer 1
+  const vorname = document.getElementById("vorname").value.trim();
+  const nachname = document.getElementById("nachname").value.trim();
+  const strasse = document.getElementById("strasse").value.trim();
+  const plzOrt = document.getElementById("plz_ort").value.trim();
+  const email = document.getElementById("teilnehmer_email").value.trim();
+  const geb = document.getElementById("geburtsdatum").value;
+  const agb = document.getElementById("agb").checked;
+
+  if (!vorname) errors.push("Vorname Teilnehmer 1 fehlt");
+  if (!nachname) errors.push("Nachname Teilnehmer 1 fehlt");
+  if (!strasse) errors.push("Straße fehlt");
+  if (!plzOrt) errors.push("PLZ & Ort fehlt");
+  if (!email) errors.push("E-Mail fehlt");
+  if (!geb) errors.push("Geburtsdatum fehlt");
+  if (!agb) errors.push("AGB nicht bestätigt");
+
+  // Zusatzteilnehmer prüfen
+  const count = parseInt(document.getElementById('participantCount').value || "1", 10);
+  for (let i = 2; i <= count; i++) {
+    const v = document.getElementById(`vorname_${i}`)?.value?.trim();
+    const n = document.getElementById(`nachname_${i}`)?.value?.trim();
+    const g = document.getElementById(`geburtsdatum_${i}`)?.value;
+    if (!v || !n || !g) errors.push(`Teilnehmer ${i} unvollständig`);
+  }
+
+  // Infotext setzen
+  if (errors.length > 0) {
+    msgEl.className = "error";
+    msgEl.textContent = "Bitte fülle folgende Felder aus: " + errors.join(", ");
+    msgEl.style.display = 'block';
+    return false;
+  } else {
+    msgEl.className = "success";
+    msgEl.textContent = "Formular ist vollständig. Bitte klicke jetzt auf 'Weiter zur Zahlung'.";
+    msgEl.style.display = 'block';
+    return true;
+  }
+}
+
+// ============================
+// 5️⃣ Proceed-Button + Infotext aktualisieren
+// ============================
+function updateProceedVisibility() {
+  const proceedBtn = document.getElementById("proceedToPayBtn");
+  const proceedText = document.getElementById("proceedText");
+  const valid = validateRegistrationFormForInfo();
+
+  if (valid && cartHasCourseOnly()) {
+    if (proceedBtn) proceedBtn.classList.remove("hidden");
+    if (proceedText) proceedText.classList.remove("hidden");
+  } else {
+    if (proceedBtn) proceedBtn.classList.add("hidden");
+    if (proceedText) proceedText.classList.add("hidden");
+  }
+}
+
+// ============================
+// 6️⃣ Checkout-UI initialisieren
+// ============================
 function initCheckoutUI() {
   voucherApplied = null;
 
@@ -259,11 +340,13 @@ function initCheckoutUI() {
 
   updateProceedVisibility();
 
-  // Mollie-Button immer initialisieren
+  // Mollie-Button initialisieren
   initMollie();
 }
 
-// --- Cart-Update: Bedingte Felder prüfen ---
+// ============================
+// 7️⃣ Warenkorb-Update
+// ============================
 function updateCartDisplay() {
   const list = document.getElementById("cart-items");
   if (!list) return;
@@ -292,6 +375,12 @@ function updateCartDisplay() {
   updateConditionalFields();
   updateProceedVisibility();
 }
+
+// ============================
+// 8️⃣ Checkout starten
+// ============================
+initCheckoutUI();
+updateCartDisplay();
 
 // --- Voucher helpers & Anpassung: prüfe Formular wenn Kurs im Warenkorb ---
 function isVoucherActive() {
