@@ -74,21 +74,21 @@
     <input type="email" name="email" id="teilnehmer_email" placeholder="E-Mail-Adresse" required>
     <input type="tel" name="telefon" id="telefon" placeholder="Telefonnummer (optional)">
 
-<label style="font-weight:bold; margin-top:1rem;" id="labelGeburtsdatum">Geburtsdatum</label>
-<input type="date" name="geburtsdatum" id="geburtsdatum" required>
+    <label style="font-weight:bold; margin-top:1rem;">Geburtsdatum</label>
+    <input type="date" name="geburtsdatum" id="geburtsdatum" required>
 
     <!-- Hinweis zu Minderjährigen wird extern geregelt -->
   </div>
 
-<!-- Teilnehmeranzahl Dropdown -->
-<div style="margin-top:1rem;" id="participantCountWrapper">
-  <label for="participantCount" style="font-weight:600;">Anzahl Teilnehmer (inkl. Teilnehmer 1)</label>
-  <select id="participantCount" style="margin-left:.5rem;">
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
+  <!-- Dropdown Anzahl Teilnehmer (unterhalb des Anmeldeformulars von Teilnehmer 1 wie gewünscht) -->
+  <div style="margin-top:1rem;">
+    <label for="participantCount" style="font-weight:600;">Anzahl Teilnehmer (inkl. Teilnehmer 1)</label>
+    <select id="participantCount" style="margin-left:.5rem;">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
     </select>
   </div>
 
@@ -175,96 +175,14 @@ let voucherApplied = null;
 function getCartTotal() {
   return cart.reduce((s, i) => s + i.price * i.qty, 0);
 }
-
-  // --- Prüfen, ob ein Kurs (nur echte Kurse) im Warenkorb liegt ---
-function cartHasCourseOnly() {
-  return cart.some(i => (i.name || "").includes("Termin:"));
+function cartNeedsForm() {
+  return cart.some(i =>
+    (i.name || "").includes("Termin:") ||
+    (i.name || "").includes("Survival Kit")
+  );
 }
 
-// --- Bedingte Felder ein-/ausblenden ---
-function updateConditionalFields() {
-  const showFields = cartHasCourseOnly(); // nur echte Kurse
-
-  // Geburtsdatum
-  const gebDatumLabel = document.getElementById('labelGeburtsdatum');
-  const gebDatumInput = document.getElementById('geburtsdatum');
-  if (gebDatumLabel && gebDatumInput) {
-    gebDatumLabel.style.display = showFields ? 'block' : 'none';
-    gebDatumInput.style.display = showFields ? 'block' : 'none';
-    gebDatumInput.required = showFields;
-  }
-
-  // Teilnehmeranzahl Dropdown
-  const participantCountWrapper = document.getElementById('participantCountWrapper');
-  if (participantCountWrapper) {
-    participantCountWrapper.style.display = showFields ? 'block' : 'none';
-  }
-
-  // Zusatzteilnehmer nur anzeigen, wenn Kurs da ist
-  renderAdditionalParticipants();
-}
-
-// --- Initialisierung des Checkouts ---
-function initCheckoutUI() {
-  voucherApplied = null;
-
-  const voucherMsg = document.getElementById("voucherMessage");
-  if (voucherMsg) {
-    voucherMsg.textContent = "";
-    voucherMsg.className = "small";
-  }
-
-  updateCartDisplay();
-
-  // Formular immer sichtbar
-  const registrationForm = document.getElementById("registrationForm");
-  if (registrationForm) registrationForm.classList.remove("hidden");
-
-  // Bedingte Felder initial prüfen
-  updateConditionalFields();
-
-  // Teilnehmeranzahl Dropdown Listener
-  const countSelect = document.getElementById('participantCount');
-  if (countSelect) {
-    countSelect.addEventListener('change', () => {
-      renderAdditionalParticipants();
-      updateConditionalFields();
-    });
-  }
-
-  // Proceed Button
-  const proceedBtn = document.getElementById("proceedToPayBtn");
-  if (proceedBtn) {
-    proceedBtn.addEventListener("click", async () => {
-      if (!validateRegistrationForm()) return;
-      await sendRegistrationToFormspree();
-      const payBtn = document.getElementById("payButton");
-      if (payBtn) payBtn.disabled = false;
-      const cont = document.getElementById("paypal-button-container");
-      if (cont) cont.scrollIntoView({ behavior: "smooth" });
-    });
-  }
-
-  // Felder für Proceed-Button überwachen
- const watchSelectors = [
-  "#vorname", "#nachname", "#strasse", "#plz_ort", "#teilnehmer_email", "#geburtsdatum", "#agb"
-];
-watchSelectors.forEach(sel => {
-  const el = document.querySelector(sel);
-  if (!el) return;
-  const ev = (el.tagName === "SELECT" || el.type === "checkbox" || el.type === "radio" || el.type === "date") ? "change" : "input";
-  el.addEventListener(ev, () => {
-    validateRegistrationForm(true); // Text setzen
-    updateProceedVisibility();     // Button sichtbar machen
-  });
-});
-
-
-  // Mollie-Button immer initialisieren
-  initMollie();
-}
-
-// --- Cart-Update: Bedingte Felder prüfen ---
+// --- Update Cart UI ---
 function updateCartDisplay() {
   const list = document.getElementById("cart-items");
   if (!list) return;
@@ -280,18 +198,88 @@ function updateCartDisplay() {
     `;
     list.appendChild(li);
   });
-
   const totalEl = document.getElementById("cart-total");
   if (totalEl) totalEl.innerText = getCartTotal().toFixed(2);
-
   if (!cart || cart.length === 0) {
     const cont = document.getElementById("paypal-button-container");
     if (cont) cont.innerHTML = "<div class='small muted'>Dein Warenkorb ist leer.</div>";
   }
-
-  // Bedingte Felder anpassen
-  updateConditionalFields();
 }
+
+// --- Init UI ---
+function initCheckoutUI() {
+  voucherApplied = null;
+  const voucherMsg = document.getElementById("voucherMessage");
+  if (voucherMsg) { voucherMsg.textContent = ""; voucherMsg.className = "small"; }
+
+  updateCartDisplay();
+
+  const registrationForm = document.getElementById("registrationForm");
+  const hasCourse = cartNeedsForm();
+
+  if (hasCourse) {
+    registrationForm.classList.remove("hidden");
+  } else {
+    registrationForm.classList.add("hidden");
+  }
+
+  // **Mollie-Button immer erzeugen**
+  initMollie();  // <= hier statt nur in else-Zweig
+
+  // Teilnehmeranzahl
+  const countSelect = document.getElementById('participantCount');
+  if (countSelect) {
+    countSelect.addEventListener('change', renderAdditionalParticipants);
+  }
+
+  renderAdditionalParticipants();
+
+  // Wire up proceed button
+const proceedBtn = document.getElementById("proceedToPayBtn");
+if (proceedBtn) {
+  proceedBtn.addEventListener("click", async () => {
+    if (!validateRegistrationForm()) return;
+
+    // Formular senden
+    await sendRegistrationToFormspree();
+
+    // Mollie-Button aktivieren nur, wenn ein Kurs im Warenkorb liegt
+    const payBtn = document.getElementById("payButton");
+    if (payBtn) {
+      if (cartNeedsForm()) {
+        payBtn.disabled = false; // Aktivierung erst nach Klick
+      } else {
+        payBtn.disabled = false; // Kein Kurs: sofort aktiv
+      }
+    }
+
+    // Scroll zum Button
+    const cont = document.getElementById("paypal-button-container");
+    if (cont) cont.scrollIntoView({ behavior: "smooth" });
+  });
+}
+
+
+  // Watch basic fields for showing proceed button
+  const watchSelectors = [
+    "#vorname", "#nachname", "#strasse", "#plz_ort",
+    "#teilnehmer_email", "#geburtsdatum",
+    "#agb"
+  ];
+  watchSelectors.forEach(sel => {
+    const el = document.querySelector(sel);
+    if (!el) return;
+    const ev = (el.tagName === "SELECT" || el.type === "checkbox" || el.type === "radio" || el.type === "date") ? "change" : "input";
+    el.addEventListener(ev, updateProceedVisibility);
+  });
+
+  // initial prüfen
+  updateProceedVisibility();
+}
+
+
+  // Mollie-Button direkt erstellen (immer sichtbar, aber ggf. disabled)
+initMollie();
 
 
 // --- Voucher helpers & Anpassung: prüfe Formular wenn Kurs im Warenkorb ---
@@ -425,10 +413,16 @@ function renderAdditionalParticipants() {
 }
 
 // --- Validation ---
-function validateRegistrationForm(setMessage = true) {
+function validateRegistrationForm() {
   const msgEl = document.getElementById("form-message");
+  msgEl.textContent = "";
 
-  // Teilnehmer 1 prüfen
+  // Wenn kein Kurs im Warenkorb liegt, Formular muss nicht zwingend ausgefüllt sein (aber proceed bleibt hidden)
+if (!cartNeedsForm()) {
+    return true;
+}
+
+  // Teilnehmer 1 checks (contract partner)
   const vorname = document.getElementById("vorname").value.trim();
   const nachname = document.getElementById("nachname").value.trim();
   const strasse = document.getElementById("strasse").value.trim();
@@ -436,30 +430,25 @@ function validateRegistrationForm(setMessage = true) {
   const email = document.getElementById("teilnehmer_email").value.trim();
   const geb = document.getElementById("geburtsdatum").value;
   const agb = document.getElementById("agb").checked;
+ 
 
   if (!vorname || !nachname || !strasse || !plzOrt || !email || !geb) {
-    if (setMessage && msgEl) {
-      msgEl.className = "error";
-      msgEl.textContent = "Bitte fülle vor der Zahlung zunächst alle Pflichtfelder aus.";
-    }
+    msgEl.className = "error";
+    msgEl.textContent = "Bitte fülle vor der Zahlung zunächst alle Pflichtfelder aus.";
     return false;
   }
   if (!email.includes("@")) {
-    if (setMessage && msgEl) {
-      msgEl.className = "error";
-      msgEl.textContent = "Bitte gib eine gültige E-Mail-Adresse an.";
-    }
+    msgEl.className = "error";
+    msgEl.textContent = "Bitte gib eine gültige E-Mail-Adresse an.";
     return false;
   }
   if (!agb) {
-    if (setMessage && msgEl) {
-      msgEl.className = "error";
-      msgEl.textContent = "Bitte bestätige noch die AGB Checkbox -> diese gilt für alle Teilnehmer!";
-    }
+    msgEl.className = "error";
+    msgEl.textContent = "Bitte bestätige noch die AGB Checkbox -> diese gilt für alle Teilnehmer!";
     return false;
   }
 
-  // Zusätzliche Teilnehmer prüfen
+  // Zusätzliche Teilnehmer prüfen (ohne Minderjährig-Checks)
   const count = parseInt(document.getElementById('participantCount').value || "1", 10);
   for (let i = 2; i <= count; i++) {
     const v = document.getElementById(`vorname_${i}`)?.value?.trim();
@@ -467,22 +456,16 @@ function validateRegistrationForm(setMessage = true) {
     const g = document.getElementById(`geburtsdatum_${i}`)?.value;
 
     if (!v || !n || !g) {
-      if (setMessage && msgEl) {
-        msgEl.className = "error";
-        msgEl.textContent = `Bitte fülle alle Pflichtfelder für Teilnehmer ${i} (Vorname, Nachname, Geburtsdatum).`;
-      }
+      msgEl.className = "error";
+      msgEl.textContent = `Bitte fülle alle Pflichtfelder für die Teilnehmer aus ${i} (Vorname, Nachname, Geburtsdatum).`;
       return false;
     }
   }
 
-  if (setMessage && msgEl) {
-    msgEl.className = "success";
-    msgEl.textContent = "Formular ist vollständig. Bitte klicke jetzt auf 'Weiter zur Zahlung'.";
-  }
-
+  msgEl.className = "success";
+  msgEl.textContent = "Formular ist vollständig. Bitte klicke jetzt auf 'Weiter zur Zahlung'.";
   return true;
 }
-
 
 // Update Proceed Button visibility based on validation
 function updateProceedVisibility() {
@@ -490,18 +473,14 @@ function updateProceedVisibility() {
   const proceedText = document.getElementById("proceedText");
   if (!proceedBtn || !proceedText) return;
 
-  const isValid = cartNeedsForm() && validateRegistrationForm(false); // nur prüfen, msg nicht setzen
-
-  // Button & Hinweis unter Button
-  if (isValid) {
+  if (cartNeedsForm() && validateRegistrationForm()) {
     proceedBtn.classList.remove("hidden");
-    proceedText.classList.remove("hidden");
+    proceedText.classList.remove("hidden"); // Text einblenden
   } else {
     proceedBtn.classList.add("hidden");
-    proceedText.classList.add("hidden");
+    proceedText.classList.add("hidden"); // Text ausblenden
   }
 }
-
   
   // --- Generate email message for Formspree ---
 function generateFormspreeMessage(data) {
