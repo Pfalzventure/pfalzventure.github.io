@@ -433,20 +433,16 @@ function renderAdditionalParticipants() {
 }
 
 // --- Validation ---
-function validateRegistrationFormForInfo() {
+function validateRegistrationForm() {
   const msgEl = document.getElementById("form-message");
-  if (!msgEl) return false;
   msgEl.textContent = "";
 
-  const hasCourse = cartHasCourseOnly();
-  if (!hasCourse) {
-    msgEl.style.display = 'none';
+  // Wenn kein Kurs im Warenkorb liegt, Formular muss nicht zwingend ausgefüllt sein (aber proceed bleibt hidden)
+if (!cartNeedsForm()) {
     return true;
-  }
+}
 
-  let errors = [];
-
-  // Teilnehmer 1
+  // Teilnehmer 1 checks (contract partner)
   const vorname = document.getElementById("vorname").value.trim();
   const nachname = document.getElementById("nachname").value.trim();
   const strasse = document.getElementById("strasse").value.trim();
@@ -454,52 +450,55 @@ function validateRegistrationFormForInfo() {
   const email = document.getElementById("teilnehmer_email").value.trim();
   const geb = document.getElementById("geburtsdatum").value;
   const agb = document.getElementById("agb").checked;
+ 
 
-  if (!vorname) errors.push("Vorname Teilnehmer 1 fehlt");
-  if (!nachname) errors.push("Nachname Teilnehmer 1 fehlt");
-  if (!strasse) errors.push("Straße fehlt");
-  if (!plzOrt) errors.push("PLZ & Ort fehlt");
-  if (!email) errors.push("E-Mail fehlt");
-  if (!geb) errors.push("Geburtsdatum fehlt");
-  if (!agb) errors.push("AGB nicht bestätigt");
+  if (!vorname || !nachname || !strasse || !plzOrt || !email || !geb) {
+    msgEl.className = "error";
+    msgEl.textContent = "Bitte fülle vor der Zahlung zunächst alle Pflichtfelder aus.";
+    return false;
+  }
+  if (!email.includes("@")) {
+    msgEl.className = "error";
+    msgEl.textContent = "Bitte gib eine gültige E-Mail-Adresse an.";
+    return false;
+  }
+  if (!agb) {
+    msgEl.className = "error";
+    msgEl.textContent = "Bitte bestätige noch die AGB Checkbox -> diese gilt für alle Teilnehmer!";
+    return false;
+  }
 
-  // Zusatzteilnehmer prüfen
+  // Zusätzliche Teilnehmer prüfen (ohne Minderjährig-Checks)
   const count = parseInt(document.getElementById('participantCount').value || "1", 10);
   for (let i = 2; i <= count; i++) {
     const v = document.getElementById(`vorname_${i}`)?.value?.trim();
     const n = document.getElementById(`nachname_${i}`)?.value?.trim();
     const g = document.getElementById(`geburtsdatum_${i}`)?.value;
-    if (!v || !n || !g) errors.push(`Teilnehmer ${i} unvollständig`);
+
+    if (!v || !n || !g) {
+      msgEl.className = "error";
+      msgEl.textContent = `Bitte fülle alle Pflichtfelder für die Teilnehmer aus ${i} (Vorname, Nachname, Geburtsdatum).`;
+      return false;
+    }
   }
 
-  // Infotext setzen
-  if (errors.length > 0) {
-    msgEl.className = "error";
-    msgEl.textContent = "Bitte fülle folgende Felder aus: " + errors.join(", ");
-    msgEl.style.display = 'block';
-    return false;
-  } else {
-    msgEl.className = "success";
-    msgEl.textContent = "Formular ist vollständig. Bitte klicke jetzt auf 'Weiter zur Zahlung'.";
-    msgEl.style.display = 'block';
-    return true;
-  }
+  msgEl.className = "success";
+  msgEl.textContent = "Formular ist vollständig. Bitte klicke jetzt auf 'Weiter zur Zahlung'.";
+  return true;
 }
-
-
 
 // Update Proceed Button visibility based on validation
 function updateProceedVisibility() {
   const proceedBtn = document.getElementById("proceedToPayBtn");
   const proceedText = document.getElementById("proceedText");
-  const valid = validateRegistrationFormForInfo();
+  if (!proceedBtn || !proceedText) return;
 
-  if (valid && cartHasCourseOnly()) {
-    if (proceedBtn) proceedBtn.classList.remove("hidden");
-    if (proceedText) proceedText.classList.remove("hidden");
+  if (cartNeedsForm() && validateRegistrationForm()) {
+    proceedBtn.classList.remove("hidden");
+    proceedText.classList.remove("hidden"); // Text einblenden
   } else {
-    if (proceedBtn) proceedBtn.classList.add("hidden");
-    if (proceedText) proceedText.classList.add("hidden");
+    proceedBtn.classList.add("hidden");
+    proceedText.classList.add("hidden"); // Text ausblenden
   }
 }
 
