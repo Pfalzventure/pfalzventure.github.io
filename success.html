@@ -2,17 +2,43 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Zahlung abgeschlossen</title>
-  <script>
-    // Wenn die URL keinen ?id= enthält → Abbruch → Startseite
-    if (!window.location.search.includes("id=")) {
-      window.location.href = "https://pfalzventure.github.io/index.html";
+  <title>Bestellung erhalten</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background-color: #f9f9f9;
     }
-    // Ansonsten einfach auf der Seite bleiben
-  </script>
+    h1 {
+      color: #2c3e50;
+    }
+    p {
+      font-size: 1.2rem;
+      color: #34495e;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+    a {
+      display: inline-block;
+      margin-top: 30px;
+      text-decoration: none;
+      color: #fff;
+      background-color: #27ae60;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+    a:hover {
+      background-color: #2ecc71;
+    }
+  </style>
 </head>
 <body>
   <h1>Vielen Dank für deine Bestellung!</h1>
-  <p>Deine Zahlung wird geprüft. Du kannst jetzt zurück zur Startseite oder andere Seiten besuchen.</p>
+  <p>
+    Deine Zahlung wird von uns geprüft. Du erhältst eine Bestätigung per E-Mail, sobald die Zahlung bei uns eingegangen ist.
+  </p>
+  <a href="https://pfalzventure.github.io/index.html">Zurück zur Startseite</a>
 </body>
 </html>
