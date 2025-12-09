@@ -175,29 +175,33 @@ let voucherApplied = null;
 function getCartTotal() {
   return cart.reduce((s, i) => s + i.price * i.qty, 0);
 }
-// --- Prüfen, ob ein Kurs im Warenkorb liegt ---
-function cartNeedsForm() {
-  return cart.some(i => (i.name || "").includes("Termin:") || (i.name || "").includes("Survival Kit"));
+
+  // --- Prüfen, ob ein Kurs (nur echte Kurse) im Warenkorb liegt ---
+function cartHasCourseOnly() {
+  return cart.some(i => (i.name || "").includes("Termin:"));
 }
 
-// --- Sichtbarkeit der bedingten Felder aktualisieren ---
+// --- Bedingte Felder ein-/ausblenden ---
 function updateConditionalFields() {
-  const hasCourse = cartNeedsForm();
+  const showFields = cartHasCourseOnly(); // nur echte Kurse
 
   // Geburtsdatum
   const gebDatumLabel = document.getElementById('labelGeburtsdatum');
   const gebDatumInput = document.getElementById('geburtsdatum');
   if (gebDatumLabel && gebDatumInput) {
-    gebDatumLabel.style.display = hasCourse ? 'block' : 'none';
-    gebDatumInput.style.display = hasCourse ? 'block' : 'none';
-    gebDatumInput.required = hasCourse;
+    gebDatumLabel.style.display = showFields ? 'block' : 'none';
+    gebDatumInput.style.display = showFields ? 'block' : 'none';
+    gebDatumInput.required = showFields;
   }
 
   // Teilnehmeranzahl Dropdown
   const participantCountWrapper = document.getElementById('participantCountWrapper');
   if (participantCountWrapper) {
-    participantCountWrapper.style.display = hasCourse ? 'block' : 'none';
+    participantCountWrapper.style.display = showFields ? 'block' : 'none';
   }
+
+  // Zusatzteilnehmer nur anzeigen, wenn Kurs da ist
+  renderAdditionalParticipants();
 }
 
 // --- Initialisierung des Checkouts ---
@@ -216,7 +220,7 @@ function initCheckoutUI() {
   const registrationForm = document.getElementById("registrationForm");
   if (registrationForm) registrationForm.classList.remove("hidden");
 
-  // Bedingte Felder ein-/ausblenden
+  // Bedingte Felder initial prüfen
   updateConditionalFields();
 
   // Teilnehmeranzahl Dropdown Listener
@@ -227,8 +231,6 @@ function initCheckoutUI() {
       updateConditionalFields();
     });
   }
-
-  renderAdditionalParticipants();
 
   // Proceed Button
   const proceedBtn = document.getElementById("proceedToPayBtn");
@@ -260,7 +262,7 @@ function initCheckoutUI() {
   initMollie();
 }
 
-// --- Bei Cart-Updates ebenfalls prüfen ---
+// --- Cart-Update: Bedingte Felder prüfen ---
 function updateCartDisplay() {
   const list = document.getElementById("cart-items");
   if (!list) return;
