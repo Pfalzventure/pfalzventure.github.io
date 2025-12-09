@@ -32,55 +32,45 @@
   <div class="loader"></div>
   <p>Bitte schließe dieses Fenster nicht.</p>
 
-  <script>
-    const paymentId = new URLSearchParams(window.location.search).get("id");
-    let tries = 0;
-    const maxTries = 20; // 10 × 3s = 30 Sekunden
+<script>
+const paymentId = new URLSearchParams(window.location.search).get("id");
+let tries = 0;
+const maxTries = 20;
 
-    const poll = async () => {
-      tries++;
+const poll = async () => {
+  tries++;
+  try {
+    const res = await fetch(`https://mollie-backend-one.vercel.app/api/payment-status?id=${paymentId}`);
+    const data = await res.json();
+    console.log("Status:", data.status);
 
-      try {
-        const res = await fetch("https://mollie-backend-one.vercel.app/api/pending-payment", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id: paymentId })
-        });
+    if (data.status === "paid") {
+      window.location.href = "https://pfalzventure.github.io/success.html";
+      return;
+    }
 
-        const data = await res.json();
-        console.log("Status:", data.status);
+    if (["failed", "canceled", "expired"].includes(data.status)) {
+      window.location.href = "https://pfalzventure.github.io/failed.html";
+      return;
+    }
 
-        if (data.status === "paid") {
-          window.location.href = "https://pfalzventure.github.io/success.html";
-          return;
-        }
+    if (tries >= maxTries) {
+      alert("Keine Bestätigung erhalten. Bitte erneut versuchen.");
+      window.location.href = "https://pfalzventure.github.io/";
+    }
+  } catch (err) {
+    console.error("Polling error", err);
+    if (tries >= maxTries) {
+      alert("Fehler bei der Zahlungsprüfung.");
+      window.location.href = "https://pfalzventure.github.io/";
+    }
+  }
+};
 
-        if (
-          data.status === "failed" ||
-          data.status === "canceled" ||
-          data.status === "expired"
-        ) {
-          window.location.href = "https://pfalzventure.github.io/failed.html";
-          return;
-        }
+poll();                // einmal direkt starten
+setInterval(poll, 3000); // dann alle 3 Sekunden wiederholen
+</script>
 
-        // Wenn Timeout erreicht → User zurück zur Website
-        if (tries >= maxTries) {
-          alert("Keine Bestätigung erhalten. Die Zahlung scheint nicht abgeschlossen worden zu sein.");
-          window.location.href = "https://pfalzventure.github.io/";
-        }
-
-      } catch (err) {
-        console.error("Polling error", err);
-        if (tries >= maxTries) {
-          alert("Fehler bei der Zahlungsprüfung.");
-          window.location.href = "https://pfalzventure.github.io/";
-        }
-      }
-    };
-
-    setInterval(poll, 3000);
-  </script>
 
 </body>
 </html>
