@@ -168,20 +168,15 @@
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mldlyqdz";
 const REDIRECT_AFTER_PAYMENT = "/danke-bestellung.html";
 
-// ============================
-// 1️⃣ Warenkorb laden
-// ============================
 let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 let voucherApplied = null;
 
+// Utilities
 function getCartTotal() {
-  return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  return cart.reduce((s, i) => s + i.price * i.qty, 0);
 }
 
-// ============================
-// 2️⃣ Prüfen, ob ein Kurs im Warenkorb liegt
-// ============================
-// --- Prüfen, ob ein Kurs (nur echte Kurse) im Warenkorb liegt ---
+  // --- Prüfen, ob ein Kurs (nur echte Kurse) im Warenkorb liegt ---
 function cartHasCourseOnly() {
   return cart.some(i => (i.name || "").includes("Termin:"));
 }
@@ -296,11 +291,6 @@ function updateCartDisplay() {
   updateConditionalFields();
 }
 
-// ============================
-// 8️⃣ Checkout starten
-// ============================
-initCheckoutUI();
-updateCartDisplay();
 
 // --- Voucher helpers & Anpassung: prüfe Formular wenn Kurs im Warenkorb ---
 function isVoucherActive() {
@@ -501,24 +491,6 @@ function updateProceedVisibility() {
     proceedText.classList.add("hidden"); // Text ausblenden
   }
 }
-
-  // Infotext aktualisieren
-  if (hasCourse) {
-    // validateRegistrationForm(true) gibt true/false zurück, aber setzt form-message intern
-    if (!valid) {
-      // Formular unvollständig → form-message zeigt was fehlt (bereits in validateRegistrationForm)
-      formMessage.style.display = 'block';
-    } else {
-      formMessage.textContent = "Formular ist vollständig. Bitte klicke jetzt auf 'Weiter zur Zahlung'.";
-      formMessage.className = "success";
-      formMessage.style.display = 'block';
-    }
-  } else {
-    // Kein Kurs → Infotext ausblenden
-    formMessage.style.display = 'none';
-  }
-}
-
   
   // --- Generate email message for Formspree ---
 function generateFormspreeMessage(data) {
