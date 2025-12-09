@@ -423,13 +423,20 @@ function renderAdditionalParticipants() {
 }
 
 // --- Validation ---
-function validateRegistrationForm(suppressMessage = false) {
+function validateRegistrationFormForInfo() {
   const msgEl = document.getElementById("form-message");
-  if (!suppressMessage) msgEl.textContent = "";
+  if (!msgEl) return false;
+  msgEl.textContent = "";
 
   const hasCourse = cartHasCourseOnly();
-  if (!hasCourse) return true;
+  if (!hasCourse) {
+    msgEl.style.display = 'none';
+    return true;
+  }
 
+  let errors = [];
+
+  // Teilnehmer 1
   const vorname = document.getElementById("vorname").value.trim();
   const nachname = document.getElementById("nachname").value.trim();
   const strasse = document.getElementById("strasse").value.trim();
@@ -438,29 +445,13 @@ function validateRegistrationForm(suppressMessage = false) {
   const geb = document.getElementById("geburtsdatum").value;
   const agb = document.getElementById("agb").checked;
 
-  if (!vorname || !nachname || !strasse || !plzOrt || !email || !geb) {
-    if (!suppressMessage) {
-      msgEl.className = "error";
-      msgEl.textContent = "Bitte fülle vor der Zahlung zunächst alle Pflichtfelder aus.";
-    }
-    return false;
-  }
-
-  if (!email.includes("@")) {
-    if (!suppressMessage) {
-      msgEl.className = "error";
-      msgEl.textContent = "Bitte gib eine gültige E-Mail-Adresse an.";
-    }
-    return false;
-  }
-
-  if (!agb) {
-    if (!suppressMessage) {
-      msgEl.className = "error";
-      msgEl.textContent = "Bitte bestätige noch die AGB Checkbox -> diese gilt für alle Teilnehmer!";
-    }
-    return false;
-  }
+  if (!vorname) errors.push("Vorname Teilnehmer 1 fehlt");
+  if (!nachname) errors.push("Nachname Teilnehmer 1 fehlt");
+  if (!strasse) errors.push("Straße fehlt");
+  if (!plzOrt) errors.push("PLZ & Ort fehlt");
+  if (!email) errors.push("E-Mail fehlt");
+  if (!geb) errors.push("Geburtsdatum fehlt");
+  if (!agb) errors.push("AGB nicht bestätigt");
 
   // Zusatzteilnehmer prüfen
   const count = parseInt(document.getElementById('participantCount').value || "1", 10);
@@ -468,21 +459,23 @@ function validateRegistrationForm(suppressMessage = false) {
     const v = document.getElementById(`vorname_${i}`)?.value?.trim();
     const n = document.getElementById(`nachname_${i}`)?.value?.trim();
     const g = document.getElementById(`geburtsdatum_${i}`)?.value;
-    if (!v || !n || !g) {
-      if (!suppressMessage) {
-        msgEl.className = "error";
-        msgEl.textContent = `Bitte fülle alle Pflichtfelder für die Teilnehmer ${i} aus (Vorname, Nachname, Geburtsdatum).`;
-      }
-      return false;
-    }
+    if (!v || !n || !g) errors.push(`Teilnehmer ${i} unvollständig`);
   }
 
-  if (!suppressMessage) {
+  // Infotext setzen
+  if (errors.length > 0) {
+    msgEl.className = "error";
+    msgEl.textContent = "Bitte fülle folgende Felder aus: " + errors.join(", ");
+    msgEl.style.display = 'block';
+    return false;
+  } else {
     msgEl.className = "success";
     msgEl.textContent = "Formular ist vollständig. Bitte klicke jetzt auf 'Weiter zur Zahlung'.";
+    msgEl.style.display = 'block';
+    return true;
   }
-  return true;
 }
+
 
 
 // Update Proceed Button visibility based on validation
