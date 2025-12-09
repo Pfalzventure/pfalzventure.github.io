@@ -482,22 +482,16 @@ function validateRegistrationFormForInfo() {
 function updateProceedVisibility() {
   const proceedBtn = document.getElementById("proceedToPayBtn");
   const proceedText = document.getElementById("proceedText");
-  const formMessage = document.getElementById("form-message");
-  if (!proceedBtn || !proceedText || !formMessage) return;
+  const valid = validateRegistrationFormForInfo();
 
-  const hasCourse = cartHasCourseOnly(); // Nur echte Kurse
-
-  // Formular validieren, aber nur wenn Kurs da ist
-  const valid = hasCourse ? validateRegistrationForm(true) : true;
-
-  // Proceed Button ein-/ausblenden
-  if (hasCourse && valid) {
-    proceedBtn.classList.remove("hidden");
-    proceedText.classList.remove("hidden");
+  if (valid && cartHasCourseOnly()) {
+    if (proceedBtn) proceedBtn.classList.remove("hidden");
+    if (proceedText) proceedText.classList.remove("hidden");
   } else {
-    proceedBtn.classList.add("hidden");
-    proceedText.classList.add("hidden");
+    if (proceedBtn) proceedBtn.classList.add("hidden");
+    if (proceedText) proceedText.classList.add("hidden");
   }
+}
 
   // Infotext aktualisieren
   if (hasCourse) {
