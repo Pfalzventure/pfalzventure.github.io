@@ -220,7 +220,7 @@ function initCheckoutUI() {
   const registrationForm = document.getElementById("registrationForm");
   if (registrationForm) registrationForm.classList.remove("hidden");
 
-  // Bedingte Felder initial prüfen
+  // Bedingte Felder prüfen
   updateConditionalFields();
 
   // Teilnehmeranzahl Dropdown Listener
@@ -229,6 +229,7 @@ function initCheckoutUI() {
     countSelect.addEventListener('change', () => {
       renderAdditionalParticipants();
       updateConditionalFields();
+      updateProceedVisibility();
     });
   }
 
@@ -236,7 +237,7 @@ function initCheckoutUI() {
   const proceedBtn = document.getElementById("proceedToPayBtn");
   if (proceedBtn) {
     proceedBtn.addEventListener("click", async () => {
-      if (!validateRegistrationForm()) return;
+      if (!validateRegistrationFormForInfo()) return;
       await sendRegistrationToFormspree();
       const payBtn = document.getElementById("payButton");
       if (payBtn) payBtn.disabled = false;
@@ -245,7 +246,7 @@ function initCheckoutUI() {
     });
   }
 
-  // Felder für Proceed-Button überwachen
+  // Felder für Infotext überwachen
   const watchSelectors = [
     "#vorname", "#nachname", "#strasse", "#plz_ort", "#teilnehmer_email", "#geburtsdatum", "#agb"
   ];
@@ -287,10 +288,10 @@ function updateCartDisplay() {
     if (cont) cont.innerHTML = "<div class='small muted'>Dein Warenkorb ist leer.</div>";
   }
 
-  // Bedingte Felder anpassen
+  // Bedingte Felder + Infotext prüfen
   updateConditionalFields();
+  updateProceedVisibility();
 }
-
 
 // --- Voucher helpers & Anpassung: prüfe Formular wenn Kurs im Warenkorb ---
 function isVoucherActive() {
