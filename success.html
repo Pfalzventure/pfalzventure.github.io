@@ -2,29 +2,24 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Zahlung erfolgreich</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      padding: 40px;
-      text-align: center;
-      background: #f7f7f7;
+  <title>Zahlung abgeschlossen</title>
+  <script>
+    // Direkt beim Laden prüfen
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentId = urlParams.get("id");
+
+    if (!paymentId) {
+      // Keine Payment-ID -> vermutlich Abbruch, zurück zur Startseite
+      window.location.href = "https://pfalzventure.github.io/index.html";
+    } else {
+      // Optional: hier könntest du später eine Danke-Nachricht anzeigen
+      // z.B.: document.getElementById("message").textContent = "Danke für deine Zahlung!";
+      console.log("Zahlung abgeschlossen oder noch in Bearbeitung. Payment ID:", paymentId);
     }
-    .box {
-      background: white;
-      padding: 30px;
-      display: inline-block;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-  </style>
+  </script>
 </head>
 <body>
-  <div class="box">
-    <h1>Danke für deine Bestellung!</h1>
-    <p>Die Zahlung wurde erfolgreich abgeschlossen.</p>
-    <p>Du erhältst gleich eine Bestätigung.</p>
-    <a href="index.html">Zurück zur Startseite</a>
-  </div>
+  <h1>Zahlung abgeschlossen</h1>
+  <p>Vielen Dank für deine Bestellung!</p>
 </body>
 </html>
