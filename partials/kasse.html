@@ -483,7 +483,9 @@ function updateProceedVisibility() {
   const proceedText = document.getElementById("proceedText");
   if (!proceedBtn || !proceedText) return;
 
-  if (cartNeedsForm() && validateRegistrationForm()) {
+  const isValid = cartNeedsForm() && validateRegistrationForm(false); // false = nur prüfen, msgEl nicht setzen
+
+  if (isValid) {
     proceedBtn.classList.remove("hidden");
     proceedText.classList.remove("hidden"); // Text einblenden
   } else {
@@ -491,6 +493,7 @@ function updateProceedVisibility() {
     proceedText.classList.add("hidden"); // Text ausblenden
   }
 }
+
   
   // --- Generate email message for Formspree ---
 function generateFormspreeMessage(data) {
