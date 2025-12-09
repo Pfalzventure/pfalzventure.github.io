@@ -181,15 +181,14 @@ function getCartTotal() {
 // ============================
 // 2️⃣ Prüfen, ob ein Kurs im Warenkorb liegt
 // ============================
+// --- Prüfen, ob ein Kurs (nur echte Kurse) im Warenkorb liegt ---
 function cartHasCourseOnly() {
   return cart.some(i => (i.name || "").includes("Termin:"));
 }
 
-// ============================
-// 3️⃣ Bedingte Felder ein-/ausblenden
-// ============================
+// --- Bedingte Felder ein-/ausblenden ---
 function updateConditionalFields() {
-  const showFields = cartHasCourseOnly();
+  const showFields = cartHasCourseOnly(); // nur echte Kurse
 
   // Geburtsdatum
   const gebDatumLabel = document.getElementById('labelGeburtsdatum');
@@ -206,86 +205,11 @@ function updateConditionalFields() {
     participantCountWrapper.style.display = showFields ? 'block' : 'none';
   }
 
-  // Zusatzteilnehmer nur rendern, wenn Kurs da ist
+  // Zusatzteilnehmer nur anzeigen, wenn Kurs da ist
   renderAdditionalParticipants();
 }
 
-// ============================
-// 4️⃣ Formular-Validierung für Infotext
-// ============================
-function validateRegistrationFormForInfo() {
-  const msgEl = document.getElementById("form-message");
-  if (!msgEl) return false;
-  // msgEl.style.display = 'block'; // Immer sichtbar, nicht ausblenden
-  msgEl.textContent = "";
-
-  let errors = [];
-
-  // Prüfen nur, wenn ein Kurs im Warenkorb liegt
-  if (cartHasCourseOnly()) {
-    // Teilnehmer 1
-    const vorname = document.getElementById("vorname").value.trim();
-    const nachname = document.getElementById("nachname").value.trim();
-    const strasse = document.getElementById("strasse").value.trim();
-    const plzOrt = document.getElementById("plz_ort").value.trim();
-    const email = document.getElementById("teilnehmer_email").value.trim();
-    const geb = document.getElementById("geburtsdatum").value;
-    const agb = document.getElementById("agb").checked;
-
-    if (!vorname) errors.push("Vorname Teilnehmer 1 fehlt");
-    if (!nachname) errors.push("Nachname Teilnehmer 1 fehlt");
-    if (!strasse) errors.push("Straße fehlt");
-    if (!plzOrt) errors.push("PLZ & Ort fehlt");
-    if (!email) errors.push("E-Mail fehlt");
-    if (!geb) errors.push("Geburtsdatum fehlt");
-    if (!agb) errors.push("AGB nicht bestätigt");
-
-    // Zusatzteilnehmer prüfen
-    const count = parseInt(document.getElementById('participantCount').value || "1", 10);
-    for (let i = 2; i <= count; i++) {
-      const v = document.getElementById(`vorname_${i}`)?.value?.trim();
-      const n = document.getElementById(`nachname_${i}`)?.value?.trim();
-      const g = document.getElementById(`geburtsdatum_${i}`)?.value;
-      if (!v || !n || !g) errors.push(`Teilnehmer ${i} unvollständig`);
-    }
-  }
-
-  // Infotext setzen, immer sichtbar
-  if (errors.length > 0) {
-    msgEl.className = "error";
-    msgEl.textContent = "Bitte fülle folgende Felder aus: " + errors.join(", ");
-  } else if (cartHasCourseOnly()) {
-    msgEl.className = "success";
-    msgEl.textContent = "Formular ist vollständig. Bitte klicke jetzt auf 'Weiter zur Zahlung'.";
-  } else {
-    msgEl.className = "info";
-    msgEl.textContent = "Bitte überprüfe deine Angaben.";
-  }
-
-  return errors.length === 0;
-}
-
-
-// ============================
-// 5️⃣ Proceed-Button + Infotext aktualisieren
-// ============================
-function updateProceedVisibility() {
-  const proceedBtn = document.getElementById("proceedToPayBtn");
-  const proceedText = document.getElementById("proceedText");
-  const valid = validateRegistrationFormForInfo();
-
-  if (valid && cartHasCourseOnly()) {
-    if (proceedBtn) proceedBtn.classList.remove("hidden");
-    if (proceedText) proceedText.classList.remove("hidden");
-  } else {
-    if (proceedBtn) proceedBtn.classList.add("hidden");
-    if (proceedText) proceedText.classList.add("hidden");
-  }
-}
-
-// ============================
-// 6️⃣ Checkout-UI initialisieren
-// ============================
+// --- Initialisierung des Checkouts ---
 function initCheckoutUI() {
   voucherApplied = null;
 
@@ -301,7 +225,7 @@ function initCheckoutUI() {
   const registrationForm = document.getElementById("registrationForm");
   if (registrationForm) registrationForm.classList.remove("hidden");
 
-  // Bedingte Felder prüfen
+  // Bedingte Felder initial prüfen
   updateConditionalFields();
 
   // Teilnehmeranzahl Dropdown Listener
@@ -310,7 +234,6 @@ function initCheckoutUI() {
     countSelect.addEventListener('change', () => {
       renderAdditionalParticipants();
       updateConditionalFields();
-      updateProceedVisibility();
     });
   }
 
@@ -318,7 +241,7 @@ function initCheckoutUI() {
   const proceedBtn = document.getElementById("proceedToPayBtn");
   if (proceedBtn) {
     proceedBtn.addEventListener("click", async () => {
-      if (!validateRegistrationFormForInfo()) return;
+      if (!validateRegistrationForm()) return;
       await sendRegistrationToFormspree();
       const payBtn = document.getElementById("payButton");
       if (payBtn) payBtn.disabled = false;
@@ -327,7 +250,7 @@ function initCheckoutUI() {
     });
   }
 
-  // Felder für Infotext überwachen
+  // Felder für Proceed-Button überwachen
   const watchSelectors = [
     "#vorname", "#nachname", "#strasse", "#plz_ort", "#teilnehmer_email", "#geburtsdatum", "#agb"
   ];
@@ -340,13 +263,11 @@ function initCheckoutUI() {
 
   updateProceedVisibility();
 
-  // Mollie-Button initialisieren
+  // Mollie-Button immer initialisieren
   initMollie();
 }
 
-// ============================
-// 7️⃣ Warenkorb-Update
-// ============================
+// --- Cart-Update: Bedingte Felder prüfen ---
 function updateCartDisplay() {
   const list = document.getElementById("cart-items");
   if (!list) return;
@@ -371,9 +292,8 @@ function updateCartDisplay() {
     if (cont) cont.innerHTML = "<div class='small muted'>Dein Warenkorb ist leer.</div>";
   }
 
-  // Bedingte Felder + Infotext prüfen
+  // Bedingte Felder anpassen
   updateConditionalFields();
-  updateProceedVisibility();
 }
 
 // ============================
