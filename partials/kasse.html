@@ -481,16 +481,40 @@ if (!cartNeedsForm()) {
 function updateProceedVisibility() {
   const proceedBtn = document.getElementById("proceedToPayBtn");
   const proceedText = document.getElementById("proceedText");
-  if (!proceedBtn || !proceedText) return;
+  const formMessage = document.getElementById("form-message");
+  if (!proceedBtn || !proceedText || !formMessage) return;
 
-  if (cartNeedsForm() && validateRegistrationForm()) {
+  const hasCourse = cartHasCourseOnly(); // Nur echte Kurse
+
+  // Formular validieren, aber nur wenn Kurs da ist
+  const valid = hasCourse ? validateRegistrationForm(true) : true;
+
+  // Proceed Button ein-/ausblenden
+  if (hasCourse && valid) {
     proceedBtn.classList.remove("hidden");
-    proceedText.classList.remove("hidden"); // Text einblenden
+    proceedText.classList.remove("hidden");
   } else {
     proceedBtn.classList.add("hidden");
-    proceedText.classList.add("hidden"); // Text ausblenden
+    proceedText.classList.add("hidden");
+  }
+
+  // Infotext aktualisieren
+  if (hasCourse) {
+    // validateRegistrationForm(true) gibt true/false zurück, aber setzt form-message intern
+    if (!valid) {
+      // Formular unvollständig → form-message zeigt was fehlt (bereits in validateRegistrationForm)
+      formMessage.style.display = 'block';
+    } else {
+      formMessage.textContent = "Formular ist vollständig. Bitte klicke jetzt auf 'Weiter zur Zahlung'.";
+      formMessage.className = "success";
+      formMessage.style.display = 'block';
+    }
+  } else {
+    // Kein Kurs → Infotext ausblenden
+    formMessage.style.display = 'none';
   }
 }
+
   
   // --- Generate email message for Formspree ---
 function generateFormspreeMessage(data) {
