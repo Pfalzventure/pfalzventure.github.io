@@ -1,42 +1,40 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vielen Dank für Ihre Bestellung</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      text-align: center;
-    }
-    .loader {
-      margin: 30px auto;
-      border: 6px solid #eee;
-      border-top: 6px solid #333;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 0.7s linear infinite;
-    }
-  
-    .message {
-      font-size: 1.2em;
-      margin-top: 20px;
-      color: #333;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Warten auf Zahlung...</title>
 </head>
 <body>
+<h1>Zahlung wird geprüft...</h1>
+<script>
+async function checkPayment() {
+  const params = new URLSearchParams(window.location.search);
+  const paymentId = params.get("id");
 
-  <h1>Vielen Dank für Ihre Bestellung!</h1>
-  <p class="message">Wir haben Ihre Zahlung erhalten und Ihre Anmeldung ist erfolgreich.</p>
-  <div class="loader"></div>
-  <p class="message">Sie erhalten in Kürze weitere Informationen per E-Mail.</p>
+  if (!paymentId) {
+    document.body.innerHTML = "<p>Keine Zahlungs-ID gefunden.</p>";
+    return;
+  }
 
-  <p class="message">
-    <a href="https://pfalzventure.github.io/">Zurück zur Startseite</a>
-  </p>
+  try {
+    // Mollie API direkt anfragen
+    const res = await fetch(`https://mollie-backend-one.vercel.app/api/get-payment?id=${paymentId}`);
+    const data = await res.json();
 
+    if (data.status === "paid") {
+      window.location.href = "success.html";
+    } else if (data.status === "canceled" || data.status === "failed") {
+      window.location.href = "failed.html";
+    } else {
+      setTimeout(checkPayment, 2000); // retry in 2 Sekunden
+    }
+  } catch (e) {
+    console.error(e);
+    setTimeout(checkPayment, 2000);
+  }
+}
+
+checkPayment();
+</script>
 </body>
 </html>
