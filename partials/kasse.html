@@ -423,16 +423,13 @@ function renderAdditionalParticipants() {
 }
 
 // --- Validation ---
-function validateRegistrationForm() {
+function validateRegistrationForm(suppressMessage = false) {
   const msgEl = document.getElementById("form-message");
-  msgEl.textContent = "";
+  if (!suppressMessage) msgEl.textContent = "";
 
-  // Wenn kein Kurs im Warenkorb liegt, Formular muss nicht zwingend ausgefüllt sein (aber proceed bleibt hidden)
-if (!cartNeedsForm()) {
-    return true;
-}
+  const hasCourse = cartHasCourseOnly();
+  if (!hasCourse) return true;
 
-  // Teilnehmer 1 checks (contract partner)
   const vorname = document.getElementById("vorname").value.trim();
   const nachname = document.getElementById("nachname").value.trim();
   const strasse = document.getElementById("strasse").value.trim();
@@ -440,42 +437,53 @@ if (!cartNeedsForm()) {
   const email = document.getElementById("teilnehmer_email").value.trim();
   const geb = document.getElementById("geburtsdatum").value;
   const agb = document.getElementById("agb").checked;
- 
 
   if (!vorname || !nachname || !strasse || !plzOrt || !email || !geb) {
-    msgEl.className = "error";
-    msgEl.textContent = "Bitte fülle vor der Zahlung zunächst alle Pflichtfelder aus.";
-    return false;
-  }
-  if (!email.includes("@")) {
-    msgEl.className = "error";
-    msgEl.textContent = "Bitte gib eine gültige E-Mail-Adresse an.";
-    return false;
-  }
-  if (!agb) {
-    msgEl.className = "error";
-    msgEl.textContent = "Bitte bestätige noch die AGB Checkbox -> diese gilt für alle Teilnehmer!";
+    if (!suppressMessage) {
+      msgEl.className = "error";
+      msgEl.textContent = "Bitte fülle vor der Zahlung zunächst alle Pflichtfelder aus.";
+    }
     return false;
   }
 
-  // Zusätzliche Teilnehmer prüfen (ohne Minderjährig-Checks)
+  if (!email.includes("@")) {
+    if (!suppressMessage) {
+      msgEl.className = "error";
+      msgEl.textContent = "Bitte gib eine gültige E-Mail-Adresse an.";
+    }
+    return false;
+  }
+
+  if (!agb) {
+    if (!suppressMessage) {
+      msgEl.className = "error";
+      msgEl.textContent = "Bitte bestätige noch die AGB Checkbox -> diese gilt für alle Teilnehmer!";
+    }
+    return false;
+  }
+
+  // Zusatzteilnehmer prüfen
   const count = parseInt(document.getElementById('participantCount').value || "1", 10);
   for (let i = 2; i <= count; i++) {
     const v = document.getElementById(`vorname_${i}`)?.value?.trim();
     const n = document.getElementById(`nachname_${i}`)?.value?.trim();
     const g = document.getElementById(`geburtsdatum_${i}`)?.value;
-
     if (!v || !n || !g) {
-      msgEl.className = "error";
-      msgEl.textContent = `Bitte fülle alle Pflichtfelder für die Teilnehmer aus ${i} (Vorname, Nachname, Geburtsdatum).`;
+      if (!suppressMessage) {
+        msgEl.className = "error";
+        msgEl.textContent = `Bitte fülle alle Pflichtfelder für die Teilnehmer ${i} aus (Vorname, Nachname, Geburtsdatum).`;
+      }
       return false;
     }
   }
 
-  msgEl.className = "success";
-  msgEl.textContent = "Formular ist vollständig. Bitte klicke jetzt auf 'Weiter zur Zahlung'.";
+  if (!suppressMessage) {
+    msgEl.className = "success";
+    msgEl.textContent = "Formular ist vollständig. Bitte klicke jetzt auf 'Weiter zur Zahlung'.";
+  }
   return true;
 }
+
 
 // Update Proceed Button visibility based on validation
 function updateProceedVisibility() {
