@@ -216,55 +216,55 @@ function updateConditionalFields() {
 function validateRegistrationFormForInfo() {
   const msgEl = document.getElementById("form-message");
   if (!msgEl) return false;
+  // msgEl.style.display = 'block'; // Immer sichtbar, nicht ausblenden
   msgEl.textContent = "";
-
-  const hasCourse = cartHasCourseOnly();
-  if (!hasCourse) {
-    msgEl.style.display = 'none';
-    return true;
-  }
 
   let errors = [];
 
-  // Teilnehmer 1
-  const vorname = document.getElementById("vorname").value.trim();
-  const nachname = document.getElementById("nachname").value.trim();
-  const strasse = document.getElementById("strasse").value.trim();
-  const plzOrt = document.getElementById("plz_ort").value.trim();
-  const email = document.getElementById("teilnehmer_email").value.trim();
-  const geb = document.getElementById("geburtsdatum").value;
-  const agb = document.getElementById("agb").checked;
+  // Prüfen nur, wenn ein Kurs im Warenkorb liegt
+  if (cartHasCourseOnly()) {
+    // Teilnehmer 1
+    const vorname = document.getElementById("vorname").value.trim();
+    const nachname = document.getElementById("nachname").value.trim();
+    const strasse = document.getElementById("strasse").value.trim();
+    const plzOrt = document.getElementById("plz_ort").value.trim();
+    const email = document.getElementById("teilnehmer_email").value.trim();
+    const geb = document.getElementById("geburtsdatum").value;
+    const agb = document.getElementById("agb").checked;
 
-  if (!vorname) errors.push("Vorname Teilnehmer 1 fehlt");
-  if (!nachname) errors.push("Nachname Teilnehmer 1 fehlt");
-  if (!strasse) errors.push("Straße fehlt");
-  if (!plzOrt) errors.push("PLZ & Ort fehlt");
-  if (!email) errors.push("E-Mail fehlt");
-  if (!geb) errors.push("Geburtsdatum fehlt");
-  if (!agb) errors.push("AGB nicht bestätigt");
+    if (!vorname) errors.push("Vorname Teilnehmer 1 fehlt");
+    if (!nachname) errors.push("Nachname Teilnehmer 1 fehlt");
+    if (!strasse) errors.push("Straße fehlt");
+    if (!plzOrt) errors.push("PLZ & Ort fehlt");
+    if (!email) errors.push("E-Mail fehlt");
+    if (!geb) errors.push("Geburtsdatum fehlt");
+    if (!agb) errors.push("AGB nicht bestätigt");
 
-  // Zusatzteilnehmer prüfen
-  const count = parseInt(document.getElementById('participantCount').value || "1", 10);
-  for (let i = 2; i <= count; i++) {
-    const v = document.getElementById(`vorname_${i}`)?.value?.trim();
-    const n = document.getElementById(`nachname_${i}`)?.value?.trim();
-    const g = document.getElementById(`geburtsdatum_${i}`)?.value;
-    if (!v || !n || !g) errors.push(`Teilnehmer ${i} unvollständig`);
+    // Zusatzteilnehmer prüfen
+    const count = parseInt(document.getElementById('participantCount').value || "1", 10);
+    for (let i = 2; i <= count; i++) {
+      const v = document.getElementById(`vorname_${i}`)?.value?.trim();
+      const n = document.getElementById(`nachname_${i}`)?.value?.trim();
+      const g = document.getElementById(`geburtsdatum_${i}`)?.value;
+      if (!v || !n || !g) errors.push(`Teilnehmer ${i} unvollständig`);
+    }
   }
 
-  // Infotext setzen
+  // Infotext setzen, immer sichtbar
   if (errors.length > 0) {
     msgEl.className = "error";
     msgEl.textContent = "Bitte fülle folgende Felder aus: " + errors.join(", ");
-    msgEl.style.display = 'block';
-    return false;
-  } else {
+  } else if (cartHasCourseOnly()) {
     msgEl.className = "success";
     msgEl.textContent = "Formular ist vollständig. Bitte klicke jetzt auf 'Weiter zur Zahlung'.";
-    msgEl.style.display = 'block';
-    return true;
+  } else {
+    msgEl.className = "info";
+    msgEl.textContent = "Bitte überprüfe deine Angaben.";
   }
+
+  return errors.length === 0;
 }
+
 
 // ============================
 // 5️⃣ Proceed-Button + Infotext aktualisieren
