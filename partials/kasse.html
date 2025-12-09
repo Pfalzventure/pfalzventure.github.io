@@ -246,17 +246,19 @@ function initCheckoutUI() {
   }
 
   // Felder für Proceed-Button überwachen
-  const watchSelectors = [
-    "#vorname", "#nachname", "#strasse", "#plz_ort", "#teilnehmer_email", "#geburtsdatum", "#agb"
-  ];
-  watchSelectors.forEach(sel => {
-    const el = document.querySelector(sel);
-    if (!el) return;
-    const ev = (el.tagName === "SELECT" || el.type === "checkbox" || el.type === "radio" || el.type === "date") ? "change" : "input";
-    el.addEventListener(ev, updateProceedVisibility);
+ const watchSelectors = [
+  "#vorname", "#nachname", "#strasse", "#plz_ort", "#teilnehmer_email", "#geburtsdatum", "#agb"
+];
+watchSelectors.forEach(sel => {
+  const el = document.querySelector(sel);
+  if (!el) return;
+  const ev = (el.tagName === "SELECT" || el.type === "checkbox" || el.type === "radio" || el.type === "date") ? "change" : "input";
+  el.addEventListener(ev, () => {
+    validateRegistrationForm(true); // Text setzen
+    updateProceedVisibility();     // Button sichtbar machen
   });
+});
 
-  updateProceedVisibility();
 
   // Mollie-Button immer initialisieren
   initMollie();
@@ -425,10 +427,8 @@ function renderAdditionalParticipants() {
 // --- Validation ---
 function validateRegistrationForm(setMessage = true) {
   const msgEl = document.getElementById("form-message");
-  if (setMessage && msgEl) msgEl.textContent = "";
 
-  if (!cartNeedsForm()) return true;
-
+  // Teilnehmer 1 prüfen
   const vorname = document.getElementById("vorname").value.trim();
   const nachname = document.getElementById("nachname").value.trim();
   const strasse = document.getElementById("strasse").value.trim();
@@ -438,21 +438,21 @@ function validateRegistrationForm(setMessage = true) {
   const agb = document.getElementById("agb").checked;
 
   if (!vorname || !nachname || !strasse || !plzOrt || !email || !geb) {
-    if (setMessage) {
+    if (setMessage && msgEl) {
       msgEl.className = "error";
       msgEl.textContent = "Bitte fülle vor der Zahlung zunächst alle Pflichtfelder aus.";
     }
     return false;
   }
   if (!email.includes("@")) {
-    if (setMessage) {
+    if (setMessage && msgEl) {
       msgEl.className = "error";
       msgEl.textContent = "Bitte gib eine gültige E-Mail-Adresse an.";
     }
     return false;
   }
   if (!agb) {
-    if (setMessage) {
+    if (setMessage && msgEl) {
       msgEl.className = "error";
       msgEl.textContent = "Bitte bestätige noch die AGB Checkbox -> diese gilt für alle Teilnehmer!";
     }
@@ -467,20 +467,22 @@ function validateRegistrationForm(setMessage = true) {
     const g = document.getElementById(`geburtsdatum_${i}`)?.value;
 
     if (!v || !n || !g) {
-      if (setMessage) {
+      if (setMessage && msgEl) {
         msgEl.className = "error";
-        msgEl.textContent = `Bitte fülle alle Pflichtfelder für die Teilnehmer aus ${i} (Vorname, Nachname, Geburtsdatum).`;
+        msgEl.textContent = `Bitte fülle alle Pflichtfelder für Teilnehmer ${i} (Vorname, Nachname, Geburtsdatum).`;
       }
       return false;
     }
   }
 
-  if (setMessage) {
+  if (setMessage && msgEl) {
     msgEl.className = "success";
     msgEl.textContent = "Formular ist vollständig. Bitte klicke jetzt auf 'Weiter zur Zahlung'.";
   }
+
   return true;
 }
+
 
 // Update Proceed Button visibility based on validation
 function updateProceedVisibility() {
