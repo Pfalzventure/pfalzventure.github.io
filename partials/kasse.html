@@ -488,14 +488,15 @@ function updateProceedVisibility() {
   const proceedText = document.getElementById("proceedText");
   if (!proceedBtn || !proceedText) return;
 
-  const isValid = cartNeedsForm() && validateRegistrationForm(false); // false = nur prüfen, msgEl nicht setzen
+  const isValid = cartNeedsForm() && validateRegistrationForm(false); // nur prüfen, msg nicht setzen
 
+  // Button & Hinweis unter Button
   if (isValid) {
     proceedBtn.classList.remove("hidden");
-    proceedText.classList.remove("hidden"); // Text einblenden
+    proceedText.classList.remove("hidden");
   } else {
     proceedBtn.classList.add("hidden");
-    proceedText.classList.add("hidden"); // Text ausblenden
+    proceedText.classList.add("hidden");
   }
 }
 
