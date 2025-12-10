@@ -249,14 +249,15 @@ function initCheckoutUI() {
 
   updateCartDisplay();
 
-  const registrationForm = document.getElementById("registrationForm");
-  const hasCourse = cartNeedsForm();
+ const registrationForm = document.getElementById("registrationForm");
+const hasCourse = cartNeedsForm();
 
-  if (hasCourse) {
-    registrationForm.classList.remove("hidden");
-  } else {
-    registrationForm.classList.add("hidden");
-  }
+// Formular soll immer sichtbar sein (nie komplett ausgeblendet)
+if (registrationForm) registrationForm.classList.remove("hidden");
+
+// jetzt die kurs-spezifischen Felder ein-/ausblenden
+toggleCourseFields();
+
   
 toggleCourseFields();
   
