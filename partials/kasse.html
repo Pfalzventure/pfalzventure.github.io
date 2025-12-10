@@ -74,8 +74,8 @@
     <input type="email" name="email" id="teilnehmer_email" placeholder="E-Mail-Adresse" required>
     <input type="tel" name="telefon" id="telefon" placeholder="Telefonnummer (optional)">
 
- <label class="birthdate-field" style="font-weight:bold; margin-top:1rem;">Geburtsdatum</label>
-<input class="birthdate-field" type="date" name="geburtsdatum" id="geburtsdatum" required>
+    <label style="font-weight:bold; margin-top:1rem;">Geburtsdatum</label>
+    <input type="date" name="geburtsdatum" id="geburtsdatum" required>
 
     <!-- Hinweis zu Minderjährigen wird extern geregelt -->
   </div>
@@ -217,19 +217,6 @@ function initCheckoutUI() {
   const registrationForm = document.getElementById("registrationForm");
   const hasCourse = cartNeedsForm();
 
-// Geburtsdatum ein-/ausblenden (nur Teilnehmer 1)
-const bdFields = document.querySelectorAll(".birthdate-field");
-bdFields.forEach(field => {
-    if (hasCourse) {
-        field.classList.remove("hidden");
-        if (field.tagName === "INPUT") field.required = true;
-    } else {
-        field.classList.add("hidden");
-        if (field.tagName === "INPUT") field.required = false;
-    }
-});
-
-  
   if (hasCourse) {
     registrationForm.classList.remove("hidden");
   } else {
