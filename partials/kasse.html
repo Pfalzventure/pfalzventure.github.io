@@ -73,11 +73,9 @@
 
     <input type="email" name="email" id="teilnehmer_email" placeholder="E-Mail-Adresse" required>
     <input type="tel" name="telefon" id="telefon" placeholder="Telefonnummer (optional)">
-
-  <div id="birthdate-wrapper" style="margin-top:1rem;">
-    <label for="geburtsdatum" style="font-weight:bold;">Geburtsdatum</label>
-    <input type="date" name="geburtsdatum" id="geburtsdatum">
-
+    
+<label style="font-weight:bold; margin-top:1rem;" id="labelGeburtsdatum">Geburtsdatum</label>
+<input type="date" name="geburtsdatum" id="geburtsdatum" required>
 
 
     <!-- Hinweis zu Minderjährigen wird extern geregelt -->
@@ -181,7 +179,8 @@ function getCartTotal() {
 function cartNeedsForm() {
   return cart.some(i =>
     (i.name || "").includes("Termin:") ||
-    (i.name || "").includes("Survival Kit")
+    (i.name || "").includes("Survival Kit") ||
+    (i.name || "").includes("Gutschein")
   );
 }
 
