@@ -761,11 +761,29 @@ async function createMolliePayment() {
 /* --- Page lifecycle --- */
 document.addEventListener("DOMContentLoaded", () => {
   initCheckoutUI();
+updateBirthdateVisibility();
+
   const payBtn = document.getElementById("payButton");
  if (payBtn && !cartNeedsForm()) {
   payBtn.disabled = false; // sofort aktiv
 }
 });
+
+  
+function updateBirthdateVisibility() {
+    const hasCourse = cartNeedsForm();
+    const bdFields = document.querySelectorAll(".birthdate-field");
+
+    bdFields.forEach(f => {
+        if (hasCourse) {
+            f.classList.remove("hidden");
+            if (f.tagName === "INPUT") f.required = true;
+        } else {
+            f.classList.add("hidden");
+            if (f.tagName === "INPUT") f.required = false;
+        }
+    });
+}
 
 </script>
 </body>
