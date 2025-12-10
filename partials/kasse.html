@@ -256,15 +256,10 @@ function initCheckoutUI() {
   updateCartDisplay();
 
   const registrationForm = document.getElementById("registrationForm");
-//if (registrationForm) registrationForm.classList.remove("hidden");
-
-  // Bedingte Felder initial prüfen
-  updateConditionalFields();
-  
   const hasCourse = cartNeedsForm();
 
- if (hasCourse) {
-   registrationForm.classList.remove("hidden");
+  if (hasCourse) {
+    registrationForm.classList.remove("hidden");
   } else {
     registrationForm.classList.add("hidden");
   }
