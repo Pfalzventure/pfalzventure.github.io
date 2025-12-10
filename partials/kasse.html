@@ -245,6 +245,8 @@ function updateCartDisplay() {
     const cont = document.getElementById("paypal-button-container");
     if (cont) cont.innerHTML = "<div class='small muted'>Dein Warenkorb ist leer.</div>";
   }
+   // Bedingte Felder anpassen
+  updateConditionalFields();
 }
 
 // --- Init UI ---
