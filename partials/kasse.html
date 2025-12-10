@@ -185,6 +185,23 @@ function cartNeedsForm() {
   );
 }
 
+  function updateBirthdateVisibility() {
+    const hasCourse = cartNeedsForm();
+    const wrapper = document.getElementById("birthdate-wrapper");
+    const input = document.getElementById("geburtsdatum");
+
+    if (!wrapper || !input) return;
+
+    if (hasCourse) {
+        wrapper.classList.remove("hidden");
+        input.required = true;
+    } else {
+        wrapper.classList.add("hidden");
+        input.required = false;
+    }
+}
+
+  
 // --- Update Cart UI ---
 function updateCartDisplay() {
   const list = document.getElementById("cart-items");
