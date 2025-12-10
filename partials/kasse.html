@@ -461,15 +461,13 @@ function renderAdditionalParticipants() {
 // --- Validation ---
 function validateRegistrationForm() {
   const msgEl = document.getElementById("form-message");
- if (cartNeedsForm()) {
-  msgEl.textContent = "";
-}
+  if (msgEl && cartNeedsForm()) {
+    msgEl.textContent = "";
+  }
 
-  // Wenn kein Kurs im Warenkorb liegt, Formular muss nicht zwingend ausgefüllt sein (aber proceed bleibt hidden)
-if (!cartNeedsForm()) {
+  if (!cartNeedsForm()) {
     return true;
-}
-
+  }
   // Teilnehmer 1 checks (contract partner)
   const vorname = document.getElementById("vorname").value.trim();
   const nachname = document.getElementById("nachname").value.trim();
