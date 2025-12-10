@@ -73,10 +73,9 @@
 
     <input type="email" name="email" id="teilnehmer_email" placeholder="E-Mail-Adresse" required>
     <input type="tel" name="telefon" id="telefon" placeholder="Telefonnummer (optional)">
-    
-<label style="font-weight:bold; margin-top:1rem;" id="labelGeburtsdatum">Geburtsdatum</label>
-<input type="date" name="geburtsdatum" id="geburtsdatum" required>
 
+    <label style="font-weight:bold; margin-top:1rem;">Geburtsdatum</label>
+    <input type="date" name="geburtsdatum" id="geburtsdatum" required>
 
     <!-- Hinweis zu Minderjährigen wird extern geregelt -->
   </div>
@@ -176,51 +175,11 @@ let voucherApplied = null;
 function getCartTotal() {
   return cart.reduce((s, i) => s + i.price * i.qty, 0);
 }
-/*function cartNeedsForm() {
+function cartNeedsForm() {
   return cart.some(i =>
     (i.name || "").includes("Termin:") ||
-    (i.name || "").includes("Survival Kit") ||
-    (i.name || "").includes("Gutschein")
-  );*/
-}
-
-  function updateBirthdateVisibility() {
-    const hasCourse = cartNeedsForm();
-    const wrapper = document.getElementById("birthdate-wrapper");
-    const input = document.getElementById("geburtsdatum");
-
-    if (!wrapper || !input) return;
-
-    if (hasCourse) {
-        wrapper.classList.remove("hidden");
-        input.required = true;
-    } else {
-        wrapper.classList.add("hidden");
-        input.required = false;
-    }
-}
-
-  // --- Bedingte Felder ein-/ausblenden ---
-function updateConditionalFields() {
-  const showFields = cartHasCourseOnly(); // nur echte Kurse
-
- // Geburtsdatum
-  const gebDatumLabel = document.getElementById('labelGeburtsdatum');
-  const gebDatumInput = document.getElementById('geburtsdatum');
-  if (gebDatumLabel && gebDatumInput) {
-    gebDatumLabel.style.display = showFields ? 'block' : 'none';
-    gebDatumInput.style.display = showFields ? 'block' : 'none';
-    gebDatumInput.required = showFields;
-  }
-  
-  // Teilnehmeranzahl Dropdown
-  const participantCountWrapper = document.getElementById('participantCountWrapper');
-  if (participantCountWrapper) {
-    participantCountWrapper.style.display = showFields ? 'block' : 'none';
-  }
-  
-  // Zusatzteilnehmer nur anzeigen, wenn Kurs da ist
-  renderAdditionalParticipants();
+    (i.name || "").includes("Survival Kit")
+  );
 }
 
 // --- Update Cart UI ---
