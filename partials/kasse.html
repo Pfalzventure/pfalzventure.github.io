@@ -74,16 +74,20 @@
     <input type="email" name="email" id="teilnehmer_email" placeholder="E-Mail-Adresse" required>
     <input type="tel" name="telefon" id="telefon" placeholder="Telefonnummer (optional)">
 
-    <label style="font-weight:bold; margin-top:1rem;">Geburtsdatum</label>
-    <input type="date" name="geburtsdatum" id="geburtsdatum" required>
+   <div id="birthdayContainer">
+  <label style="font-weight:bold; margin-top:1rem;">Geburtsdatum</label>
+  <input type="date" name="geburtsdatum" id="geburtsdatum" required>
+  </div>
+
 
     <!-- Hinweis zu Minderjährigen wird extern geregelt -->
   </div>
 
   <!-- Dropdown Anzahl Teilnehmer (unterhalb des Anmeldeformulars von Teilnehmer 1 wie gewünscht) -->
-  <div style="margin-top:1rem;">
-    <label for="participantCount" style="font-weight:600;">Anzahl Teilnehmer (inkl. Teilnehmer 1)</label>
-    <select id="participantCount" style="margin-left:.5rem;">
+<div id="participantCountContainer" style="margin-top:1rem;">
+  <label for="participantCount" style="font-weight:600;">Anzahl Teilnehmer (inkl. Teilnehmer 1)</label>
+  <select id="participantCount" style="margin-left:.5rem;">
+
       <option value="1">1</option>
       <option value="2">2</option>
       <option value="3">3</option>
