@@ -244,6 +244,8 @@ function updateCartDisplay() {
     const cont = document.getElementById("paypal-button-container");
     if (cont) cont.innerHTML = "<div class='small muted'>Dein Warenkorb ist leer.</div>";
   }
+    // Bedingte Felder anpassen
+  updateConditionalFields();
 }
 
 // --- Init UI ---
@@ -263,7 +265,9 @@ function initCheckoutUI() {
   } else {
     registrationForm.classList.add("hidden");
   }
-
+  
+  // Bedingte Felder initial prüfen
+  updateConditionalFields();
   // **Mollie-Button immer erzeugen**
   initMollie();  // <= hier statt nur in else-Zweig
 
@@ -274,7 +278,7 @@ function initCheckoutUI() {
   }
 
   renderAdditionalParticipants();
-
+ updateConditionalFields();
   // Wire up proceed button
 const proceedBtn = document.getElementById("proceedToPayBtn");
 if (proceedBtn) {
