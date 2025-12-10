@@ -251,7 +251,9 @@ function initCheckoutUI() {
   } else {
     registrationForm.classList.add("hidden");
   }
-
+  
+toggleCourseFields();
+  
   // **Mollie-Button immer erzeugen**
   initMollie();  // <= hier statt nur in else-Zweig
 
