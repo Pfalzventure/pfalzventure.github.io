@@ -176,12 +176,12 @@ let voucherApplied = null;
 function getCartTotal() {
   return cart.reduce((s, i) => s + i.price * i.qty, 0);
 }
-function cartNeedsForm() {
+/*function cartNeedsForm() {
   return cart.some(i =>
     (i.name || "").includes("Termin:") ||
     (i.name || "").includes("Survival Kit") ||
     (i.name || "").includes("Gutschein")
-  );
+  );*/
 }
 
   function updateBirthdateVisibility() {
