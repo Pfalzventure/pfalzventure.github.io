@@ -188,13 +188,15 @@ function cartNeedsForm() {
 // ---- Kursfelder ein-/ausblenden ----
 function toggleCourseFields() {
   const hasCourse = cartNeedsForm();
-
-  const birthday = document.getElementById("geburtsdatum");
+const birthday = document.getElementById("geburtsdatum");
   const participantCount = document.getElementById("participantCount");
+  const birthdayContainer = document.getElementById("birthdayContainer");
+  const participantContainer = document.getElementById("participantCountContainer");
 
-  // Container (wegen Label)
-const birthdayContainer = document.getElementById("birthdayContainer");
-const participantContainer = document.getElementById("participantCountContainer");
+  // Wenn ein Element fehlt: nichts tun (vermeidet JS-Fehler)
+  if (!birthday || !participantCount || !birthdayContainer || !participantContainer) {
+    return;
+  }
 
   if (hasCourse) {
     // anzeigen + required aktivieren
@@ -204,7 +206,7 @@ const participantContainer = document.getElementById("participantCountContainer"
     participantContainer.classList.remove("hidden");
 
   } else {
-    // ausblenden + required deaktivieren
+    // ausblenden + required deaktivieren + Werte zurücksetzen
     birthdayContainer.classList.add("hidden");
     birthday.required = false;
     birthday.value = "";
@@ -213,6 +215,7 @@ const participantContainer = document.getElementById("participantCountContainer"
     participantCount.value = "1";
   }
 }
+
   
 // --- Update Cart UI ---
 function updateCartDisplay() {
