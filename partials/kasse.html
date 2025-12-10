@@ -200,7 +200,28 @@ function cartNeedsForm() {
     }
 }
 
+  // --- Bedingte Felder ein-/ausblenden ---
+function updateConditionalFields() {
+  const showFields = cartHasCourseOnly(); // nur echte Kurse
+
+ // Geburtsdatum
+  const gebDatumLabel = document.getElementById('labelGeburtsdatum');
+  const gebDatumInput = document.getElementById('geburtsdatum');
+  if (gebDatumLabel && gebDatumInput) {
+    gebDatumLabel.style.display = showFields ? 'block' : 'none';
+    gebDatumInput.style.display = showFields ? 'block' : 'none';
+    gebDatumInput.required = showFields;
+  }
   
+  // Teilnehmeranzahl Dropdown
+  const participantCountWrapper = document.getElementById('participantCountWrapper');
+  if (participantCountWrapper) {
+    participantCountWrapper.style.display = showFields ? 'block' : 'none';
+  }
+  
+  // Zusatzteilnehmer nur anzeigen, wenn Kurs da ist
+  renderAdditionalParticipants();
+}
 // --- Update Cart UI ---
 function updateCartDisplay() {
   const list = document.getElementById("cart-items");
@@ -234,6 +255,7 @@ function initCheckoutUI() {
   updateCartDisplay();
 
   const registrationForm = document.getElementById("registrationForm");
+
   const hasCourse = cartNeedsForm();
 
   if (hasCourse) {
