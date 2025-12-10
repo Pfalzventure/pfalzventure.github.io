@@ -249,15 +249,20 @@ function initCheckoutUI() {
 watchSelectors.forEach(sel => {
   const el = document.querySelector(sel);
   if (!el) return;
-  const ev = (el.tagName === "SELECT" || el.type === "checkbox" || 
-              el.type === "radio" || el.type === "date")
-              ? "change" : "input";
+  const ev =
+    (el.tagName === "SELECT" ||
+     el.type === "checkbox" ||
+     el.type === "radio" ||
+     el.type === "date")
+      ? "change"
+      : "input";
 
   el.addEventListener(ev, () => {
-    validateRegistrationForm();  
-    updateProceedVisibility();
+    validateRegistrationForm();   // Text setzen!! (das fehlt!!)
+    updateProceedVisibility();    // Button ein-/ausblenden
   });
 });
+
 
   // Mollie-Button immer initialisieren
   initMollie();
