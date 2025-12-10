@@ -179,11 +179,9 @@ function getCartTotal() {
   return cart.reduce((s, i) => s + i.price * i.qty, 0);
 }
 function cartNeedsForm() {
-  return cart.some(i =>
-    (i.name || "").includes("Termin:") ||
-    (i.name || "").includes("Survival Kit")
-  );
+  return cart.some(i => (i.name || "").includes("Termin:"));
 }
+
 
 // ---- Kursfelder ein-/ausblenden ----
 function toggleCourseFields() {
