@@ -482,7 +482,8 @@ function updateProceedVisibility() {
   const proceedText = document.getElementById("proceedText");
   if (!proceedBtn || !proceedText) return;
 
-  if (cartNeedsForm() && validateRegistrationForm()) {
+const formValid = validateRegistrationForm();
+if (cartNeedsForm() && formValid) {
     proceedBtn.classList.remove("hidden");
     proceedText.classList.remove("hidden"); // Text einblenden
   } else {
