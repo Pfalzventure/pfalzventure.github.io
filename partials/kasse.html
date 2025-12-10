@@ -246,17 +246,18 @@ function initCheckoutUI() {
   }
 
   // Felder für Proceed-Button überwachen
-  const watchSelectors = [
-    "#vorname", "#nachname", "#strasse", "#plz_ort", "#teilnehmer_email", "#geburtsdatum", "#agb"
-  ];
-  watchSelectors.forEach(sel => {
-    const el = document.querySelector(sel);
-    if (!el) return;
-    const ev = (el.tagName === "SELECT" || el.type === "checkbox" || el.type === "radio" || el.type === "date") ? "change" : "input";
-    el.addEventListener(ev, updateProceedVisibility);
-  });
+watchSelectors.forEach(sel => {
+  const el = document.querySelector(sel);
+  if (!el) return;
+  const ev = (el.tagName === "SELECT" || el.type === "checkbox" || 
+              el.type === "radio" || el.type === "date")
+              ? "change" : "input";
 
-  updateProceedVisibility();
+  el.addEventListener(ev, () => {
+    validateRegistrationForm();  
+    updateProceedVisibility();
+  });
+});
 
   // Mollie-Button immer initialisieren
   initMollie();
