@@ -178,8 +178,8 @@ function getCartTotal() {
 function cartNeedsForm() {
   return cart.some(i =>
     (i.name || "").includes("Termin:") ||
-    (i.name || "").includes("Survival Kit")
-   (i.name || "").includes("Gutschein")
+    (i.name || "").includes("Survival Kit") ||
+    (i.name || "").includes("Gutschein")
   );
 }
 
