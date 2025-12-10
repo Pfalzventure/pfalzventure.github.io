@@ -74,8 +74,8 @@
     <input type="email" name="email" id="teilnehmer_email" placeholder="E-Mail-Adresse" required>
     <input type="tel" name="telefon" id="telefon" placeholder="Telefonnummer (optional)">
 
-  <label class="birthdate-field" style="font-weight:bold; margin-top:1rem;">Geburtsdatum</label>
-<input class="birthdate-field" type="date" name="geburtsdatum" id="geburtsdatum" required>
+    <label style="font-weight:bold; margin-top:1rem;">Geburtsdatum</label>
+    <input type="date" name="geburtsdatum" id="geburtsdatum" required>
 
     <!-- Hinweis zu Minderjährigen wird extern geregelt -->
   </div>
@@ -204,8 +204,6 @@ function updateCartDisplay() {
     const cont = document.getElementById("paypal-button-container");
     if (cont) cont.innerHTML = "<div class='small muted'>Dein Warenkorb ist leer.</div>";
   }
-   // ⭐ WICHTIG: Geburtsdatum nach jedem Update neu prüfen
-    updateBirthdateVisibility();
 }
 
 // --- Init UI ---
@@ -763,29 +761,11 @@ async function createMolliePayment() {
 /* --- Page lifecycle --- */
 document.addEventListener("DOMContentLoaded", () => {
   initCheckoutUI();
-updateBirthdateVisibility();
-
   const payBtn = document.getElementById("payButton");
  if (payBtn && !cartNeedsForm()) {
   payBtn.disabled = false; // sofort aktiv
 }
 });
-
-  
-function updateBirthdateVisibility() {
-    const hasCourse = cartNeedsForm();
-    const bdFields = document.querySelectorAll(".birthdate-field");
-
-    bdFields.forEach(f => {
-        if (hasCourse) {
-            f.classList.remove("hidden");
-            if (f.tagName === "INPUT") f.required = true;
-        } else {
-            f.classList.add("hidden");
-            if (f.tagName === "INPUT") f.required = false;
-        }
-    });
-}
 
 </script>
 </body>
