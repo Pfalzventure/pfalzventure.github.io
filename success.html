@@ -5,20 +5,45 @@
   <title>Bestellung erhalten</title>
   <style>
     body {
+      margin: 0;
+      padding: 0;
       font-family: Arial, sans-serif;
+      background: url('assets/wald.jpg') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
       text-align: center;
-      padding: 50px;
-      background-color: #f9f9f9;
     }
+
+    /* halbtransparente Box für bessere Lesbarkeit */
+    .content-box {
+      background: rgba(255, 255, 255, 0.85);
+      padding: 40px 50px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+      max-width: 600px;
+      backdrop-filter: blur(4px);
+    }
+
+    .logo {
+      width: 160px;
+      margin-bottom: 25px;
+    }
+
     h1 {
       color: #2c3e50;
+      margin-top: 0;
     }
+
     p {
       font-size: 1.2rem;
       color: #34495e;
-      max-width: 600px;
-      margin: 20px auto;
+      margin: 20px 0;
     }
+
     a {
       display: inline-block;
       margin-top: 30px;
@@ -28,17 +53,26 @@
       padding: 12px 24px;
       border-radius: 6px;
       font-weight: bold;
+      transition: background-color 0.2s ease;
     }
+
     a:hover {
       background-color: #2ecc71;
     }
   </style>
 </head>
 <body>
-  <h1>Vielen Dank für deine Bestellung!</h1>
-  <p>
-    Deine Zahlung wird von uns geprüft. Du erhältst eine Bestätigung per E-Mail, sobald die Zahlung bei uns eingegangen ist.
-  </p>
-  <a href="https://pfalzventure.github.io/index.html">Zurück zur Startseite</a>
+
+  <div class="content-box">
+    <img src="assets/logo2.png" alt="Logo" class="logo" />
+
+    <h1>Vielen Dank für deine Bestellung!</h1>
+    <p>
+      Deine Zahlung wird von uns geprüft. Du erhältst eine Bestätigung per E-Mail, sobald die Zahlung bei uns eingegangen ist.
+    </p>
+
+    <a href="https://pfalzventure.github.io/index.html">Zurück zur Startseite</a>
+  </div>
+
 </body>
 </html>
