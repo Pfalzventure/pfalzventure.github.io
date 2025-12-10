@@ -337,6 +337,11 @@ function blockPaymentsBecauseVoucher() {
   hidePayContainer();
   document.getElementById("proceedToPayBtn").classList.add("hidden");
 }
+  // evtl. hat sich der Warenkorb-/Zustand geändert: UI anpassen
+toggleCourseFields();
+updateCartVisibility?.(); // nur, falls du so eine Funktion hast (optional)
+updateProceedVisibility();
+
 function unblockPayments() {
   const hasCourse = cartNeedsForm();
   if (hasCourse) {
