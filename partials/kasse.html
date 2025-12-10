@@ -184,7 +184,6 @@ function cartNeedsForm() {
   );
 }
 
-  /*******************************
   function updateBirthdateVisibility() {
     const hasCourse = cartNeedsForm();
     const wrapper = document.getElementById("birthdate-wrapper");
@@ -200,7 +199,7 @@ function cartNeedsForm() {
         input.required = false;
     }
 }
- *******************************/
+
   // --- Bedingte Felder ein-/ausblenden ---
 function updateConditionalFields() {
   const showFields = cartHasCourseOnly(); // nur echte Kurse
@@ -245,8 +244,6 @@ function updateCartDisplay() {
     const cont = document.getElementById("paypal-button-container");
     if (cont) cont.innerHTML = "<div class='small muted'>Dein Warenkorb ist leer.</div>";
   }
-    // Bedingte Felder anpassen
-  updateConditionalFields();
 }
 
 // --- Init UI ---
@@ -258,7 +255,6 @@ function initCheckoutUI() {
   updateCartDisplay();
 
   const registrationForm = document.getElementById("registrationForm");
-
   const hasCourse = cartNeedsForm();
 
   if (hasCourse) {
@@ -277,7 +273,7 @@ function initCheckoutUI() {
   }
 
   renderAdditionalParticipants();
- updateConditionalFields();
+
   // Wire up proceed button
 const proceedBtn = document.getElementById("proceedToPayBtn");
 if (proceedBtn) {
@@ -805,7 +801,6 @@ async function createMolliePayment() {
 /* --- Page lifecycle --- */
 document.addEventListener("DOMContentLoaded", () => {
   initCheckoutUI();
-   updateBirthdateVisibility();
   const payBtn = document.getElementById("payButton");
  if (payBtn && !cartNeedsForm()) {
   payBtn.disabled = false; // sofort aktiv
