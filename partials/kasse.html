@@ -182,6 +182,35 @@ function cartNeedsForm() {
   );
 }
 
+// ---- Kursfelder ein-/ausblenden ----
+function toggleCourseFields() {
+  const hasCourse = cartNeedsForm();
+
+  const birthday = document.getElementById("geburtsdatum");
+  const participantCount = document.getElementById("participantCount");
+
+  // Container (wegen Label)
+  const birthdayContainer = birthday.parentElement;
+  const participantContainer = participantCount.parentElement;
+
+  if (hasCourse) {
+    // anzeigen + required aktivieren
+    birthdayContainer.classList.remove("hidden");
+    birthday.required = true;
+
+    participantContainer.classList.remove("hidden");
+
+  } else {
+    // ausblenden + required deaktivieren
+    birthdayContainer.classList.add("hidden");
+    birthday.required = false;
+    birthday.value = "";
+
+    participantContainer.classList.add("hidden");
+    participantCount.value = "1";
+  }
+}
+  
 // --- Update Cart UI ---
 function updateCartDisplay() {
   const list = document.getElementById("cart-items");
