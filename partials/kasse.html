@@ -781,6 +781,7 @@ async function createMolliePayment() {
 /* --- Page lifecycle --- */
 document.addEventListener("DOMContentLoaded", () => {
   initCheckoutUI();
+   updateBirthdateVisibility();
   const payBtn = document.getElementById("payButton");
  if (payBtn && !cartNeedsForm()) {
   payBtn.disabled = false; // sofort aktiv
