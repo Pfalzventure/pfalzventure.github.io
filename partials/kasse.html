@@ -260,13 +260,13 @@ if (registrationForm) registrationForm.classList.remove("hidden");
   // Bedingte Felder initial prüfen
   updateConditionalFields();
   
-//  const hasCourse = cartNeedsForm();
+  const hasCourse = cartNeedsForm();
 
- // if (hasCourse) {
- //   registrationForm.classList.remove("hidden");
-//  } else {
-//    registrationForm.classList.add("hidden");
-//  }
+ if (hasCourse) {
+   registrationForm.classList.remove("hidden");
+  } else {
+    registrationForm.classList.add("hidden");
+  }
 
   // **Mollie-Button immer erzeugen**
   initMollie();  // <= hier statt nur in else-Zweig
