@@ -442,7 +442,7 @@ if (!cartNeedsForm()) {
   const agb = document.getElementById("agb").checked;
  
 
-  if (!vorname || !nachname || !strasse || !plzOrt || !email || !geb) {
+  if (!vorname || !nachname || !strasse || !plzOrt || !email) {
     msgEl.className = "error";
     msgEl.textContent = "Bitte fülle vor der Zahlung zunächst alle Pflichtfelder aus.";
     return false;
