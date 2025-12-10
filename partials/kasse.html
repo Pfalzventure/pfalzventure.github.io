@@ -217,6 +217,19 @@ function initCheckoutUI() {
   const registrationForm = document.getElementById("registrationForm");
   const hasCourse = cartNeedsForm();
 
+// Geburtsdatum ein-/ausblenden (nur Teilnehmer 1)
+const bdFields = document.querySelectorAll(".birthdate-field");
+bdFields.forEach(field => {
+    if (hasCourse) {
+        field.classList.remove("hidden");
+        if (field.tagName === "INPUT") field.required = true;
+    } else {
+        field.classList.add("hidden");
+        if (field.tagName === "INPUT") field.required = false;
+    }
+});
+
+  
   if (hasCourse) {
     registrationForm.classList.remove("hidden");
   } else {
