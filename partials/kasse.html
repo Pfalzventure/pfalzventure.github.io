@@ -446,7 +446,9 @@ function renderAdditionalParticipants() {
 // --- Validation ---
 function validateRegistrationForm() {
   const msgEl = document.getElementById("form-message");
+ if (cartNeedsForm()) {
   msgEl.textContent = "";
+}
 
   // Wenn kein Kurs im Warenkorb liegt, Formular muss nicht zwingend ausgefüllt sein (aber proceed bleibt hidden)
 if (!cartNeedsForm()) {
