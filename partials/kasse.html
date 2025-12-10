@@ -240,6 +240,9 @@ function updateCartDisplay() {
     if (cont) cont.innerHTML = "<div class='small muted'>Dein Warenkorb ist leer.</div>";
   }
 }
+// am Ende von updateCartDisplay()
+toggleCourseFields();
+updateProceedVisibility(); // optional: Proceed-Button aktualisieren
 
 // --- Init UI ---
 function initCheckoutUI() {
