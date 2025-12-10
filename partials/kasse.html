@@ -483,14 +483,18 @@ function updateProceedVisibility() {
   const proceedText = document.getElementById("proceedText");
   if (!proceedBtn || !proceedText) return;
 
-  if (cartNeedsForm() && validateRegistrationForm()) {
+  // Formular NICHT neu validieren – sonst verschwindet der Text wieder
+  const formIsValid = validateRegistrationForm();  // <- darf NICHT text leeren
+
+  if (cartNeedsForm() && formIsValid) {
     proceedBtn.classList.remove("hidden");
-    proceedText.classList.remove("hidden"); // Text einblenden
+    proceedText.classList.remove("hidden");
   } else {
     proceedBtn.classList.add("hidden");
-    proceedText.classList.add("hidden"); // Text ausblenden
+    proceedText.classList.add("hidden");
   }
 }
+
   
   // --- Generate email message for Formspree ---
 function generateFormspreeMessage(data) {
