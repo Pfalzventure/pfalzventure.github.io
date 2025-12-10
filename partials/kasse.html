@@ -414,11 +414,11 @@ function renderAdditionalParticipants() {
     });
 
     // Watch fields for validation trigger
-    ['vorname','nachname','geburtsdatum'].forEach(f => {
-      const el = document.getElementById(`${f}_${i}`);
-      if (!el) return;
-      el.addEventListener('input', updateProceedVisibility);
-    });
+['vorname','nachname','geburtsdatum'].forEach(f => {
+    const el = document.getElementById(`${f}_${i}`);
+    if (!el) return;
+    el.addEventListener('input', updateProceedVisibility);
+});
   }
 }
 
