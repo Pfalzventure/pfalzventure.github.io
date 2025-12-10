@@ -194,8 +194,8 @@ function toggleCourseFields() {
   const participantCount = document.getElementById("participantCount");
 
   // Container (wegen Label)
-  const birthdayContainer = birthday.parentElement;
-  const participantContainer = participantCount.parentElement;
+const birthdayContainer = document.getElementById("birthdayContainer");
+const participantContainer = document.getElementById("participantCountContainer");
 
   if (hasCourse) {
     // anzeigen + required aktivieren
