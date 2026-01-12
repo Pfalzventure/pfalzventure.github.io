@@ -499,11 +499,10 @@ function generateFormspreeMessage(data) {
   }
 
   // Format cart items (monospaced table-like)
-let cartText = "";
+cartText = ""; // Reset
 data.warenkorb_inhalt.split("; ").forEach(item => {
-  const parts = item.split(" = "); // z. B. "2 Tages Survival Intensivkurs – Termin: 18.04.2026 × 1 = 149.90"
-  const left = parts[0].split(" × ");
-  const name = left[0]; // Nur der Name inkl. Termin
+  const parts = item.split(" = ");        // z.B. "2 Tages Survival Intensivkurs – Termin: 18.04.2026 × 1 = 149.90"
+  const name = parts[0].split(" × ")[0];  // Nur der Name inkl. Termin
   const price = parts[1];
   cartText += `- ${name}\n  Preis: ${price} €\n\n`;
 });
