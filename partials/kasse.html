@@ -499,18 +499,14 @@ function generateFormspreeMessage(data) {
   }
 
   // Format cart items (monospaced table-like)
-  let cartText = "";
-  cartText += "Produkt                     Menge   Preis\n";
-  cartText += "--------------------------------------------\n";
-
-  data.warenkorb_inhalt.split("; ").forEach(item => {
-    const parts = item.split(" = ");
-    const left = parts[0].split(" × ");
-    const name = left[0].padEnd(25, " ");
-    const qty = left[1].toString().padEnd(7, " ");
-    const price = parts[1];
-    cartText += `${name}${qty}${price}\n`;
-  });
+let cartText = "";
+data.warenkorb_inhalt.split("; ").forEach(item => {
+  const parts = item.split(" = "); // z. B. "2 Tages Survival Intensivkurs – Termin: 18.04.2026 × 1 = 149.90"
+  const left = parts[0].split(" × ");
+  const name = left[0]; // Nur der Name inkl. Termin
+  const price = parts[1];
+  cartText += `- ${name}\n  Preis: ${price} €\n\n`;
+});
 
   // Voucher text
   let voucherPart = "";
