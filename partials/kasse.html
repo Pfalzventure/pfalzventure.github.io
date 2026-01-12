@@ -540,11 +540,8 @@ ${additionalText}--------------------------------------------
 BESTELLÜBERSICHT
 --------------------------------------------
 
-const cartText = cart.map(item => {
-  return `- ${item.name}
-  Preis: ${(item.price * item.qty).toFixed(2)} €`;
-}).join("\n\n");
-
+${cartText}
+Gesamtsumme: ${data.warenkorb_summe} €
 
 ${voucherPart}--------------------------------------------
 Was solltest du Mitbringen?
