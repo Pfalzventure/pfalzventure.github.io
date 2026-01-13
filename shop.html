@@ -162,7 +162,7 @@
        <select id="kursTermine1" class="terminfenster" size="5"></select>
 
        <script>
-    fetch('termine.json')
+    fetch('assets/kurstermine_2_tage.json')
       .then(response => response.json())
       .then(data => {
         const select = document.getElementById('kursTermine1');
