@@ -602,6 +602,13 @@ main {
   color: #000;
 }
 
+.terminfenster option:disabled {
+  background-color: #eee;
+  color: #888;
+  font-style: italic;
+  cursor: not-allowed;
+}
+
 /* Entfernt die Standard-Markierung in Firefox */
 .terminfenster {
   color: #000;
