@@ -249,19 +249,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
  
- <!-- 🔄 Kurstermine automatisch laden -->
+<!-- 🔄 Kurstermine automatisch laden -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
   /**
    * Lädt Termine aus einer JSON-Datei und befüllt ein Dropdown.
-   * Wenn keine Termine vorhanden sind, wird das Dropdown deaktiviert.
-   * @param {string} selectId - ID des <select>-Elements
-   * @param {string} jsonPath - Pfad zur JSON-Datei (z.B. "assets/kurstermine_1_tag.json")
+   * Unterstützt ausgebuchte Termine via { ausgebucht: true }
    */
   async function loadCourseDates(selectId, jsonPath) {
     const select = document.getElementById(selectId);
     if (!select) return console.warn(`⚠️ Dropdown #${selectId} nicht gefunden.`);
+
+    // 🔹 wichtig: immer zuerst leeren
+    select.innerHTML = "";
 
     try {
       const res = await fetch(jsonPath);
@@ -273,12 +274,17 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error("Keine Termine gefunden");
       }
 
-      // Dropdown leeren und befüllen
-      select.innerHTML = "";
       termine.forEach(t => {
         const opt = document.createElement("option");
         opt.value = t.id || t.text || t;
         opt.textContent = t.text || t.name || t;
+
+        // 🔴 NEU: ausgebucht behandeln
+        if (t.ausgebucht === true) {
+          opt.disabled = true;
+          opt.textContent += " (ausgebucht)";
+        }
+
         select.appendChild(opt);
       });
 
@@ -296,13 +302,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Alle Kurs-Dateien laden
+  // 🔹 Kurs-Termine laden
   loadCourseDates("kursTermine1", "assets/kurstermine_1_tag.json");
   loadCourseDates("kursTermine2", "assets/kurstermine_2_tage.json");
   loadCourseDates("kursTermine3", "assets/kurstermine_3_tage.json");
 
 });
 </script>
+
 
  <!-- 🛒 Zentralen Warenkorb laden -->
 <script>
