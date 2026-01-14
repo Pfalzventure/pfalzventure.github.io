@@ -313,7 +313,9 @@ function unblockPayments() {
 // --- Funktion für Klick auf "Weiter zur Zahlung" ---
 function proceedToPayment() {
   proceedToPaymentClicked = true;
+ initMollie();
 }
+  // --- Gutschein einlösen ---
 async function submitVoucherRequest() {
   const code = document.getElementById("voucherCode").value.trim();
   const email = document.getElementById("customerEmail").value.trim();
