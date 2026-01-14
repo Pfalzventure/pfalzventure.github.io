@@ -282,23 +282,23 @@ if (proceedBtn) {
   // Mollie-Button direkt erstellen (immer sichtbar, aber ggf. disabled)
 initMollie();
 
-// --- Globaler Freigabe-State ---
-let proceedToPaymentClicked = false;
-  
 // --- Voucher helpers & Anpassung: prüfe Formular wenn Kurs im Warenkorb ---
-  function isVoucherActive() {
+function isVoucherActive() {
   return voucherApplied && voucherApplied.code;
 }
+
 function showVoucherAppliedMessage(text) {
   const msg = document.getElementById("voucherMessage");
   if (!msg) return;
   msg.className = "success";
   msg.textContent = text;
 }
+
 function blockPaymentsBecauseVoucher() {
   hidePayContainer();
   document.getElementById("proceedToPayBtn").classList.add("hidden");
 }
+
 function unblockPayments() {
   const hasCourse = cartNeedsForm();
   if (hasCourse) {
@@ -310,50 +310,50 @@ function unblockPayments() {
   }
 }
 
-// --- Funktion für Klick auf "Weiter zur Zahlung" ---
-function proceedToPayment() {
-  proceedToPaymentClicked = true;
- initMollie();
-}
-  // --- Gutschein einlösen ---
 async function submitVoucherRequest() {
   const code = document.getElementById("voucherCode").value.trim();
   const email = document.getElementById("customerEmail").value.trim();
   const msgEl = document.getElementById("voucherMessage");
 
   if (!code) {
-    if (msgEl) { msgEl.className = "error"; msgEl.textContent = "Bitte Gutscheincode eingeben."; }
-    return;
-  }
-  if (!email || !email.includes("@")) {
-    if (msgEl) { msgEl.className = "error"; msgEl.textContent = "Bitte gültige E-Mail-Adresse eingeben."; }
-    return;
-  }
-
-// --- NEU: Prüfe, ob "Weiter zur Zahlung" geklickt wurde ---
-  if (!proceedToPaymentClicked) {
     if (msgEl) {
       msgEl.className = "error";
-      msgEl.textContent = 'Bitte klicke zuerst auf „Weiter zur Zahlung“, bevor du den Gutschein einlöst.';
+      msgEl.textContent = "Bitte Gutscheincode eingeben.";
     }
     return;
   }
-  
-  // Wenn Kurs im Warenkorb liegt -> Formularsichtbar sein & validiert sein müssen
- if (cartNeedsForm()) {
-  const regForm = document.getElementById("registrationForm");
-  const formVisible = regForm && !regForm.classList.contains("hidden");
-  if (formVisible && !validateRegistrationForm()) {
-    if (msgEl) { msgEl.className = "error"; msgEl.textContent = "Bitte fülle zuerst das Anmeldeformular vollständig aus und klicke auf "weiter zur Zahlung"."; }
+
+  if (!email || !email.includes("@")) {
+    if (msgEl) {
+      msgEl.className = "error";
+      msgEl.textContent = "Bitte gültige E-Mail-Adresse eingeben.";
+    }
     return;
   }
-}
 
-  if (msgEl) { msgEl.className = "success"; msgEl.textContent = "Vielen Dank! Dein Gutscheincode wurde eingereicht und wird geprüft."; }
+  // Wenn Kurs im Warenkorb liegt -> Formularsichtbar sein & validiert sein müssen
+  if (cartNeedsForm()) {
+    const regForm = document.getElementById("registrationForm");
+    const formVisible = regForm && !regForm.classList.contains("hidden");
+    if (formVisible && !validateRegistrationForm()) {
+      if (msgEl) {
+        msgEl.className = "error";
+        msgEl.textContent = "Bitte fülle zuerst das Anmeldeformular vollständig aus und klicke auf \"weiter zur Zahlung\".";
+      }
+      return;
+    }
+  }
+
+  if (msgEl) {
+    msgEl.className = "success";
+    msgEl.textContent = "Vielen Dank! Dein Gutscheincode wurde eingereicht und wird geprüft.";
+  }
 
   setTimeout(() => {
-    const el = document.getElementById("voucherCode"); if (el) el.value = "";
-    const em = document.getElementById("customerEmail"); if (em) em.value = "";
+    const el = document.getElementById("voucherCode");
+    if (el) el.value = "";
+    const em = document.getElementById("customerEmail");
+    if (em) em.value = "";
   }, 800);
 
   try {
@@ -377,7 +377,10 @@ async function submitVoucherRequest() {
 
   } catch (err) {
     console.error("⚠️ Fehler beim Senden an Formspree:", err);
-    if (msgEl) { msgEl.className = "error"; msgEl.textContent = "⚠️ Gutschein konnte nicht gesendet werden. Bitte kontaktiere uns per Mail."; }
+    if (msgEl) {
+      msgEl.className = "error";
+      msgEl.textContent = "⚠️ Gutschein konnte nicht gesendet werden. Bitte kontaktiere uns per Mail.";
+    }
   }
 
   setTimeout(() => {
@@ -385,8 +388,9 @@ async function submitVoucherRequest() {
     if (msg && !isVoucherActive()) msg.textContent = "";
   }, 8000);
 }
+
 window.submitVoucherRequest = submitVoucherRequest;
-window.proceedToPayment = proceedToPayment;
+
 
 // --- Dynamisches Erzeugen zusätzlicher Teilnehmer (ohne Minderjährig + ohne Copy-Buttons) ---
 function renderAdditionalParticipants() {
