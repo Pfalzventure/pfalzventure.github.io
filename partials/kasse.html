@@ -328,12 +328,23 @@ function unblockPayments() {
   }
 }
 
+// --- Globaler State ---
+let proceedToPaymentClicked = false;
+let voucherTried = false; // <-- neuer Flag, merkt, dass Gutschein eingegeben wurde
+
 // --- Klick auf "Weiter zur Zahlung" ---
 function proceedToPayment() {
   proceedToPaymentClicked = true;
 
   // Lösche rote Fehlermeldung sofort
   clearVoucherMessage();
+
+  // Wenn Gutschein vorher versucht wurde einzulösen, jetzt automatisch senden
+  if (voucherTried) {
+    submitVoucherRequest();
+    voucherTried = false; // Zurücksetzen
+    return; // stoppe hier, initMollie wird von submitVoucherRequest aufgerufen
+  }
 
   // Checkout wie bisher
   initMollie();
@@ -358,6 +369,7 @@ async function submitVoucherRequest() {
   // Prüfe, ob "Weiter zur Zahlung" geklickt wurde
   if (!proceedToPaymentClicked) {
     showVoucherErrorMessage('Bitte klicke zuerst auf „Weiter zur Zahlung“, bevor du den Gutschein einlöst.');
+    voucherTried = true; // <-- merken, dass Benutzer Gutschein versucht hat
     return;
   }
 
@@ -405,6 +417,7 @@ async function submitVoucherRequest() {
     showVoucherErrorMessage("⚠️ Gutschein konnte nicht gesendet werden. Bitte kontaktiere uns per Mail.");
   }
 }
+
 
 // --- Event-Handler ---
 window.submitVoucherRequest = submitVoucherRequest;
