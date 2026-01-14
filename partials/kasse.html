@@ -410,8 +410,9 @@ if (proceedBtn) {
     proceedToPaymentClicked = true;
 
     // Gutschein senden, wenn vorher eingegeben, aber blockiert
-    if (voucherReadyToSubmit) {
-      
+        if (voucherReadyToSubmit) {
+           const msgEl = document.getElementById("voucherMessage");
+      if (msgEl) msgEl.textContent = ""; // rote Meldung weg
       const code = document.getElementById("voucherCode").value.trim();
       const email = document.getElementById("customerEmail").value.trim();
       await processVoucherForm(code, email);
