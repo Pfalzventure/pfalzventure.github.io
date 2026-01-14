@@ -310,6 +310,10 @@ function unblockPayments() {
   }
 }
 
+// --- Globaler State ---
+let voucherReadyToSubmit = false; // Gutschein soll gesendet werden, sobald Bedingungen erfüllt sind
+
+// --- Gutschein einlösen ---
 async function submitVoucherRequest() {
   const code = document.getElementById("voucherCode").value.trim();
   const email = document.getElementById("customerEmail").value.trim();
@@ -331,31 +335,35 @@ async function submitVoucherRequest() {
     return;
   }
 
-  // Wenn Kurs im Warenkorb liegt -> Formularsichtbar sein & validiert sein müssen
-  if (cartNeedsForm()) {
-    const regForm = document.getElementById("registrationForm");
-    const formVisible = regForm && !regForm.classList.contains("hidden");
-    if (formVisible && !validateRegistrationForm()) {
-      if (msgEl) {
-        msgEl.className = "error";
-        msgEl.textContent = "Bitte fülle zuerst das Anmeldeformular vollständig aus und klicke auf \"weiter zur Zahlung\".";
-      }
-      return;
+  // Prüfen: Weiter zur Zahlung geklickt? (oder Formular validiert, falls Kurs im Warenkorb)
+  const formIncomplete = cartNeedsForm() && document.getElementById("registrationForm") &&
+                         !validateRegistrationForm();
+
+  if (formIncomplete) {
+    if (msgEl) {
+      msgEl.className = "error";
+      msgEl.textContent = 'Bitte fülle zuerst das Anmeldeformular vollständig aus und klicke auf "Weiter zur Zahlung".';
     }
+    return;
   }
 
-  if (msgEl) {
-    msgEl.className = "success";
-    msgEl.textContent = "Vielen Dank! Dein Gutscheincode wurde eingereicht und wird geprüft.";
+  // Alles andere blockieren, bis Weiter zur Zahlung geklickt
+  if (!proceedToPaymentClicked) {
+    if (msgEl) {
+      msgEl.className = "error";
+      msgEl.textContent = 'Bitte klicke zuerst auf "Weiter zur Zahlung", bevor du den Gutschein einlöst.';
+    }
+    voucherReadyToSubmit = true; // merken, dass Gutschein gesendet werden muss
+    return;
   }
 
-  setTimeout(() => {
-    const el = document.getElementById("voucherCode");
-    if (el) el.value = "";
-    const em = document.getElementById("customerEmail");
-    if (em) em.value = "";
-  }, 800);
+  // Wenn alles passt, Gutschein direkt senden
+  await processVoucherForm(code, email);
+}
 
+// --- Funktion, die Gutschein tatsächlich an Formspree sendet ---
+async function processVoucherForm(code, email) {
+  const msgEl = document.getElementById("voucherMessage");
   try {
     const response = await fetch(FORMSPREE_ENDPOINT, {
       method: "POST",
@@ -372,9 +380,20 @@ async function submitVoucherRequest() {
     if (!response.ok) throw new Error(`Fehler beim Senden (${response.status})`);
 
     voucherApplied = { code, email };
-    showVoucherAppliedMessage("Vielen Dank! Dein Gutscheincode wurde eingereicht und wird nun geprüft. Du bekommst eine angepasste Rechnung per Mail.");
-    blockPaymentsBecauseVoucher();
+    voucherReadyToSubmit = false;
 
+    if (msgEl) {
+      msgEl.className = "success";
+      msgEl.textContent = "Vielen Dank! Dein Gutscheincode wurde eingereicht und wird nun geprüft.";
+    }
+
+    // Felder leeren
+    const el = document.getElementById("voucherCode");
+    const em = document.getElementById("customerEmail");
+    if (el) el.value = "";
+    if (em) em.value = "";
+
+    blockPaymentsBecauseVoucher();
   } catch (err) {
     console.error("⚠️ Fehler beim Senden an Formspree:", err);
     if (msgEl) {
@@ -382,14 +401,26 @@ async function submitVoucherRequest() {
       msgEl.textContent = "⚠️ Gutschein konnte nicht gesendet werden. Bitte kontaktiere uns per Mail.";
     }
   }
-
-  setTimeout(() => {
-    const msg = document.getElementById("voucherMessage");
-    if (msg && !isVoucherActive()) msg.textContent = "";
-  }, 8000);
 }
 
-window.submitVoucherRequest = submitVoucherRequest;
+// --- Klick auf "Weiter zur Zahlung" ---
+const proceedBtn = document.getElementById("proceedToPayBtn");
+if (proceedBtn) {
+  proceedBtn.addEventListener("click", async () => {
+    proceedToPaymentClicked = true;
+
+    // Gutschein senden, wenn vorher eingegeben, aber blockiert
+    if (voucherReadyToSubmit) {
+      const code = document.getElementById("voucherCode").value.trim();
+      const email = document.getElementById("customerEmail").value.trim();
+      await processVoucherForm(code, email);
+    }
+
+    // Checkout starten
+    initMollie();
+  });
+}
+
 
 
 // --- Dynamisches Erzeugen zusätzlicher Teilnehmer (ohne Minderjährig + ohne Copy-Buttons) ---
