@@ -282,7 +282,7 @@ if (proceedBtn) {
   // Mollie-Button direkt erstellen (immer sichtbar, aber ggf. disabled)
 initMollie();
 
-// --- Globaler Freigabe-State ---
+// --- Globaler State ---
 let proceedToPaymentClicked = false;
 
 // --- Voucher helpers ---
@@ -332,10 +332,10 @@ function unblockPayments() {
 function proceedToPayment() {
   proceedToPaymentClicked = true;
 
-  // Rote Fehlermeldung löschen, falls vorher gesetzt
+  // Lösche rote Fehlermeldung sofort
   clearVoucherMessage();
 
-  // Weiter zur Zahlung wie bisher
+  // Checkout wie bisher
   initMollie();
 }
 
@@ -343,9 +343,8 @@ function proceedToPayment() {
 async function submitVoucherRequest() {
   const code = document.getElementById("voucherCode").value.trim();
   const email = document.getElementById("customerEmail").value.trim();
-  const msgEl = document.getElementById("voucherMessage");
 
-  // Prüfen, ob Inputs vorhanden
+  // Prüfe Inputs
   if (!code) {
     showVoucherErrorMessage("Bitte Gutscheincode eingeben.");
     return;
@@ -356,13 +355,13 @@ async function submitVoucherRequest() {
     return;
   }
 
-  // Prüfen, ob "Weiter zur Zahlung" geklickt wurde
+  // Prüfe, ob "Weiter zur Zahlung" geklickt wurde
   if (!proceedToPaymentClicked) {
     showVoucherErrorMessage('Bitte klicke zuerst auf „Weiter zur Zahlung“, bevor du den Gutschein einlöst.');
     return;
   }
 
-  // Formular validieren, falls Kurs im Warenkorb
+  // Validierung Formular, falls Kurs im Warenkorb
   if (cartNeedsForm()) {
     const regForm = document.getElementById("registrationForm");
     const formVisible = regForm && !regForm.classList.contains("hidden");
@@ -372,7 +371,7 @@ async function submitVoucherRequest() {
     }
   }
 
-  // Erfolgsnachricht vorbereiten
+  // Zeige sofort grüne Meldung, dass Request läuft
   showVoucherAppliedMessage("Vielen Dank! Dein Gutscheincode wird geprüft...");
 
   try {
@@ -390,11 +389,12 @@ async function submitVoucherRequest() {
 
     if (!response.ok) throw new Error(`Fehler beim Senden (${response.status})`);
 
+    // Gutschein erfolgreich gesetzt
     voucherApplied = { code, email };
     showVoucherAppliedMessage("Vielen Dank! Dein Gutscheincode wurde eingereicht und wird nun geprüft. Du bekommst eine angepasste Rechnung per Mail.");
     blockPaymentsBecauseVoucher();
 
-    // Inputs erst nach erfolgreichem Request leeren
+    // Inputs erst jetzt leeren
     const el = document.getElementById("voucherCode");
     const em = document.getElementById("customerEmail");
     if (el) el.value = "";
@@ -406,9 +406,10 @@ async function submitVoucherRequest() {
   }
 }
 
-// --- Event-Handler setzen ---
+// --- Event-Handler ---
 window.submitVoucherRequest = submitVoucherRequest;
 window.proceedToPayment = proceedToPayment;
+
 
 
 // --- Dynamisches Erzeugen zusätzlicher Teilnehmer (ohne Minderjährig + ohne Copy-Buttons) ---
