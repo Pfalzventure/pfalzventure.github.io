@@ -160,38 +160,7 @@
       <p>Wem es rein ums Wissen geht: Erlerne an nur einem Tag die wichtigsten Skills um in der Natur überleben zu können. </p>
       <label for="kursTermine1">Freie Kurstermine:</label><br>
        <select id="kursTermine1" class="terminfenster" size="5"></select>
-<script>
-  fetch('assets/kurstermine_2_tage.json')
-    .then(r => {
-      alert('Fetch Status: ' + r.status);
-      return r.text();
-    })
-    .then(t => {
-      console.log(t);
-    })
-    .catch(e => alert('Fetch Fehler'));
-</script>
-       <script>
-    fetch('assets/kurstermine_2_tage.json')
-      .then(response => response.json())
-      .then(data => {
-        const select = document.getElementById('kursTermine1');
-
-        data.termine.forEach(termin => {
-          const option = document.createElement('option');
-          option.value = termin.id;
-          option.textContent = termin.text;
-
-          if (termin.ausgebucht) {
-            option.disabled = true;
-            option.textContent += ' (ausgebucht)';
-          }
-
-          select.appendChild(option);
-        });
-      });
-  </script>
-      
+     
       <br><br>
       <a href="kurse.html#crashkurs" class="btn info-btn">ℹ️ Mehr Infos</a><br><br>
       <button class="btn add-btn" onclick="addCourseVoucher('kursTermine1','1 Tages Survival Crashkurs',59.90)">In den Warenkorb (59,90 €)</button>
