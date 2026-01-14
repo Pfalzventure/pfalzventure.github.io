@@ -161,7 +161,15 @@
       <label for="kursTermine1">Freie Kurstermine:</label><br>
        <select id="kursTermine1" class="terminfenster" size="5"></select>
 <script>
-  alert('JS wird ausgeführt');
+  fetch('assets/kurstermine_2_tage.json')
+    .then(r => {
+      alert('Fetch Status: ' + r.status);
+      return r.text();
+    })
+    .then(t => {
+      console.log(t);
+    })
+    .catch(e => alert('Fetch Fehler'));
 </script>
        <script>
     fetch('assets/kurstermine_2_tage.json')
