@@ -284,7 +284,7 @@ initMollie();
 
 // --- Globaler Freigabe-State ---
 let proceedToPaymentClicked = false;
-let pendingVoucher = null; // speichert Gutschein-Code und Email, falls Klick noch nicht erfolgt
+let pendingVoucher = null; // speichert Gutschein-Code + Email, falls Klick noch nicht erfolgt
 
 // --- Voucher helpers ---
 function isVoucherActive() {
@@ -309,6 +309,7 @@ function clearVoucherMessage() {
   const msg = document.getElementById("voucherMessage");
   if (!msg) return;
   msg.textContent = "";
+  msg.className = "";
 }
 
 // --- Payment helpers ---
@@ -332,28 +333,27 @@ function unblockPayments() {
 function proceedToPayment() {
   proceedToPaymentClicked = true;
 
-  // roten Hinweis entfernen
+  // Rote Fehlermeldung entfernen
   clearVoucherMessage();
 
-  // Wenn vorher ein Gutschein-Code eingetragen wurde, jetzt Request absenden
+  // Falls der User schon einen Gutschein eingegeben hat, jetzt einlösen
   if (pendingVoucher) {
-    submitVoucherRequest(pendingVoucher.code, pendingVoucher.email);
-    pendingVoucher = null;
+    const { code, email } = pendingVoucher;
+    pendingVoucher = null; // löschen, damit es nicht mehrfach ausgelöst wird
+    submitVoucherRequest(code, email);
   }
 
-  // Weiter zur Zahlung wie bisher
+  // Checkout wie bisher
   initMollie();
 }
 
 // --- Gutschein einlösen ---
 async function submitVoucherRequest(codeParam, emailParam) {
-  let code, email;
+  let code = codeParam;
+  let email = emailParam;
 
-  // Falls Werte über Parameter kommen (z.B. nachträglich), nutze diese
-  if (codeParam && emailParam) {
-    code = codeParam;
-    email = emailParam;
-  } else {
+  // Falls keine Parameter übergeben → Werte aus Inputs holen
+  if (!code || !email) {
     code = document.getElementById("voucherCode").value.trim();
     email = document.getElementById("customerEmail").value.trim();
   }
@@ -370,9 +370,9 @@ async function submitVoucherRequest(codeParam, emailParam) {
     return;
   }
 
-  // --- Prüfe, ob "Weiter zur Zahlung" geklickt wurde ---
+  // Prüfen, ob "Weiter zur Zahlung" geklickt wurde
   if (!proceedToPaymentClicked) {
-    // Speichere Gutschein für spätere Einlösung
+    // Gutschein speichern, um ihn nach Klick automatisch auszuführen
     pendingVoucher = { code, email };
     showVoucherErrorMessage('Bitte klicke zuerst auf „Weiter zur Zahlung“, bevor du den Gutschein einlöst.');
     return;
@@ -388,6 +388,7 @@ async function submitVoucherRequest(codeParam, emailParam) {
     }
   }
 
+  // Erfolgsnachricht vorbereiten
   if (msgEl) {
     msgEl.className = "success";
     msgEl.textContent = "Vielen Dank! Dein Gutscheincode wird geprüft...";
@@ -412,21 +413,16 @@ async function submitVoucherRequest(codeParam, emailParam) {
     showVoucherAppliedMessage("Vielen Dank! Dein Gutscheincode wurde eingereicht und wird nun geprüft. Du bekommst eine angepasste Rechnung per Mail.");
     blockPaymentsBecauseVoucher();
 
-    // Inputs erst jetzt leeren
-    setTimeout(() => {
-      const el = document.getElementById("voucherCode"); if (el) el.value = "";
-      const em = document.getElementById("customerEmail"); if (em) em.value = "";
-    }, 800);
+    // Inputs erst nach erfolgreichem Request leeren
+    const el = document.getElementById("voucherCode");
+    const em = document.getElementById("customerEmail");
+    if (el) el.value = "";
+    if (em) em.value = "";
 
   } catch (err) {
     console.error("⚠️ Fehler beim Senden an Formspree:", err);
     showVoucherErrorMessage("⚠️ Gutschein konnte nicht gesendet werden. Bitte kontaktiere uns per Mail.");
   }
-
-  setTimeout(() => {
-    const msg = document.getElementById("voucherMessage");
-    if (msg && !isVoucherActive()) msg.textContent = "";
-  }, 8000);
 }
 
 // --- Event-Handler setzen ---
