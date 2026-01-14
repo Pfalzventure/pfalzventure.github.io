@@ -284,7 +284,6 @@ initMollie();
 
 // --- Globaler Freigabe-State ---
 let proceedToPaymentClicked = false;
-let pendingVoucher = null; // speichert Gutschein-Code + Email, falls Klick noch nicht erfolgt
 
 // --- Voucher helpers ---
 function isVoucherActive() {
@@ -333,33 +332,20 @@ function unblockPayments() {
 function proceedToPayment() {
   proceedToPaymentClicked = true;
 
-  // Rote Fehlermeldung entfernen
+  // Rote Fehlermeldung löschen, falls vorher gesetzt
   clearVoucherMessage();
 
-  // Falls der User schon einen Gutschein eingegeben hat, jetzt einlösen
-  if (pendingVoucher) {
-    const { code, email } = pendingVoucher;
-    pendingVoucher = null; // löschen, damit es nicht mehrfach ausgelöst wird
-    submitVoucherRequest(code, email);
-  }
-
-  // Checkout wie bisher
+  // Weiter zur Zahlung wie bisher
   initMollie();
 }
 
 // --- Gutschein einlösen ---
-async function submitVoucherRequest(codeParam, emailParam) {
-  let code = codeParam;
-  let email = emailParam;
-
-  // Falls keine Parameter übergeben → Werte aus Inputs holen
-  if (!code || !email) {
-    code = document.getElementById("voucherCode").value.trim();
-    email = document.getElementById("customerEmail").value.trim();
-  }
-
+async function submitVoucherRequest() {
+  const code = document.getElementById("voucherCode").value.trim();
+  const email = document.getElementById("customerEmail").value.trim();
   const msgEl = document.getElementById("voucherMessage");
 
+  // Prüfen, ob Inputs vorhanden
   if (!code) {
     showVoucherErrorMessage("Bitte Gutscheincode eingeben.");
     return;
@@ -372,8 +358,6 @@ async function submitVoucherRequest(codeParam, emailParam) {
 
   // Prüfen, ob "Weiter zur Zahlung" geklickt wurde
   if (!proceedToPaymentClicked) {
-    // Gutschein speichern, um ihn nach Klick automatisch auszuführen
-    pendingVoucher = { code, email };
     showVoucherErrorMessage('Bitte klicke zuerst auf „Weiter zur Zahlung“, bevor du den Gutschein einlöst.');
     return;
   }
@@ -389,10 +373,7 @@ async function submitVoucherRequest(codeParam, emailParam) {
   }
 
   // Erfolgsnachricht vorbereiten
-  if (msgEl) {
-    msgEl.className = "success";
-    msgEl.textContent = "Vielen Dank! Dein Gutscheincode wird geprüft...";
-  }
+  showVoucherAppliedMessage("Vielen Dank! Dein Gutscheincode wird geprüft...");
 
   try {
     const response = await fetch(FORMSPREE_ENDPOINT, {
@@ -428,7 +409,6 @@ async function submitVoucherRequest(codeParam, emailParam) {
 // --- Event-Handler setzen ---
 window.submitVoucherRequest = submitVoucherRequest;
 window.proceedToPayment = proceedToPayment;
-
 
 
 // --- Dynamisches Erzeugen zusätzlicher Teilnehmer (ohne Minderjährig + ohne Copy-Buttons) ---
