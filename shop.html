@@ -291,6 +291,13 @@ document.addEventListener("DOMContentLoaded", () => {
           opt.disabled = true;
           opt.textContent += " (ausgebucht)";
         }
+
+         // 🔴 NEU: belegt behandeln
+        if (t.belegt5 === true) {
+         // opt.disabled = true;
+          opt.textContent += " (noch 5 Plätze frei)";
+        }
+        
  // 🔴 NEU: belegt behandeln
         if (t.belegt4 === true) {
          // opt.disabled = true;
