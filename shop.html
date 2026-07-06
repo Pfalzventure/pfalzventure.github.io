@@ -292,11 +292,29 @@ document.addEventListener("DOMContentLoaded", () => {
           opt.textContent += " (ausgebucht)";
         }
  // 🔴 NEU: belegt behandeln
-        if (t.belegt === true) {
+        if (t.belegt4 === true) {
          // opt.disabled = true;
           opt.textContent += " (noch 4 Plätze frei)";
         }
 
+        // 🔴 NEU: belegt behandeln
+        if (t.belegt3 === true) {
+         // opt.disabled = true;
+          opt.textContent += " (noch 3 Plätze frei)";
+        }
+
+ // 🔴 NEU: belegt behandeln
+        if (t.belegt2 === true) {
+         // opt.disabled = true;
+          opt.textContent += " (nur noch 2 Plätze frei!)";
+        }
+
+         // 🔴 NEU: belegt behandeln
+        if (t.belegt1 === true) {
+         // opt.disabled = true;
+          opt.textContent += " (nur noch 1 Platz frei!)";
+        }
+        
         select.appendChild(opt);
       });
 
