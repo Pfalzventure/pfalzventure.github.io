@@ -579,6 +579,31 @@ main {
   gap: 15px;
   flex-wrap: wrap;
 }
+
+
+.vorrat-tabelle {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.vorrat-tabelle td {
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+}
+
+.vorrat-tabelle td:last-child {
+  text-align: right;
+  font-weight: bold;
+}
+
+@media(max-width:600px){
+
+.vorrat-tabelle {
+  font-size: 0.9rem;
+}
+
+}
 /* ============================
    Medien Einblendungen
    ============================ */
