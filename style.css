@@ -631,6 +631,10 @@ main {
   flex-wrap: wrap;
   margin-top: 20px;
 }
+
+.cta .btn {
+  margin: 0 5px;
+}
 /* ============================
    Medien Einblendungen
    ============================ */
