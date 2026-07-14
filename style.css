@@ -573,6 +573,12 @@ main {
   margin:2rem auto;
 }
 
+.wissen-links {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
 /* ============================
    Medien Einblendungen
    ============================ */
