@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nahrungsvorrat & Krisenvorsorge | Pfalzventure</title>
+
+<meta name="description" content="Wie du einen sinnvollen Lebensmittelvorrat für Krisen anlegst. Rotierendes System, Kalorienbedarf, Proteine und Beispielvorrat für 10 Tage.">
+
+<meta name="robots" content="index, follow">
+
+<link rel="icon" href="favicon.ico">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+
+<!-- ============================
+     Header
+     ============================ -->
+
+<header>
+
+<div class="container">
+
+
+<a href="index.html" class="logo">
+<img src="assets/Logo2.png" alt="Pfalzventure Logo">
+</a>
+
+
+<div class="burger" onclick="toggleMenu()">☰</div>
+
+
+
+<nav>
+
+<ul class="nav-links" id="nav-links">
+
+<li><a href="index.html">Start</a></li>
+<li><a href="kurse.html">Kurse</a></li>
+<li><a href="wissen.html" class="active">Wissen</a></li>
+<li><a href="shop.html">Shop</a></li>
+<li><a href="kontakt.html">Kontakt</a></li>
+
+</ul>
+
+</nav>
+
+
+<button id="cart-toggle" onclick="toggleCart()" class="btn cart-btn">
+🛒 Warenkorb (<span id="cart-count">0</span>)
+</button>
+
+
+</div>
+
+</header>
+
+
+
+
+<script>
+
+function toggleMenu() {
+
+document.getElementById("nav-links").classList.toggle("nav-active");
+
+}
+
+
+document.addEventListener("click", function(event){
+
+const menu=document.getElementById("nav-links");
+const burger=document.querySelector(".burger");
+
+
+if(menu && burger &&
+!menu.contains(event.target) &&
+!burger.contains(event.target)){
+
+menu.classList.remove("nav-active");
+
+}
+
+});
+
+</script>
+
+
+
+
+
+
+<!-- ============================
+     Inhalt
+     ============================ -->
+
+
+<div class="container">
+
+
+<h1 class="kontakt-title">
+Nahrung
+</h1>
+
+
+
+
+<main>
+
+
+
+
+<section class="kontakt-section">
+
+
+<p>
+Ein sinnvoller Lebensmittelvorrat besteht nicht aus speziellen
+Notfallprodukten, sondern vor allem aus Lebensmitteln, die auch im normalen
+Alltag verwendet werden.
+</p>
+
+
+<br>
+
+
+<p>
+Am besten eignet sich ein Vorrat aus haltbaren Lebensmitteln, die im Alltag
+sowieso verbraucht werden, z.B.:
+</p>
+
+
+<br>
+
+
+<ul class="saubere-liste">
+
+<li>Nudeln</li>
+<li>Reis</li>
+<li>Linsen und andere Hülsenfrüchte</li>
+<li>Mehl</li>
+<li>Haferflocken</li>
+<li>Konserven</li>
+<li>Tomatenmark</li>
+<li>haltbare Milchprodukte</li>
+<li>Nüsse und Öle</li>
+
+</ul>
+
+
+<br>
+
+
+<p>
+Im Alltag bedient man sich aus diesem Vorrat und kauft die verbrauchten
+Lebensmittel immer wieder nach. Verbraucht werden logischerweise immer zuerst
+die ältesten Lebensmittel.
+</p>
+
+
+<p>
+Dieses Vorgehen verhindert, dass Lebensmittel ihr Mindesthaltbarkeitsdatum
+überschreiten und sorgt dafür, dass der Vorrat dauerhaft einsatzbereit bleibt.
+</p>
+
+
+
+</section>
+
+
+
+
+
+
+<section class="product">
+
+
+<h2>Energie und Nährstoffe</h2>
+
+
+<p>
+Pro Person sollte man pro Tag einen Kalorienbedarf von ca. 2500 kcal decken
+können.
+</p>
+
+
+<p>
+Wichtig ist auch der Proteinbedarf (z.B. über Trockenfleisch, Erbsen, Linsen
+oder andere Hülsenfrüchte). Hier empfiehlt sich ein täglicher Vorrat von ca.
+70g Proteinen.
+</p>
+
+
+<p>
+Sollten zu wenige Vitamine und Mineralien aufgenommen werden, kann auf
+Nahrungsergänzungsmittel zurückgegriffen werden.
+</p>
+
+
+<p>
+Aus alldem muss allerdings keine Wissenschaft gemacht werden. Generell gilt:
+Je vielfältiger und umfangreicher ein Vorrat ist, desto angenehmer lassen sich
+schwierige Situationen überbrücken.
+</p>
+
+
+<p>
+Wichtig: Es sollte nur so viel Vorrat angelegt werden, wie auch mit der Zeit
+verbraucht werden kann. Legt man sich zu viel auf Lager, müsste der Vorrat
+alle paar Jahre erneuert werden. Lebensmittel können sonst verderben und sind
+in einem Krisenfall unter Umständen wertlos.
+</p>
+
+
+</section>
+
+
+
+
+
+
+
+<section class="product">
+
+
+<h2>
+Beispiel: 10-Tage Nahrungsvorrat für eine 3-köpfige Familie
+</h2>
+
+
+
+<table class="vorrat-tabelle">
+
+
+<tr><td>Reis</td><td>2 kg</td></tr>
+<tr><td>Nudeln</td><td>3 kg</td></tr>
+<tr><td>Haferflocken</td><td>1 kg</td></tr>
+<tr><td>Knäckebrot / Zwieback</td><td>1 kg</td></tr>
+<tr><td>Mehl</td><td>3 kg</td></tr>
+<tr><td>Couscous / Bulgur</td><td>1 kg</td></tr>
+<tr><td>Linsen (trocken)</td><td>1 kg</td></tr>
+<tr><td>Bohnen / Kichererbsen (Dose)</td><td>4 Dosen</td></tr>
+<tr><td>Thunfisch / Fischkonserven</td><td>4 Dosen</td></tr>
+<tr><td>Fleischkonserven / Würstchen im Glas</td><td>6 Portionen</td></tr>
+<tr><td>Erdnussbutter</td><td>1 kg</td></tr>
+<tr><td>Gemüsekonserven</td><td>10 Dosen</td></tr>
+<tr><td>Passierte Tomaten / Tomatenmark</td><td>8 Packungen / Dosen / Tuben</td></tr>
+<tr><td>Apfelmus</td><td>4 Gläser</td></tr>
+<tr><td>Trockenobst</td><td>0,5 kg</td></tr>
+<tr><td>Nüsse</td><td>1 kg</td></tr>
+<tr><td>Rapsöl / Sonnenblumenöl</td><td>2 Liter</td></tr>
+<tr><td>Butterschmalz / Ghee</td><td>0,5 kg</td></tr>
+<tr><td>H-Milch</td><td>6 Liter</td></tr>
+<tr><td>Kaffee / Tee / Kakao</td><td>nach Bedarf</td></tr>
+<tr><td>Marmelade / Honig</td><td>0,5 kg</td></tr>
+<tr><td>Müsliriegel</td><td>15 Stück</td></tr>
+<tr><td>Schokolade</td><td>1 kg</td></tr>
+<tr><td>Kekse</td><td>1 kg</td></tr>
+<tr><td>Fruchtriegel</td><td>15 Stück</td></tr>
+<tr><td>Trockenhefe</td><td>6 Packungen</td></tr>
+<tr><td>Zucker</td><td>0,5 kg</td></tr>
+
+</table>
+
+
+</section>
+
+
+
+
+
+
+<section class="preis-info">
+
+
+<h2>Nahrung finden und zubereiten</h2>
+
+
+<p>
+Wenn du unabhängig von der Zivilisation in der Lage sein willst Nahrung zu
+finden und korrekt zuzubereiten, dann besuche doch einen unserer Kurse:
+</p>
+
+
+<br>
+
+
+<a href="kurse.html" class="btn">
+Zu den Kursen
+</a>
+
+
+</section>
+
+
+
+
+</main>
+
+
+</div>
+
+
+
+
+
+
+
+<footer>
+
+
+<p>
+© 2025 Pfalzventure – Robert Prokasky
+</p>
+
+
+<p>
+<a href="impressum.html">Impressum</a> |
+<a href="datenschutz.html">Datenschutz</a> |
+<a href="AGB.html">AGB</a>
+</p>
+
+
+</footer>
+
+
+
+
+
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+
+try {
+
+
+const res = await fetch("partials/cart.html");
+
+if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+
+const html = await res.text();
+
+
+const temp=document.createElement("div");
+
+temp.innerHTML=html.trim();
+
+
+
+Array.from(temp.children).forEach(el=>{
+
+
+if(el.tagName.toLowerCase()==="script"){
+
+
+const script=document.createElement("script");
+
+
+if(el.src)
+script.src=el.src;
+else
+script.textContent=el.textContent;
+
+
+document.body.appendChild(script);
+
+
+}
+
+else {
+
+
+document.body.appendChild(el);
+
+}
+
+
+});
+
+
+
+setTimeout(()=>{
+
+
+if(typeof loadCart==="function"){
+
+loadCart();
+
+}
+
+
+},300);
+
+
+
+}
+
+catch(err){
+
+console.error("Fehler beim Laden des Warenkorbs:",err);
+
+}
+
+
+});
+
+</script>
+
+
+
+<script data-host="https://app.microanalytics.io"
+data-dnt="false"
+src="https://app.microanalytics.io/js/script.js"
+id="ZwSg9rf6GA"
+async defer>
+</script>
+
+
+
+</body>
+
+</html>
