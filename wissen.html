@@ -1,28 +1,121 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Urban Survival – Krisenvorsorge & Wissen | Pfalzventure</title>
+
+<meta name="description" content="Praktisches Wissen zu Urban Survival, Krisenvorsorge, Nahrung, Wasser, Ausrüstung und Sicherheit. Tipps für mehr Selbstständigkeit im Alltag.">
+
+<meta name="robots" content="index, follow">
+
+<link rel="icon" href="favicon.ico">
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<!-- ============================
+     Header
+     ============================ -->
+
+<header>
 <div class="container">
 
-<h1 class="kontakt-title">Urban Survival</h1>
+<a href="index.html" class="logo">
+<img src="assets/Logo2.png" alt="Pfalzventure Logo">
+</a>
+
+
+<div class="burger" onclick="toggleMenu()">☰</div>
+
+
+<nav>
+<ul class="nav-links" id="nav-links">
+
+<li><a href="index.html">Start</a></li>
+<li><a href="kurse.html">Kurse</a></li>
+<li><a href="wissen.html" class="active">Wissen</a></li>
+<li><a href="shop.html">Shop</a></li>
+<li><a href="kontakt.html">Kontakt</a></li>
+
+</ul>
+</nav>
+
+
+<button id="cart-toggle" onclick="toggleCart()" class="btn cart-btn">
+🛒 Warenkorb (<span id="cart-count">0</span>)
+</button>
+
+
+</div>
+</header>
+
+
+<script>
+function toggleMenu() {
+document.getElementById("nav-links").classList.toggle("nav-active");
+}
+
+document.addEventListener("click", function(event) {
+const menu = document.getElementById("nav-links");
+const burger = document.querySelector(".burger");
+
+if(menu && burger &&
+!menu.contains(event.target) &&
+!burger.contains(event.target)) {
+menu.classList.remove("nav-active");
+}
+
+});
+</script>
+
+
+
+<!-- ============================
+     Wissen
+     ============================ -->
+
+
+<div class="container">
+
+
+<h1 class="kontakt-title">
+Urban Survival
+</h1>
+
+
 
 <main>
 
+
 <section class="kontakt-section">
+
 
 <p>
 Die meisten realen Survivalsituationen spielen sich nicht in der Wildnis,
 sondern tatsächlich zu Hause oder im Alltag ab. Ob Brand, Hochwasser,
-Stromausfall oder andere Krisen – all das fällt unter den Begriff Urban Survival.
-Hier findest du praktisches Wissen für mehr Selbstständigkeit und Vorbereitung
-im Alltag.
+Stromausfall oder andere Krisen – all das fällt unter den Begriff
+Urban Survival. Hier findest du praktisches Wissen für mehr Selbstständigkeit
+und Vorbereitung im Alltag.
 </p>
+
 
 <br>
 
+
 <p>
-Man kann sich nicht auf jede denkbare Situation vorbereiten – und man muss dafür
-auch nicht gleich zum Prepper werden. Dennoch sollte jeder Haushalt einige
-grundlegende Vorkehrungen treffen, um bei einem Stromausfall, einer
-Naturkatastrophe oder anderen unerwarteten Ereignissen möglichst lange
+Man kann sich nicht auf jede denkbare Situation vorbereiten – und man muss
+dafür auch nicht gleich zum Prepper werden. Dennoch sollte jeder Haushalt
+einige grundlegende Vorkehrungen treffen, um bei einem Stromausfall,
+einer Naturkatastrophe oder anderen unerwarteten Ereignissen möglichst lange
 handlungsfähig zu bleiben.
 </p>
+
 
 <p>
 Das Bundesamt für Bevölkerungsschutz und Katastrophenhilfe (BBK) empfiehlt
@@ -30,83 +123,247 @@ deshalb, einen Vorrat an Lebensmitteln und Trinkwasser sowie eine grundlegende
 Notfallausrüstung für 10 Tage bereitzuhalten.
 </p>
 
+
 <p>
-➡️ <a href="https://www.bbk.bund.de/SharedDocs/Downloads/DE/Mediathek/Publikationen/Buergerinformationen/Ratgeber/BBK-Vorsorgen-fuer-Krisen-und-Katastrophen.pdf?__blob=publicationFile&v=44"
+➡️ Hier geht's zum Ratgeber des BBK zur Krisenvorsorge:
+<br><br>
+
+<a href="https://www.bbk.bund.de/SharedDocs/Downloads/DE/Mediathek/Publikationen/Buergerinformationen/Ratgeber/BBK-Vorsorgen-fuer-Krisen-und-Katastrophen.pdf?__blob=publicationFile&v=44"
 target="_blank">
+
 BBK-Ratgeber zur Krisenvorsorge öffnen
+
 </a>
+
 </p>
+
+
+<br>
+
+
+<p>
+Der Leitfaden des BBK richtet sich bewusst an eine breite Zielgruppe und
+behandelt viele Themen nur in Grundzügen. Deshalb möchten wir speziell bei
+Themen, die etwas zu allgemein gehalten wurden, einige Bereiche näher
+beleuchten, mit praktischen Tipps ergänzen und unsere eigenen Erfahrungen aus
+den Bereichen Outdoor, Survival und Krisenvorsorge einfließen lassen.
+</p>
+
 
 </section>
 
 
+
+
 <section class="product">
+
 
 <h2>Themen</h2>
 
+
 <p>
-Der Leitfaden des BBK richtet sich bewusst an eine breite Zielgruppe und
-behandelt viele Themen nur in Grundzügen. Deshalb möchten wir einige Bereiche
-näher beleuchten, mit praktischen Tipps ergänzen und unsere Erfahrungen aus
-Outdoor, Survival und Krisenvorsorge einfließen lassen.
+Hier findest du unsere ausführlicheren Beiträge zu einzelnen Bereichen der
+Krisenvorsorge:
 </p>
 
-<div class="kurs-buttons">
+
+<br>
+
+
+<div class="wissen-links">
+
 
 <a href="nahrung.html" class="btn">
 🥫 Nahrung
 </a>
 
+
 <a href="wasser.html" class="btn">
 💧 Wasser
 </a>
+
 
 <a href="ausruestung.html" class="btn">
 🎒 Ausrüstung
 </a>
 
+
 <a href="sicherheit.html" class="btn">
 🛡 Sicherheit
 </a>
 
+
 </div>
 
+
 </section>
+
+
+
 
 
 <section class="kontakt-section">
 
+
 <h2>Dein Thema fehlt?</h2>
 
+
 <p>
-Fehlt dir noch ein Thema, das wir genauer behandeln sollten? Dann schreib uns
-gerne eine Nachricht. Wir freuen uns immer über Anregungen und
-Verbesserungsvorschläge und erweitern diesen Bereich kontinuierlich.
+Fehlt dir noch ein Thema, das wir genauer behandeln sollten?
+Dann schreib uns gerne eine Nachricht.
+Wir freuen uns immer über Anregungen und Verbesserungsvorschläge und
+erweitern diesen Bereich kontinuierlich.
 </p>
+
 
 </section>
 
 
+
+
+
 <section class="preis-info">
 
+
 <h2>Nicht nur lesen – erleben!</h2>
+
 
 <p>
 Wenn du nicht nur lesen, sondern auch erleben willst – besuche einen unserer
 Kurse. Ob du einen sanften Crashkurs zum Thema Survival suchst oder eine
-extreme Survivalsituation in der Natur erleben möchtest, es ist für jeden etwas
+extreme Survivalsituation in der Natur erleben möchtest, es ist für jeden was
 dabei.
 </p>
 
+
 <br>
+
 
 <a href="kurse.html" class="btn">
 Zu den Kursen
 </a>
+
 
 </section>
 
 
 </main>
 
+
 </div>
+
+
+
+
+
+<!-- ============================
+     Footer
+     ============================ -->
+
+
+<footer>
+
+<p>
+© 2025 Pfalzventure – Robert Prokasky
+</p>
+
+
+<p>
+<a href="impressum.html">Impressum</a> |
+<a href="datenschutz.html">Datenschutz</a> |
+<a href="AGB.html">AGB</a>
+</p>
+
+
+</footer>
+
+
+
+
+
+<!-- ============================
+     Warenkorb laden
+     ============================ -->
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+try {
+
+const res = await fetch("partials/cart.html");
+
+if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+
+const html = await res.text();
+
+
+const temp = document.createElement("div");
+temp.innerHTML = html.trim();
+
+
+Array.from(temp.children).forEach(el => {
+
+
+if(el.tagName.toLowerCase() === "script") {
+
+const script = document.createElement("script");
+
+if(el.src)
+script.src = el.src;
+else
+script.textContent = el.textContent;
+
+
+document.body.appendChild(script);
+
+
+} else {
+
+document.body.appendChild(el);
+
+}
+
+
+});
+
+
+setTimeout(() => {
+
+if(typeof loadCart === "function") {
+
+loadCart();
+
+}
+
+},300);
+
+
+}
+
+catch(err) {
+
+console.error("Fehler beim Laden des Warenkorbs:",err);
+
+}
+
+});
+
+
+</script>
+
+
+
+<script data-host="https://app.microanalytics.io"
+data-dnt="false"
+src="https://app.microanalytics.io/js/script.js"
+id="ZwSg9rf6GA"
+async defer>
+</script>
+
+
+
+</body>
+</html>
