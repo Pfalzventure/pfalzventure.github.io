@@ -604,6 +604,25 @@ main {
 }
 
 }
+
+.checkliste {
+  list-style: none;
+  padding: 0;
+}
+
+.checkliste li {
+  background: rgba(255,255,255,0.6);
+  margin-bottom: 8px;
+  padding: 10px 15px;
+  border-radius: 8px;
+}
+
+.checkliste li::before {
+  content: "✓";
+  color: var(--forest-green);
+  font-weight: bold;
+  margin-right: 10px;
+}
 /* ============================
    Medien Einblendungen
    ============================ */
