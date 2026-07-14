@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Wasservorrat & Wasseraufbereitung | Pfalzventure</title>
+
+<meta name="description" content="Wasser in der Krisenvorsorge: Wasservorrat anlegen, alternative Wasserquellen finden und Wasser sicher aufbereiten.">
+
+<meta name="robots" content="index, follow">
+
+<link rel="icon" href="favicon.ico">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+
+<!-- ============================
+     Header
+     ============================ -->
+
+<header>
+
+<div class="container">
+
+
+<a href="index.html" class="logo">
+<img src="assets/Logo2.png" alt="Pfalzventure Logo">
+</a>
+
+
+<div class="burger" onclick="toggleMenu()">☰</div>
+
+
+
+<nav>
+
+<ul class="nav-links" id="nav-links">
+
+<li><a href="index.html">Start</a></li>
+<li><a href="kurse.html">Kurse</a></li>
+<li><a href="wissen.html" class="active">Wissen</a></li>
+<li><a href="shop.html">Shop</a></li>
+<li><a href="kontakt.html">Kontakt</a></li>
+
+</ul>
+
+</nav>
+
+
+<button id="cart-toggle" onclick="toggleCart()" class="btn cart-btn">
+🛒 Warenkorb (<span id="cart-count">0</span>)
+</button>
+
+
+</div>
+
+</header>
+
+
+
+
+<script>
+
+function toggleMenu() {
+
+document.getElementById("nav-links").classList.toggle("nav-active");
+
+}
+
+
+document.addEventListener("click", function(event){
+
+const menu=document.getElementById("nav-links");
+const burger=document.querySelector(".burger");
+
+
+if(menu && burger &&
+!menu.contains(event.target) &&
+!burger.contains(event.target)){
+
+menu.classList.remove("nav-active");
+
+}
+
+});
+
+</script>
+
+
+
+
+
+
+<!-- ============================
+     Inhalt
+     ============================ -->
+
+
+<div class="container">
+
+
+<h1 class="kontakt-title">
+Wasser
+</h1>
+
+
+
+
+<main>
+
+
+
+
+<section class="kontakt-section">
+
+
+<h2>Die wichtigste Ressource</h2>
+
+
+<p>
+Wasser ist die wichtigste Grundlage der Krisenvorsorge. Während man auf
+Lebensmittel einige Tage verzichten kann, ist eine ausreichende
+Wasserversorgung deutlich kritischer.
+</p>
+
+
+<br>
+
+
+<p>
+Das BBK empfiehlt das Anlegen eines Wasser Vorrats von
+<strong>2 Liter pro Person pro Tag</strong>.
+</p>
+
+
+<p>
+Für diejenigen, die den Platz haben, ist das auch absolut sinnvoll. So oder
+so sollte man sich zumindest für einige Tage Wasser auf Vorrat legen.
+</p>
+
+
+<p>
+Je nach Situation kann im Notfall auch noch Leitungswasser gezapft und
+abgefüllt werden (z.B. in Badewannen, Waschbecken, Wäschebütten oder Eimern).
+Das funktioniert auch bei einem Stromausfall noch für einige Stunden.
+</p>
+
+
+</section>
+
+
+
+
+
+
+
+<section class="product">
+
+
+<h2>Weitere Wasserquellen im Notfall</h2>
+
+
+<p>
+Sollte der eigene Vorrat nicht ausreichen, gibt es verschiedene Möglichkeiten,
+zusätzlich Wasser zu beschaffen:
+</p>
+
+
+<br>
+
+
+<ul class="saubere-liste">
+
+<li>Regenwasser auffangen</li>
+
+<li>Wasser aus natürlichen Gewässern schöpfen</li>
+
+<li>Wasser aus Hydranten</li>
+
+<li>Wasser aus dem Spülkasten</li>
+
+</ul>
+
+
+<br>
+
+
+<p>
+<strong>Wichtig:</strong> Wasser aus diesen Quellen sollte zunächst aufbereitet
+werden, um es sicher trinkbar zu machen.
+</p>
+
+
+</section>
+
+
+
+
+
+
+
+
+<section class="product">
+
+
+<h2>Möglichkeiten zur Wasseraufbereitung</h2>
+
+
+
+<h3>Abkochen</h3>
+
+<p>
+Die einfachste Möglichkeit ist das Abkochen. Dabei wird das Wasser erhitzt,
+bis es sprudelnd kocht.
+</p>
+
+
+
+<h3>Filtern</h3>
+
+<p>
+Wasserfilter können Schmutzpartikel und je nach System auch bestimmte
+Krankheitserreger entfernen.
+</p>
+
+
+<p>
+<strong>Wichtig:</strong> Nicht jeder Filter macht aus beliebigem Wasser
+automatisch Trinkwasser. Die Leistungsfähigkeit hängt stark vom verwendeten
+System ab.
+</p>
+
+
+
+<h3>Entkeimungstabletten</h3>
+
+<p>
+Chemische Wasseraufbereitung kann ebenfalls eingesetzt werden, zum Beispiel
+mit Entkeimungstabletten wie Micropur.
+</p>
+
+
+
+<h3>UV-Behandlung</h3>
+
+<p>
+UV-Licht kann Mikroorganismen abtöten. Bekannte Systeme sind beispielsweise
+UV-Geräte wie SteriPEN.
+</p>
+
+
+
+</section>
+
+
+
+
+
+
+
+
+<section class="preis-info">
+
+
+<h2>Wasser finden und aufbereiten</h2>
+
+
+<p>
+Wenn du lernen willst, wie man Wasser in der Natur finden kann und wie du mit
+einfachen Mitteln Wasser aufbereitest, dann besuche doch einen unserer Kurse:
+</p>
+
+
+<br>
+
+
+<a href="kurse.html" class="btn">
+Zu den Kursen
+</a>
+
+
+</section>
+
+
+
+
+</main>
+
+
+</div>
+
+
+
+
+
+
+
+<footer>
+
+
+<p>
+© 2025 Pfalzventure – Robert Prokasky
+</p>
+
+
+<p>
+<a href="impressum.html">Impressum</a> |
+<a href="datenschutz.html">Datenschutz</a> |
+<a href="AGB.html">AGB</a>
+</p>
+
+
+</footer>
+
+
+
+
+
+
+
+<!-- Warenkorb laden -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+
+try {
+
+
+const res = await fetch("partials/cart.html");
+
+
+if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+
+const html = await res.text();
+
+
+const temp=document.createElement("div");
+
+temp.innerHTML=html.trim();
+
+
+
+Array.from(temp.children).forEach(el=>{
+
+
+if(el.tagName.toLowerCase()==="script"){
+
+
+const script=document.createElement("script");
+
+
+if(el.src)
+script.src=el.src;
+
+else
+script.textContent=el.textContent;
+
+
+document.body.appendChild(script);
+
+
+}
+
+else {
+
+
+document.body.appendChild(el);
+
+}
+
+
+});
+
+
+
+setTimeout(()=>{
+
+
+if(typeof loadCart==="function"){
+
+loadCart();
+
+}
+
+
+},300);
+
+
+
+}
+
+catch(err){
+
+console.error("Fehler beim Laden des Warenkorbs:",err);
+
+}
+
+
+});
+
+</script>
+
+
+
+<script data-host="https://app.microanalytics.io"
+data-dnt="false"
+src="https://app.microanalytics.io/js/script.js"
+id="ZwSg9rf6GA"
+async defer>
+</script>
+
+
+
+</body>
+
+</html>
