@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Notfallausrüstung & Fluchtrucksack | Pfalzventure</title>
+
+<meta name="description" content="Welche Ausrüstung gehört in einen Notfallrucksack? Unsere Empfehlung für Krisenvorsorge, Fluchtrucksack und grundlegende Notfallausrüstung.">
+
+<meta name="robots" content="index, follow">
+
+<link rel="icon" href="favicon.ico">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+
+<!-- ============================
+     Header
+     ============================ -->
+
+<header>
+
+<div class="container">
+
+
+<a href="index.html" class="logo">
+<img src="assets/Logo2.png" alt="Pfalzventure Logo">
+</a>
+
+
+<div class="burger" onclick="toggleMenu()">☰</div>
+
+
+
+<nav>
+
+<ul class="nav-links" id="nav-links">
+
+<li><a href="index.html">Start</a></li>
+<li><a href="kurse.html">Kurse</a></li>
+<li><a href="wissen.html" class="active">Wissen</a></li>
+<li><a href="shop.html">Shop</a></li>
+<li><a href="kontakt.html">Kontakt</a></li>
+
+</ul>
+
+</nav>
+
+
+<button id="cart-toggle" onclick="toggleCart()" class="btn cart-btn">
+🛒 Warenkorb (<span id="cart-count">0</span>)
+</button>
+
+
+</div>
+
+</header>
+
+
+
+
+<script>
+
+function toggleMenu() {
+
+document.getElementById("nav-links").classList.toggle("nav-active");
+
+}
+
+
+document.addEventListener("click", function(event){
+
+const menu=document.getElementById("nav-links");
+const burger=document.querySelector(".burger");
+
+
+if(menu && burger &&
+!menu.contains(event.target) &&
+!burger.contains(event.target)){
+
+menu.classList.remove("nav-active");
+
+}
+
+});
+
+</script>
+
+
+
+
+
+
+<!-- ============================
+     Inhalt
+     ============================ -->
+
+
+<div class="container">
+
+
+<h1 class="kontakt-title">
+Ausrüstung
+</h1>
+
+
+
+
+<main>
+
+
+
+
+<section class="kontakt-section">
+
+
+<p>
+Die benötigte Ausrüstung in einem Notfall ist immer stark situationsabhängig.
+Auch das Bundesamt für Bevölkerungsschutz und Katastrophenhilfe (BBK) gibt
+hierzu sinnvolle Empfehlungen für Ausrüstungsgegenstände, die in keinem
+Haushalt fehlen sollten.
+</p>
+
+
+<br>
+
+
+<p>
+Eine vollständige Übersicht findest du im Ratgeber des BBK.
+</p>
+
+
+<br>
+
+
+<p>
+Darüber hinaus empfiehlt das BBK, ein Notgepäck bzw. einen Notfallrucksack
+bereitzuhalten, falls das Zuhause kurzfristig verlassen werden muss.
+</p>
+
+
+<p>
+Die folgende Liste orientiert sich an den Empfehlungen des BBK, wurde von uns
+jedoch um einige Gegenstände ergänzt und an die Anforderungen eines möglichst
+vielseitigen Einsatzes angepasst.
+</p>
+
+
+</section>
+
+
+
+
+
+
+
+<section class="product">
+
+
+<h2>
+Unsere Empfehlung für einen Notfallrucksack
+</h2>
+
+
+
+<ul class="checkliste">
+
+
+<li>Regenschutz (Poncho, Plane, Schirm)</li>
+
+<li>Schlafsack oder Decke</li>
+
+<li>Isomatte oder Luftmatratze</li>
+
+<li>Wechselkleidung</li>
+
+<li>USB-Stick mit wichtigen Dokumenten</li>
+
+<li>Medikamente / Erste-Hilfe-Set</li>
+
+<li>Geladene Powerbank</li>
+
+<li>Kurbelradio</li>
+
+<li>Taschenlampe</li>
+
+<li>Wasser</li>
+
+<li>Trinkgefäß</li>
+
+<li>Wasserfilter</li>
+
+<li>Bargeld</li>
+
+<li>Feuerzeug</li>
+
+<li>Messer</li>
+
+<li>Etwas Schnur</li>
+
+<li>Kochgeschirr aus Metall</li>
+
+<li>Kocher samt Brennstoff</li>
+
+<li>2 Rettungsdecken</li>
+
+<li>Notizblock und Stift</li>
+
+<li>
+Hygieneartikel (z.B. Taschentücher, Klopapier, Tampons,
+Zahnbürste, Zahnpasta, Seife, Müllbeutel)
+</li>
+
+<li>
+Wichtige Telefonnummern (Behörden, private Kontakte)
+</li>
+
+
+</ul>
+
+
+</section>
+
+
+
+
+
+
+
+
+<section class="preis-info">
+
+
+<h2>
+Survival mit wenig Ausrüstung
+</h2>
+
+
+<p>
+Wenn du lernen willst, wie man mit wenig oder sogar ohne Ausrüstung in der
+Natur klarkommen kann, dann besuche doch einen unserer Kurse:
+</p>
+
+
+<br>
+
+
+<a href="kurse.html" class="btn">
+Zu den Kursen
+</a>
+
+
+</section>
+
+
+
+
+</main>
+
+
+</div>
+
+
+
+
+
+
+
+<footer>
+
+
+<p>
+© 2025 Pfalzventure – Robert Prokasky
+</p>
+
+
+<p>
+<a href="impressum.html">Impressum</a> |
+<a href="datenschutz.html">Datenschutz</a> |
+<a href="AGB.html">AGB</a>
+</p>
+
+
+</footer>
+
+
+
+
+
+
+
+<!-- Warenkorb laden -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+
+try {
+
+
+const res = await fetch("partials/cart.html");
+
+
+if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+
+const html = await res.text();
+
+
+const temp=document.createElement("div");
+
+temp.innerHTML=html.trim();
+
+
+
+Array.from(temp.children).forEach(el=>{
+
+
+if(el.tagName.toLowerCase()==="script"){
+
+
+const script=document.createElement("script");
+
+
+if(el.src)
+script.src=el.src;
+
+else
+script.textContent=el.textContent;
+
+
+document.body.appendChild(script);
+
+
+}
+
+else {
+
+
+document.body.appendChild(el);
+
+}
+
+
+});
+
+
+
+setTimeout(()=>{
+
+
+if(typeof loadCart==="function"){
+
+loadCart();
+
+}
+
+
+},300);
+
+
+
+}
+
+catch(err){
+
+console.error("Fehler beim Laden des Warenkorbs:",err);
+
+}
+
+
+});
+
+</script>
+
+
+
+<script data-host="https://app.microanalytics.io"
+data-dnt="false"
+src="https://app.microanalytics.io/js/script.js"
+id="ZwSg9rf6GA"
+async defer>
+</script>
+
+
+
+</body>
+
+</html>
