@@ -2,8 +2,8 @@
   "termine": [
 
     { "id": "1", "text": "18.07.2026", "ausgebucht": true },
-    { "id": "3", "text": "08.08.2026", "belegt5": true },
-    { "id": "4", "text": "22.08.2026" },
+    { "id": "3", "text": "08.08.2026", "belegt4": true },
+    { "id": "4", "text": "22.08.2026", "belegt5": true }, 
     { "id": "7", "text": "10.10.2026" },
     { "id": "8", "text": "21.11.2026" }
   ]
