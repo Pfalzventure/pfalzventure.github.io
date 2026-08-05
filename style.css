@@ -765,7 +765,7 @@ main {
 
 .product-voucherpic img {
   width: 48%;
-  max-width: 250px;
+  max-width: 200px;
   height: auto;
   margin: 0;
 }
