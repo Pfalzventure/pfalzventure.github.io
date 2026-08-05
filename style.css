@@ -756,14 +756,18 @@ main {
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
+.product-voucherpic {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
 .product-voucherpic img {
-  display: block;
-  width: 50%;
-  max-width: 100%;
+  width: 48%;
+  max-width: 350px;
   height: auto;
-  margin: 0 !important;       /* überschreibt .product img */
-  margin-left: 0 !important;  /* sicherstellen */
-  margin-right: auto !important;
+  margin: 0;
 }
 
 .product-figure figcaption {
