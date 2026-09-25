@@ -187,6 +187,11 @@ nav ul li a:hover {
    Banner auf Startseite: Neue Kurstermine
    ============================ */
 
+```css
+/* ============================
+   Banner: Neue Kurstermine
+   ============================ */
+
 .course-banner {
   display: block;
   background: #c96b25;
@@ -259,7 +264,6 @@ nav ul li a:hover {
     font-size: 0.85rem;
   }
 }
-```
 
 /* ============================ 
 Hero Section (Startseite) 
