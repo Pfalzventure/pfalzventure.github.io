@@ -195,7 +195,7 @@ nav ul li a:hover {
 .course-banner {
   display: block;
   background: #c96b25;
-  color: white;
+  color: #2f4f4f;
   text-decoration: none;
   transition: background 0.2s ease, transform 0.2s ease;
 }
