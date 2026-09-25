@@ -240,6 +240,7 @@ nav ul li a:hover {
   white-space: nowrap;
 }
 
+
 /* Mobile */
 @media (max-width: 600px) {
   .course-banner-content {
@@ -263,6 +264,7 @@ nav ul li a:hover {
     padding: 7px 10px;
     font-size: 0.85rem;
   }
+   color: #2f4f4f;
 }
 
 /* ============================ 
