@@ -181,15 +181,8 @@ nav ul li a:hover {
   }
 }
 
-```css
-
 /* ============================
    Banner auf Startseite: Neue Kurstermine
-   ============================ */
-
-```css
-/* ============================
-   Banner: Neue Kurstermine
    ============================ */
 
 .course-banner {
@@ -198,6 +191,12 @@ nav ul li a:hover {
   color: #2f4f4f;
   text-decoration: none;
   transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.course-banner:visited,
+.course-banner:hover,
+.course-banner:active {
+  color: #2f4f4f;
 }
 
 .course-banner:hover {
@@ -231,16 +230,6 @@ nav ul li a:hover {
   font-size: 0.95rem;
 }
 
-.course-banner-button {
-  background: white;
-  color: #8f4818;
-  padding: 8px 14px;
-  border-radius: 5px;
-  font-weight: bold;
-  white-space: nowrap;
-}
-
-
 /* Mobile */
 @media (max-width: 600px) {
   .course-banner-content {
@@ -259,12 +248,6 @@ nav ul li a:hover {
   .course-banner-content span:not(.course-banner-icon):not(.course-banner-button) {
     font-size: 0.82rem;
   }
-
-  .course-banner-button {
-    padding: 7px 10px;
-    font-size: 0.85rem;
-  }
-   color: #2f4f4f;
 }
 
 /* ============================ 
