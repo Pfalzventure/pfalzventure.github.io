@@ -181,6 +181,85 @@ nav ul li a:hover {
   }
 }
 
+```css
+
+/* ============================
+   Banner auf Startseite: Neue Kurstermine
+   ============================ */
+
+.course-banner {
+  display: block;
+  background: #c96b25;
+  color: white;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.course-banner:hover {
+  background: #ad571c;
+}
+
+.course-banner-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+.course-banner-icon {
+  font-size: 28px;
+}
+
+.course-banner-content strong {
+  display: block;
+  font-size: 1.15rem;
+  letter-spacing: 0.5px;
+}
+
+.course-banner-content span:not(.course-banner-icon):not(.course-banner-button) {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.95rem;
+}
+
+.course-banner-button {
+  background: white;
+  color: #8f4818;
+  padding: 8px 14px;
+  border-radius: 5px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .course-banner-content {
+    padding: 12px 15px;
+    gap: 10px;
+  }
+
+  .course-banner-icon {
+    font-size: 22px;
+  }
+
+  .course-banner-content strong {
+    font-size: 1rem;
+  }
+
+  .course-banner-content span:not(.course-banner-icon):not(.course-banner-button) {
+    font-size: 0.82rem;
+  }
+
+  .course-banner-button {
+    padding: 7px 10px;
+    font-size: 0.85rem;
+  }
+}
+```
 
 /* ============================ 
 Hero Section (Startseite) 
