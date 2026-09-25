@@ -196,7 +196,7 @@ nav ul li a:hover {
 .course-banner:visited,
 .course-banner:hover,
 .course-banner:active {
-  color: #2f4f4f;
+  color: #2f4f4f !important;
 }
 
 .course-banner:hover {
