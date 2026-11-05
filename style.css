@@ -798,6 +798,19 @@ main {
   margin-left: 0 !important;  /* sicherstellen */
   margin-right: auto !important;
 }
+
+.new-badge {
+  display: inline-block;
+  background-color: #e63946;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 5px;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
 /* ============================
    Inhaltsboxen
    ============================ */
